@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Devkoes.Restup.WebServer.Models.Schemas;
+using System;
 
 namespace Devkoes.Restup.WebServer.Attributes
 {

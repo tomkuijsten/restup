@@ -113,12 +113,14 @@
     <Compile Include="Attributes\UriFormatAttribute.cs" />
     <Compile Include="Helpers\HttpHelpers.cs" />
     <Compile Include="Http\HttpServer.cs" />
+    <Compile Include="Http\RestMethodInfo.cs" />
     <Compile Include="InstanceCreators\SingletonInstanceCreator.cs" />
     <Compile Include="Models\Contracts\IInstanceCreator.cs" />
     <Compile Include="Models\Contracts\IRestController.cs" />
     <Compile Include="Models\Contracts\IRestResponse.cs" />
     <Compile Include="Models\Schemas\GetResponse.cs" />
     <Compile Include="Models\Schemas\JSONObject.cs" />
+    <Compile Include="Models\Schemas\RestVerb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestControllerRequestHandler.cs" />
     <Compile Include="RestWebServer.cs" />

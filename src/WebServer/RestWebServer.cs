@@ -24,13 +24,14 @@ namespace Devkoes.Restup.WebServer
             string[] requestParts = methodUrlAndHttpStatus.Split(' ');
             string verb = requestParts[0];
             string uri = requestParts[1];
+
             if(HttpHelpers.IsSupportedVerb(verb))
             {
                 return null;
             }
 
             var restVerb = HttpHelpers.GetVerb(verb);
-
+            
             return _requestHandler.HandleRequest(restVerb, uri);
         }
     }
