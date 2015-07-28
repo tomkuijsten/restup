@@ -18,7 +18,7 @@ namespace Devkoes.Restup.WebServer.Http
 
         private Regex _findParameterValuesRegex;
         private Regex _matchUriRegex;
-        private IEnumerable<string> _parameterNames;
+        private IDictionary<string, Type> _parameters;
 
         public MethodInfo MethodInfo { get; set; }
         public RestVerb Verb { get; set; }
@@ -26,43 +26,45 @@ namespace Devkoes.Restup.WebServer.Http
 
         public RestMethodInfo(MethodInfo methodInfo)
         {
-            InitializeParameterNames(methodInfo);
-            InitializeInstantiator(methodInfo);
-            InitializeVerb(methodInfo);
-            InitializeFindParameterRegex(methodInfo);
-            InitializeMatchUriRegex(methodInfo);
+            MethodInfo = methodInfo;
+
+            InitializeParameterNames();
+            InitializeInstantiator();
+            InitializeVerb();
+            InitializeFindParameterRegex();
+            InitializeMatchUriRegex();
         }
 
-        private void InitializeParameterNames(MethodInfo methodInfo)
+        private void InitializeParameterNames()
         {
-            _parameterNames = methodInfo.GetParameters().Select(p => p.Name).ToArray();
+            _parameters = MethodInfo.GetParameters().ToDictionary(p=> p.Name, p=> p.ParameterType);
         }
 
-        private void InitializeInstantiator(MethodInfo methodInfo)
+        private void InitializeInstantiator()
         {
-            Instantiator = InstanceCreatorCache.GetCreator(methodInfo.DeclaringType);
+            Instantiator = InstanceCreatorCache.GetCreator(MethodInfo.DeclaringType);
         }
 
-        private void InitializeMatchUriRegex(MethodInfo methodInfo)
+        private void InitializeMatchUriRegex()
         {
-            var uriFormatter = methodInfo.GetCustomAttribute<UriFormatAttribute>();
+            var uriFormatter = MethodInfo.GetCustomAttribute<UriFormatAttribute>();
             string regexToMatchUri = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatter.UriFormat, MATCHURI_REPLACE_STRING));
             _matchUriRegex = new Regex(regexToMatchUri);
 
         }
 
-        private void InitializeFindParameterRegex(MethodInfo methodInfo)
+        private void InitializeFindParameterRegex()
         {
-            var uriFormatter = methodInfo.GetCustomAttribute<UriFormatAttribute>();
+            var uriFormatter = MethodInfo.GetCustomAttribute<UriFormatAttribute>();
 
             string regexToFindParamValues = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatter.UriFormat, MATCHPARAMETER_REPLACE_STRING));
 
             _findParameterValuesRegex = new Regex(regexToFindParamValues);
         }
 
-        private void InitializeVerb(MethodInfo mi)
+        private void InitializeVerb()
         {
-            var restVerbAttr = mi.ReturnType.GetTypeInfo().GetCustomAttribute<RestVerbAttribute>();
+            var restVerbAttr = MethodInfo.ReturnType.GetTypeInfo().GetCustomAttribute<RestVerbAttribute>();
             Verb = restVerbAttr.Verb;
         }
 
@@ -84,9 +86,9 @@ namespace Devkoes.Restup.WebServer.Http
                 yield return null;
             }
 
-            foreach (string parameterName in _parameterNames)
+            foreach (var parameter in _parameters)
             {
-                yield return m.Groups[parameterName].Value;
+                yield return Convert.ChangeType(m.Groups[parameter.Key].Value, parameter.Value);
             }
         }
 

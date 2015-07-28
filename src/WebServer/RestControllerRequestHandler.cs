@@ -5,16 +5,22 @@ using System.Reflection;
 using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Devkoes.Restup.WebServer.Http;
+using Devkoes.Restup.WebServer.Helpers;
 
 namespace Devkoes.Restup.WebServer
 {
     public class RestControllerRequestHandler
     {
         private List<RestMethodInfo> _restMethodCollection;
+        private DefaultResponse _unsupportedVerbResponse;
+        private DefaultResponse _invalidUriResponse;
 
         public RestControllerRequestHandler()
         {
             _restMethodCollection = new List<RestMethodInfo>();
+
+            _unsupportedVerbResponse = new DefaultResponse("Verb not supported", HttpResponseStatus.BadRequest);
+            _invalidUriResponse = new DefaultResponse("No REST controller for uri found", HttpResponseStatus.BadRequest);
         }
 
         public void RegisterController<T>() where T : IRestController
@@ -23,7 +29,7 @@ namespace Devkoes.Restup.WebServer
                 from m in typeof(T).GetRuntimeMethods()
                 where
                     m.IsPublic &&
-                    m.ReturnType.GetTypeInfo().IsSubclassOf(typeof(IRestResponse)) &&
+                    m.ReturnType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse)) &&
                     m.IsDefined(typeof(UriFormatAttribute))
                 select m;
 
@@ -35,15 +41,22 @@ namespace Devkoes.Restup.WebServer
             }
         }
 
-        public IRestResponse HandleRequest(RestVerb verb, string uri)
+        public IRestResponse HandleRequest(string verb, string uri)
         {
-            var restMethod = _restMethodCollection.SingleOrDefault(r => r.Match(verb, uri));
-            if (restMethod != null)
+            if (!HttpHelpers.IsSupportedVerb(verb))
             {
-                return restMethod.ExecuteMethod(uri);
+                return _unsupportedVerbResponse;
             }
 
-            return null;
+            var restVerb = HttpHelpers.GetVerb(verb);
+
+            var restMethod = _restMethodCollection.SingleOrDefault(r => r.Match(restVerb, uri));
+            if (restMethod == null)
+            {
+                return _invalidUriResponse;
+            }
+
+            return restMethod.ExecuteMethod(uri);
         }
     }
 }

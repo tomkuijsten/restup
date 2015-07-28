@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Devkoes.Restup.WebServer;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using WebServerHostTest.RESTControllers;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -22,9 +24,20 @@ namespace WebServerHostTest
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private RestWebServer _webserver;
         public MainPage()
         {
             this.InitializeComponent();
+
+            InitializeWebServer();
+        }
+
+        private void InitializeWebServer()
+        {
+            _webserver = new RestWebServer();
+            _webserver.RegisterController<ParametersController>();
+
+            _webserver.StartServerAsync();
         }
     }
 }

@@ -1,14 +1,16 @@
 ﻿using Devkoes.Restup.WebServer.Helpers;
+using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using System.Collections.Generic;
+using System;
 
 namespace Devkoes.Restup.WebServer
 {
-    public class RestWebServer
+    public class RestWebServer : HttpServer
     {
         private RestControllerRequestHandler _requestHandler;
 
-        public RestWebServer()
+        public RestWebServer() : base(8800)
         {
             _requestHandler = new RestControllerRequestHandler();
         }
@@ -18,21 +20,14 @@ namespace Devkoes.Restup.WebServer
             _requestHandler.RegisterController<T>();
         }
 
-        public IRestResponse HandleRequest(string request)
+        public override IRestResponse HandleRequest(string request)
         {
             string methodUrlAndHttpStatus = request.ToString().Split('\n')[0];
             string[] requestParts = methodUrlAndHttpStatus.Split(' ');
             string verb = requestParts[0];
             string uri = requestParts[1];
-
-            if(HttpHelpers.IsSupportedVerb(verb))
-            {
-                return null;
-            }
-
-            var restVerb = HttpHelpers.GetVerb(verb);
             
-            return _requestHandler.HandleRequest(restVerb, uri);
+            return _requestHandler.HandleRequest(verb, uri);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace WebServerHostTest.RESTControllers
         [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]
         public GetResponse ReadParameter(int channelId, int nodeId, int parameterId)
         {
-            return new GetResponse(GetResponse.GetResponseStatus.OK, new JSONObject());
+            return new GetResponse(GetResponse.GetResponseStatus.OK, "{parameterValue: 23.0}");
         }
     }
 }

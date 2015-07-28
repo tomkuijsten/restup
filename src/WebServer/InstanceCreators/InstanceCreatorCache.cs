@@ -34,10 +34,12 @@ namespace Devkoes.Restup.WebServer.InstanceCreators
 
                 if(t == InstanceCreationType.PerCall)
                 {
-                    throw new NotImplementedException("PerCall instance type is not yet suppported.");
+                    _cache[restController] = new PerCallInstanceCreator();
                 }
-
-                _cache[restController] = new SingletonInstanceCreator();
+                else
+                {
+                    _cache[restController] = new SingletonInstanceCreator();
+                }
             }
         }
     }
