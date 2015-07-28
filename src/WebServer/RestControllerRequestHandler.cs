@@ -42,16 +42,14 @@ namespace Devkoes.Restup.WebServer
             }
         }
 
-        public IRestResponse HandleRequest(string verb, string uri)
+        public IRestResponse HandleRequest(RestVerb verb, string uri)
         {
-            if (!HttpHelpers.IsSupportedVerb(verb))
+            if(verb == RestVerb.Unsupported)
             {
                 return _unsupportedVerbResponse;
             }
-
-            var restVerb = HttpHelpers.GetVerb(verb);
-
-            var restMethod = _restMethodCollection.SingleOrDefault(r => r.Match(restVerb, uri));
+            
+            var restMethod = _restMethodCollection.SingleOrDefault(r => r.Match(verb, uri));
             if (restMethod == null)
             {
                 return _invalidUriResponse;

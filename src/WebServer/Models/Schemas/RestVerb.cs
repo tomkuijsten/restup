@@ -2,9 +2,10 @@
 {
     public enum RestVerb
     {
+        Unsupported,
         POST,
         GET,
         PUT,
-        DELETE
+        DELETE,
     }
 }

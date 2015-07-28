@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Devkoes.Restup.WebServer.Helpers
 {
-    internal class HttpHelpers
+    internal static class HttpHelpers
     {
-        private static IDictionary<int, string> _statusCodeTexts = new Dictionary<int, string>() {
+        private static readonly IDictionary<int, string> _statusCodeTexts = new Dictionary<int, string>() {
             [200] = "OK",
             [201] = "Created",
             [204] = "No Content",
@@ -25,20 +25,7 @@ namespace Devkoes.Restup.WebServer.Helpers
                 }
             }
 
-            throw new NotSupportedException($"Unsupported verb '{verb}' found.");
-        }
-
-        internal static bool IsSupportedVerb(string verb)
-        {
-            foreach (var name in Enum.GetNames(typeof(RestVerb)))
-            {
-                if (string.Equals(verb, name, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return RestVerb.Unsupported;
         }
 
         internal static string GetHttpStatusCodeText(int statusCode)
