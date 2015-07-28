@@ -8,7 +8,7 @@ namespace Devkoes.Restup.WebServer
     {
         private RestControllerRequestHandler _requestHandler;
 
-        public RestWebServer(IEnumerable<IRestController> controllers)
+        public RestWebServer()
         {
             _requestHandler = new RestControllerRequestHandler();
         }

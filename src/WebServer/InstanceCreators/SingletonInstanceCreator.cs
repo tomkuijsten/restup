@@ -3,11 +3,30 @@ using System;
 
 namespace Devkoes.Restup.WebServer.InstanceCreators
 {
-    public class SingletonInstanceCreator<T> : IInstanceCreator<T> where T : class
+    public class SingletonInstanceCreator : IInstanceCreator
     {
-        public T Create(params object[] args)
+        private object _instance;
+        private object _instanceLock = new object();
+
+        public object Create(Type instanceType, params object[] args)
         {
-            return Activator.CreateInstance<T>();
+            CacheInstance(instanceType, args);
+
+            return _instance;
+        }
+
+        private void CacheInstance(Type instanceType, object[] args)
+        {
+            if (_instance == null)
+            {
+                lock(_instanceLock)
+                {
+                    if(_instance == null)
+                    {
+                        _instance = Activator.CreateInstance(instanceType, args);
+                    }
+                }
+            }
         }
     }
 }

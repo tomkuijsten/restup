@@ -1,7 +1,9 @@
-﻿namespace Devkoes.Restup.WebServer.Models.Contracts
+﻿using System;
+
+namespace Devkoes.Restup.WebServer.Models.Contracts
 {
-    public interface IInstanceCreator<T> where T:class
+    public interface IInstanceCreator
     {
-        T Create(params object[] args);
+        object Create(Type instanceType, params object[] args);
     }
 }

@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace WebServerHostTest.RESTControllers
 {
-    class ParametersController : IRestController
+    [RestController(InstanceCreationType.Singleton)]
+    public class ParametersController : IRestController
     {
         [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]
         public GetResponse ReadParameter(int channelId, int nodeId, int parameterId)

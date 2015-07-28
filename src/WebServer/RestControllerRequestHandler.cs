@@ -27,13 +27,12 @@ namespace Devkoes.Restup.WebServer
                     m.IsDefined(typeof(UriFormatAttribute))
                 select m;
 
+            // TODO: check if uriformat is unique
+
             foreach (var methodDef in allPublicRestMethods)
             {
-                var uriFormat = methodDef.GetCustomAttribute<UriFormatAttribute>();
-                _restMethodCollection.Add(new RestMethodInfo(methodDef, uriFormat.UriFormat));
+                _restMethodCollection.Add(new RestMethodInfo(methodDef));
             }
-
-            // TODO: check if uriformat is unique
         }
 
         public IRestResponse HandleRequest(RestVerb verb, string uri)
@@ -41,7 +40,7 @@ namespace Devkoes.Restup.WebServer
             var restMethod = _restMethodCollection.SingleOrDefault(r => r.Match(verb, uri));
             if (restMethod != null)
             {
-                return (IRestResponse)restMethod.MethodInfo.Invoke(restMethod.Instantiator.Create(), restMethod.GetParametersFromUri(uri));
+                return restMethod.ExecuteMethod(uri);
             }
 
             return null;
