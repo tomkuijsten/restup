@@ -122,7 +122,6 @@
     <Compile Include="Models\Contracts\IRestController.cs" />
     <Compile Include="Models\Contracts\IRestResponse.cs" />
     <Compile Include="Models\Schemas\GetResponse.cs" />
-    <Compile Include="Models\Schemas\HttpResponseStatus.cs" />
     <Compile Include="Models\Schemas\InstanceCreationType.cs" />
     <Compile Include="Models\Schemas\DefaultResponse.cs" />
     <Compile Include="Models\Schemas\RestVerb.cs" />

@@ -6,6 +6,7 @@ using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Helpers;
+using System.Net;
 
 namespace Devkoes.Restup.WebServer
 {
@@ -19,8 +20,8 @@ namespace Devkoes.Restup.WebServer
         {
             _restMethodCollection = new List<RestMethodInfo>();
 
-            _unsupportedVerbResponse = new DefaultResponse("Verb not supported", HttpResponseStatus.BadRequest);
-            _invalidUriResponse = new DefaultResponse("No REST controller for uri found", HttpResponseStatus.BadRequest);
+            _unsupportedVerbResponse = new DefaultResponse("Verb not supported", HttpStatusCode.BadRequest);
+            _invalidUriResponse = new DefaultResponse("No REST controller for uri found", HttpStatusCode.BadRequest);
         }
 
         public void RegisterController<T>() where T : IRestController
