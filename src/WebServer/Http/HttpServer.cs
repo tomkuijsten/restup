@@ -9,6 +9,7 @@ using Devkoes.Restup.WebServer.Helpers;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
+using System.Diagnostics;
 
 namespace Devkoes.Restup.WebServer.Http
 {
@@ -31,6 +32,8 @@ namespace Devkoes.Restup.WebServer.Http
         public async void StartServerAsync()
         {
             await listener.BindServiceNameAsync(port.ToString());
+
+            Debug.WriteLine($"Webserver started on port {port}");
         }
 
         public void Dispose()
