@@ -1,8 +1,6 @@
 ﻿using Devkoes.Restup.WebServer.Models.Contracts;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using Devkoes.Restup.WebServer.Helpers;
@@ -26,7 +24,7 @@ namespace Devkoes.Restup.WebServer.Http
             listener.ConnectionReceived += (s, e) => ProcessRequestAsync(e.Socket);
         }
 
-        public abstract IRestResponse HandleRequest(string request);
+        internal abstract IHttpResponse HandleRequest(string request);
 
 
         public async void StartServerAsync()
@@ -46,47 +44,54 @@ namespace Devkoes.Restup.WebServer.Http
             try
             {
                 // this works for text only
-                StringBuilder request = new StringBuilder();
-                using (IInputStream input = socket.InputStream)
-                {
-                    byte[] data = new byte[BufferSize];
-                    IBuffer buffer = data.AsBuffer();
-                    uint dataRead = BufferSize;
-                    while (dataRead == BufferSize)
-                    {
-                        await input.ReadAsync(buffer, BufferSize, InputStreamOptions.Partial);
-                        request.Append(Encoding.UTF8.GetString(data, 0, data.Length));
-                        dataRead = buffer.Length;
-                    }
-                }
+                string request = await GetRequestString(socket);
 
-                var result = HandleRequest(request.ToString());
+                var result = HandleRequest(request);
 
-                using (IOutputStream output = socket.OutputStream)
-                {
-                    await WriteResponseAsync(result, output);
-                }
+                await WriteResponseAsync(result, socket);
             }
             catch (Exception)
             {
             }
         }
 
-        private async Task WriteResponseAsync(IRestResponse response, IOutputStream os)
+        private static async Task<string> GetRequestString(StreamSocket socket)
         {
-            using (Stream resp = os.AsStreamForWrite())
+            StringBuilder request = new StringBuilder();
+            using (IInputStream input = socket.InputStream)
             {
-                // Look in the Data subdirectory of the app package
-                byte[] bodyArray = Encoding.UTF8.GetBytes(response.Data);
-                MemoryStream stream = new MemoryStream(bodyArray);
-                string header = string.Format("HTTP/1.1 {0} {1}\r\n" +
-                                  "Content-Length: {2}\r\n" +
-                                  "Content-Type: application/json\r\n" +
-                                  "Connection: close\r\n\r\n",
-                                  response.StatusCode,
-                                  HttpHelpers.GetHttpStatusCodeText(response.StatusCode),
-                                  stream.Length);
-                byte[] headerArray = Encoding.UTF8.GetBytes(header);
+                byte[] data = new byte[BufferSize];
+                IBuffer buffer = data.AsBuffer();
+                uint dataRead = BufferSize;
+                while (dataRead == BufferSize)
+                {
+                    await input.ReadAsync(buffer, BufferSize, InputStreamOptions.Partial);
+                    request.Append(Encoding.UTF8.GetString(data, 0, data.Length));
+                    dataRead = buffer.Length;
+                }
+            }
+
+            return request.ToString();
+        }
+
+        private async Task WriteResponseAsync(IHttpResponse response, StreamSocket socket)
+        {
+            using (IOutputStream output = socket.OutputStream)
+            using (Stream resp = output.AsStreamForWrite())
+            {
+                byte[] bodyData = Encoding.UTF8.GetBytes(response.Body);
+                MemoryStream stream = new MemoryStream(bodyData);
+
+                string statusCodeText = HttpHelpers.GetHttpStatusCodeText(response.StatusCode);
+
+                var rawHttpResponseBuilder = new StringBuilder();
+                rawHttpResponseBuilder.AppendFormat("HTTP/1.1 {0} {1}\r\n", response.StatusCode, statusCodeText);
+                rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", stream.Length);
+                rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpHelpers.GetMediaType(response.BodyType));
+                rawHttpResponseBuilder.Append("Connection: close\r\n");
+                rawHttpResponseBuilder.Append("\r\n");
+
+                byte[] headerArray = Encoding.UTF8.GetBytes(rawHttpResponseBuilder.ToString());
                 await resp.WriteAsync(headerArray, 0, headerArray.Length);
                 await stream.CopyToAsync(resp);
                 await resp.FlushAsync();

@@ -1,24 +1,22 @@
-﻿using System;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Attributes;
+﻿using Devkoes.Restup.WebServer.Attributes;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    [RestVerb(RestVerb.GET)]
-    public struct GetResponse : IRestResponse
+    [RestVerb(RestVerb.PUT)]
+    public struct PutResponse
     {
-        public enum GetResponseStatus : int {
+        public enum GetResponseStatus : int
+        {
             OK = 200,
+            NoContent = 204,
             NotFound = 404
         };
 
         public GetResponseStatus Status { get; }
-        public object Data { get; }
 
-        public GetResponse(GetResponseStatus status, string data)
+        public PutResponse(GetResponseStatus status)
         {
             Status = status;
-            Data = data;
         }
 
         public int StatusCode

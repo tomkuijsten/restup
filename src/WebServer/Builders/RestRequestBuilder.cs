@@ -10,12 +10,14 @@ namespace Devkoes.Restup.WebServer.Builders
     {
         private const string ACCEPT_HEADERKEY = "accept:";
 
+        private static AcceptMediaType DEFAULT_RETURN_MEDIATYPE = AcceptMediaType.JSON;
+
         // The order represents the priority for a response
-        private static readonly IDictionary<AcceptHeaders, string> _acceptHeaderText = new Dictionary<AcceptHeaders, string>()
+        private static readonly IDictionary<string, AcceptMediaType> _acceptHeaderText = new Dictionary<string, AcceptMediaType>()
         {
-            [AcceptHeaders.ApplicationJSON] = "application/json",
-            [AcceptHeaders.TextXML] = "text/xml",
-            [AcceptHeaders.TextHTML] = "text/html"
+            ["application/json"] = AcceptMediaType.JSON,
+            ["text/xml"] = AcceptMediaType.XML,
+            ["application/xml"] = AcceptMediaType.XML
         };
 
         internal RestRequest Build(string request)
@@ -27,23 +29,23 @@ namespace Devkoes.Restup.WebServer.Builders
 
             string[] perLine = request.Split('\n');
             
-            var verbAndUri = GetVerbAndUriFromRequest(perLine);
+            var verbAndUri = GetVerbAndUriFromRequest(perLine.First());
             var verb = HttpHelpers.GetVerb(verbAndUri.Item1);
             string body = GetBodyFromRequest(request);
-            var accHeader = GetAcceptHeaderFromRequest(perLine);
+            var accHeaders = GetAcceptHeadersFromRequest(perLine);
 
             return new RestRequest()
             {
                 Verb = verb,
                 Uri = verbAndUri.Item2,
                 Body = body,
-                AcceptHeader = accHeader
+                AcceptHeaders = accHeaders
             };
         }
 
-        private static Tuple<string,string> GetVerbAndUriFromRequest(string[] perLine)
+        private static Tuple<string,string> GetVerbAndUriFromRequest(string firstRequestLine)
         {
-            string[] requestParts = perLine[0].Split(' ');
+            string[] requestParts = firstRequestLine.Split(' ');
 
             if (requestParts.Length < 2)
             {
@@ -53,18 +55,24 @@ namespace Devkoes.Restup.WebServer.Builders
             return Tuple.Create(requestParts[0], requestParts[1]);
         }
 
-        private AcceptHeaders GetAcceptHeaderFromRequest(string[] requestLines)
+        private IEnumerable<AcceptMediaType> GetAcceptHeadersFromRequest(string[] requestLines)
         {
             // HTTP 1.1 headers are case insensitive (http://www.w3.org/Protocols/rfc2616/rfc2616.html)
             var lcLines = requestLines.Select(l => l.ToLower());
-            var acceptedHeaders = 
+            var acceptedHeadersQuery = 
                     from line in lcLines
                     where line.StartsWith(ACCEPT_HEADERKEY)
                     from header in _acceptHeaderText
-                    where line.Contains(header.Value)
-                    select header.Key;
+                    where line.Contains(header.Key)
+                    select header.Value;
 
-            return acceptedHeaders.FirstOrDefault();
+            var accHeaders = acceptedHeadersQuery.ToArray();
+
+            // If no accept header, or no supported accept header, we add the default
+            if (!accHeaders.Any())
+                accHeaders = new[] { DEFAULT_RETURN_MEDIATYPE };
+
+            return accHeaders;
         }
 
         private string GetBodyFromRequest(string request)

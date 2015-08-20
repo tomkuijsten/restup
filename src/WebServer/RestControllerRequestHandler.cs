@@ -10,13 +10,13 @@ using System.Net;
 
 namespace Devkoes.Restup.WebServer
 {
-    public class RestControllerRequestHandler
+    internal class RestControllerRequestHandler
     {
         private List<RestMethodInfo> _restMethodCollection;
         private DefaultResponse _unsupportedVerbResponse;
         private DefaultResponse _invalidUriResponse;
 
-        public RestControllerRequestHandler()
+        internal RestControllerRequestHandler()
         {
             _restMethodCollection = new List<RestMethodInfo>();
 
@@ -24,7 +24,7 @@ namespace Devkoes.Restup.WebServer
             _invalidUriResponse = new DefaultResponse("No REST controller for uri found", HttpStatusCode.BadRequest);
         }
 
-        public void RegisterController<T>() where T : IRestController
+        internal void RegisterController<T>() where T : IRestController
         {
             var allPublicRestMethods =
                 from m in typeof(T).GetRuntimeMethods()
@@ -42,7 +42,7 @@ namespace Devkoes.Restup.WebServer
             }
         }
 
-        public IRestResponse HandleRequest(RestVerb verb, string uri)
+        internal IRestResponse HandleRequest(RestVerb verb, string uri)
         {
             if(verb == RestVerb.Unsupported)
             {

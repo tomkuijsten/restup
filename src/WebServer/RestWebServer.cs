@@ -1,6 +1,11 @@
 ﻿using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Builders;
+using System.Linq;
+using Devkoes.Restup.WebServer.Models.Schemas;
+using Newtonsoft.Json;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace Devkoes.Restup.WebServer
 {
@@ -20,11 +25,39 @@ namespace Devkoes.Restup.WebServer
             _requestHandler.RegisterController<T>();
         }
 
-        public override IRestResponse HandleRequest(string request)
+        internal override IHttpResponse HandleRequest(string request)
         {
             var restRequest = _restReqBuilder.Build(request);
 
-            return _requestHandler.HandleRequest(restRequest.Verb, restRequest.Uri);
+            var response = _requestHandler.HandleRequest(restRequest.Verb, restRequest.Uri);
+
+            string bodyString = null;
+            if (response.Data != null)
+            {
+                if (restRequest.AcceptHeaders.First() == AcceptMediaType.JSON)
+                {
+                    bodyString = JsonConvert.SerializeObject(response.Data);
+                }
+                else if(restRequest.AcceptHeaders.First() == AcceptMediaType.XML)
+                {
+                    bodyString = SerializeObject(response.Data);
+                }
+            }
+
+            var httpResp = new HttpResponse(bodyString, restRequest.AcceptHeaders.First(), response.StatusCode);
+
+            return httpResp;
+        }
+
+        private static string SerializeObject(object toSerialize)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(toSerialize.GetType());
+
+            using (StringWriter textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, toSerialize);
+                return textWriter.ToString();
+            }
         }
     }
 }
