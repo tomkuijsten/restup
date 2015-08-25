@@ -22,5 +22,11 @@ namespace WebServerHostTest.RESTControllers
         {
             return new GetResponse(GetResponse.GetResponseStatus.OK, new ParameterValue() { Value = 23.0});
         }
+
+        [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]
+        public PutResponse WriteParameter(int channelId, int nodeId, int parameterId, [FromBody]ParameterValue v)
+        {
+            return new PutResponse(PutResponse.GetResponseStatus.OK);
+        }
     }
 }

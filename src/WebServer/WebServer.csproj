@@ -109,6 +109,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Attributes\FromBodyAttribute.cs" />
     <Compile Include="Attributes\RestControllerAttribute.cs" />
     <Compile Include="Attributes\RestVerbAttribute.cs" />
     <Compile Include="Attributes\UriFormatAttribute.cs" />
