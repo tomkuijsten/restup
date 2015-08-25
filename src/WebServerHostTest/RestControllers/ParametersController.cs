@@ -12,10 +12,15 @@ namespace WebServerHostTest.RESTControllers
     [RestController(InstanceCreationType.Singleton)]
     public class ParametersController : IRestController
     {
+        public class ParameterValue
+        {
+            public double Value { get; set; }
+        }
+
         [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]
         public GetResponse ReadParameter(int channelId, int nodeId, int parameterId)
         {
-            return new GetResponse(GetResponse.GetResponseStatus.OK, "{parameterValue: 23.0}");
+            return new GetResponse(GetResponse.GetResponseStatus.OK, new ParameterValue() { Value = 23.0});
         }
     }
 }

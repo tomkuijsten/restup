@@ -15,7 +15,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
         public GetResponseStatus Status { get; }
         public object Data { get; }
 
-        public GetResponse(GetResponseStatus status, string data)
+        public GetResponse(GetResponseStatus status, object data)
         {
             Status = status;
             Data = data;
