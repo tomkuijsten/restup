@@ -18,31 +18,43 @@ namespace Devkoes.Restup.WebServer.Http
 
         private Regex _findParameterValuesRegex;
         private Regex _matchUriRegex;
-        private IDictionary<string, Type> _parameters;
+        private IDictionary<string, Type> _parametersForUri;
 
-        public MethodInfo MethodInfo { get; set; }
-        public RestVerb Verb { get; set; }
-        public IInstanceCreator Instantiator { get; set; }
+        public MethodInfo MethodInfo { get; private set; }
+        public RestVerb Verb { get; private set; }
+        public bool HasBodyParameter{get; private set;}
+        public Type BodyParameterType { get; private set;}
 
         public RestMethodInfo(MethodInfo methodInfo)
         {
             MethodInfo = methodInfo;
 
             InitializeParameterNames();
-            InitializeInstantiator();
             InitializeVerb();
             InitializeFindParameterRegex();
             InitializeMatchUriRegex();
+            InitializeBodyParameter();
+        }
+
+        private void InitializeBodyParameter()
+        {
+            var fromBodyParameter = MethodInfo.GetParameters().FirstOrDefault((p) => p.GetCustomAttribute<FromBodyAttribute>() != null);
+            if (fromBodyParameter == null)
+            {
+                return;
+            }
+
+            HasBodyParameter = true;
+            BodyParameterType = fromBodyParameter.ParameterType;
         }
 
         private void InitializeParameterNames()
         {
-            _parameters = MethodInfo.GetParameters().ToDictionary(p=> p.Name, p=> p.ParameterType);
-        }
+            var fromUriParams = from p in MethodInfo.GetParameters()
+                    where p.GetCustomAttribute<FromBodyAttribute>() == null
+                    select p;
 
-        private void InitializeInstantiator()
-        {
-            Instantiator = InstanceCreatorCache.GetCreator(MethodInfo.DeclaringType);
+            _parametersForUri = fromUriParams.ToDictionary(p => p.Name, p => p.ParameterType);
         }
 
         private void InitializeMatchUriRegex()
@@ -86,17 +98,10 @@ namespace Devkoes.Restup.WebServer.Http
                 yield return null;
             }
 
-            foreach (var parameter in _parameters)
+            foreach (var parameter in _parametersForUri)
             {
                 yield return Convert.ChangeType(m.Groups[parameter.Key].Value, parameter.Value);
             }
-        }
-
-        public IRestResponse ExecuteMethod(string uri)
-        {
-            return (IRestResponse)MethodInfo.Invoke(
-                    Instantiator.Create(MethodInfo.DeclaringType),
-                    GetParametersFromUri(uri).ToArray());
         }
     }
 }

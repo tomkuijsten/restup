@@ -10,10 +10,10 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
     public struct HttpResponse : IHttpResponse
     {
         public string Body { get; }
-        public AcceptMediaType BodyType { get; }
+        public MediaType BodyType { get; }
         public int StatusCode { get; }
 
-        public HttpResponse(string body, AcceptMediaType bodyType, int statusCode)
+        public HttpResponse(string body, MediaType bodyType, int statusCode)
         {
             Body = body;
             BodyType = bodyType;

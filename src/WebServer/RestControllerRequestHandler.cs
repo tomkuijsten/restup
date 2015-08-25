@@ -5,8 +5,8 @@ using System.Reflection;
 using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Helpers;
 using System.Net;
+using Devkoes.Restup.WebServer.Factories;
 
 namespace Devkoes.Restup.WebServer
 {
@@ -15,10 +15,12 @@ namespace Devkoes.Restup.WebServer
         private List<RestMethodInfo> _restMethodCollection;
         private DefaultResponse _unsupportedVerbResponse;
         private DefaultResponse _invalidUriResponse;
+        private RestMethodExecutorFactory _methodExecuteFactory;
 
         internal RestControllerRequestHandler()
         {
             _restMethodCollection = new List<RestMethodInfo>();
+            _methodExecuteFactory = new RestMethodExecutorFactory();
 
             _unsupportedVerbResponse = new DefaultResponse("Verb not supported", HttpStatusCode.BadRequest);
             _invalidUriResponse = new DefaultResponse("No REST controller for uri found", HttpStatusCode.BadRequest);
@@ -42,20 +44,22 @@ namespace Devkoes.Restup.WebServer
             }
         }
 
-        internal IRestResponse HandleRequest(RestVerb verb, string uri)
+        internal IRestResponse HandleRequest(RestRequest req)
         {
-            if(verb == RestVerb.Unsupported)
+            if(req.Verb == RestVerb.Unsupported)
             {
                 return _unsupportedVerbResponse;
             }
             
-            var restMethod = _restMethodCollection.SingleOrDefault(r => r.Match(verb, uri));
+            var restMethod = _restMethodCollection.SingleOrDefault(r => r.Match(req.Verb, req.Uri));
             if (restMethod == null)
             {
                 return _invalidUriResponse;
             }
 
-            return restMethod.ExecuteMethod(uri);
+            var restMethodExecutor = _methodExecuteFactory.Create(restMethod);
+
+            return restMethodExecutor.ExecuteMethod(restMethod, req);
         }
     }
 }

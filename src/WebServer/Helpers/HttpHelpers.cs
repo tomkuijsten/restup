@@ -6,10 +6,10 @@ namespace Devkoes.Restup.WebServer.Helpers
 {
     internal static class HttpHelpers
     {
-        private static readonly IDictionary<AcceptMediaType, string> _mediaTypeTexts = new Dictionary<AcceptMediaType, string>()
+        private static readonly IDictionary<MediaType, string> _mediaTypeTexts = new Dictionary<MediaType, string>()
         {
-            [AcceptMediaType.JSON] = "application/json",
-            [AcceptMediaType.XML] = "application/xml"
+            [MediaType.JSON] = "application/json",
+            [MediaType.XML] = "application/xml"
         };
 
         private static readonly IDictionary<int, string> _statusCodeTexts = new Dictionary<int, string>() {
@@ -39,7 +39,7 @@ namespace Devkoes.Restup.WebServer.Helpers
             return _statusCodeTexts[statusCode];
         }
 
-        internal static string GetMediaType(AcceptMediaType mediaType)
+        internal static string GetMediaType(MediaType mediaType)
         {
             return _mediaTypeTexts[mediaType];
         }

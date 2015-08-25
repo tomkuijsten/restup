@@ -1,6 +1,6 @@
 ﻿namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    public enum AcceptMediaType
+    public enum MediaType
     {
         JSON,
         XML

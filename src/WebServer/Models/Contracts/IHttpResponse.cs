@@ -10,7 +10,7 @@ namespace Devkoes.Restup.WebServer.Models.Contracts
     public interface IHttpResponse
     {
         string Body { get; }
-        AcceptMediaType BodyType { get; }
+        MediaType BodyType { get; }
         int StatusCode { get; }
     }
 }

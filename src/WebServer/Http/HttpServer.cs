@@ -79,7 +79,8 @@ namespace Devkoes.Restup.WebServer.Http
             using (IOutputStream output = socket.OutputStream)
             using (Stream resp = output.AsStreamForWrite())
             {
-                byte[] bodyData = Encoding.UTF8.GetBytes(response.Body);
+                //TODO: do some SOLID things with writing body and body headers yes or no
+                byte[] bodyData = response.Body == null ? new byte[0] : Encoding.UTF8.GetBytes(response.Body);
                 MemoryStream stream = new MemoryStream(bodyData);
 
                 string statusCodeText = HttpHelpers.GetHttpStatusCodeText(response.StatusCode);

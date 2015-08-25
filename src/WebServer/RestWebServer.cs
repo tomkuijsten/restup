@@ -13,11 +13,13 @@ namespace Devkoes.Restup.WebServer
     {
         private RestControllerRequestHandler _requestHandler;
         private RestRequestBuilder _restReqBuilder;
+        private BodySerializer _bodySerializer;
 
         public RestWebServer() : base(8800)
         {
             _requestHandler = new RestControllerRequestHandler();
             _restReqBuilder = new RestRequestBuilder();
+            _bodySerializer = new BodySerializer();
         }
 
         public void RegisterController<T>() where T : IRestController
@@ -29,35 +31,13 @@ namespace Devkoes.Restup.WebServer
         {
             var restRequest = _restReqBuilder.Build(request);
 
-            var response = _requestHandler.HandleRequest(restRequest.Verb, restRequest.Uri);
+            var response = _requestHandler.HandleRequest(restRequest);
 
-            string bodyString = null;
-            if (response.Data != null)
-            {
-                if (restRequest.AcceptHeaders.First() == AcceptMediaType.JSON)
-                {
-                    bodyString = JsonConvert.SerializeObject(response.Data);
-                }
-                else if(restRequest.AcceptHeaders.First() == AcceptMediaType.XML)
-                {
-                    bodyString = SerializeObject(response.Data);
-                }
-            }
+            string bodyString = _bodySerializer.ToBody(response.Data, restRequest);
 
             var httpResp = new HttpResponse(bodyString, restRequest.AcceptHeaders.First(), response.StatusCode);
 
             return httpResp;
-        }
-
-        private static string SerializeObject(object toSerialize)
-        {
-            XmlSerializer xmlSerializer = new XmlSerializer(toSerialize.GetType());
-
-            using (StringWriter textWriter = new StringWriter())
-            {
-                xmlSerializer.Serialize(textWriter, toSerialize);
-                return textWriter.ToString();
-            }
         }
     }
 }

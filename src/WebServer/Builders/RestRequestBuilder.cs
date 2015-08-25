@@ -9,15 +9,16 @@ namespace Devkoes.Restup.WebServer.Builders
     public class RestRequestBuilder
     {
         private const string ACCEPT_HEADERKEY = "accept:";
+        private const string CONTENTTYPE_HEADERKEY = "content-type:";
 
-        private static AcceptMediaType DEFAULT_RETURN_MEDIATYPE = AcceptMediaType.JSON;
+        private static MediaType DEFAULT_RETURN_MEDIATYPE = MediaType.JSON;
 
         // The order represents the priority for a response
-        private static readonly IDictionary<string, AcceptMediaType> _acceptHeaderText = new Dictionary<string, AcceptMediaType>()
+        private static readonly IDictionary<string, MediaType> _acceptedMediaTypes = new Dictionary<string, MediaType>()
         {
-            ["application/json"] = AcceptMediaType.JSON,
-            ["text/xml"] = AcceptMediaType.XML,
-            ["application/xml"] = AcceptMediaType.XML
+            ["application/json"] = MediaType.JSON,
+            ["text/xml"] = MediaType.XML,
+            ["application/xml"] = MediaType.XML
         };
 
         internal RestRequest Build(string request)
@@ -33,14 +34,37 @@ namespace Devkoes.Restup.WebServer.Builders
             var verb = HttpHelpers.GetVerb(verbAndUri.Item1);
             string body = GetBodyFromRequest(request);
             var accHeaders = GetAcceptHeadersFromRequest(perLine);
+            var bodyType = GetBodyTypeFromRequest(perLine);
 
             return new RestRequest()
             {
                 Verb = verb,
                 Uri = verbAndUri.Item2,
                 Body = body,
+                BodyMediaType = bodyType,
                 AcceptHeaders = accHeaders
             };
+        }
+
+        private MediaType GetBodyTypeFromRequest(string[] requestLines)
+        {
+            var contentTypeLine = requestLines.FirstOrDefault((l) => l.ToLower().StartsWith(CONTENTTYPE_HEADERKEY));
+            if(string.IsNullOrWhiteSpace(contentTypeLine))
+            {
+                return MediaType.JSON;
+            }
+
+            foreach (var acceptedType in _acceptedMediaTypes)
+            {
+                if(!contentTypeLine.Contains(acceptedType.Key))
+                {
+                    continue;
+                }
+
+                return acceptedType.Value;
+            }
+
+            return MediaType.JSON;
         }
 
         private static Tuple<string,string> GetVerbAndUriFromRequest(string firstRequestLine)
@@ -55,14 +79,14 @@ namespace Devkoes.Restup.WebServer.Builders
             return Tuple.Create(requestParts[0], requestParts[1]);
         }
 
-        private IEnumerable<AcceptMediaType> GetAcceptHeadersFromRequest(string[] requestLines)
+        private IEnumerable<MediaType> GetAcceptHeadersFromRequest(string[] requestLines)
         {
             // HTTP 1.1 headers are case insensitive (http://www.w3.org/Protocols/rfc2616/rfc2616.html)
             var lcLines = requestLines.Select(l => l.ToLower());
             var acceptedHeadersQuery = 
                     from line in lcLines
                     where line.StartsWith(ACCEPT_HEADERKEY)
-                    from header in _acceptHeaderText
+                    from header in _acceptedMediaTypes
                     where line.Contains(header.Key)
                     select header.Value;
 
