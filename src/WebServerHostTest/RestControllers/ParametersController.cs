@@ -40,5 +40,11 @@ namespace WebServerHostTest.RESTControllers
         {
             return new PostResponse(PostResponse.PostResponseStatus.Created, $"/parameters/{parameterId}");
         }
+
+        [UriFormat("/parameters/{parameterId}")]
+        public DeleteResponse DeleteParameter(int parameterId)
+        {
+            return new DeleteResponse(DeleteResponse.DeleteResponseStatus.OK);
+        }
     }
 }
