@@ -17,6 +17,12 @@ namespace WebServerHostTest.RESTControllers
             public double Value { get; set; }
         }
 
+        public class ParameterType
+        {
+            public string Name { get; set; }
+            public string Type { get; set; }
+        }
+
         [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]
         public GetResponse ReadParameter(int channelId, int nodeId, int parameterId)
         {
@@ -26,7 +32,13 @@ namespace WebServerHostTest.RESTControllers
         [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]
         public PutResponse WriteParameter(int channelId, int nodeId, int parameterId, [FromBody]ParameterValue v)
         {
-            return new PutResponse(PutResponse.GetResponseStatus.OK);
+            return new PutResponse(PutResponse.PutResponseStatus.OK);
+        }
+
+        [UriFormat("/parameters/{parameterId}")]
+        public PostResponse CreateParameter(int parameterId, [FromBody]ParameterType v)
+        {
+            return new PostResponse(PostResponse.PostResponseStatus.Created, $"/parameters/{parameterId}");
         }
     }
 }

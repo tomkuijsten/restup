@@ -133,6 +133,7 @@
     <Compile Include="Models\Schemas\InstanceCreationType.cs" />
     <Compile Include="Models\Schemas\DefaultResponse.cs" />
     <Compile Include="Models\Contracts\IRestMethodExecutor.cs" />
+    <Compile Include="Models\Schemas\PostResponse.cs" />
     <Compile Include="Models\Schemas\PutResponse.cs" />
     <Compile Include="Models\Schemas\RestRequest.cs" />
     <Compile Include="Models\Schemas\RestVerb.cs" />

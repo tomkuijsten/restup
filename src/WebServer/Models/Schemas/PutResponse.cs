@@ -8,16 +8,16 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
     {
         public object Data { get; }
 
-        public enum GetResponseStatus : int
+        public enum PutResponseStatus : int
         {
             OK = 200,
             NoContent = 204,
             NotFound = 404
         };
 
-        public GetResponseStatus Status { get; }
+        public PutResponseStatus Status { get; }
 
-        public PutResponse(GetResponseStatus status)
+        public PutResponse(PutResponseStatus status)
         {
             Status = status;
             Data = null;
