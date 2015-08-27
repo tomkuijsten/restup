@@ -22,7 +22,7 @@ namespace Devkoes.Restup.WebServer
             _bodySerializer = new BodySerializer();
         }
 
-        public void RegisterController<T>() where T : IRestController
+        public void RegisterController<T>() where T : class
         {
             _requestHandler.RegisterController<T>();
         }

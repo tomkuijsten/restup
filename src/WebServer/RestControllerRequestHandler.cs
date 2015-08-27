@@ -26,7 +26,7 @@ namespace Devkoes.Restup.WebServer
             _invalidUriResponse = new DefaultResponse("No REST controller for uri found", HttpStatusCode.BadRequest);
         }
 
-        internal void RegisterController<T>() where T : IRestController
+        internal void RegisterController<T>() where T : class
         {
             var allPublicRestMethods =
                 from m in typeof(T).GetRuntimeMethods()

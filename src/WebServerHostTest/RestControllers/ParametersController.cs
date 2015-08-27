@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace WebServerHostTest.RESTControllers
 {
     [RestController(InstanceCreationType.Singleton)]
-    public class ParametersController : IRestController
+    public class ParametersController
     {
         public class ParameterValue
         {
