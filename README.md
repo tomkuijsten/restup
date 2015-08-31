@@ -12,8 +12,8 @@ When the raspberry pi 2 was released, all windows 10 users were filled with joy 
 
 # Usage
 
-> [UriFormat("/users/{userId}")] 
-> public PostResponse CreateUser(int userId, [FromBody] User user) 
-> {
->     return new PostResponse(PostResponse.ResponseStatus.Created, $"/users/{userId}"); 
-> } 
+``` [UriFormat("/users/{userId}")] 
+``` public PostResponse CreateUser(int userId, [FromBody] User user) 
+``` {
+```     return new PostResponse(PostResponse.ResponseStatus.Created, $"/users/{userId}"); 
+``` } 
