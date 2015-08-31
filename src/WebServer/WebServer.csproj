@@ -126,6 +126,7 @@
     <Compile Include="Models\Contracts\IHttpResponse.cs" />
     <Compile Include="Models\Contracts\IInstanceCreator.cs" />
     <Compile Include="Models\Contracts\IRestResponse.cs" />
+    <Compile Include="Models\Contracts\IRestResponseVisitor.cs" />
     <Compile Include="Models\Schemas\DeleteResponse.cs" />
     <Compile Include="Models\Schemas\MediaType.cs" />
     <Compile Include="Models\Schemas\GetResponse.cs" />
@@ -141,6 +142,7 @@
     <Compile Include="RestControllerRequestHandler.cs" />
     <Compile Include="Executors\RestMethodExecutor.cs" />
     <Compile Include="RestWebServer.cs" />
+    <Compile Include="Visitors\RestResponseVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />

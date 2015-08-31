@@ -6,6 +6,7 @@ using Devkoes.Restup.WebServer.Models.Schemas;
 using Newtonsoft.Json;
 using System.Xml.Serialization;
 using System.IO;
+using Devkoes.Restup.WebServer.Visitors;
 
 namespace Devkoes.Restup.WebServer
 {
@@ -13,13 +14,11 @@ namespace Devkoes.Restup.WebServer
     {
         private RestControllerRequestHandler _requestHandler;
         private RestRequestBuilder _restReqBuilder;
-        private BodySerializer _bodySerializer;
 
         public RestWebServer() : base(8800)
         {
             _requestHandler = new RestControllerRequestHandler();
             _restReqBuilder = new RestRequestBuilder();
-            _bodySerializer = new BodySerializer();
         }
 
         public void RegisterController<T>() where T : class
@@ -31,13 +30,12 @@ namespace Devkoes.Restup.WebServer
         {
             var restRequest = _restReqBuilder.Build(request);
 
-            var response = _requestHandler.HandleRequest(restRequest);
+            var restResponse = _requestHandler.HandleRequest(restRequest);
 
-            string bodyString = _bodySerializer.ToBody(response.Data, restRequest);
+            var responseVisitor = new RestResponseVisitor(restRequest);
+            restResponse.Accept(responseVisitor);
 
-            var httpResp = new HttpResponse(bodyString, restRequest.AcceptHeaders.First(), response.StatusCode);
-
-            return httpResp;
+            return responseVisitor.HttpResponse;
         }
     }
 }

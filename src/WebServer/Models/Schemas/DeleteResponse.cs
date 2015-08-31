@@ -1,30 +1,23 @@
 ﻿using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
     [RestVerb(RestVerb.DELETE)]
     public struct DeleteResponse : IRestResponse
     {
-        public enum DeleteResponseStatus : int
+        public enum ResponseStatus : int
         {
             OK = 200,
             NoContent = 204,
             NotFound = 404
         };
 
-        public DeleteResponseStatus Status { get; }
-        public object Data { get; }
+        public ResponseStatus Status { get; }
 
-        public DeleteResponse(DeleteResponseStatus status, object data = null)
+        public DeleteResponse(ResponseStatus status)
         {
             Status = status;
-            Data = data;
         }
 
         public int StatusCode
@@ -33,6 +26,11 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             {
                 return (int)Status;
             }
+        }
+
+        public void Accept(IRestResponseVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

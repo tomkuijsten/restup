@@ -79,22 +79,7 @@ namespace Devkoes.Restup.WebServer.Http
             using (IOutputStream output = socket.OutputStream)
             using (Stream resp = output.AsStreamForWrite())
             {
-                //TODO: do some SOLID things with writing body and body headers yes or no
-                byte[] bodyData = response.Body == null ? new byte[0] : Encoding.UTF8.GetBytes(response.Body);
-                MemoryStream stream = new MemoryStream(bodyData);
-
-                string statusCodeText = HttpHelpers.GetHttpStatusCodeText(response.StatusCode);
-
-                var rawHttpResponseBuilder = new StringBuilder();
-                rawHttpResponseBuilder.AppendFormat("HTTP/1.1 {0} {1}\r\n", response.StatusCode, statusCodeText);
-                rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", stream.Length);
-                rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpHelpers.GetMediaType(response.BodyType));
-                rawHttpResponseBuilder.Append("Connection: close\r\n");
-                rawHttpResponseBuilder.Append("\r\n");
-
-                byte[] headerArray = Encoding.UTF8.GetBytes(rawHttpResponseBuilder.ToString());
-                await resp.WriteAsync(headerArray, 0, headerArray.Length);
-                await stream.CopyToAsync(resp);
+                await resp.WriteAsync(response.RawResponse, 0, response.RawResponse.Length);
                 await resp.FlushAsync();
             }
         }

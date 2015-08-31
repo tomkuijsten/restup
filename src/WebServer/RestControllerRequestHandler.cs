@@ -22,8 +22,8 @@ namespace Devkoes.Restup.WebServer
             _restMethodCollection = new List<RestMethodInfo>();
             _methodExecuteFactory = new RestMethodExecutorFactory();
 
-            _unsupportedVerbResponse = new DefaultResponse("Verb not supported", HttpStatusCode.BadRequest);
-            _invalidUriResponse = new DefaultResponse("No REST controller for uri found", HttpStatusCode.BadRequest);
+            _unsupportedVerbResponse = new DefaultResponse("Verb not supported", DefaultResponse.ResponseStatus.BadRequest);
+            _invalidUriResponse = new DefaultResponse("No REST controller for uri found", DefaultResponse.ResponseStatus.BadRequest);
         }
 
         internal void RegisterController<T>() where T : class

@@ -9,10 +9,10 @@ namespace WebServer.UnitTests
     [TestClass]
     public class RestWebServerTest
     {
+        #region BasicGetAcceptXML
         private string _basicGETAcceptXML =
 @"GET /users/2 HTTP/1.1
 Host: minwinpc:8800
-Connection: Keep-Alive
 Accept: text/xml";
 
         [TestMethod]
@@ -22,16 +22,40 @@ Accept: text/xml";
             m.RegisterController<TestController>();
             var response = m.HandleRequest(_basicGETAcceptXML);
 
-            Assert.AreEqual(response.BodyType, MediaType.XML);
-            Assert.AreEqual(response.StatusCode, 200);
-            StringAssert.Contains(response.Body, "<Name>Tom</Name>");
-            StringAssert.Contains(response.Body, "<Age>30</Age>");
+            StringAssert.Contains(response.Response, "200 OK");
+            StringAssert.Contains(response.Response, "Content-Type: application/xml");
+            StringAssert.Contains(response.Response, "<Name>Tom</Name>");
+            StringAssert.Contains(response.Response, "<Age>30</Age>");
         }
+        #endregion
 
+        #region BasicGetAcceptJSON
+        private string _basicGETAcceptJSON =
+@"GET /users/2 HTTP/1.1
+Host: minwinpc:8800
+Accept: application/json";
+
+        [TestMethod]
+        public void HandleRequest_BasicGETAcceptJSON_Status200WithJSON()
+        {
+            var m = new RestWebServer();
+            m.RegisterController<TestController>();
+            var response = m.HandleRequest(_basicGETAcceptJSON);
+
+            StringAssert.Contains(response.Response, "200 OK");
+            StringAssert.Contains(response.Response, "Content-Type: application/json");
+            StringAssert.Contains(response.Response, "\"Name\":\"Tom\"");
+            StringAssert.Contains(response.Response, "\"Age\":30");
+        }
+        #endregion
+
+        #region BasicPost
         private string _basicPOST =
 @"POST /users/2 HTTP/1.1
 Host: minwinpc:8800
-Connection: Keep-Alive";
+Content-Type: application/json
+
+{""Name"": ""Tom"", ""Age"": 33}";
 
         [TestMethod]
         public void HandleRequest_BasicPOST_LocationHeaderStatus201()
@@ -40,9 +64,45 @@ Connection: Keep-Alive";
             m.RegisterController<TestController>();
             var response = m.HandleRequest(_basicPOST);
 
-            Assert.AreEqual(response.StatusCode, 201);
-            //Assert.AreEqual(response.Location, "/users/2");
+            StringAssert.Contains(response.Response, "201 Created");
+            StringAssert.Contains(response.Response, "Location: /users/2");
         }
+        #endregion
+
+        #region BasicPut
+        private string _basicPUT =
+@"PUT /users/2 HTTP/1.1
+Host: minwinpc:8800
+Content-Type: application/json
+
+{Name: Tom, Age: 21}";
+
+        [TestMethod]
+        public void HandleRequest_BasicPUT_Status200()
+        {
+            var m = new RestWebServer();
+            m.RegisterController<TestController>();
+            var response = m.HandleRequest(_basicPUT);
+
+            StringAssert.Contains(response.Response, "200 OK");
+        }
+        #endregion
+
+        #region BasicDelete
+        private string _basicDEL =
+@"DELETE /users/2 HTTP/1.1
+Host: minwinpc:8800";
+
+        [TestMethod]
+        public void HandleRequest_BasicDEL_Status200()
+        {
+            var m = new RestWebServer();
+            m.RegisterController<TestController>();
+            var response = m.HandleRequest(_basicDEL);
+
+            StringAssert.Contains(response.Response, "200 OK");
+        }
+        #endregion
     }
 
     [RestController(InstanceCreationType.Singleton)]
@@ -57,7 +117,25 @@ Connection: Keep-Alive";
         [UriFormat("/users/{userId}")]
         public GetResponse GetUser(int userId)
         {
-            return new GetResponse(GetResponse.GetResponseStatus.OK, new User() { Name = "Tom", Age = 30 });
+            return new GetResponse(GetResponse.ResponseStatus.OK, new User() { Name = "Tom", Age = 30 });
+        }
+
+        [UriFormat("/users/{userId}")]
+        public PostResponse CreateUser(int userId, [FromBody] User user)
+        {
+            return new PostResponse(PostResponse.ResponseStatus.Created, $"/users/{userId}");
+        }
+
+        [UriFormat("/users/{userId}")]
+        public PutResponse UpdateUser(int userId)
+        {
+            return new PutResponse(PutResponse.ResponseStatus.OK);
+        }
+
+        [UriFormat("/users/{userId}")]
+        public DeleteResponse DeleteUser(int userId)
+        {
+            return new DeleteResponse(DeleteResponse.ResponseStatus.OK);
         }
     }
 }

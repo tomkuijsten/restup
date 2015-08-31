@@ -5,6 +5,12 @@ namespace Devkoes.Restup.WebServer.Models.Contracts
     public interface IRestResponse
     {
         int StatusCode { get; }
-        object Data { get; }
+
+        void Accept(IRestResponseVisitor visitor);
+    }
+
+    public interface IBodyRestResponse : IRestResponse
+    {
+        object BodyData { get; }
     }
 }

@@ -6,21 +6,18 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
     [RestVerb(RestVerb.PUT)]
     public struct PutResponse : IRestResponse
     {
-        public object Data { get; }
-
-        public enum PutResponseStatus : int
+        public enum ResponseStatus : int
         {
             OK = 200,
             NoContent = 204,
             NotFound = 404
         };
 
-        public PutResponseStatus Status { get; }
+        public ResponseStatus Status { get; }
 
-        public PutResponse(PutResponseStatus status)
+        public PutResponse(ResponseStatus status)
         {
             Status = status;
-            Data = null;
         }
 
         public int StatusCode
@@ -29,6 +26,11 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             {
                 return (int)Status;
             }
+        }
+
+        public void Accept(IRestResponseVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }
