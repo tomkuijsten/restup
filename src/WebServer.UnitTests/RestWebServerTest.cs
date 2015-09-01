@@ -19,7 +19,7 @@ Accept: text/xml";
         public void HandleRequest_BasicGETAcceptXML_Status200WithXml()
         {
             var m = new RestWebServer();
-            m.RegisterController<TestController>();
+            m.RegisterController<HappyPathTestController>();
             var response = m.HandleRequest(_basicGETAcceptXML);
 
             StringAssert.Contains(response.Response, "200 OK");
@@ -39,7 +39,7 @@ Accept: application/json";
         public void HandleRequest_BasicGETAcceptJSON_Status200WithJSON()
         {
             var m = new RestWebServer();
-            m.RegisterController<TestController>();
+            m.RegisterController<HappyPathTestController>();
             var response = m.HandleRequest(_basicGETAcceptJSON);
 
             StringAssert.Contains(response.Response, "200 OK");
@@ -51,7 +51,7 @@ Accept: application/json";
 
         #region BasicPost
         private string _basicPOST =
-@"POST /users/2 HTTP/1.1
+@"POST /users HTTP/1.1
 Host: minwinpc:8800
 Content-Type: application/json
 
@@ -61,7 +61,7 @@ Content-Type: application/json
         public void HandleRequest_BasicPOST_LocationHeaderStatus201()
         {
             var m = new RestWebServer();
-            m.RegisterController<TestController>();
+            m.RegisterController<HappyPathTestController>();
             var response = m.HandleRequest(_basicPOST);
 
             StringAssert.Contains(response.Response, "201 Created");
@@ -81,7 +81,7 @@ Content-Type: application/json
         public void HandleRequest_BasicPUT_Status200()
         {
             var m = new RestWebServer();
-            m.RegisterController<TestController>();
+            m.RegisterController<HappyPathTestController>();
             var response = m.HandleRequest(_basicPUT);
 
             StringAssert.Contains(response.Response, "200 OK");
@@ -97,7 +97,7 @@ Host: minwinpc:8800";
         public void HandleRequest_BasicDEL_Status200()
         {
             var m = new RestWebServer();
-            m.RegisterController<TestController>();
+            m.RegisterController<HappyPathTestController>();
             var response = m.HandleRequest(_basicDEL);
 
             StringAssert.Contains(response.Response, "200 OK");
@@ -106,7 +106,7 @@ Host: minwinpc:8800";
     }
 
     [RestController(InstanceCreationType.Singleton)]
-    public class TestController
+    public class HappyPathTestController
     {
         public class User
         {
@@ -120,10 +120,10 @@ Host: minwinpc:8800";
             return new GetResponse(GetResponse.ResponseStatus.OK, new User() { Name = "Tom", Age = 30 });
         }
 
-        [UriFormat("/users/{userId}")]
-        public PostResponse CreateUser(int userId, [FromBody] User user)
+        [UriFormat("/users")]
+        public PostResponse CreateUser([FromBody] User user)
         {
-            return new PostResponse(PostResponse.ResponseStatus.Created, $"/users/{userId}");
+            return new PostResponse(PostResponse.ResponseStatus.Created, $"/users/2");
         }
 
         [UriFormat("/users/{userId}")]
