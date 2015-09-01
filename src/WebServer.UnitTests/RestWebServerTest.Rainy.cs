@@ -11,7 +11,7 @@ namespace WebServer.UnitTests
     public class RestWebServerRainyDayTest
     {
         #region BasicPost
-        private string _basicPOST =
+        private string _conflictingPOST =
 @"POST /users/1 HTTP/1.1
 Host: minwinpc:8800
 Content-Type: application/json
@@ -19,24 +19,31 @@ Content-Type: application/json
 {""Name"": ""Tom"", ""Age"": 33}";
 
         [TestMethod]
-        public void HandleRequest_BasicPOST_ConlictedUser()
+        public void HandleRequest_BasicPOST_Conflicted()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = m.HandleRequest(_basicPOST);
+            var response = m.HandleRequest(_conflictingPOST);
 
             StringAssert.Contains(response.Response, "409 Conflict");
             StringAssert.DoesNotMatch(response.Response, new Regex("Location:"));
         }
 
+        private string _methodNotAllowedPOST =
+@"POST /users/2 HTTP/1.1
+Host: minwinpc:8800
+Content-Type: application/json
+
+{""Name"": ""Tom"", ""Age"": 33}";
+
         [TestMethod]
-        public void HandleRequest_BasicPOST_NotFoundUser()
+        public void HandleRequest_BasicPOST_MethodNotAllowed()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = m.HandleRequest(_basicPOST);
+            var response = m.HandleRequest(_methodNotAllowedPOST);
 
-            StringAssert.Contains(response.Response, "405 MethodNotAllowed");
+            StringAssert.Contains(response.Response, "405 Method Not Allowed");
             StringAssert.DoesNotMatch(response.Response, new Regex("Location:"));
         }
         #endregion
@@ -51,12 +58,6 @@ Content-Type: application/json
             public int Age { get; set; }
         }
 
-        [UriFormat("/users/{userId}")]
-        public GetResponse GetUser(int userId)
-        {
-            return new GetResponse(GetResponse.ResponseStatus.OK, new User() { Name = "Tom", Age = 30 });
-        }
-
         [UriFormat("/users/{id}")]
         public PostResponse CreateUser(int id, [FromBody] User user)
         {
@@ -64,18 +65,6 @@ Content-Type: application/json
                 return new PostResponse(PostResponse.ResponseStatus.Conflict);
             else
                 return new PostResponse(PostResponse.ResponseStatus.MethodNotFound);
-        }
-
-        [UriFormat("/users/{userId}")]
-        public PutResponse UpdateUser(int userId)
-        {
-            return new PutResponse(PutResponse.ResponseStatus.OK);
-        }
-
-        [UriFormat("/users/{userId}")]
-        public DeleteResponse DeleteUser(int userId)
-        {
-            return new DeleteResponse(DeleteResponse.ResponseStatus.OK);
         }
     }
 }
