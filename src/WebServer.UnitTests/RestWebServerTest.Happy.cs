@@ -7,7 +7,7 @@ using System;
 namespace WebServer.UnitTests
 {
     [TestClass]
-    public class RestWebServerTest
+    public class RestWebServerHappyPathTest
     {
         #region BasicGetAcceptXML
         private string _basicGETAcceptXML =

@@ -10,7 +10,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
         {
             Created = 201,
             Conflict = 409,
-            NotFound = 404
+            MethodNotFound = 405
         };
 
         public ResponseStatus Status { get; }
@@ -20,6 +20,11 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
         {
             Status = status;
             LocationRedirect = locationRedirectUri;
+        }
+
+        public PostResponse(ResponseStatus status) : this(status, null)
+        {
+
         }
 
         public int StatusCode
