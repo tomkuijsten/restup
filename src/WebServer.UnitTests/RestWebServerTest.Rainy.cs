@@ -27,7 +27,6 @@ Content-Type: application/json
 
             StringAssert.Contains(response.Response, "409 Conflict");
             StringAssert.DoesNotMatch(response.Response, new Regex("Location:"));
-            StringAssert.Contains(response.Response, "Allow:");
         }
 
         private string _methodNotAllowedPOST =
