@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace WebServer.UnitTests
 {
-	[TestClass]
+    [TestClass]
     public class RestWebServerRainyDayTest
     {
         #region BasicPost
@@ -19,7 +19,7 @@ Content-Type: application/json
 {""Name"": ""Tom"", ""Age"": 33}";
 
         [TestMethod]
-        public void HandleRequest_BasicPOST_Conflicted()
+        public void HandleRequest_CreateWithExistingId_Conflicted()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
@@ -29,23 +29,22 @@ Content-Type: application/json
             StringAssert.DoesNotMatch(response.Response, new Regex("Location:"));
         }
 
-        private string _methodNotAllowedPOST =
-@"POST /users/2 HTTP/1.1
+        private string _methodNotAllowedPUT =
+@"PUT /users/2 HTTP/1.1
 Host: minwinpc:8800
 Content-Type: application/json
 
 {""Name"": ""Tom"", ""Age"": 33}";
 
         [TestMethod]
-        public void HandleRequest_BasicPOST_MethodNotAllowed()
+        public void HandleRequest_BasicPUT_MethodNotAllowed()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = m.HandleRequest(_methodNotAllowedPOST);
+            var response = m.HandleRequest(_methodNotAllowedPUT);
 
             StringAssert.Contains(response.Response, "405 Method Not Allowed");
-            StringAssert.DoesNotMatch(response.Response, new Regex("Location:"));
-            StringAssert.Contains(response.Response, "Allow:");
+            StringAssert.Contains(response.Response, "Allow: POST");
         }
         #endregion
     }
@@ -62,10 +61,7 @@ Content-Type: application/json
         [UriFormat("/users/{id}")]
         public PostResponse CreateUser(int id, [FromBody] User user)
         {
-            if(id == 1)
-                return new PostResponse(PostResponse.ResponseStatus.Conflict);
-            else
-                return new PostResponse(PostResponse.ResponseStatus.MethodNotFound);
+            return new PostResponse(PostResponse.ResponseStatus.Conflict);
         }
     }
 }

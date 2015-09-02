@@ -13,6 +13,7 @@ namespace Devkoes.Restup.WebServer.Models.Contracts
         void Visit(GetResponse response);
         void Visit(DeleteResponse response);
         void Visit(PostResponse response);
-        void Visit(DefaultResponse defaultResponse);
+        void Visit(StatusOnlyResponse statusOnlyResponse);
+        void Visit(MethodNotAllowedResponse methodNotAllowedResponse);
     }
 }

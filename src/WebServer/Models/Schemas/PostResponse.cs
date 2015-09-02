@@ -9,8 +9,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
         public enum ResponseStatus : int
         {
             Created = 201,
-            Conflict = 409,
-            MethodNotFound = 405
+            Conflict = 409
         };
 
         public ResponseStatus Status { get; }

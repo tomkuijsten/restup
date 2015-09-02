@@ -80,9 +80,9 @@ namespace Devkoes.Restup.WebServer.Http
             Verb = restVerbAttr.Verb;
         }
 
-        public bool Match(RestVerb verb, string uri)
+        public bool Match(string uri)
         {
-            return this.Verb == verb && UriMatches(uri);
+            return UriMatches(uri);
         }
 
         private bool UriMatches(string uri)

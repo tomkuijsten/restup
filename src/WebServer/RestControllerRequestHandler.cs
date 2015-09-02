@@ -13,8 +13,7 @@ namespace Devkoes.Restup.WebServer
     internal class RestControllerRequestHandler
     {
         private List<RestMethodInfo> _restMethodCollection;
-        private DefaultResponse _unsupportedVerbResponse;
-        private DefaultResponse _invalidUriResponse;
+        private BadRequestResponse _badRequestResponse;
         private RestMethodExecutorFactory _methodExecuteFactory;
 
         internal RestControllerRequestHandler()
@@ -22,8 +21,7 @@ namespace Devkoes.Restup.WebServer
             _restMethodCollection = new List<RestMethodInfo>();
             _methodExecuteFactory = new RestMethodExecutorFactory();
 
-            _unsupportedVerbResponse = new DefaultResponse("Verb not supported", DefaultResponse.ResponseStatus.BadRequest);
-            _invalidUriResponse = new DefaultResponse("No REST controller for uri found", DefaultResponse.ResponseStatus.BadRequest);
+            _badRequestResponse = new BadRequestResponse();
         }
 
         internal void RegisterController<T>() where T : class
@@ -48,13 +46,19 @@ namespace Devkoes.Restup.WebServer
         {
             if(req.Verb == RestVerb.Unsupported)
             {
-                return _unsupportedVerbResponse;
+                return _badRequestResponse;
             }
             
-            var restMethod = _restMethodCollection.SingleOrDefault(r => r.Match(req.Verb, req.Uri));
+            var restMethods = _restMethodCollection.Where(r => r.Match(req.Uri));
+            if (!restMethods.Any())
+            {
+                return _badRequestResponse;
+            }
+
+            var restMethod = restMethods.SingleOrDefault(r => r.Verb == req.Verb);
             if (restMethod == null)
             {
-                return _invalidUriResponse;
+                return new MethodNotAllowedResponse(restMethods.Select(r => r.Verb));
             }
 
             var restMethodExecutor = _methodExecuteFactory.Create(restMethod);
