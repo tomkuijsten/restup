@@ -3,16 +3,21 @@ using Devkoes.Restup.WebServer.Http;
 using System.Linq;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.InstanceCreators;
+using System.Collections.Generic;
+using System;
+using Devkoes.Restup.WebServer.Factories;
 
 namespace Devkoes.Restup.WebServer.Executors
 {
     internal class RestMethodWithBodyExecutor : IRestMethodExecutor
     {
         private BodySerializer _bodySerializer;
+        private RestResponseFactory _responseFactory;
 
         public RestMethodWithBodyExecutor()
         {
             _bodySerializer = new BodySerializer();
+            _responseFactory = new RestResponseFactory();
         }
 
         public IRestResponse ExecuteMethod(RestMethodInfo info, RestRequest request)
@@ -21,11 +26,19 @@ namespace Devkoes.Restup.WebServer.Executors
 
             var bodyObj = _bodySerializer.FromBody(request.Body, request.BodyMediaType, info.BodyParameterType);
 
-            var parameters = info.GetParametersFromUri(request.Uri).Union(new[] { bodyObj });
+            object[] parameters = null;
+            try
+            {
+                parameters = info.GetParametersFromUri(request.Uri).Union(new[] { bodyObj }).ToArray();
+            }
+            catch (FormatException)
+            {
+                return _responseFactory.CreateBadRequest();
+            }
 
             return (IRestResponse)info.MethodInfo.Invoke(
                     instantiator.Create(info.MethodInfo.DeclaringType),
-                    parameters.ToArray());
+                    parameters);
         }
     }
 }

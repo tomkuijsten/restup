@@ -10,7 +10,7 @@ namespace WebServer.UnitTests
     [TestClass]
     public class RestWebServerRainyDayTest
     {
-        #region BasicPost
+        #region ConflictingPost
         private string _conflictingPOST =
 @"POST /users/1 HTTP/1.1
 Host: minwinpc:8800
@@ -28,7 +28,9 @@ Content-Type: application/json
             StringAssert.Contains(response.Response, "409 Conflict");
             StringAssert.DoesNotMatch(response.Response, new Regex("Location:"));
         }
+        #endregion
 
+        #region MethodNotAllowed
         private string _methodNotAllowedPUT =
 @"PUT /users/2 HTTP/1.1
 Host: minwinpc:8800
@@ -45,6 +47,25 @@ Content-Type: application/json
 
             StringAssert.Contains(response.Response, "405 Method Not Allowed");
             StringAssert.Contains(response.Response, "Allow: POST");
+        }
+        #endregion
+
+        #region ParameterParseException
+        private string _parameterParseExceptionPUT =
+@"POST /users/notanumber HTTP/1.1
+Host: minwinpc:8800
+Content-Type: application/json
+
+{""Name"": ""Tom"", ""Age"": 33}";
+
+        [TestMethod]
+        public void HandleRequest_WrongParameterTypePUT_BasRequest()
+        {
+            var m = new RestWebServer();
+            m.RegisterController<RaiyDayTestController>();
+            var response = m.HandleRequest(_parameterParseExceptionPUT);
+
+            StringAssert.Contains(response.Response, "400 Bad Request");
         }
         #endregion
     }

@@ -116,6 +116,7 @@
     <Compile Include="Builders\RestRequestBuilder.cs" />
     <Compile Include="Executors\RestMethodWithBodyExecutor.cs" />
     <Compile Include="Factories\RestMethodExecutorFactory.cs" />
+    <Compile Include="Factories\RestResponseFactory.cs" />
     <Compile Include="Helpers\HttpHelpers.cs" />
     <Compile Include="Http\BodySerializer.cs" />
     <Compile Include="Http\HttpServer.cs" />

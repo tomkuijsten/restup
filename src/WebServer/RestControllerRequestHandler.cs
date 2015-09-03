@@ -13,15 +13,14 @@ namespace Devkoes.Restup.WebServer
     internal class RestControllerRequestHandler
     {
         private List<RestMethodInfo> _restMethodCollection;
-        private BadRequestResponse _badRequestResponse;
+        private RestResponseFactory _responseFactory;
         private RestMethodExecutorFactory _methodExecuteFactory;
 
         internal RestControllerRequestHandler()
         {
             _restMethodCollection = new List<RestMethodInfo>();
+            _responseFactory = new RestResponseFactory();
             _methodExecuteFactory = new RestMethodExecutorFactory();
-
-            _badRequestResponse = new BadRequestResponse();
         }
 
         internal void RegisterController<T>() where T : class
@@ -46,13 +45,13 @@ namespace Devkoes.Restup.WebServer
         {
             if(req.Verb == RestVerb.Unsupported)
             {
-                return _badRequestResponse;
+                return _responseFactory.CreateBadRequest();
             }
             
             var restMethods = _restMethodCollection.Where(r => r.Match(req.Uri));
             if (!restMethods.Any())
             {
-                return _badRequestResponse;
+                return _responseFactory.CreateBadRequest();
             }
 
             var restMethod = restMethods.SingleOrDefault(r => r.Verb == req.Verb);
