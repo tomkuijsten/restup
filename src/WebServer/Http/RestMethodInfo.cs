@@ -16,24 +16,47 @@ namespace Devkoes.Restup.WebServer.Http
         private const string MATCHPARAMETER_REPLACE_STRING = "(?<$1>.*?)";
         private const string MATCHURI_REPLACE_STRING = ".+?";
 
+        private IEnumerable<Type> _validParameterTypes;
         private Regex _findParameterValuesRegex;
         private Regex _matchUriRegex;
         private IDictionary<string, Type> _parametersForUri;
 
         public MethodInfo MethodInfo { get; private set; }
         public RestVerb Verb { get; private set; }
-        public bool HasBodyParameter{get; private set;}
-        public Type BodyParameterType { get; private set;}
+        public bool HasBodyParameter { get; private set; }
+        public Type BodyParameterType { get; private set; }
 
         public RestMethodInfo(MethodInfo methodInfo)
         {
             MethodInfo = methodInfo;
 
-            InitializeParameterNames();
+            InitializeValidParameterTypes();
+            InitializeParameters();
             InitializeVerb();
             InitializeFindParameterRegex();
             InitializeMatchUriRegex();
             InitializeBodyParameter();
+        }
+
+        private void InitializeValidParameterTypes()
+        {
+            _validParameterTypes = new[] {
+                typeof(string),
+                typeof(decimal),
+                typeof(double),
+                typeof(float),
+                typeof(short),
+                typeof(int),
+                typeof(long),
+                typeof(byte),
+                typeof(bool),
+                typeof(DateTime),
+                typeof(char),
+                typeof(sbyte),
+                typeof(ushort),
+                typeof(uint),
+                typeof(ulong),
+            };
         }
 
         private void InitializeBodyParameter()
@@ -48,13 +71,23 @@ namespace Devkoes.Restup.WebServer.Http
             BodyParameterType = fromBodyParameter.ParameterType;
         }
 
-        private void InitializeParameterNames()
+        private void InitializeParameters()
         {
             var fromUriParams = from p in MethodInfo.GetParameters()
-                    where p.GetCustomAttribute<FromBodyAttribute>() == null
-                    select p;
+                                where p.GetCustomAttribute<FromBodyAttribute>() == null
+                                select p;
+
+            if (!ParametersHaveValidType(fromUriParams.Select(p => p.ParameterType)))
+            {
+                throw new InvalidOperationException("Can't use method parameters with a custom type.");
+            }
 
             _parametersForUri = fromUriParams.ToDictionary(p => p.Name, p => p.ParameterType);
+        }
+
+        private bool ParametersHaveValidType(IEnumerable<Type> parameters)
+        {
+            return !parameters.Except(_validParameterTypes).Any();
         }
 
         private void InitializeMatchUriRegex()
@@ -93,7 +126,7 @@ namespace Devkoes.Restup.WebServer.Http
         public IEnumerable<object> GetParametersFromUri(string uri)
         {
             Match m = _findParameterValuesRegex.Match(uri);
-            if(!m.Success)
+            if (!m.Success)
             {
                 yield return null;
             }

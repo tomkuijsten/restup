@@ -59,13 +59,33 @@ Content-Type: application/json
 {""Name"": ""Tom"", ""Age"": 33}";
 
         [TestMethod]
-        public void HandleRequest_WrongParameterTypePUT_BasRequest()
+        public void HandleRequest_WrongParameterTypePUT_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
             var response = m.HandleRequest(_parameterParseExceptionPUT);
 
             StringAssert.Contains(response.Response, "400 Bad Request");
+        }
+        #endregion
+
+        #region ParameterTypeException
+        [TestMethod]
+        public void HandleRequest_WrongParameterTypeInController_InvalidOperationException()
+        {
+            var m = new RestWebServer();
+
+            bool invOpThrown = false;
+            try
+            {
+                m.RegisterController<ParameterTypeErrorTestController>();
+            }
+            catch (InvalidOperationException)
+            {
+                invOpThrown = true;
+            }
+
+            Assert.IsTrue(invOpThrown, "InvalidOperationException was not thrown");
         }
         #endregion
     }
@@ -81,6 +101,16 @@ Content-Type: application/json
 
         [UriFormat("/users/{id}")]
         public PostResponse CreateUser(int id, [FromBody] User user)
+        {
+            return new PostResponse(PostResponse.ResponseStatus.Conflict);
+        }
+    }
+
+    [RestController(InstanceCreationType.Singleton)]
+    public class ParameterTypeErrorTestController
+    {
+        [UriFormat("/users/{id}")]
+        public PostResponse CreateUser(object id)
         {
             return new PostResponse(PostResponse.ResponseStatus.Conflict);
         }
