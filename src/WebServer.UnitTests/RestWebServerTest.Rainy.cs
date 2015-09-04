@@ -89,7 +89,7 @@ Content-Type: application/json
         }
         #endregion
 
-        #region BodyParameterParseException
+        #region JsonBodyParameterValueParseException
         private string _bodyParameterParseExPOST =
 @"POST /users/1 HTTP/1.1
 Host: minwinpc:8800
@@ -103,6 +103,63 @@ Content-Type: application/json
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
             var response = m.HandleRequest(_bodyParameterParseExPOST);
+
+            StringAssert.Contains(response.Response, "400 Bad Request");
+        }
+        #endregion
+
+        #region XmlBodyParameterValueParseException
+        private string _xmlBodyParameterParseExPOST =
+@"POST /users/1 HTTP/1.1
+Host: minwinpc:8800
+Content-Type: application/xml
+
+<User><Name>Tom</Name><Age>thirtythree</Age></User>";
+
+        [TestMethod]
+        public void HandleRequest_InvalidXMLBodyParameter_BadRequest()
+        {
+            var m = new RestWebServer();
+            m.RegisterController<RaiyDayTestController>();
+            var response = m.HandleRequest(_xmlBodyParameterParseExPOST);
+
+            StringAssert.Contains(response.Response, "400 Bad Request");
+        }
+        #endregion
+
+        #region InvalidJsonFormatParseException
+        private string _invalidJsonFormatPOST =
+@"POST /users/1 HTTP/1.1
+Host: minwinpc:8800
+Content-Type: application/json
+
+{""Name"" = ""Tom""; ""Age"" = 33}";
+
+        [TestMethod]
+        public void HandleRequest_InvalidJsonFormat_BadRequest()
+        {
+            var m = new RestWebServer();
+            m.RegisterController<RaiyDayTestController>();
+            var response = m.HandleRequest(_invalidJsonFormatPOST);
+
+            StringAssert.Contains(response.Response, "400 Bad Request");
+        }
+        #endregion
+
+        #region InvalidXmlFormatParseException
+        private string _invalidXmlFormatExPOST =
+@"POST /users/1 HTTP/1.1
+Host: minwinpc:8800
+Content-Type: application/xml
+
+<User><Name>Tom</><Age>thirtythree</Age></User>";
+
+        [TestMethod]
+        public void HandleRequest_InvalidJsonBodyParameter_BadRequest()
+        {
+            var m = new RestWebServer();
+            m.RegisterController<RaiyDayTestController>();
+            var response = m.HandleRequest(_invalidXmlFormatExPOST);
 
             StringAssert.Contains(response.Response, "400 Bad Request");
         }

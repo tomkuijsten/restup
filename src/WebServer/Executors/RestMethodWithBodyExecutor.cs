@@ -34,6 +34,10 @@ namespace Devkoes.Restup.WebServer.Executors
             {
                 return _responseFactory.CreateBadRequest();
             }
+            catch (InvalidOperationException)
+            {
+                return _responseFactory.CreateBadRequest();
+            }
 
             object[] parameters = null;
             try
