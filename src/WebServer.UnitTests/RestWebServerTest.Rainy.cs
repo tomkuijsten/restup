@@ -88,6 +88,25 @@ Content-Type: application/json
             Assert.IsTrue(invOpThrown, "InvalidOperationException was not thrown");
         }
         #endregion
+
+        #region BodyParameterParseException
+        private string _bodyParameterParseExPOST =
+@"POST /users/1 HTTP/1.1
+Host: minwinpc:8800
+Content-Type: application/json
+
+{""Name"": ""Tom"", ""Age"": ""thirtythree""}";
+
+        [TestMethod]
+        public void HandleRequest_InvalidJSONBodyParameter_BadRequest()
+        {
+            var m = new RestWebServer();
+            m.RegisterController<RaiyDayTestController>();
+            var response = m.HandleRequest(_bodyParameterParseExPOST);
+
+            StringAssert.Contains(response.Response, "400 Bad Request");
+        }
+        #endregion
     }
 
     [RestController(InstanceCreationType.Singleton)]

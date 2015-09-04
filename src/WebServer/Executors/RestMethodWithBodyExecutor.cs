@@ -6,6 +6,7 @@ using Devkoes.Restup.WebServer.InstanceCreators;
 using System.Collections.Generic;
 using System;
 using Devkoes.Restup.WebServer.Factories;
+using Newtonsoft.Json;
 
 namespace Devkoes.Restup.WebServer.Executors
 {
@@ -24,7 +25,15 @@ namespace Devkoes.Restup.WebServer.Executors
         {
             var instantiator = InstanceCreatorCache.GetCreator(info.MethodInfo.DeclaringType);
 
-            var bodyObj = _bodySerializer.FromBody(request.Body, request.BodyMediaType, info.BodyParameterType);
+            object bodyObj = null;
+            try
+            {
+                bodyObj = _bodySerializer.FromBody(request.Body, request.BodyMediaType, info.BodyParameterType);
+            }
+            catch (JsonReaderException)
+            {
+                return _responseFactory.CreateBadRequest();
+            }
 
             object[] parameters = null;
             try
