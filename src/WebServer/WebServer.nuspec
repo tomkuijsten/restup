@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Restup</id>
+    <version>$version$</version>
+    <title>Devkoes RestUWP</title>
+    <authors>Devkoes</authors>
+    <owners>Devkoes</owners>
+    <licenseUrl>https://github.com/tomkuijsten/restup/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/tomkuijsten/restup</projectUrl>
+    <iconUrl>http://www.devkoes.nl/wp-content/uploads/2015/05/IMG_4329-300x200.jpg</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A REST server for the Windows Universal framework</description>
+    <releaseNotes>Initial release</releaseNotes>
+    <copyright>Devkoes Copyright 2015</copyright>
+    <tags>UWP REST WebService Windows .NET</tags>
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="7.0.1" />
+    </dependencies>
+  </metadata>
+</package>
