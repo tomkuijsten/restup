@@ -1,13 +1,12 @@
 ﻿using Devkoes.Restup.WebServer.Models.Contracts;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using Devkoes.Restup.WebServer.Helpers;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
-using System.Diagnostics;
 
 namespace Devkoes.Restup.WebServer.Http
 {
@@ -21,7 +20,7 @@ namespace Devkoes.Restup.WebServer.Http
         {
             listener = new StreamSocketListener();
             port = serverPort;
-            listener.ConnectionReceived += (s, e) => ProcessRequestAsync(e.Socket);
+            listener.ConnectionReceived += ProcessRequestAsync;
         }
 
         internal abstract IHttpResponse HandleRequest(string request);
@@ -39,20 +38,22 @@ namespace Devkoes.Restup.WebServer.Http
             listener.Dispose();
         }
 
-        private async void ProcessRequestAsync(StreamSocket socket)
+        private void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
-            try
+            Task.Run(async () =>
             {
-                // this works for text only
-                string request = await GetRequestString(socket);
+                try
+                {
+                    string request = await GetRequestString(args.Socket);
 
-                var result = HandleRequest(request);
+                    var result = HandleRequest(request);
 
-                await WriteResponseAsync(result, socket);
-            }
-            catch (Exception)
-            {
-            }
+                    await WriteResponseAsync(result, args.Socket);
+                }
+                catch (Exception)
+                {
+                }
+            });
         }
 
         private static async Task<string> GetRequestString(StreamSocket socket)
@@ -66,7 +67,7 @@ namespace Devkoes.Restup.WebServer.Http
                 while (dataRead == BufferSize)
                 {
                     await input.ReadAsync(buffer, BufferSize, InputStreamOptions.Partial);
-                    request.Append(Encoding.UTF8.GetString(data, 0, data.Length));
+                    request.Append(Encoding.GetEncoding("iso-8859-1").GetString(data, 0, data.Length));
                     dataRead = buffer.Length;
                 }
             }
