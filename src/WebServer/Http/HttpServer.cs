@@ -26,7 +26,7 @@ namespace Devkoes.Restup.WebServer.Http
         internal abstract IHttpResponse HandleRequest(string request);
 
 
-        public async void StartServerAsync()
+        public async Task StartServerAsync()
         {
             await listener.BindServiceNameAsync(port.ToString());
 
