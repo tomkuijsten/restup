@@ -7,7 +7,7 @@
   IgnorableNamespaces="uap mp">
 
   <Identity
-    Name="f3178840-4bd4-4d1a-9991-35a2f0ede8f2"
+    Name="Devkoes.UWP.WebserverHostTest"
     Publisher="CN=t-kuijsten"
     Version="1.0.0.0" />
 
