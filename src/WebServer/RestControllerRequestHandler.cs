@@ -7,6 +7,7 @@ using Devkoes.Restup.WebServer.Models.Schemas;
 using Devkoes.Restup.WebServer.Http;
 using System.Net;
 using Devkoes.Restup.WebServer.Factories;
+using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer
 {
@@ -23,17 +24,26 @@ namespace Devkoes.Restup.WebServer
             _methodExecuteFactory = new RestMethodExecutorFactory();
         }
 
-        internal void RegisterController<T>() where T : class
+        internal IEnumerable<MethodInfo> GetValidMethodDefinitions<T>()
         {
             var allPublicRestMethods =
-                from m in typeof(T).GetRuntimeMethods()
-                where
-                    m.IsPublic &&
-                    m.ReturnType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse)) &&
-                    m.IsDefined(typeof(UriFormatAttribute))
-                select m;
+               from m in typeof(T).GetRuntimeMethods()
+               where
+                   m.IsPublic &&
+                   (m.ReturnType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse)) ||
+                   (m.ReturnType.GetTypeInfo().IsSubclassOf(typeof(Task<>)) &&
+                   m.ReturnType.GetGenericArguments()[0].GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse)))) &&
+                   m.IsDefined(typeof(UriFormatAttribute))
+               select m;
 
             // TODO: check if uriformat is unique
+
+            return allPublicRestMethods;
+        }
+
+        internal void RegisterController<T>() where T : class
+        {
+            var allPublicRestMethods = GetValidMethodDefinitions<T>();
 
             foreach (var methodDef in allPublicRestMethods)
             {
