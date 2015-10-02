@@ -24,9 +24,9 @@ namespace WebServerHostTest.RESTControllers
         }
 
         [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]
-        public GetResponse ReadParameter(int channelId, int nodeId, int parameterId)
+        public async Task<GetResponse> ReadParameter(int channelId, int nodeId, int parameterId)
         {
-            return new GetResponse(GetResponse.ResponseStatus.OK, new ParameterValue() { Value = 23.0});
+            return await Task.Run(() => new GetResponse(GetResponse.ResponseStatus.OK, new ParameterValue() { Value = 23.0}));
         }
 
         [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]

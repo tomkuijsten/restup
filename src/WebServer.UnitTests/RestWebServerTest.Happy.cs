@@ -3,6 +3,7 @@ using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
+using System.Threading.Tasks;
 
 namespace WebServer.UnitTests
 {
@@ -16,11 +17,11 @@ Host: minwinpc:8800
 Accept: text/xml";
 
         [TestMethod]
-        public void HandleRequest_BasicGETAcceptXML_Status200WithXml()
+        public async Task HandleRequest_BasicGETAcceptXML_Status200WithXml()
         {
             var m = new RestWebServer();
             m.RegisterController<HappyPathTestController>();
-            var response = m.HandleRequest(_basicGETAcceptXML);
+            var response = await m.HandleRequest(_basicGETAcceptXML);
 
             StringAssert.Contains(response.Response, "200 OK");
             StringAssert.Contains(response.Response, "Content-Type: application/xml");
@@ -36,11 +37,11 @@ Host: minwinpc:8800
 Accept: application/json";
 
         [TestMethod]
-        public void HandleRequest_BasicGETAcceptJSON_Status200WithJSON()
+        public async Task HandleRequest_BasicGETAcceptJSON_Status200WithJSON()
         {
             var m = new RestWebServer();
             m.RegisterController<HappyPathTestController>();
-            var response = m.HandleRequest(_basicGETAcceptJSON);
+            var response = await m.HandleRequest(_basicGETAcceptJSON);
 
             StringAssert.Contains(response.Response, "200 OK");
             StringAssert.Contains(response.Response, "Content-Type: application/json");
@@ -58,11 +59,11 @@ Content-Type: application/json
 {""Name"": ""Tom"", ""Age"": 33}";
 
         [TestMethod]
-        public void HandleRequest_BasicPOST_LocationHeaderStatus201()
+        public async Task HandleRequest_BasicPOST_LocationHeaderStatus201()
         {
             var m = new RestWebServer();
             m.RegisterController<HappyPathTestController>();
-            var response = m.HandleRequest(_basicPOST);
+            var response = await m.HandleRequest(_basicPOST);
 
             StringAssert.Contains(response.Response, "201 Created");
             StringAssert.Contains(response.Response, "Location: /users/2");
@@ -78,11 +79,11 @@ Content-Type: application/json
 {Name: Tom, Age: 21}";
 
         [TestMethod]
-        public void HandleRequest_BasicPUT_Status200()
+        public async Task HandleRequest_BasicPUT_Status200()
         {
             var m = new RestWebServer();
             m.RegisterController<HappyPathTestController>();
-            var response = m.HandleRequest(_basicPUT);
+            var response = await m.HandleRequest(_basicPUT);
 
             StringAssert.Contains(response.Response, "200 OK");
         }
@@ -94,11 +95,11 @@ Content-Type: application/json
 Host: minwinpc:8800";
 
         [TestMethod]
-        public void HandleRequest_BasicDEL_Status200()
+        public async Task HandleRequest_BasicDEL_Status200()
         {
             var m = new RestWebServer();
             m.RegisterController<HappyPathTestController>();
-            var response = m.HandleRequest(_basicDEL);
+            var response = await m.HandleRequest(_basicDEL);
 
             StringAssert.Contains(response.Response, "200 OK");
         }

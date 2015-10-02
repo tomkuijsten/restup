@@ -1,10 +1,11 @@
 ﻿using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Schemas;
+using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer.Models.Contracts
 {
     internal interface IRestMethodExecutor
     {
-        IRestResponse ExecuteMethod(RestMethodInfo info, RestRequest request);
+        Task<IRestResponse> ExecuteMethodAsync(RestMethodInfo info, RestRequest request);
     }
 }

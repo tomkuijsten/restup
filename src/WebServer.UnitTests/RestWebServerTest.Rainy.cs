@@ -4,6 +4,7 @@ using Devkoes.Restup.WebServer.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace WebServer.UnitTests
 {
@@ -19,11 +20,11 @@ Content-Type: application/json
 {""Name"": ""Tom"", ""Age"": 33}";
 
         [TestMethod]
-        public void HandleRequest_CreateWithExistingId_Conflicted()
+        public async Task HandleRequest_CreateWithExistingId_Conflicted()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = m.HandleRequest(_conflictingPOST);
+            var response = await m.HandleRequest(_conflictingPOST);
 
             StringAssert.Contains(response.Response, "409 Conflict");
             StringAssert.DoesNotMatch(response.Response, new Regex("Location:"));
@@ -39,11 +40,11 @@ Content-Type: application/json
 {""Name"": ""Tom"", ""Age"": 33}";
 
         [TestMethod]
-        public void HandleRequest_BasicPUT_MethodNotAllowed()
+        public async Task HandleRequest_BasicPUT_MethodNotAllowed()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = m.HandleRequest(_methodNotAllowedPUT);
+            var response = await m.HandleRequest(_methodNotAllowedPUT);
 
             StringAssert.Contains(response.Response, "405 Method Not Allowed");
             StringAssert.Contains(response.Response, "Allow: POST");
@@ -59,11 +60,11 @@ Content-Type: application/json
 {""Name"": ""Tom"", ""Age"": 33}";
 
         [TestMethod]
-        public void HandleRequest_WrongParameterTypePUT_BadRequest()
+        public async Task HandleRequest_WrongParameterTypePUT_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = m.HandleRequest(_parameterParseExceptionPUT);
+            var response = await m.HandleRequest(_parameterParseExceptionPUT);
 
             StringAssert.Contains(response.Response, "400 Bad Request");
         }
@@ -98,11 +99,11 @@ Content-Type: application/json
 {""Name"": ""Tom"", ""Age"": ""thirtythree""}";
 
         [TestMethod]
-        public void HandleRequest_InvalidJSONBodyParameter_BadRequest()
+        public async Task HandleRequest_InvalidJSONBodyParameter_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = m.HandleRequest(_bodyParameterParseExPOST);
+            var response = await m.HandleRequest(_bodyParameterParseExPOST);
 
             StringAssert.Contains(response.Response, "400 Bad Request");
         }
@@ -117,11 +118,11 @@ Content-Type: application/xml
 <User><Name>Tom</Name><Age>thirtythree</Age></User>";
 
         [TestMethod]
-        public void HandleRequest_InvalidXMLBodyParameter_BadRequest()
+        public async Task HandleRequest_InvalidXMLBodyParameter_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = m.HandleRequest(_xmlBodyParameterParseExPOST);
+            var response = await m.HandleRequest(_xmlBodyParameterParseExPOST);
 
             StringAssert.Contains(response.Response, "400 Bad Request");
         }
@@ -136,11 +137,11 @@ Content-Type: application/json
 {""Name"" = ""Tom""; ""Age"" = 33}";
 
         [TestMethod]
-        public void HandleRequest_InvalidJsonFormat_BadRequest()
+        public async Task HandleRequest_InvalidJsonFormat_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = m.HandleRequest(_invalidJsonFormatPOST);
+            var response = await m.HandleRequest(_invalidJsonFormatPOST);
 
             StringAssert.Contains(response.Response, "400 Bad Request");
         }
@@ -155,11 +156,11 @@ Content-Type: application/xml
 <User><Name>Tom</><Age>thirtythree</Age></User>";
 
         [TestMethod]
-        public void HandleRequest_InvalidJsonBodyParameter_BadRequest()
+        public async Task HandleRequest_InvalidJsonBodyParameter_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = m.HandleRequest(_invalidXmlFormatExPOST);
+            var response = await m.HandleRequest(_invalidXmlFormatExPOST);
 
             StringAssert.Contains(response.Response, "400 Bad Request");
         }

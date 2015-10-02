@@ -8,6 +8,7 @@ using Devkoes.Restup.WebServer.Http;
 using System.Net;
 using Devkoes.Restup.WebServer.Factories;
 using System.Threading.Tasks;
+using System;
 
 namespace Devkoes.Restup.WebServer
 {
@@ -24,34 +25,54 @@ namespace Devkoes.Restup.WebServer
             _methodExecuteFactory = new RestMethodExecutorFactory();
         }
 
-        internal IEnumerable<MethodInfo> GetValidMethodDefinitions<T>()
+        internal void RegisterController<T>() where T : class
+        {
+            _restMethodCollection.AddRange(GetRestMethods<T>());
+        }
+
+        internal IEnumerable<RestMethodInfo> GetRestMethods<T>() where T : class
+        {
+            var restMethods = new List<RestMethodInfo>();
+
+            var allPublicAsyncRestMethods = GetRestAsyncMethodDefinitions<T>();
+            var allPublicRestMethods = GetRestMethodDefinitions<T>();
+
+            foreach (var methodDef in allPublicRestMethods)
+                restMethods.Add(new RestMethodInfo(methodDef));
+
+            foreach (var methodDef in allPublicAsyncRestMethods)
+                restMethods.Add(new RestMethodInfo(methodDef, true));
+
+            return restMethods;
+        }
+
+        internal IEnumerable<MethodInfo> GetRestMethodDefinitions<T>()
         {
             var allPublicRestMethods =
                from m in typeof(T).GetRuntimeMethods()
                where
                    m.IsPublic &&
-                   (m.ReturnType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse)) ||
-                   (m.ReturnType.GetTypeInfo().IsSubclassOf(typeof(Task<>)) &&
-                   m.ReturnType.GetGenericArguments()[0].GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse)))) &&
-                   m.IsDefined(typeof(UriFormatAttribute))
+                   m.IsDefined(typeof(UriFormatAttribute)) &&
+                   HasRestResponse(m)
                select m;
 
-            // TODO: check if uriformat is unique
-
-            return allPublicRestMethods;
+            return allPublicRestMethods.ToArray();
         }
 
-        internal void RegisterController<T>() where T : class
+        internal IEnumerable<MethodInfo> GetRestAsyncMethodDefinitions<T>()
         {
-            var allPublicRestMethods = GetValidMethodDefinitions<T>();
+            var allPublicRestMethods =
+               from m in typeof(T).GetRuntimeMethods()
+               where
+                   m.IsPublic &&
+                   m.IsDefined(typeof(UriFormatAttribute)) &&
+                   HasAsyncRestResponse(m)
+               select m;
 
-            foreach (var methodDef in allPublicRestMethods)
-            {
-                _restMethodCollection.Add(new RestMethodInfo(methodDef));
-            }
+            return allPublicRestMethods.ToArray();
         }
 
-        internal IRestResponse HandleRequest(RestRequest req)
+        internal async Task<IRestResponse> HandleRequest(RestRequest req)
         {
             if(req.Verb == RestVerb.Unsupported)
             {
@@ -72,7 +93,25 @@ namespace Devkoes.Restup.WebServer
 
             var restMethodExecutor = _methodExecuteFactory.Create(restMethod);
 
-            return restMethodExecutor.ExecuteMethod(restMethod, req);
+            return await restMethodExecutor.ExecuteMethodAsync(restMethod, req);
+        }
+
+        private static bool HasAsyncRestResponse(MethodInfo m)
+        {
+            var isTask = m.ReturnType.GetTypeInfo().IsSubclassOf(typeof(Task));
+            if (!isTask)
+                return false;
+
+            var genericArgs = m.ReturnType.GetGenericArguments();
+            if (!genericArgs.Any())
+                return false;
+
+            return genericArgs[0].GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
+        }
+
+        private static bool HasRestResponse(MethodInfo m)
+        {
+            return m.ReturnType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
         }
     }
 }

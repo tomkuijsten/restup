@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Xml.Serialization;
 using System.IO;
 using Devkoes.Restup.WebServer.Visitors;
+using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer
 {
@@ -26,11 +27,11 @@ namespace Devkoes.Restup.WebServer
             _requestHandler.RegisterController<T>();
         }
 
-        internal override IHttpResponse HandleRequest(string request)
+        internal override async Task<IHttpResponse> HandleRequest(string request)
         {
             var restRequest = _restReqBuilder.Build(request);
 
-            var restResponse = _requestHandler.HandleRequest(restRequest);
+            var restResponse = await _requestHandler.HandleRequest(restRequest);
 
             var responseVisitor = new RestResponseVisitor(restRequest);
             restResponse.Accept(responseVisitor);

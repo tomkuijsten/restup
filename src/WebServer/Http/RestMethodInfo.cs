@@ -25,9 +25,12 @@ namespace Devkoes.Restup.WebServer.Http
         public RestVerb Verb { get; private set; }
         public bool HasBodyParameter { get; private set; }
         public Type BodyParameterType { get; private set; }
+        public bool IsAsync { get; }
 
-        public RestMethodInfo(MethodInfo methodInfo)
+        public RestMethodInfo(MethodInfo methodInfo, bool isAsync)
         {
+            IsAsync = isAsync;
+
             MethodInfo = methodInfo;
 
             InitializeValidParameterTypes();
@@ -36,6 +39,11 @@ namespace Devkoes.Restup.WebServer.Http
             InitializeFindParameterRegex();
             InitializeMatchUriRegex();
             InitializeBodyParameter();
+        }
+
+        public RestMethodInfo(MethodInfo methodInfo) : this(methodInfo, false)
+        {
+
         }
 
         private void InitializeValidParameterTypes()
@@ -109,8 +117,14 @@ namespace Devkoes.Restup.WebServer.Http
 
         private void InitializeVerb()
         {
-            var restVerbAttr = MethodInfo.ReturnType.GetTypeInfo().GetCustomAttribute<RestVerbAttribute>();
-            Verb = restVerbAttr.Verb;
+            TypeInfo returnType = null;
+
+            if (!IsAsync)
+                returnType = MethodInfo.ReturnType.GetTypeInfo();
+            else
+                returnType = MethodInfo.ReturnType.GetGenericArguments()[0].GetTypeInfo();
+
+            Verb = returnType.GetCustomAttribute<RestVerbAttribute>().Verb;
         }
 
         public bool Match(string uri)

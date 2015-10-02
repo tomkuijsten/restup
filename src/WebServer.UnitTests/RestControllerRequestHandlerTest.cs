@@ -14,14 +14,14 @@ namespace WebServer.UnitTests
     public class RestControllerRequestHandlerTest
     {
         [TestMethod]
-        public void Test()
+        public void GetRestMethods_HasAsyncMethod_IsAsyncSet()
         {
-            var x = new RestControllerRequestHandler();
+            var restHandler = new RestControllerRequestHandler();
 
-            var allDefs = x.GetValidMethodDefinitions<AsyncTestController>();
+            var allDefs = restHandler.GetRestMethods<AsyncTestController>();
 
             Assert.AreEqual(1, allDefs.Count());
-            //Assert.AreEqual(true, allDefs.First().IsAsync);
+            Assert.AreEqual(true, allDefs.First().IsAsync);
         }
 
         [RestController(InstanceCreationType.Singleton)]

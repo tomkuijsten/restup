@@ -23,7 +23,7 @@ namespace Devkoes.Restup.WebServer.Http
             listener.ConnectionReceived += ProcessRequestAsync;
         }
 
-        internal abstract IHttpResponse HandleRequest(string request);
+        internal abstract Task<IHttpResponse> HandleRequest(string request);
 
 
         public async Task StartServerAsync()
@@ -40,13 +40,14 @@ namespace Devkoes.Restup.WebServer.Http
 
         private void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
+            // Don't lock this thread which handles incoming requests, release it asap.
             Task.Run(async () =>
             {
                 try
                 {
                     string request = await GetRequestString(args.Socket);
 
-                    var result = HandleRequest(request);
+                    var result = await HandleRequest(request);
 
                     await WriteResponseAsync(result, args.Socket);
                 }

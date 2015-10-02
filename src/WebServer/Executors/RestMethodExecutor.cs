@@ -6,6 +6,7 @@ using Devkoes.Restup.WebServer.InstanceCreators;
 using System.Collections.Generic;
 using System;
 using Devkoes.Restup.WebServer.Factories;
+using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer.Executors
 {
@@ -18,7 +19,17 @@ namespace Devkoes.Restup.WebServer.Executors
             _responseFactory = new RestResponseFactory();
         }
 
-        public IRestResponse ExecuteMethod(RestMethodInfo info, RestRequest request)
+        public async Task<IRestResponse> ExecuteMethodAsync(RestMethodInfo info, RestRequest request)
+        {
+            var methodInvokeResult = ExecuteAnonymousMethod(info, request);
+
+            if (!info.IsAsync)
+                return await Task.Run(() => (IRestResponse)methodInvokeResult);
+
+            return await (dynamic)methodInvokeResult;
+        }
+
+        private object ExecuteAnonymousMethod(RestMethodInfo info, RestRequest request)
         {
             var instantiator = InstanceCreatorCache.GetCreator(info.MethodInfo.DeclaringType);
 
@@ -32,7 +43,7 @@ namespace Devkoes.Restup.WebServer.Executors
                 return _responseFactory.CreateBadRequest();
             }
 
-            return (IRestResponse)info.MethodInfo.Invoke(
+            return info.MethodInfo.Invoke(
                     instantiator.Create(info.MethodInfo.DeclaringType),
                     parameters);
         }
