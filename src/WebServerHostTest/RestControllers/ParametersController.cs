@@ -1,10 +1,6 @@
 ﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace WebServerHostTest.RESTControllers
@@ -30,7 +26,7 @@ namespace WebServerHostTest.RESTControllers
         }
 
         [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]
-        public PutResponse WriteParameter(int channelId, int nodeId, int parameterId, [FromBody]ParameterValue v)
+        public PutResponse UpdateParameter(int channelId, int nodeId, int parameterId, [FromBody]ParameterValue v)
         {
             return new PutResponse(PutResponse.ResponseStatus.OK);
         }
