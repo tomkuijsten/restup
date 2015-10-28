@@ -53,7 +53,7 @@ namespace Devkoes.Restup.WebServer.Executors
             object[] parameters = null;
             try
             {
-                parameters = info.GetParametersFromUri(request.Uri).Union(new[] { bodyObj }).ToArray();
+                parameters = info.GetParametersFromUri(request.Uri).Concat(new[] { bodyObj }).ToArray();
             }
             catch (FormatException)
             {

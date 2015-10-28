@@ -13,7 +13,7 @@ namespace Devkoes.Restup.WebServer.Http
     public class RestMethodInfo
     {
         private static readonly Regex FIND_PARAMETERKEYS_REGEX = new Regex("{(.*?)}");
-        private const string MATCHPARAMETER_REPLACE_STRING = "(?<$1>.*?)";
+        private const string MATCHPARAMETER_REPLACE_STRING = "(?<$1>.+?)";
         private const string MATCHURI_REPLACE_STRING = ".+?";
 
         private IEnumerable<Type> _validParameterTypes;
