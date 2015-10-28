@@ -12,15 +12,18 @@ namespace Devkoes.Restup.WebServer.Http
 {
     public abstract class HttpServer : IDisposable
     {
-        private const uint BufferSize = 8192;
-        private int port;
-        private readonly StreamSocketListener listener;
+        private const uint BUFFER_SIZE = 8192;
+        private readonly int _port;
+        private readonly StreamSocketListener _listener;
+
+        internal Encoding HttpRequestStringEncoding { get; }
 
         public HttpServer(int serverPort)
         {
-            listener = new StreamSocketListener();
-            port = serverPort;
-            listener.ConnectionReceived += ProcessRequestAsync;
+            _listener = new StreamSocketListener();
+            _port = serverPort;
+            _listener.ConnectionReceived += ProcessRequestAsync;
+            HttpRequestStringEncoding = Encoding.GetEncoding("iso-8859-1");
         }
 
         internal abstract Task<IHttpResponse> HandleRequest(string request);
@@ -28,14 +31,9 @@ namespace Devkoes.Restup.WebServer.Http
 
         public async Task StartServerAsync()
         {
-            await listener.BindServiceNameAsync(port.ToString());
+            await _listener.BindServiceNameAsync(_port.ToString());
 
-            Debug.WriteLine($"Webserver started on port {port}");
-        }
-
-        public void Dispose()
-        {
-            listener.Dispose();
+            Debug.WriteLine($"Webserver started on port {_port}");
         }
 
         private void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
@@ -57,23 +55,29 @@ namespace Devkoes.Restup.WebServer.Http
             });
         }
 
-        private static async Task<string> GetRequestString(StreamSocket socket)
+
+        private async Task<string> GetRequestString(StreamSocket socket)
         {
             StringBuilder request = new StringBuilder();
             using (IInputStream input = socket.InputStream)
             {
-                byte[] data = new byte[BufferSize];
+                byte[] data = new byte[BUFFER_SIZE];
                 IBuffer buffer = data.AsBuffer();
-                uint dataRead = BufferSize;
-                while (dataRead == BufferSize)
+                uint dataRead = BUFFER_SIZE;
+                while (dataRead == BUFFER_SIZE)
                 {
-                    await input.ReadAsync(buffer, BufferSize, InputStreamOptions.Partial);
-                    request.Append(Encoding.GetEncoding("iso-8859-1").GetString(data, 0, data.Length));
+                    await input.ReadAsync(buffer, BUFFER_SIZE, InputStreamOptions.Partial);
+                    request.Append(HttpRequestStringEncoding.GetString(data, 0, data.Length));
                     dataRead = buffer.Length;
                 }
             }
 
-            return request.ToString();
+            return TrimEndNullChars(request.ToString());
+        }
+
+        internal string TrimEndNullChars(string input)
+        {
+            return input.TrimEnd(Convert.ToChar(0));
         }
 
         private async Task WriteResponseAsync(IHttpResponse response, StreamSocket socket)
@@ -84,6 +88,11 @@ namespace Devkoes.Restup.WebServer.Http
                 await resp.WriteAsync(response.RawResponse, 0, response.RawResponse.Length);
                 await resp.FlushAsync();
             }
+        }
+
+        public void Dispose()
+        {
+            _listener.Dispose();
         }
     }
 }
