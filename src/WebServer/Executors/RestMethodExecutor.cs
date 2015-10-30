@@ -1,11 +1,10 @@
-﻿using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Devkoes.Restup.WebServer.Factories;
 using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using System.Linq;
 using Devkoes.Restup.WebServer.InstanceCreators;
-using System.Collections.Generic;
+using Devkoes.Restup.WebServer.Models.Contracts;
+using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
-using Devkoes.Restup.WebServer.Factories;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer.Executors
@@ -24,7 +23,7 @@ namespace Devkoes.Restup.WebServer.Executors
             var methodInvokeResult = ExecuteAnonymousMethod(info, request);
 
             if (!info.IsAsync)
-                return await Task.Run(() => (IRestResponse)methodInvokeResult);
+                return (IRestResponse)methodInvokeResult;
 
             return await (dynamic)methodInvokeResult;
         }
