@@ -19,16 +19,16 @@ namespace WebServerHostTest.RESTControllers
             public string Type { get; set; }
         }
 
-        [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]
-        public async Task<GetResponse> ReadParameter(int channelId, int nodeId, int parameterId)
+        [UriFormat("/networks/{networkId}/channels/{channelId}/parameters/{parameterId}")]
+        public Task<GetResponse> ReadParameter(int networkId, int channelId, int parameterId)
         {
-            return await Task.Run(() => new GetResponse(GetResponse.ResponseStatus.OK, new ParameterValue() { Value = 23.0}));
+            return Task.FromResult(new GetResponse(GetResponse.ResponseStatus.OK, new ParameterValue() { Value = 23.0 }));
         }
 
-        [UriFormat("/channels/{channelId}/nodes/{nodeId}/parameters/{parameterId}")]
-        public PutResponse UpdateParameter(int channelId, int nodeId, int parameterId, [FromBody]ParameterValue v)
+        [UriFormat("/networks/{networkId}/channels/{channelId}/parameters/{parameterId}")]
+        public Task<PutResponse> UpdateParameter(int networkId, int channelId, int parameterId, [FromBody]ParameterValue v)
         {
-            return new PutResponse(PutResponse.ResponseStatus.OK);
+            return Task.FromResult(new PutResponse(PutResponse.ResponseStatus.OK));
         }
 
         [UriFormat("/parameters/{parameterId}")]
