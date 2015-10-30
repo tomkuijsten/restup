@@ -38,7 +38,7 @@ private async Task InitializeWebServer()
 public class ParametersController
 {
   [UriFormat("/parameters/{parameterId}")] 
-  public PostResponse CreateUser(int userId, [FromBody] string parameterValue) 
+  public PostResponse CreateUser(int parameterId, [FromBody] string parameterValue) 
   {
     return new PostResponse(PostResponse.ResponseStatus.Created, $"/users/{userId}"); 
   }
