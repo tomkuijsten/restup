@@ -25,10 +25,10 @@ using Devkoes.Restup.WebServer;
 
 private async Task InitializeWebServer()
 {
-    RestWebServer webserver = new RestWebServer();
+    RestWebServer webserver = new RestWebServer(80); //defaults to 8800
     webserver.RegisterController<ParametersController>();
 
-    await webserver.StartServerAsync(80);
+    await webserver.StartServerAsync();
 }
 
 ```
