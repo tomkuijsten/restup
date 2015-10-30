@@ -71,4 +71,10 @@ You can use the `FromBodyAttribute` on a method parameter. Restup will deseriali
 All public methods in the controller which have the `UriFormatAttribute` and one of the verb responses as return type will be indexed as REST method.
 
 ## Serializing/deserializing
-If your http request has a body, the http header "Content-Type" is used to deserialize the data. There are two content types supported: xml and json. The .NET internal xml serializer is used for XML. For Json I've used the incredible lib from Newtonsoft. By default all your types are serializable by both serializers. Just createa class/struct with properties and it will be serialized correctly.
+There are two content types supported: xml and json. The .NET internal xml serializer is used for XML. For Json I've used the incredible lib from Newtonsoft. By default all your types are serializable by both serializers. Just createa class/struct with properties and it will be serialized correctly.
+### Http request
+If your http request has a body, the "Content-Type" header is used to determine the serializer.
+### Http response
+If your controller method returns a GetResponse, the http request header "Accept" is used to determine the serializer.
+
+*Note: all serializers default to Json if headers are missing.*
