@@ -1,11 +1,6 @@
-﻿using Devkoes.Restup.WebServer.Http;
+﻿using Devkoes.Restup.WebServer.Builders;
+using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Builders;
-using System.Linq;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Newtonsoft.Json;
-using System.Xml.Serialization;
-using System.IO;
 using Devkoes.Restup.WebServer.Visitors;
 using System.Threading.Tasks;
 
@@ -16,11 +11,13 @@ namespace Devkoes.Restup.WebServer
         private RestControllerRequestHandler _requestHandler;
         private RestRequestBuilder _restReqBuilder;
 
-        public RestWebServer() : base(8800)
+        public RestWebServer(int port) : base(port)
         {
             _requestHandler = new RestControllerRequestHandler();
             _restReqBuilder = new RestRequestBuilder();
         }
+
+        public RestWebServer() : this(8800) { }
 
         public void RegisterController<T>() where T : class
         {
