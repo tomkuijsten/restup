@@ -1,14 +1,13 @@
-﻿using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Devkoes.Restup.WebServer.Attributes;
+using Devkoes.Restup.WebServer.Factories;
+using Devkoes.Restup.WebServer.Http;
+using Devkoes.Restup.WebServer.InstanceCreators;
+using Devkoes.Restup.WebServer.Models.Contracts;
+using Devkoes.Restup.WebServer.Models.Schemas;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Http;
-using System.Net;
-using Devkoes.Restup.WebServer.Factories;
 using System.Threading.Tasks;
-using System;
 
 namespace Devkoes.Restup.WebServer
 {
@@ -28,6 +27,8 @@ namespace Devkoes.Restup.WebServer
         internal void RegisterController<T>() where T : class
         {
             _restMethodCollection.AddRange(GetRestMethods<T>());
+
+            InstanceCreatorCache.CacheCreator(typeof(T));
         }
 
         internal IEnumerable<RestMethodInfo> GetRestMethods<T>() where T : class
@@ -74,11 +75,11 @@ namespace Devkoes.Restup.WebServer
 
         internal async Task<IRestResponse> HandleRequest(RestRequest req)
         {
-            if(req.Verb == RestVerb.Unsupported)
+            if (req.Verb == RestVerb.Unsupported)
             {
                 return _responseFactory.CreateBadRequest();
             }
-            
+
             var restMethods = _restMethodCollection.Where(r => r.Match(req.Uri));
             if (!restMethods.Any())
             {
