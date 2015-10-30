@@ -8,6 +8,8 @@ namespace WebServerHostTest.RESTControllers
     [RestController(InstanceCreationType.Singleton)]
     public class ParametersController
     {
+        private Task<GetResponse> _getResponse;
+
         public class ParameterValue
         {
             public double Value { get; set; }
@@ -19,10 +21,16 @@ namespace WebServerHostTest.RESTControllers
             public string Type { get; set; }
         }
 
+
+        public ParametersController()
+        {
+            _getResponse = Task.FromResult(new GetResponse(GetResponse.ResponseStatus.OK, new ParameterValue() { Value = 23.0 }));
+        }
+
         [UriFormat("/networks/{networkId}/channels/{channelId}/parameters/{parameterId}")]
         public Task<GetResponse> ReadParameter(int networkId, int channelId, int parameterId)
         {
-            return Task.FromResult(new GetResponse(GetResponse.ResponseStatus.OK, new ParameterValue() { Value = 23.0 }));
+            return _getResponse;
         }
 
         [UriFormat("/networks/{networkId}/channels/{channelId}/parameters/{parameterId}")]
