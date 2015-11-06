@@ -1,7 +1,6 @@
 ﻿using Devkoes.Restup.WebServer.Models.Contracts;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,7 +27,6 @@ namespace Devkoes.Restup.WebServer.Http
 
         internal abstract Task<IHttpResponse> HandleRequest(string request);
 
-
         public async Task StartServerAsync()
         {
             await _listener.BindServiceNameAsync(_port.ToString());
@@ -36,10 +34,9 @@ namespace Devkoes.Restup.WebServer.Http
             Debug.WriteLine($"Webserver started on port {_port}");
         }
 
-        private void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
+        private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
-            // Don't lock this thread which handles incoming requests, release it asap.
-            Task.Run(async () =>
+            await Task.Run(async () =>
             {
                 try
                 {
@@ -49,12 +46,21 @@ namespace Devkoes.Restup.WebServer.Http
 
                     await WriteResponseAsync(result, args.Socket);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Debug.WriteLine($"Exception while handling process: {ex.Message}");
+                }
+                finally
+                {
+                    try
+                    {
+                        // Lets make sure the socket will always close
+                        args.Socket.Dispose();
+                    }
+                    catch { }
                 }
             });
         }
-
 
         private async Task<string> GetRequestString(StreamSocket socket)
         {
@@ -83,10 +89,9 @@ namespace Devkoes.Restup.WebServer.Http
         private async Task WriteResponseAsync(IHttpResponse response, StreamSocket socket)
         {
             using (IOutputStream output = socket.OutputStream)
-            using (Stream resp = output.AsStreamForWrite())
             {
-                await resp.WriteAsync(response.RawResponse, 0, response.RawResponse.Length);
-                await resp.FlushAsync();
+                await output.WriteAsync(response.RawResponse.AsBuffer());
+                await output.FlushAsync();
             }
         }
 
