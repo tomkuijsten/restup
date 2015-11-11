@@ -7,13 +7,14 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
     {
         public IEnumerable<RestVerb> Allows { get; }
 
-        public MethodNotAllowedResponse(IEnumerable<RestVerb> allows) : base(405) {
+        public MethodNotAllowedResponse(IEnumerable<RestVerb> allows) : base(405)
+        {
             Allows = allows;
         }
 
-        public override void Accept(IRestResponseVisitor visitor)
+        public override T Visit<T>(IRestResponseVisitor<T> visitor)
         {
-            visitor.Visit(this);
+            return visitor.Visit(this);
         }
     }
 }

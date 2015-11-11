@@ -2,18 +2,16 @@
 using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
+using System;
 using System.Linq;
 using System.Text;
-using System;
 
 namespace Devkoes.Restup.WebServer.Visitors
 {
-    internal class RestResponseVisitor : IRestResponseVisitor
+    internal class RestResponseVisitor : IRestResponseVisitor<IHttpResponse>
     {
         private RestRequest _request;
         private static BodySerializer _bodySerializer;
-
-        internal IHttpResponse HttpResponse { get; private set; }
 
         static RestResponseVisitor()
         {
@@ -25,29 +23,29 @@ namespace Devkoes.Restup.WebServer.Visitors
             _request = restRequest;
         }
 
-        public void Visit(DeleteResponse response)
+        public IHttpResponse Visit(DeleteResponse response)
         {
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
             rawHttpResponseBuilder.Append(CreateHttpNewLine());
 
-            HttpResponse = CreateHttpResponse(rawHttpResponseBuilder);
+            return CreateHttpResponse(rawHttpResponseBuilder);
         }
 
-        public void Visit(PostResponse response)
+        public IHttpResponse Visit(PostResponse response)
         {
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
 
-            if(response.Status == PostResponse.ResponseStatus.Created)
+            if (response.Status == PostResponse.ResponseStatus.Created)
                 rawHttpResponseBuilder.Append($"Location: {response.LocationRedirect}\r\n");
 
             rawHttpResponseBuilder.Append(CreateHttpNewLine());
 
-            HttpResponse = CreateHttpResponse(rawHttpResponseBuilder);
+            return CreateHttpResponse(rawHttpResponseBuilder);
         }
 
-        public void Visit(GetResponse response)
+        public IHttpResponse Visit(GetResponse response)
         {
             string bodyString = _bodySerializer.ToBody(response.BodyData, _request);
 
@@ -60,35 +58,35 @@ namespace Devkoes.Restup.WebServer.Visitors
             rawHttpResponseBuilder.Append(CreateHttpNewLine());
             rawHttpResponseBuilder.Append(bodyString);
 
-            HttpResponse = CreateHttpResponse(rawHttpResponseBuilder);
+            return CreateHttpResponse(rawHttpResponseBuilder);
         }
 
-        public void Visit(PutResponse response)
+        public IHttpResponse Visit(PutResponse response)
         {
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
             rawHttpResponseBuilder.Append(CreateHttpNewLine());
 
-            HttpResponse = CreateHttpResponse(rawHttpResponseBuilder);
+            return CreateHttpResponse(rawHttpResponseBuilder);
         }
 
-        public void Visit(StatusOnlyResponse statusOnlyResponse)
+        public IHttpResponse Visit(StatusOnlyResponse statusOnlyResponse)
         {
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(statusOnlyResponse));
             rawHttpResponseBuilder.Append(CreateHttpNewLine());
 
-            HttpResponse = CreateHttpResponse(rawHttpResponseBuilder);
+            return CreateHttpResponse(rawHttpResponseBuilder);
         }
 
-        public void Visit(MethodNotAllowedResponse methodNotAllowedResponse)
+        public IHttpResponse Visit(MethodNotAllowedResponse methodNotAllowedResponse)
         {
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(methodNotAllowedResponse));
             rawHttpResponseBuilder.AppendFormat("Allow: {0}", string.Join(",", methodNotAllowedResponse.Allows));
             rawHttpResponseBuilder.Append(CreateHttpNewLine());
 
-            HttpResponse = CreateHttpResponse(rawHttpResponseBuilder);
+            return CreateHttpResponse(rawHttpResponseBuilder);
         }
 
         private HttpResponse CreateHttpResponse(StringBuilder response)

@@ -1,19 +1,14 @@
 ﻿using Devkoes.Restup.WebServer.Models.Schemas;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer.Models.Contracts
 {
-    public interface IRestResponseVisitor
+    public interface IRestResponseVisitor<T>
     {
-        void Visit(PutResponse response);
-        void Visit(GetResponse response);
-        void Visit(DeleteResponse response);
-        void Visit(PostResponse response);
-        void Visit(StatusOnlyResponse statusOnlyResponse);
-        void Visit(MethodNotAllowedResponse methodNotAllowedResponse);
+        T Visit(PutResponse response);
+        T Visit(GetResponse response);
+        T Visit(DeleteResponse response);
+        T Visit(PostResponse response);
+        T Visit(StatusOnlyResponse statusOnlyResponse);
+        T Visit(MethodNotAllowedResponse methodNotAllowedResponse);
     }
 }

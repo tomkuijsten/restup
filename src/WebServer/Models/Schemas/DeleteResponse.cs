@@ -28,9 +28,9 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             }
         }
 
-        public void Accept(IRestResponseVisitor visitor)
+        public T Visit<T>(IRestResponseVisitor<T> visitor)
         {
-            visitor.Visit(this);
+            return visitor.Visit(this);
         }
     }
 }

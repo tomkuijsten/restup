@@ -1,9 +1,4 @@
 ﻿using Devkoes.Restup.WebServer.Models.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
@@ -16,9 +11,9 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             StatusCode = statusCode;
         }
 
-        public virtual void Accept(IRestResponseVisitor visitor)
+        public virtual T Visit<T>(IRestResponseVisitor<T> visitor)
         {
-            visitor.Visit(this);
+            return visitor.Visit(this);
         }
     }
 }

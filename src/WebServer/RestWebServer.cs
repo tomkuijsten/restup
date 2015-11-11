@@ -31,9 +31,9 @@ namespace Devkoes.Restup.WebServer
             var restResponse = await _requestHandler.HandleRequest(restRequest);
 
             var responseVisitor = new RestResponseVisitor(restRequest);
-            restResponse.Accept(responseVisitor);
+            var httpResponse = restResponse.Visit(responseVisitor);
 
-            return responseVisitor.HttpResponse;
+            return httpResponse;
         }
     }
 }
