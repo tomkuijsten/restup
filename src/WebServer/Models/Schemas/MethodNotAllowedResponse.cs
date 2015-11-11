@@ -12,9 +12,9 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             Allows = allows;
         }
 
-        public override T Visit<T>(IRestResponseVisitor<T> visitor)
+        public override T Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param)
         {
-            return visitor.Visit(this);
+            return visitor.Visit(this, param);
         }
     }
 }

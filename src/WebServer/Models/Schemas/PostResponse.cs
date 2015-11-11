@@ -34,9 +34,9 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             }
         }
 
-        public T Visit<T>(IRestResponseVisitor<T> visitor)
+        public T Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param)
         {
-            return visitor.Visit(this);
+            return visitor.Visit(this, param);
         }
     }
 }

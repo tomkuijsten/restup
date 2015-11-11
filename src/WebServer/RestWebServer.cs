@@ -1,7 +1,7 @@
 ﻿using Devkoes.Restup.WebServer.Builders;
+using Devkoes.Restup.WebServer.Converters;
 using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Visitors;
 using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer
@@ -10,11 +10,14 @@ namespace Devkoes.Restup.WebServer
     {
         private RestControllerRequestHandler _requestHandler;
         private RestRequestBuilder _restReqBuilder;
+        private RestResponseToHttpResponseConverter _restToHttpConverter;
 
         public RestWebServer(int port) : base(port)
         {
             _requestHandler = new RestControllerRequestHandler();
             _restReqBuilder = new RestRequestBuilder();
+            _restToHttpConverter = new RestResponseToHttpResponseConverter();
+
         }
 
         public RestWebServer() : this(8800) { }
@@ -30,8 +33,7 @@ namespace Devkoes.Restup.WebServer
 
             var restResponse = await _requestHandler.HandleRequest(restRequest);
 
-            var responseVisitor = new RestResponseVisitor(restRequest);
-            var httpResponse = restResponse.Visit(responseVisitor);
+            var httpResponse = restResponse.Visit(_restToHttpConverter, restRequest);
 
             return httpResponse;
         }

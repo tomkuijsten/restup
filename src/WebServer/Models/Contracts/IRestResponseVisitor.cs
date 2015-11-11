@@ -2,13 +2,13 @@
 
 namespace Devkoes.Restup.WebServer.Models.Contracts
 {
-    public interface IRestResponseVisitor<T>
+    public interface IRestResponseVisitor<TParam, TResult>
     {
-        T Visit(PutResponse response);
-        T Visit(GetResponse response);
-        T Visit(DeleteResponse response);
-        T Visit(PostResponse response);
-        T Visit(StatusOnlyResponse statusOnlyResponse);
-        T Visit(MethodNotAllowedResponse methodNotAllowedResponse);
+        TResult Visit(PutResponse response, TParam param);
+        TResult Visit(GetResponse response, TParam param);
+        TResult Visit(DeleteResponse response, TParam param);
+        TResult Visit(PostResponse response, TParam param);
+        TResult Visit(StatusOnlyResponse statusOnlyResponse, TParam param);
+        TResult Visit(MethodNotAllowedResponse methodNotAllowedResponse, TParam param);
     }
 }

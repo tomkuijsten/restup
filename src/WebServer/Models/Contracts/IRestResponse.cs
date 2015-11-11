@@ -4,7 +4,7 @@
     {
         int StatusCode { get; }
 
-        T Visit<T>(IRestResponseVisitor<T> visitor);
+        T Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param);
     }
 
     public interface IBodyRestResponse : IRestResponse

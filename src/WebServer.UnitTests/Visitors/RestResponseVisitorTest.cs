@@ -1,5 +1,5 @@
-﻿using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Visitors;
+﻿using Devkoes.Restup.WebServer.Converters;
+using Devkoes.Restup.WebServer.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace WebServer.UnitTests.Visitors
@@ -10,8 +10,8 @@ namespace WebServer.UnitTests.Visitors
         [TestMethod]
         public void Visit_Delete_DefaultResponse()
         {
-            RestResponseVisitor v = new RestResponseVisitor(null);
-            var httpResponse = v.Visit(new DeleteResponse(DeleteResponse.ResponseStatus.OK));
+            RestResponseToHttpResponseConverter v = new RestResponseToHttpResponseConverter();
+            var httpResponse = v.Visit(new DeleteResponse(DeleteResponse.ResponseStatus.OK), null);
 
             StringAssert.Contains(httpResponse.Response, "200 OK");
             StringAssert.Contains(httpResponse.Response, "Connection: ");
