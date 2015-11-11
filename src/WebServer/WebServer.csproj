@@ -145,7 +145,7 @@
     <Compile Include="RestControllerRequestHandler.cs" />
     <Compile Include="Executors\RestMethodExecutor.cs" />
     <Compile Include="RestWebServer.cs" />
-    <Compile Include="Converters\RestResponseConverter.cs" />
+    <Compile Include="Converters\RestResponseToHttpResponseConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
