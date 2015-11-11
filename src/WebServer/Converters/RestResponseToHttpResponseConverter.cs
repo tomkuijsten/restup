@@ -1,5 +1,4 @@
-﻿using Devkoes.Restup.WebServer.Helpers;
-using Devkoes.Restup.WebServer.Http;
+﻿using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
@@ -48,7 +47,7 @@ namespace Devkoes.Restup.WebServer.Converters
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
             rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", bodyLength);
-            rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpHelpers.GetMediaType(restReq.AcceptHeaders.First()));
+            rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpCodesTranslator.GetMediaType(restReq.AcceptHeaders.First()));
             rawHttpResponseBuilder.Append(CreateHttpNewLine());
             rawHttpResponseBuilder.Append(bodyString);
 
@@ -93,7 +92,7 @@ namespace Devkoes.Restup.WebServer.Converters
 
         private string CreateDefaultResponse(IRestResponse response)
         {
-            string statusCodeText = HttpHelpers.GetHttpStatusCodeText(response.StatusCode);
+            string statusCodeText = HttpCodesTranslator.GetHttpStatusCodeText(response.StatusCode);
             string responseStart = $"HTTP/1.1 {response.StatusCode} {statusCodeText}\r\n";
             var date = $"Date: {DateTime.Now.ToString("r")}\r\n";
             var connection = "Connection: close\r\n";

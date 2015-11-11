@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Devkoes.Restup.WebServer.Helpers
+namespace Devkoes.Restup.WebServer.Http
 {
-    internal static class HttpHelpers
+    internal static class HttpCodesTranslator
     {
         private static readonly IDictionary<MediaType, string> _mediaTypeTexts = new Dictionary<MediaType, string>()
         {
@@ -12,7 +12,8 @@ namespace Devkoes.Restup.WebServer.Helpers
             [MediaType.XML] = "application/xml"
         };
 
-        private static readonly IDictionary<int, string> _statusCodeTexts = new Dictionary<int, string>() {
+        private static readonly IDictionary<int, string> _statusCodeTexts = new Dictionary<int, string>()
+        {
             [200] = "OK",
             [201] = "Created",
             [204] = "No Content",
@@ -24,9 +25,9 @@ namespace Devkoes.Restup.WebServer.Helpers
 
         internal static RestVerb GetVerb(string verb)
         {
-            foreach(var name in Enum.GetNames(typeof(RestVerb)))
+            foreach (var name in Enum.GetNames(typeof(RestVerb)))
             {
-                if(string.Equals(verb, name, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(verb, name, StringComparison.OrdinalIgnoreCase))
                 {
                     return (RestVerb)Enum.Parse(typeof(RestVerb), name);
                 }

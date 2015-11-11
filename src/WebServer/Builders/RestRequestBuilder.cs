@@ -1,4 +1,4 @@
-﻿using Devkoes.Restup.WebServer.Helpers;
+﻿using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
 using System.Collections.Generic;
@@ -29,9 +29,9 @@ namespace Devkoes.Restup.WebServer.Builders
             }
 
             string[] perLine = request.Split('\n');
-            
+
             var verbAndUri = GetVerbAndUriFromRequest(perLine.First());
-            var verb = HttpHelpers.GetVerb(verbAndUri.Item1);
+            var verb = HttpCodesTranslator.GetVerb(verbAndUri.Item1);
             string body = GetBodyFromRequest(request);
             var accHeaders = GetAcceptHeadersFromRequest(perLine);
             var bodyType = GetBodyTypeFromRequest(perLine);
@@ -49,14 +49,14 @@ namespace Devkoes.Restup.WebServer.Builders
         private MediaType GetBodyTypeFromRequest(string[] requestLines)
         {
             var contentTypeLine = requestLines.FirstOrDefault((l) => l.ToLower().StartsWith(CONTENTTYPE_HEADERKEY));
-            if(string.IsNullOrWhiteSpace(contentTypeLine))
+            if (string.IsNullOrWhiteSpace(contentTypeLine))
             {
                 return MediaType.JSON;
             }
 
             foreach (var acceptedType in _acceptedMediaTypes)
             {
-                if(!contentTypeLine.Contains(acceptedType.Key))
+                if (!contentTypeLine.Contains(acceptedType.Key))
                 {
                     continue;
                 }
@@ -67,7 +67,7 @@ namespace Devkoes.Restup.WebServer.Builders
             return MediaType.JSON;
         }
 
-        private static Tuple<string,string> GetVerbAndUriFromRequest(string firstRequestLine)
+        private static Tuple<string, string> GetVerbAndUriFromRequest(string firstRequestLine)
         {
             string[] requestParts = firstRequestLine.Split(' ');
 
@@ -83,7 +83,7 @@ namespace Devkoes.Restup.WebServer.Builders
         {
             // HTTP 1.1 headers are case insensitive (http://www.w3.org/Protocols/rfc2616/rfc2616.html)
             var lcLines = requestLines.Select(l => l.ToLower());
-            var acceptedHeadersQuery = 
+            var acceptedHeadersQuery =
                     from line in lcLines
                     where line.StartsWith(ACCEPT_HEADERKEY)
                     from header in _acceptedMediaTypes
