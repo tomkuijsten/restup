@@ -1,6 +1,6 @@
 ﻿using Devkoes.Restup.WebServer;
 using System.Threading.Tasks;
-using WebServerHostTest.RESTControllers;
+using WebServerHostTest.RestControllers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -29,7 +29,13 @@ namespace WebServerHostTest
         private async Task InitializeWebServer()
         {
             _webserver = new RestWebServer();
-            _webserver.RegisterController<ParametersController>();
+
+            _webserver.RegisterController<AsyncControllerSample>();
+            _webserver.RegisterController<FromBodyControllerSample>();
+            _webserver.RegisterController<PerCallControllerSample>();
+            _webserver.RegisterController<SimpleParameterControllerSample>();
+            _webserver.RegisterController<SingletonControllerSample>();
+            _webserver.RegisterController<ThrowExceptionControllerSample>();
 
             await _webserver.StartServerAsync();
         }

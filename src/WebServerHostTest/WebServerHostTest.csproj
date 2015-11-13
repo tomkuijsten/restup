@@ -98,7 +98,12 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RestControllers\ParametersController.cs" />
+    <Compile Include="RestControllers\AsyncControllerSample.cs" />
+    <Compile Include="RestControllers\FromBodyControllerSample.cs" />
+    <Compile Include="RestControllers\SimpleParameterControllerSample.cs" />
+    <Compile Include="RestControllers\PerCallControllerSample.cs" />
+    <Compile Include="RestControllers\SingletonControllerSample.cs" />
+    <Compile Include="RestControllers\ThrowExceptionControllerSample.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
