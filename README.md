@@ -1,12 +1,10 @@
-# REST uwp
+# REST webservice for Universal Windows Apps
 
 
 [![Build status](https://ci.appveyor.com/api/projects/status/1aj7614fb0o1bjdy?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup)
 (failing due to problems on appveyor with universal apps)
 
 [Download NuGet package](https://www.nuget.org/packages/Restup/1.0.0-alpha1)
-
-REST webserver implementation for universal windows platform (UWP) apps.
 
 Using guidelines from:
 
