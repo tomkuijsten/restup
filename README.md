@@ -3,7 +3,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/1aj7614fb0o1bjdy?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup)
 
-[![NuGet downloads](https://img.shields.io/nuget/dt/restup.svg)](https://www.nuget.org/packages/Restup/1.0.0-alpha1)
+[![NuGet downloads](https://img.shields.io/nuget/dt/restup.svg)](https://www.nuget.org/packages/Restup/)
 
 Using guidelines from:
 
