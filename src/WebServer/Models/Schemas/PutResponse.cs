@@ -4,7 +4,7 @@ using Devkoes.Restup.WebServer.Models.Contracts;
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
     [RestVerb(RestVerb.PUT)]
-    public struct PutResponse : IRestResponse
+    public struct PutResponse : IBodyRestResponse
     {
         public enum ResponseStatus : int
         {
@@ -15,9 +15,21 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
 
         public ResponseStatus Status { get; }
 
-        public PutResponse(ResponseStatus status)
+        public object BodyData { get; set; }
+
+        public PutResponse(ResponseStatus status, object body)
         {
             Status = status;
+            BodyData = body;
+        }
+
+        public PutResponse(ResponseStatus status) : this(status, null)
+        {
+        }
+
+        public static PutResponse CreateNotFound()
+        {
+            return new PutResponse(ResponseStatus.NotFound, null);
         }
 
         public int StatusCode

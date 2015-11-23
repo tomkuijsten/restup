@@ -94,7 +94,14 @@ namespace Devkoes.Restup.WebServer
 
             var restMethodExecutor = _methodExecuteFactory.Create(restMethod);
 
-            return await restMethodExecutor.ExecuteMethodAsync(restMethod, req);
+            try
+            {
+                return await restMethodExecutor.ExecuteMethodAsync(restMethod, req);
+            }
+            catch
+            {
+                return _responseFactory.CreateBadRequest();
+            }
         }
 
         private static bool HasAsyncRestResponse(MethodInfo m)
