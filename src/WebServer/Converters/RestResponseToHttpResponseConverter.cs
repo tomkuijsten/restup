@@ -2,6 +2,7 @@
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -27,15 +28,11 @@ namespace Devkoes.Restup.WebServer.Converters
 
         public IHttpResponse Visit(PostResponse response, RestRequest restReq)
         {
-            var rawHttpResponseBuilder = new StringBuilder();
-            rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
-
+            var extraHeaders = new Dictionary<string, string>();
             if (response.Status == PostResponse.ResponseStatus.Created)
-                rawHttpResponseBuilder.Append($"Location: {response.LocationRedirect}\r\n");
+                extraHeaders.Add("Location", response.LocationRedirect);
 
-            rawHttpResponseBuilder.Append(CreateHttpNewLine());
-
-            return CreateHttpResponse(rawHttpResponseBuilder);
+            return VisitWithBody(response, restReq, extraHeaders);
         }
 
         public IHttpResponse Visit(GetResponse response, RestRequest restReq)
@@ -69,6 +66,12 @@ namespace Devkoes.Restup.WebServer.Converters
 
         private IHttpResponse VisitWithBody(IBodyRestResponse response, RestRequest restReq)
         {
+            return VisitWithBody(response, restReq, null);
+        }
+        private IHttpResponse VisitWithBody(IBodyRestResponse response, RestRequest restReq, IDictionary<string, string> extraHeaders)
+        {
+            extraHeaders = extraHeaders ?? new Dictionary<string, string>();
+
             string bodyString = _bodySerializer.ToBody(response.BodyData, restReq);
 
             int bodyLength = bodyString == null ? 0 : Encoding.UTF8.GetBytes(bodyString).Length;
@@ -77,6 +80,12 @@ namespace Devkoes.Restup.WebServer.Converters
             rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
             rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", bodyLength);
             rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpCodesTranslator.GetMediaType(restReq.AcceptHeaders.First()));
+
+            foreach (var extraHeader in extraHeaders)
+            {
+                rawHttpResponseBuilder.AppendFormat($"{extraHeader.Key}: {extraHeader.Value}\r\n");
+            }
+
             rawHttpResponseBuilder.Append(CreateHttpNewLine());
             rawHttpResponseBuilder.Append(bodyString);
 

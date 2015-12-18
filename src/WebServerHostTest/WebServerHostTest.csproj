@@ -104,6 +104,7 @@
     <Compile Include="RestControllers\PerCallControllerSample.cs" />
     <Compile Include="RestControllers\SingletonControllerSample.cs" />
     <Compile Include="RestControllers\ThrowExceptionControllerSample.cs" />
+    <Compile Include="RestControllers\WithResponseBodyControllerSample.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

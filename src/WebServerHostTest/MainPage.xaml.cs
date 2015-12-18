@@ -36,6 +36,7 @@ namespace WebServerHostTest
             _webserver.RegisterController<SimpleParameterControllerSample>();
             _webserver.RegisterController<SingletonControllerSample>();
             _webserver.RegisterController<ThrowExceptionControllerSample>();
+            _webserver.RegisterController<WithResponseBodyControllerSample>();
 
             await _webserver.StartServerAsync();
         }
