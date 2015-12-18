@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<package >
+<package>
   <metadata>
     <id>Restup</id>
-    <version>1.0.0-alpha2</version>
+    <version>1.0.0-alpha3</version>
     <title>Restup</title>
     <authors>Devkoes</authors>
     <owners>Devkoes</owners>
@@ -11,7 +11,7 @@
     <iconUrl>https://github.com/tomkuijsten/restup/blob/master/restup.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A REST server for the Windows Universal framework</description>
-    <releaseNotes>Alpha test2</releaseNotes>
+    <releaseNotes>Alpha test 3</releaseNotes>
     <copyright>Devkoes Copyright 2015</copyright>
     <tags>UWP REST WebService Universal Windows .NET</tags>
     <dependencies>
