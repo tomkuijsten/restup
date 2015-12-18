@@ -3,9 +3,7 @@ using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace WebServer.UnitTests
@@ -16,7 +14,7 @@ namespace WebServer.UnitTests
         [TestMethod]
         public void GetRestMethods_HasAsyncMethod_IsAsyncSet()
         {
-            var restHandler = new RestControllerRequestHandler();
+            var restHandler = new RestControllerRequestHandler(null);
 
             var allDefs = restHandler.GetRestMethods<AsyncTestController>();
 
@@ -30,7 +28,7 @@ namespace WebServer.UnitTests
             [UriFormat("/users/{userId}")]
             public async Task<GetResponse> GetUser(int userId)
             {
-                return await Task.Run(() =>new GetResponse(GetResponse.ResponseStatus.OK, "test"));
+                return await Task.Run(() => new GetResponse(GetResponse.ResponseStatus.OK, "test"));
             }
         }
     }

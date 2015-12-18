@@ -39,7 +39,7 @@ namespace Devkoes.Restup.WebServer.Builders
             return new RestRequest()
             {
                 Verb = verb,
-                Uri = verbAndUri.Item2,
+                Uri = UriHelper.RemovePreAndPostSlash(verbAndUri.Item2),
                 Body = body,
                 BodyMediaType = bodyType,
                 AcceptHeaders = accHeaders

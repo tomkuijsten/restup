@@ -28,7 +28,7 @@ namespace WebServerHostTest
 
         private async Task InitializeWebServer()
         {
-            _webserver = new RestWebServer();
+            _webserver = new RestWebServer(8800, "api");
 
             _webserver.RegisterController<AsyncControllerSample>();
             _webserver.RegisterController<FromBodyControllerSample>();

@@ -121,6 +121,7 @@
     <Compile Include="Http\BodySerializer.cs" />
     <Compile Include="Http\HttpServer.cs" />
     <Compile Include="Http\RestMethodInfo.cs" />
+    <Compile Include="Http\UriHelper.cs" />
     <Compile Include="InstanceCreators\InstanceCreatorCache.cs" />
     <Compile Include="InstanceCreators\PerCallInstanceCreator.cs" />
     <Compile Include="InstanceCreators\SingletonInstanceCreator.cs" />

@@ -12,15 +12,16 @@ namespace Devkoes.Restup.WebServer
         private RestRequestBuilder _restReqBuilder;
         private RestResponseToHttpResponseConverter _restToHttpConverter;
 
-        public RestWebServer(int port) : base(port)
+        public RestWebServer(int port, string urlPrefix) : base(port)
         {
-            _requestHandler = new RestControllerRequestHandler();
+            _requestHandler = new RestControllerRequestHandler(urlPrefix);
             _restReqBuilder = new RestRequestBuilder();
             _restToHttpConverter = new RestResponseToHttpResponseConverter();
-
         }
 
-        public RestWebServer() : this(8800) { }
+        public RestWebServer(int port) : this(port, null) { }
+
+        public RestWebServer() : this(8800, null) { }
 
         public void RegisterController<T>() where T : class
         {

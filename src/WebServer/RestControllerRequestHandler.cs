@@ -16,9 +16,11 @@ namespace Devkoes.Restup.WebServer
         private List<RestMethodInfo> _restMethodCollection;
         private RestResponseFactory _responseFactory;
         private RestMethodExecutorFactory _methodExecuteFactory;
+        private string _urlPrefix;
 
-        internal RestControllerRequestHandler()
+        internal RestControllerRequestHandler(string urlPrefix)
         {
+            _urlPrefix = urlPrefix;
             _restMethodCollection = new List<RestMethodInfo>();
             _responseFactory = new RestResponseFactory();
             _methodExecuteFactory = new RestMethodExecutorFactory();
@@ -39,10 +41,10 @@ namespace Devkoes.Restup.WebServer
             var allPublicRestMethods = GetRestMethodDefinitions<T>();
 
             foreach (var methodDef in allPublicRestMethods)
-                restMethods.Add(new RestMethodInfo(methodDef));
+                restMethods.Add(new RestMethodInfo(methodDef, _urlPrefix));
 
             foreach (var methodDef in allPublicAsyncRestMethods)
-                restMethods.Add(new RestMethodInfo(methodDef, true));
+                restMethods.Add(new RestMethodInfo(methodDef, _urlPrefix, true));
 
             return restMethods;
         }

@@ -1,12 +1,10 @@
 ﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using System;
-using Devkoes.Restup.WebServer.InstanceCreators;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Devkoes.Restup.WebServer.Http
 {
@@ -20,6 +18,7 @@ namespace Devkoes.Restup.WebServer.Http
         private Regex _findParameterValuesRegex;
         private Regex _matchUriRegex;
         private IDictionary<string, Type> _parametersForUri;
+        private string _urlPrefix;
 
         public MethodInfo MethodInfo { get; private set; }
         public RestVerb Verb { get; private set; }
@@ -27,8 +26,9 @@ namespace Devkoes.Restup.WebServer.Http
         public Type BodyParameterType { get; private set; }
         public bool IsAsync { get; }
 
-        public RestMethodInfo(MethodInfo methodInfo, bool isAsync)
+        public RestMethodInfo(MethodInfo methodInfo, string urlPrefix, bool isAsync)
         {
+            _urlPrefix = UriHelper.RemovePreAndPostSlash(urlPrefix);
             IsAsync = isAsync;
 
             MethodInfo = methodInfo;
@@ -41,10 +41,7 @@ namespace Devkoes.Restup.WebServer.Http
             InitializeBodyParameter();
         }
 
-        public RestMethodInfo(MethodInfo methodInfo) : this(methodInfo, false)
-        {
-
-        }
+        public RestMethodInfo(MethodInfo methodInfo, string urlPrefix) : this(methodInfo, urlPrefix, false) { }
 
         private void InitializeValidParameterTypes()
         {
@@ -101,7 +98,8 @@ namespace Devkoes.Restup.WebServer.Http
         private void InitializeMatchUriRegex()
         {
             var uriFormatter = MethodInfo.GetCustomAttribute<UriFormatAttribute>();
-            string regexToMatchUri = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatter.UriFormat, MATCHURI_REPLACE_STRING));
+            string uriFormatWithPrefix = CreateUriFormat(uriFormatter);
+            string regexToMatchUri = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatWithPrefix, MATCHURI_REPLACE_STRING));
             _matchUriRegex = new Regex(regexToMatchUri);
 
         }
@@ -109,10 +107,20 @@ namespace Devkoes.Restup.WebServer.Http
         private void InitializeFindParameterRegex()
         {
             var uriFormatter = MethodInfo.GetCustomAttribute<UriFormatAttribute>();
-
-            string regexToFindParamValues = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatter.UriFormat, MATCHPARAMETER_REPLACE_STRING));
+            string uriFormatWithPrefix = CreateUriFormat(uriFormatter);
+            string regexToFindParamValues = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatWithPrefix, MATCHPARAMETER_REPLACE_STRING));
 
             _findParameterValuesRegex = new Regex(regexToFindParamValues);
+        }
+
+        private string CreateUriFormat(UriFormatAttribute uriFormatter)
+        {
+            string uriFormat = UriHelper.RemovePreAndPostSlash(uriFormatter.UriFormat);
+
+            if (string.IsNullOrWhiteSpace(_urlPrefix))
+                return uriFormat;
+
+            return $"{_urlPrefix}/{uriFormat}";
         }
 
         private void InitializeVerb()
