@@ -40,27 +40,12 @@ namespace Devkoes.Restup.WebServer.Converters
 
         public IHttpResponse Visit(GetResponse response, RestRequest restReq)
         {
-            string bodyString = _bodySerializer.ToBody(response.BodyData, restReq);
-
-            int bodyLength = bodyString == null ? 0 : Encoding.UTF8.GetBytes(bodyString).Length;
-
-            var rawHttpResponseBuilder = new StringBuilder();
-            rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
-            rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", bodyLength);
-            rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpCodesTranslator.GetMediaType(restReq.AcceptHeaders.First()));
-            rawHttpResponseBuilder.Append(CreateHttpNewLine());
-            rawHttpResponseBuilder.Append(bodyString);
-
-            return CreateHttpResponse(rawHttpResponseBuilder);
+            return VisitWithBody(response, restReq);
         }
 
         public IHttpResponse Visit(PutResponse response, RestRequest restReq)
         {
-            var rawHttpResponseBuilder = new StringBuilder();
-            rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
-            rawHttpResponseBuilder.Append(CreateHttpNewLine());
-
-            return CreateHttpResponse(rawHttpResponseBuilder);
+            return VisitWithBody(response, restReq);
         }
 
         public IHttpResponse Visit(StatusOnlyResponse statusOnlyResponse, RestRequest restReq)
@@ -78,6 +63,22 @@ namespace Devkoes.Restup.WebServer.Converters
             rawHttpResponseBuilder.Append(CreateDefaultResponse(methodNotAllowedResponse));
             rawHttpResponseBuilder.AppendFormat("Allow: {0}", string.Join(",", methodNotAllowedResponse.Allows));
             rawHttpResponseBuilder.Append(CreateHttpNewLine());
+
+            return CreateHttpResponse(rawHttpResponseBuilder);
+        }
+
+        private IHttpResponse VisitWithBody(IBodyRestResponse response, RestRequest restReq)
+        {
+            string bodyString = _bodySerializer.ToBody(response.BodyData, restReq);
+
+            int bodyLength = bodyString == null ? 0 : Encoding.UTF8.GetBytes(bodyString).Length;
+
+            var rawHttpResponseBuilder = new StringBuilder();
+            rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
+            rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", bodyLength);
+            rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpCodesTranslator.GetMediaType(restReq.AcceptHeaders.First()));
+            rawHttpResponseBuilder.Append(CreateHttpNewLine());
+            rawHttpResponseBuilder.Append(bodyString);
 
             return CreateHttpResponse(rawHttpResponseBuilder);
         }
