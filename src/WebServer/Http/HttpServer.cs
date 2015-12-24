@@ -72,9 +72,9 @@ namespace Devkoes.Restup.WebServer.Http
                 uint dataRead = BUFFER_SIZE;
                 while (dataRead == BUFFER_SIZE)
                 {
-                    await input.ReadAsync(buffer, BUFFER_SIZE, InputStreamOptions.Partial);
-                    request.Append(HttpRequestStringEncoding.GetString(data, 0, data.Length));
-                    dataRead = buffer.Length;
+                    var readBytes = await input.ReadAsync(buffer, BUFFER_SIZE, InputStreamOptions.Partial);
+                    request.Append(HttpRequestStringEncoding.GetString(readBytes.ToArray()));
+                    dataRead = readBytes.Length;
                 }
             }
 
