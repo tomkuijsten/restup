@@ -23,7 +23,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             BodyData = body;
         }
 
-        public PostResponse(ResponseStatus status, string locationRedirectUri) : this(status, null, null)
+        public PostResponse(ResponseStatus status, string locationRedirectUri) : this(status, locationRedirectUri, null)
         {
         }
 
