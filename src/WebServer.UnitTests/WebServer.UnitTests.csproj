@@ -97,7 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builders\RestRequestBuilderTest.cs" />
-    <Compile Include="Http\HttpServerTest.cs" />
+    <Compile Include="Http\HttpRequestStreamReaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestControllerRequestHandlerTest.cs" />
     <Compile Include="RestWebServerTest.Happy.cs" />

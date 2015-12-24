@@ -25,7 +25,10 @@ namespace Devkoes.Restup.WebServer.Builders
         {
             if (string.IsNullOrWhiteSpace(request))
             {
-                throw new ArgumentException("Request should contain the http verb and uri", "request");
+                return new RestRequest()
+                {
+                    Verb = RestVerb.Unsupported
+                };
             }
 
             string[] perLine = request.Split('\n');

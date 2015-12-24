@@ -25,7 +25,7 @@ Content-Type: application/json
             Assert.AreEqual(MediaType.JSON, request.BodyMediaType);
             Assert.AreEqual(MediaType.XML, request.AcceptHeaders.First());
             Assert.AreEqual("{Parameter:23.0}", request.Body);
-            Assert.AreEqual("/api/Parameters/2/nodes/12", request.Uri);
+            Assert.AreEqual("api/Parameters/2/nodes/12", request.Uri);
             Assert.AreEqual(RestVerb.GET, request.Verb);
         }
     }
