@@ -9,8 +9,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
         void Visit(ContentLengthHeader uh, T arg);
         void Visit(AcceptHeader uh, T arg);
         void Visit(ContentTypeHeader uh, T arg);
-        void Visit(ContentCharsetHeader uh, T arg);
-        void Visit(AcceptCharSetHeader uh, T arg);
+        void Visit(AcceptCharsetHeader uh, T arg);
     }
 
     internal interface IHttpHeader
@@ -85,7 +84,8 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
     {
         internal static string NAME = "Content-Type";
 
-        public MediaType ContentType { get; set; }
+        public MediaType ContentType { get; internal set; }
+        public Encoding ContentEncoding { get; internal set; }
 
         public ContentTypeHeader(string value) : base(NAME, value)
         {
@@ -98,31 +98,13 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
         }
     }
 
-    internal class ContentCharsetHeader : BaseHeader
-    {
-        internal static string NAME = "Content-Charset";
-
-        //part of content-type: text/xml; charset=utf-8
-        public Encoding RequestContentEncoding { get; set; }
-
-        public ContentCharsetHeader(string value) : base(NAME, value)
-        {
-            RequestContentEncoding = Encoding.GetEncoding(value);
-        }
-
-        public override void Visit<T>(IHttpHeaderVisitor<T> v, T arg)
-        {
-            v.Visit(this, arg);
-        }
-    }
-
-    internal class AcceptCharSetHeader : BaseHeader
+    internal class AcceptCharsetHeader : BaseHeader
     {
         internal static string NAME = "Accept-Charset";
 
         public Encoding ResponseContentEncoding { get; set; }
 
-        public AcceptCharSetHeader(string value) : base(NAME, value)
+        public AcceptCharsetHeader(string value) : base(NAME, value)
         {
             ResponseContentEncoding = Encoding.GetEncoding(value);
         }

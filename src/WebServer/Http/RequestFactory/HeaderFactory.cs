@@ -15,8 +15,7 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
                 [ContentLengthHeader.NAME] = CreateContentLength,
                 [AcceptHeader.NAME] = CreateResponseContentType,
                 [ContentTypeHeader.NAME] = CreateRequestContentType,
-                [ContentCharsetHeader.NAME] = CreateRequestContentCharset,
-                [AcceptCharSetHeader.NAME] = CreateResponseContentCharset
+                [AcceptCharsetHeader.NAME] = CreateResponseContentCharset
             };
         }
 
@@ -35,11 +34,6 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
             return new ContentLengthHeader(headerValue);
         }
 
-        private IHttpHeader CreateRequestContentCharset(string headerValue)
-        {
-            return new ContentCharsetHeader(headerValue);
-        }
-
         private IHttpHeader CreateRequestContentType(string headerValue)
         {
             return new ContentTypeHeader(headerValue);
@@ -52,7 +46,7 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
 
         private IHttpHeader CreateResponseContentCharset(string headerValue)
         {
-            return new AcceptCharSetHeader(headerValue);
+            return new AcceptCharsetHeader(headerValue);
         }
     }
 }
