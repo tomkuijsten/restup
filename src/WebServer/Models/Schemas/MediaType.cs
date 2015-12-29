@@ -2,6 +2,7 @@
 {
     public enum MediaType
     {
+        Unsupported,
         JSON,
         XML
     }

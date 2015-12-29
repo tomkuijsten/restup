@@ -12,6 +12,14 @@ namespace Devkoes.Restup.WebServer.Http
             [MediaType.XML] = "application/xml"
         };
 
+        private static readonly IDictionary<string, MediaType> _textAsMediaType = new Dictionary<string, MediaType>()
+        {
+            ["application/json"] = MediaType.JSON,
+            ["text/json"] = MediaType.JSON,
+            ["application/xml"] = MediaType.XML,
+            ["text/xml"] = MediaType.XML,
+        };
+
         private static readonly IDictionary<int, string> _statusCodeTexts = new Dictionary<int, string>()
         {
             [200] = "OK",
@@ -44,6 +52,16 @@ namespace Devkoes.Restup.WebServer.Http
         internal static string GetMediaType(MediaType mediaType)
         {
             return _mediaTypeTexts[mediaType];
+        }
+
+        internal static MediaType GetMediaType(string value)
+        {
+            if (_textAsMediaType.ContainsKey(value))
+            {
+                return _textAsMediaType[value];
+            }
+
+            return MediaType.Unsupported;
         }
     }
 }
