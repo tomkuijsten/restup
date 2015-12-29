@@ -15,7 +15,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
     internal interface IHttpHeader
     {
         string Name { get; set; }
-        string Value { get; set; }
+        string RawContent { get; set; }
 
         void Visit<T>(IHttpHeaderVisitor<T> v, T arg);
     }
@@ -23,12 +23,12 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
     internal abstract class BaseHeader : IHttpHeader
     {
         public string Name { get; set; }
-        public string Value { get; set; }
+        public string RawContent { get; set; }
 
         public BaseHeader(string name, string value)
         {
             Name = name;
-            Value = value;
+            RawContent = value;
         }
 
         public abstract void Visit<T>(IHttpHeaderVisitor<T> v, T arg);
