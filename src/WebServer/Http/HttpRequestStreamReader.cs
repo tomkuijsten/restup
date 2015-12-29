@@ -16,7 +16,7 @@ namespace Devkoes.Restup.WebServer.Http
         // This should be an exception, so 10ms is not that big a deal.
         private const int INPUTSTREAM_EMPTY_DELAYMS = 10;
 
-        private Regex _findContentLengthRegex = new Regex("content-length:\\D*(?<cl>\\d*)", RegexOptions.IgnoreCase);
+        private Regex _findContentLengthRegex = new Regex("content-length:\\D*(?<cl>\\d*)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         internal Encoding HttpRequestStringEncoding { get; }
 

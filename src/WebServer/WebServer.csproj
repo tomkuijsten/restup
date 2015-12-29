@@ -115,6 +115,7 @@
     <Compile Include="Attributes\UriFormatAttribute.cs" />
     <Compile Include="Builders\RestRequestBuilder.cs" />
     <Compile Include="Executors\RestMethodWithBodyExecutor.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Factories\RestMethodExecutorFactory.cs" />
     <Compile Include="Factories\RestResponseFactory.cs" />
     <Compile Include="Http\HttpCodesTranslator.cs" />
@@ -129,7 +130,7 @@
     <Compile Include="Http\RequestFactory\HttpRequestStream.cs" />
     <Compile Include="Http\RequestFactory\ParseRequestPipeline.cs" />
     <Compile Include="Models\Contracts\IRequestPipelinePart.cs" />
-    <Compile Include="Models\Schemas\HttpHeaders.cs" />
+    <Compile Include="Http\RequestFactory\HttpHeaders.cs" />
     <Compile Include="Http\RequestFactory\HttpRequest.cs" />
     <Compile Include="Http\RequestFactory\MethodParser.cs" />
     <Compile Include="Http\RequestFactory\ProtocolVersionParser.cs" />

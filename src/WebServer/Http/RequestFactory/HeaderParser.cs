@@ -1,7 +1,6 @@
 ﻿using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Devkoes.Restup.WebServer.Http.RequestFactory
 {
@@ -25,8 +24,6 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
     internal class HeaderParser : RequestPipelinePart
     {
         private HeaderFactory _headerFactory;
-        private Regex _trimStart = new Regex(@"^\s+", RegexOptions.Compiled);
-        private Regex _trimEnd = new Regex(@"\s+$", RegexOptions.Compiled);
 
         private class Header
         {
@@ -64,8 +61,7 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
                     {
                         // Handle end of one header scenario
                         var headerValue = GetHeaderString(stream, unparsedIndex, i);
-                        headerValue = _trimStart.Replace(headerValue, string.Empty);
-                        headerValue = _trimEnd.Replace(headerValue, string.Empty);
+                        headerValue = headerValue.TrimWhitespaces();
                         resultThisFar.AddHeader(_headerFactory.Create(headerName, headerValue));
                         headerName = null;
                         unparsedIndex = i + 2;
