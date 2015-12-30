@@ -14,7 +14,9 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             public bool WordFound { get; set; }
         }
 
-        public bool Finished { get; protected set; }
+        public bool IsFinished { get; protected set; }
+
+        public bool IsSucceeded { get; protected set; }
 
         public byte[] UnparsedData { get; protected set; }
 

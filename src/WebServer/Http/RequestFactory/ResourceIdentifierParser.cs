@@ -13,7 +13,8 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
             {
                 resultThisFar.Uri = new Uri(word.Word, UriKind.Relative);
                 UnparsedData = word.RemainingBytes;
-                Finished = true;
+                IsFinished = true;
+                IsSucceeded = true;
             }
         }
     }

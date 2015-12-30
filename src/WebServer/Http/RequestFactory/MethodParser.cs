@@ -13,7 +13,8 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
             {
                 resultThisFar.Method = GetMethod(word.Word);
                 UnparsedData = word.RemainingBytes;
-                Finished = true;
+                IsFinished = true;
+                IsSucceeded = true;
             }
         }
 

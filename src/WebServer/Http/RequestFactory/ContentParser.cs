@@ -14,15 +14,29 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
     {
         private string _content;
 
+        public ContentParser()
+        {
+            // Incoming data is read entirely, always, so there will never be any unparsed data
+            UnparsedData = new byte[0];
+        }
         public override void HandleRequestPart(byte[] stream, HttpRequest resultThisFar)
         {
-            _content += resultThisFar.RequestContentEncoding.GetString(stream);
-            if (_content.Length == resultThisFar.ContentLength)
+            if (resultThisFar.ContentLength == 0)
             {
-                resultThisFar.Content = _content;
-                Finished = true;
+                IsFinished = true;
+                IsSucceeded = stream.Length == 0;
             }
-            // else if content is bigger, finished will never be set, badrequest will happen
+            else
+            {
+                _content += resultThisFar.RequestContentEncoding.GetString(stream);
+                if (_content.Length == resultThisFar.ContentLength)
+                {
+                    resultThisFar.Content = _content;
+                    IsFinished = true;
+                    IsSucceeded = true;
+                }
+                // else if content is bigger, finished will never be set, badrequest will happen
+            }
         }
     }
 }

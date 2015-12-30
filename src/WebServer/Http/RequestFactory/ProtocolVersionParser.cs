@@ -12,7 +12,8 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
             {
                 resultThisFar.HttpVersion = word.Word;
                 UnparsedData = word.RemainingBytes;
-                Finished = true;
+                IsFinished = true;
+                IsSucceeded = true;
             }
         }
     }

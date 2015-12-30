@@ -1,6 +1,7 @@
 ﻿using Devkoes.Restup.WebServer.Models.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
@@ -28,42 +29,50 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
             var httpStream = new HttpRequestStream(requestStream);
             var request = new HttpRequest();
 
-            var stream = await httpStream.ReadAsync(BUFFER_SIZE, InputStreamOptions.Partial);
-            byte[] streamData = stream.Data;
-
-            var requestPipeline = GetPipeline();
-            using (var pipeLineEnumerator = requestPipeline.GetEnumerator())
+            try
             {
-                pipeLineEnumerator.MoveNext();
-                bool requestComplete = false;
+                var stream = await httpStream.ReadAsync(BUFFER_SIZE, InputStreamOptions.Partial);
+                byte[] streamData = stream.Data;
 
-                while (!requestComplete)
+                var requestPipeline = GetPipeline();
+                using (var pipeLineEnumerator = requestPipeline.GetEnumerator())
                 {
-                    pipeLineEnumerator.Current.HandleRequestPart(streamData, request);
+                    pipeLineEnumerator.MoveNext();
+                    bool requestComplete = false;
 
-                    if (pipeLineEnumerator.Current.Finished)
+                    while (!requestComplete)
                     {
+                        pipeLineEnumerator.Current.HandleRequestPart(streamData, request);
                         streamData = pipeLineEnumerator.Current.UnparsedData;
-                        if (!pipeLineEnumerator.MoveNext())
-                        {
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        var newStreamdata = await httpStream.ReadAsync(BUFFER_SIZE, InputStreamOptions.Partial);
 
-                        if (!newStreamdata.ReadSuccessful)
+                        if (pipeLineEnumerator.Current.IsFinished)
                         {
-                            break;
+                            if (!pipeLineEnumerator.Current.IsSucceeded ||
+                                !pipeLineEnumerator.MoveNext())
+                            {
+                                break;
+                            }
                         }
+                        else
+                        {
+                            var newStreamdata = await httpStream.ReadAsync(BUFFER_SIZE, InputStreamOptions.Partial);
 
-                        streamData = ConcatArrays(streamData, newStreamdata.Data);
+                            if (!newStreamdata.ReadSuccessful)
+                            {
+                                break;
+                            }
+
+                            streamData = ConcatArrays(streamData, newStreamdata.Data);
+                        }
                     }
                 }
-            }
 
-            request.IsComplete = requestPipeline.Last().Finished;
+                request.IsComplete = requestPipeline.All(p => p.IsSucceeded);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
 
             return request;
         }

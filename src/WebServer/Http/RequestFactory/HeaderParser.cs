@@ -43,28 +43,54 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
         /// <param name="resultThisFar"></param>
         public override void HandleRequestPart(byte[] stream, HttpRequest resultThisFar)
         {
+            UnparsedData = stream;
+
             string headerName = null;
-            var bytesLeft = stream.Length - 1;
-            int unparsedIndex = 0;
+            var bytesLeft = stream.Length;
+            int headerValueStartIndex = 0;
+            int headerValueEndIndex = 0;
             for (var i = 0; i < stream.Length; i++, bytesLeft--)
             {
                 byte currentByte = stream[i];
                 if (headerName == null && currentByte == HttpConstants.ColonByte)
                 {
-                    headerName = GetHeaderString(stream, unparsedIndex, i);
-                    unparsedIndex = i + 1;
+                    headerName = GetHeaderString(stream, headerValueEndIndex, i);
+                    headerValueStartIndex = i + 1;
                 }
                 else if (stream[i] == HttpConstants.CRByte)
                 {
-                    if (bytesLeft >= 2 &&
+                    // Special case when /r/n is received or /r/ncontentdata
+                    if (i == 0 && bytesLeft >= 2 && stream[1] == HttpConstants.LFByte)
+                    {
+                        IsFinished = true;
+                        IsSucceeded = true;
+                        headerValueEndIndex = 2;
+                        break;
+                    }
+
+                    if (headerName != null &&
+                        bytesLeft >= 2 &&
                         stream[i + 1] == HttpConstants.LFByte)
                     {
                         // Handle end of one header scenario
-                        var headerValue = GetHeaderString(stream, unparsedIndex, i);
+                        var headerValue = GetHeaderString(stream, headerValueStartIndex, i);
                         headerValue = headerValue.TrimWhitespaces();
-                        resultThisFar.AddHeader(_headerFactory.Create(headerName, headerValue));
-                        headerName = null;
-                        unparsedIndex = i + 2;
+                        try
+                        {
+                            resultThisFar.AddHeader(_headerFactory.Create(headerName, headerValue));
+                        }
+                        catch (Exception)
+                        {
+                            IsFinished = true;
+                            IsSucceeded = false;
+                            break;
+                        }
+                        finally
+                        {
+                            headerName = null;
+                            headerValueStartIndex = 0;
+                            headerValueEndIndex = i + 2;
+                        }
                     }
 
                     if (bytesLeft >= 4 &&
@@ -73,14 +99,15 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
                         stream[i + 3] == HttpConstants.LFByte)
                     {
                         // Handle end of headers scenario
-                        unparsedIndex = i + 4;
-                        Finished = true;
+                        headerValueEndIndex = i + 4;
+                        IsFinished = true;
+                        IsSucceeded = true;
                         break;
                     }
                 }
             }
 
-            UnparsedData = stream.Skip(unparsedIndex).ToArray();
+            UnparsedData = stream.Skip(headerValueEndIndex).ToArray();
         }
 
         private string GetHeaderString(byte[] stream, int unparsedIndex, int markerIndex)

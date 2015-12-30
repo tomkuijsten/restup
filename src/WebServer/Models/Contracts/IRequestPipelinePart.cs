@@ -6,6 +6,7 @@ namespace Devkoes.Restup.WebServer.Models.Contracts
     {
         void HandleRequestPart(byte[] stream, HttpRequest resultThisFar);
         byte[] UnparsedData { get; }
-        bool Finished { get; }
+        bool IsFinished { get; }
+        bool IsSucceeded { get; }
     }
 }
