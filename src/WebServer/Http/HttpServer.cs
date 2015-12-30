@@ -1,4 +1,4 @@
-﻿using Devkoes.Restup.WebServer.Http.RequestFactory;
+﻿using Devkoes.Restup.WebServer.Http.RequestParsers;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using System;
 using System.Diagnostics;
@@ -15,7 +15,7 @@ namespace Devkoes.Restup.WebServer.Http
         private readonly StreamSocketListener _listener;
         private HttpRequestParser _requestParser;
 
-        public HttpServer(int serverPort)
+        internal HttpServer(int serverPort)
         {
             _listener = new StreamSocketListener();
             _requestParser = new HttpRequestParser();
@@ -30,6 +30,13 @@ namespace Devkoes.Restup.WebServer.Http
             await _listener.BindServiceNameAsync(_port.ToString());
 
             Debug.WriteLine($"Webserver started on port {_port}");
+        }
+
+        public void StopServer()
+        {
+            ((IDisposable)this).Dispose();
+
+            Debug.WriteLine($"Webserver on port {_port} stopped");
         }
 
         private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
@@ -52,7 +59,6 @@ namespace Devkoes.Restup.WebServer.Http
                 {
                     try
                     {
-                        // Lets make sure the socket will always close
                         args.Socket.Dispose();
                     }
                     catch { }
@@ -69,7 +75,7 @@ namespace Devkoes.Restup.WebServer.Http
             }
         }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
             _listener.Dispose();
         }

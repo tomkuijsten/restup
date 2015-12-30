@@ -1,6 +1,6 @@
 ﻿namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    public enum RestVerb
+    internal enum HttpMethod
     {
         Unsupported,
         POST,

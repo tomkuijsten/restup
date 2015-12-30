@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    public class MethodNotAllowedResponse : StatusOnlyResponse
+    internal class MethodNotAllowedResponse : StatusOnlyResponse
     {
-        public IEnumerable<RestVerb> Allows { get; }
+        public IEnumerable<HttpMethod> Allows { get; }
 
-        public MethodNotAllowedResponse(IEnumerable<RestVerb> allows) : base(405)
+        internal MethodNotAllowedResponse(IEnumerable<HttpMethod> allows) : base(405)
         {
             Allows = allows;
         }

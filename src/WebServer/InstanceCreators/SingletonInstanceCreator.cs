@@ -3,7 +3,7 @@ using System;
 
 namespace Devkoes.Restup.WebServer.InstanceCreators
 {
-    public class SingletonInstanceCreator : IInstanceCreator
+    internal class SingletonInstanceCreator : IInstanceCreator
     {
         private object _instance;
         private object _instanceLock = new object();
@@ -19,9 +19,9 @@ namespace Devkoes.Restup.WebServer.InstanceCreators
         {
             if (_instance == null)
             {
-                lock(_instanceLock)
+                lock (_instanceLock)
                 {
-                    if(_instance == null)
+                    if (_instance == null)
                     {
                         _instance = Activator.CreateInstance(instanceType, args);
                     }

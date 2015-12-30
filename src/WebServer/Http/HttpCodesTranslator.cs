@@ -4,15 +4,17 @@ using System.Collections.Generic;
 
 namespace Devkoes.Restup.WebServer.Http
 {
-    internal static class HttpCodesTranslator
+    internal class HttpCodesTranslator
     {
-        private static readonly IDictionary<MediaType, string> _mediaTypeTexts = new Dictionary<MediaType, string>()
+        internal static HttpCodesTranslator Default { get; }
+
+        private readonly IDictionary<MediaType, string> _mediaTypeTexts = new Dictionary<MediaType, string>()
         {
             [MediaType.JSON] = "application/json",
             [MediaType.XML] = "application/xml"
         };
 
-        private static readonly IDictionary<string, MediaType> _textAsMediaType = new Dictionary<string, MediaType>()
+        private readonly IDictionary<string, MediaType> _textAsMediaType = new Dictionary<string, MediaType>()
         {
             ["application/json"] = MediaType.JSON,
             ["text/json"] = MediaType.JSON,
@@ -20,7 +22,7 @@ namespace Devkoes.Restup.WebServer.Http
             ["text/xml"] = MediaType.XML,
         };
 
-        private static readonly IDictionary<int, string> _statusCodeTexts = new Dictionary<int, string>()
+        private readonly IDictionary<int, string> _statusCodeTexts = new Dictionary<int, string>()
         {
             [200] = "OK",
             [201] = "Created",
@@ -31,30 +33,37 @@ namespace Devkoes.Restup.WebServer.Http
             [409] = "Conflict",
         };
 
-        internal static RestVerb GetVerb(string verb)
+        static HttpCodesTranslator()
         {
-            foreach (var name in Enum.GetNames(typeof(RestVerb)))
+            Default = new HttpCodesTranslator();
+        }
+
+        private HttpCodesTranslator() { }
+
+        internal HttpMethod GetVerb(string verb)
+        {
+            foreach (var name in Enum.GetNames(typeof(HttpMethod)))
             {
                 if (string.Equals(verb, name, StringComparison.OrdinalIgnoreCase))
                 {
-                    return (RestVerb)Enum.Parse(typeof(RestVerb), name);
+                    return (HttpMethod)Enum.Parse(typeof(HttpMethod), name);
                 }
             }
 
-            return RestVerb.Unsupported;
+            return HttpMethod.Unsupported;
         }
 
-        internal static string GetHttpStatusCodeText(int statusCode)
+        internal string GetHttpStatusCodeText(int statusCode)
         {
             return _statusCodeTexts[statusCode];
         }
 
-        internal static string GetMediaType(MediaType mediaType)
+        internal string GetMediaType(MediaType mediaType)
         {
             return _mediaTypeTexts[mediaType];
         }
 
-        internal static MediaType GetMediaType(string value)
+        internal MediaType GetMediaType(string value)
         {
             if (_textAsMediaType.ContainsKey(value))
             {

@@ -1,7 +1,6 @@
-﻿using Devkoes.Restup.WebServer.Converters;
-using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Http.RequestFactory;
+﻿using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
+using Devkoes.Restup.WebServer.Rest;
 using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer
@@ -19,16 +18,6 @@ namespace Devkoes.Restup.WebServer
             _restToHttpConverter = new RestResponseToHttpResponseConverter();
         }
 
-        /// <summary>
-        /// The prefix will always be formatted as "/prefix"
-        /// </summary>
-        private string FixPrefixUrlFormatting(string urlPrefix)
-        {
-            var cleanUrl = UriHelper.RemovePreAndPostSlash(urlPrefix);
-
-            return string.IsNullOrWhiteSpace(cleanUrl) ? string.Empty : "/" + cleanUrl;
-        }
-
         public RestWebServer(int port) : this(port, null) { }
 
         public RestWebServer() : this(8800, null) { }
@@ -36,6 +25,16 @@ namespace Devkoes.Restup.WebServer
         public void RegisterController<T>() where T : class
         {
             _requestHandler.RegisterController<T>();
+        }
+
+        /// <summary>
+        /// The prefix will always be formatted as "/prefix"
+        /// </summary>
+        private string FixPrefixUrlFormatting(string urlPrefix)
+        {
+            var cleanUrl = urlPrefix.RemovePreAndPostSlash();
+
+            return string.IsNullOrWhiteSpace(cleanUrl) ? string.Empty : "/" + cleanUrl;
         }
 
         internal override async Task<IHttpResponse> HandleRequest(HttpRequest request)

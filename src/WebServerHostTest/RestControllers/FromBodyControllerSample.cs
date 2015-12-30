@@ -3,7 +3,7 @@ using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
 using System.Diagnostics;
 
-namespace WebServerHostTest.RestControllers
+namespace Devkoes.Restup.WebServerHostTest.RestControllers
 {
     [RestController(InstanceCreationType.PerCall)]
     public class FromBodyControllerSample

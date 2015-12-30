@@ -3,7 +3,7 @@ using Devkoes.Restup.WebServer.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    [RestVerb(RestVerb.POST)]
+    [RestVerb(HttpMethod.POST)]
     public struct PostResponse : IBodyRestResponse
     {
         public enum ResponseStatus : int
@@ -12,9 +12,9 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             Conflict = 409
         };
 
-        public object BodyData { get; set; }
+        public object BodyData { get; }
         public ResponseStatus Status { get; }
-        public string LocationRedirect { get; set; }
+        public string LocationRedirect { get; }
 
         public PostResponse(ResponseStatus status, string locationRedirectUri, object body)
         {
@@ -39,7 +39,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             }
         }
 
-        public T Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param)
+        T IRestResponse.Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param)
         {
             return visitor.Visit(this, param);
         }

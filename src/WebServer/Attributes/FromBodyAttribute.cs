@@ -6,7 +6,7 @@ namespace Devkoes.Restup.WebServer.Attributes
     /// This class is only used as a marker
     /// </summary>
     [System.AttributeUsage(AttributeTargets.Parameter, Inherited = false, AllowMultiple = false)]
-    public class FromBodyAttribute : Attribute
+    public sealed class FromBodyAttribute : Attribute
     {
     }
 }

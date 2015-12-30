@@ -7,22 +7,29 @@ using System.Reflection;
 
 namespace Devkoes.Restup.WebServer.InstanceCreators
 {
-    internal static class InstanceCreatorCache
+    internal class InstanceCreatorCache
     {
-        private static Dictionary<Type, IInstanceCreator> _cache;
+        internal static InstanceCreatorCache Default { get; }
+
+        private Dictionary<Type, IInstanceCreator> _cache;
 
         static InstanceCreatorCache()
+        {
+            Default = new InstanceCreatorCache();
+        }
+
+        internal InstanceCreatorCache()
         {
             _cache = new Dictionary<Type, IInstanceCreator>();
         }
 
-        internal static IInstanceCreator GetCreator(Type restController)
+        internal IInstanceCreator GetCreator(Type restController)
         {
             CacheCreator(restController);
             return _cache[restController];
         }
 
-        internal static void CacheCreator(Type restController)
+        internal void CacheCreator(Type restController)
         {
             if (!_cache.ContainsKey(restController))
             {

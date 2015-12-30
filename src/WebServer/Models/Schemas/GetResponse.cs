@@ -3,7 +3,7 @@ using Devkoes.Restup.WebServer.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    [RestVerb(RestVerb.GET)]
+    [RestVerb(HttpMethod.GET)]
     public struct GetResponse : IBodyRestResponse
     {
         public enum ResponseStatus : int
@@ -31,7 +31,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             }
         }
 
-        public T Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param)
+        T IRestResponse.Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param)
         {
             return visitor.Visit(this, param);
         }

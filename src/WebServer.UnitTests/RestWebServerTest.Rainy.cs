@@ -1,13 +1,12 @@
-﻿using Devkoes.Restup.WebServer;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Http.RequestFactory;
+﻿using Devkoes.Restup.WebServer.Attributes;
+using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace WebServer.UnitTests
+namespace Devkoes.Restup.WebServer.UnitTests
 {
     [TestClass]
     public class RestWebServerRainyDayTest
@@ -15,7 +14,7 @@ namespace WebServer.UnitTests
         #region ConflictingPost
         private HttpRequest _conflictingPOST = new HttpRequest()
         {
-            Method = RestVerb.POST,
+            Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.JSON,
             Content = "{\"Name\": \"Tom\", \"Age\": 33}",
@@ -37,7 +36,7 @@ namespace WebServer.UnitTests
         #region MethodNotAllowed
         private HttpRequest _methodNotAllowedPUT = new HttpRequest()
         {
-            Method = RestVerb.DELETE,
+            Method = HttpMethod.DELETE,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.JSON,
             Content = "{\"Name\": \"Tom\", \"Age\": 33}",
@@ -59,7 +58,7 @@ namespace WebServer.UnitTests
         #region ParameterParseException
         private HttpRequest _parameterParseExceptionPUT = new HttpRequest()
         {
-            Method = RestVerb.PUT,
+            Method = HttpMethod.PUT,
             Uri = new Uri("/users/notanumber", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.JSON,
             Content = "{\"Name\": \"Tom\", \"Age\": 33}",
@@ -100,7 +99,7 @@ namespace WebServer.UnitTests
         #region JsonBodyParameterValueParseException
         private HttpRequest _bodyParameterParseExPOST = new HttpRequest()
         {
-            Method = RestVerb.POST,
+            Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.JSON,
             Content = "{\"Name\": \"Tom\", \"Age\": notanumber}",
@@ -122,7 +121,7 @@ namespace WebServer.UnitTests
         #region XmlBodyParameterValueParseException
         private HttpRequest _xmlBodyParameterParseExPOST = new HttpRequest()
         {
-            Method = RestVerb.POST,
+            Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.JSON,
             Content = "<User><Name>Tom</Name><Age>thirtythree</Age></User>",
@@ -143,7 +142,7 @@ namespace WebServer.UnitTests
         #region InvalidJsonFormatParseException
         private HttpRequest _invalidJsonFormatPOST = new HttpRequest()
         {
-            Method = RestVerb.POST,
+            Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.JSON,
             Content = "{\"Name\": \"Tom\"; \"Age\": 33}",
@@ -164,7 +163,7 @@ namespace WebServer.UnitTests
         #region InvalidXmlFormatParseException
         private HttpRequest _invalidXmlFormatExPOST = new HttpRequest()
         {
-            Method = RestVerb.POST,
+            Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.JSON,
             Content = "<User><Name>Tom</><Age>thirtythree</Age></User>",

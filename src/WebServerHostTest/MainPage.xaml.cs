@@ -1,12 +1,12 @@
 ﻿using Devkoes.Restup.WebServer;
+using Devkoes.Restup.WebServerHostTest.RestControllers;
 using System.Threading.Tasks;
-using WebServerHostTest.RestControllers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace WebServerHostTest
+namespace Devkoes.Restup.WebServerHostTest
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.

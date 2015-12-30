@@ -1,12 +1,11 @@
-﻿using Devkoes.Restup.WebServer;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Http.RequestFactory;
+﻿using Devkoes.Restup.WebServer.Attributes;
+using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
 using System.Threading.Tasks;
 
-namespace WebServer.UnitTests
+namespace Devkoes.Restup.WebServer.UnitTests
 {
     [TestClass]
     public class RestWebServerHappyPathTest
@@ -14,7 +13,7 @@ namespace WebServer.UnitTests
         #region BasicGetAcceptXML
         private HttpRequest _basicGETAcceptXML = new HttpRequest()
         {
-            Method = RestVerb.GET,
+            Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.XML,
             IsComplete = true
@@ -37,7 +36,7 @@ namespace WebServer.UnitTests
         #region BasicGetAcceptJSON
         private HttpRequest _basicGETAcceptJSON = new HttpRequest()
         {
-            Method = RestVerb.GET,
+            Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.JSON,
             IsComplete = true
@@ -60,7 +59,7 @@ namespace WebServer.UnitTests
         #region BasicPost
         private HttpRequest _basicPOST = new HttpRequest()
         {
-            Method = RestVerb.POST,
+            Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.JSON,
             Content = "{\"Name\": \"Tom\", \"Age\": 33}",
@@ -82,7 +81,7 @@ namespace WebServer.UnitTests
         #region BasicPut
         private HttpRequest _basicPUT = new HttpRequest()
         {
-            Method = RestVerb.PUT,
+            Method = HttpMethod.PUT,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
             ResponseContentType = MediaType.JSON,
             Content = "{Name: Tom, Age: 21}",
@@ -103,7 +102,7 @@ namespace WebServer.UnitTests
         #region BasicDelete
         private HttpRequest _basicDEL = new HttpRequest()
         {
-            Method = RestVerb.DELETE,
+            Method = HttpMethod.DELETE,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
             IsComplete = true
         };

@@ -3,7 +3,7 @@ using System;
 
 namespace Devkoes.Restup.WebServer.InstanceCreators
 {
-    public class PerCallInstanceCreator : IInstanceCreator
+    internal class PerCallInstanceCreator : IInstanceCreator
     {
         public object Create(Type instanceType, params object[] args)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    public enum MediaType
+    internal enum MediaType
     {
         Unsupported,
         JSON,

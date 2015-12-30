@@ -6,9 +6,9 @@ namespace Devkoes.Restup.WebServer.Attributes
     [System.AttributeUsage((AttributeTargets.Class | AttributeTargets.Struct), Inherited = false, AllowMultiple = false)]
     internal sealed class RestVerbAttribute : Attribute
     {
-        public RestVerb Verb { get; }
+        public HttpMethod Verb { get; }
 
-        public RestVerbAttribute(RestVerb verb)
+        public RestVerbAttribute(HttpMethod verb)
         {
             Verb = verb;
         }

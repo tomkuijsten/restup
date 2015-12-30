@@ -2,7 +2,7 @@
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
 
-namespace WebServerHostTest.RestControllers
+namespace Devkoes.Restup.WebServerHostTest.RestControllers
 {
     /// <summary>
     /// Sample controller with all verbs supporting a response body.

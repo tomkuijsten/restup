@@ -4,9 +4,9 @@ using System;
 namespace Devkoes.Restup.WebServer.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
-    public class RestControllerAttribute : Attribute
+    public sealed class RestControllerAttribute : Attribute
     {
-        public InstanceCreationType InstanceCreationType { get; set; }
+        public InstanceCreationType InstanceCreationType { get; }
 
         public RestControllerAttribute(InstanceCreationType instanceCreation)
         {

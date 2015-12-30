@@ -2,11 +2,11 @@
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    public class StatusOnlyResponse : IRestResponse
+    internal class StatusOnlyResponse : IRestResponse
     {
         public int StatusCode { get; private set; }
 
-        public StatusOnlyResponse(int statusCode)
+        internal StatusOnlyResponse(int statusCode)
         {
             StatusCode = statusCode;
         }

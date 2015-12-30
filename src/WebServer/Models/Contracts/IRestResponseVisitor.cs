@@ -2,7 +2,7 @@
 
 namespace Devkoes.Restup.WebServer.Models.Contracts
 {
-    public interface IRestResponseVisitor<TParam, TResult>
+    interface IRestResponseVisitor<TParam, TResult>
     {
         TResult Visit(PutResponse response, TParam param);
         TResult Visit(GetResponse response, TParam param);

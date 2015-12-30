@@ -7,8 +7,8 @@
     <ProjectGuid>{1AC1BC53-7583-4976-8899-BE508BD11585}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WebServerHostTest</RootNamespace>
-    <AssemblyName>WebServerHostTest</AssemblyName>
+    <RootNamespace>Devkoes.Restup.WebServerHostTest</RootNamespace>
+    <AssemblyName>Devkoes.Restup.WebServerHostTest</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
