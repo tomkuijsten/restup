@@ -33,6 +33,44 @@ namespace Devkoes.Restup.WebServer.UnitTests
         }
         #endregion
 
+        #region BasicGetWithAbsoluteUri
+        private HttpRequest _basicGETAbsoluteUri = new HttpRequest()
+        {
+            Method = HttpMethod.GET,
+            Uri = new Uri("http://myserverx:1234/users/2", UriKind.RelativeOrAbsolute),
+            IsComplete = true
+        };
+
+        [TestMethod]
+        public async Task HandleRequest_BasicGETAbsoluteUri_Status200()
+        {
+            var m = new RestWebServer();
+            m.RegisterController<HappyPathTestController>();
+            var response = await m.HandleRequest(_basicGETAbsoluteUri);
+
+            StringAssert.Contains(response.Response, "200 OK");
+        }
+        #endregion
+
+        #region BasicGetWithAbsoluteUri
+        private HttpRequest _basicGETUriPrefix = new HttpRequest()
+        {
+            Method = HttpMethod.GET,
+            Uri = new Uri("api/users/2", UriKind.RelativeOrAbsolute),
+            IsComplete = true
+        };
+
+        [TestMethod]
+        public async Task HandleRequest_BasicGETUriPrefix_Status200()
+        {
+            var m = new RestWebServer(8800, "api");
+            m.RegisterController<HappyPathTestController>();
+            var response = await m.HandleRequest(_basicGETUriPrefix);
+
+            StringAssert.Contains(response.Response, "200 OK");
+        }
+        #endregion
+
         #region BasicGetAcceptJSON
         private HttpRequest _basicGETAcceptJSON = new HttpRequest()
         {

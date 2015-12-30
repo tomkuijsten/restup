@@ -7,7 +7,6 @@ using System.Text;
 
 namespace Devkoes.Restup.WebServer.Http
 {
-    //TODO Shouldn't we create a factory which produces a struct?
     internal class HttpRequest
     {
         private List<IHttpHeader> _headers;

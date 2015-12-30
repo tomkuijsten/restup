@@ -144,29 +144,14 @@ namespace Devkoes.Restup.WebServer.Rest
 
         private bool UriMatches(Uri uri)
         {
-            string relativeUri = GetRelativeUri(uri);
+            string relativeUri = uri.ToRelativeString();
 
             return _matchUriRegex.IsMatch(relativeUri);
         }
 
-        private string GetRelativeUri(Uri uri)
-        {
-            string relativeUri = null;
-            if (uri.IsAbsoluteUri)
-            {
-                relativeUri = uri.PathAndQuery;
-            }
-            else
-            {
-                relativeUri = uri.ToString();
-            }
-
-            return relativeUri;
-        }
-
         internal IEnumerable<object> GetParametersFromUri(Uri uri)
         {
-            Match m = _findParameterValuesRegex.Match(uri.ToString());
+            Match m = _findParameterValuesRegex.Match(uri.ToRelativeString());
             if (!m.Success)
             {
                 yield return null;
