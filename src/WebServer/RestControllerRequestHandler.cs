@@ -1,6 +1,7 @@
 ﻿using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Factories;
 using Devkoes.Restup.WebServer.Http;
+using Devkoes.Restup.WebServer.Http.RequestFactory;
 using Devkoes.Restup.WebServer.InstanceCreators;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
@@ -75,9 +76,10 @@ namespace Devkoes.Restup.WebServer
             return allPublicRestMethods.ToArray();
         }
 
-        internal async Task<IRestResponse> HandleRequest(RestRequest req)
+        internal async Task<IRestResponse> HandleRequest(HttpRequest req)
         {
-            if (req.Verb == RestVerb.Unsupported)
+            if (!req.IsComplete ||
+                req.Method == RestVerb.Unsupported)
             {
                 return _responseFactory.CreateBadRequest();
             }
@@ -88,7 +90,7 @@ namespace Devkoes.Restup.WebServer
                 return _responseFactory.CreateBadRequest();
             }
 
-            var restMethod = restMethods.SingleOrDefault(r => r.Verb == req.Verb);
+            var restMethod = restMethods.SingleOrDefault(r => r.Verb == req.Method);
             if (restMethod == null)
             {
                 return new MethodNotAllowedResponse(restMethods.Select(r => r.Verb));

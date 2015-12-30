@@ -1,5 +1,6 @@
 ﻿using Devkoes.Restup.WebServer;
 using Devkoes.Restup.WebServer.Attributes;
+using Devkoes.Restup.WebServer.Http.RequestFactory;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
@@ -11,10 +12,13 @@ namespace WebServer.UnitTests
     public class RestWebServerHappyPathTest
     {
         #region BasicGetAcceptXML
-        private string _basicGETAcceptXML =
-@"GET /users/2 HTTP/1.1
-Host: minwinpc:8800
-Accept: text/xml";
+        private HttpRequest _basicGETAcceptXML = new HttpRequest()
+        {
+            Method = RestVerb.GET,
+            Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.XML,
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_BasicGETAcceptXML_Status200WithXml()
@@ -31,10 +35,13 @@ Accept: text/xml";
         #endregion
 
         #region BasicGetAcceptJSON
-        private string _basicGETAcceptJSON =
-@"GET /users/2 HTTP/1.1
-Host: minwinpc:8800
-Accept: application/json";
+        private HttpRequest _basicGETAcceptJSON = new HttpRequest()
+        {
+            Method = RestVerb.GET,
+            Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_BasicGETAcceptJSON_Status200WithJSON()
@@ -51,12 +58,14 @@ Accept: application/json";
         #endregion
 
         #region BasicPost
-        private string _basicPOST =
-@"POST /users HTTP/1.1
-Host: minwinpc:8800
-Content-Type: application/json
-
-{""Name"": ""Tom"", ""Age"": 33}";
+        private HttpRequest _basicPOST = new HttpRequest()
+        {
+            Method = RestVerb.POST,
+            Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            Content = "{\"Name\": \"Tom\", \"Age\": 33}",
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_BasicPOST_LocationHeaderStatus201()
@@ -71,12 +80,14 @@ Content-Type: application/json
         #endregion
 
         #region BasicPut
-        private string _basicPUT =
-@"PUT /users/2 HTTP/1.1
-Host: minwinpc:8800
-Content-Type: application/json
-
-{Name: Tom, Age: 21}";
+        private HttpRequest _basicPUT = new HttpRequest()
+        {
+            Method = RestVerb.PUT,
+            Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            Content = "{Name: Tom, Age: 21}",
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_BasicPUT_Status200()
@@ -90,9 +101,12 @@ Content-Type: application/json
         #endregion
 
         #region BasicDelete
-        private string _basicDEL =
-@"DELETE /users/2 HTTP/1.1
-Host: minwinpc:8800";
+        private HttpRequest _basicDEL = new HttpRequest()
+        {
+            Method = RestVerb.DELETE,
+            Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_BasicDEL_Status200()

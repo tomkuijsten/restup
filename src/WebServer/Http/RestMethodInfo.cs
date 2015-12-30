@@ -28,7 +28,7 @@ namespace Devkoes.Restup.WebServer.Http
 
         public RestMethodInfo(MethodInfo methodInfo, string urlPrefix, bool isAsync)
         {
-            _urlPrefix = UriHelper.RemovePreAndPostSlash(urlPrefix);
+            _urlPrefix = urlPrefix;
             IsAsync = isAsync;
 
             MethodInfo = methodInfo;
@@ -118,7 +118,9 @@ namespace Devkoes.Restup.WebServer.Http
             string uriFormat = UriHelper.RemovePreAndPostSlash(uriFormatter.UriFormat);
 
             if (string.IsNullOrWhiteSpace(_urlPrefix))
-                return uriFormat;
+            {
+                return "/" + uriFormat;
+            }
 
             return $"{_urlPrefix}/{uriFormat}";
         }
@@ -135,19 +137,36 @@ namespace Devkoes.Restup.WebServer.Http
             Verb = returnType.GetCustomAttribute<RestVerbAttribute>().Verb;
         }
 
-        public bool Match(string uri)
+        public bool Match(Uri uri)
         {
             return UriMatches(uri);
         }
 
-        private bool UriMatches(string uri)
+        private bool UriMatches(Uri uri)
         {
-            return _matchUriRegex.IsMatch(uri);
+            string relativeUri = GetRelativeUri(uri);
+
+            return _matchUriRegex.IsMatch(relativeUri);
         }
 
-        public IEnumerable<object> GetParametersFromUri(string uri)
+        private string GetRelativeUri(Uri uri)
         {
-            Match m = _findParameterValuesRegex.Match(uri);
+            string relativeUri = null;
+            if (uri.IsAbsoluteUri)
+            {
+                relativeUri = uri.PathAndQuery;
+            }
+            else
+            {
+                relativeUri = uri.ToString();
+            }
+
+            return relativeUri;
+        }
+
+        public IEnumerable<object> GetParametersFromUri(Uri uri)
+        {
+            Match m = _findParameterValuesRegex.Match(uri.ToString());
             if (!m.Success)
             {
                 yield return null;

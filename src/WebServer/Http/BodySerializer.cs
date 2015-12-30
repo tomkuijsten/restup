@@ -1,11 +1,8 @@
-﻿using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Devkoes.Restup.WebServer.Http.RequestFactory;
+using Devkoes.Restup.WebServer.Models.Schemas;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Devkoes.Restup.WebServer.Http
@@ -14,11 +11,11 @@ namespace Devkoes.Restup.WebServer.Http
     {
         internal object FromBody(string body, MediaType bodyMediaType, Type bodyType)
         {
-            if(bodyMediaType == MediaType.JSON)
+            if (bodyMediaType == MediaType.JSON)
             {
                 return JsonConvert.DeserializeObject(body, bodyType);
             }
-            else if(bodyMediaType == MediaType.XML)
+            else if (bodyMediaType == MediaType.XML)
             {
                 return XmlDeserializeObject(body, bodyType);
             }
@@ -26,18 +23,18 @@ namespace Devkoes.Restup.WebServer.Http
             throw new NotImplementedException();
         }
 
-        internal string ToBody(object bodyObject, RestRequest req)
+        internal string ToBody(object bodyObject, HttpRequest req)
         {
-            if(bodyObject == null || !req.AcceptHeaders.Any())
+            if (bodyObject == null)
             {
                 return null;
             }
 
-            if (req.AcceptHeaders.First() == MediaType.JSON)
+            if (req.ResponseContentType == MediaType.JSON)
             {
                 return JsonConvert.SerializeObject(bodyObject);
             }
-            else if (req.AcceptHeaders.First() == MediaType.XML)
+            else if (req.ResponseContentType == MediaType.XML)
             {
                 return XmlSerializeObject(bodyObject);
             }

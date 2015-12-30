@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 
 namespace Devkoes.Restup.WebServer.Http.RequestFactory
 {
-    internal class ParseRequestPipeline
+    internal class HttpRequestParser
     {
         private const uint BUFFER_SIZE = 8192;
 
@@ -24,7 +25,14 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
             };
         }
 
-        public async Task<HttpRequest> ParseRequestStream(IInputStream requestStream)
+        public async Task<HttpRequest> ParseRequestStream(StreamSocket httpRequestSocket)
+        {
+            using (var inputStream = httpRequestSocket.InputStream)
+            {
+                return await ParseRequestStream(inputStream);
+            }
+        }
+        internal async Task<HttpRequest> ParseRequestStream(IInputStream requestStream)
         {
             var httpStream = new HttpRequestStream(requestStream);
             var request = new HttpRequest();

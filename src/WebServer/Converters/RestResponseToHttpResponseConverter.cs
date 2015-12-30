@@ -1,14 +1,14 @@
 ﻿using Devkoes.Restup.WebServer.Http;
+using Devkoes.Restup.WebServer.Http.RequestFactory;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Devkoes.Restup.WebServer.Converters
 {
-    internal class RestResponseToHttpResponseConverter : IRestResponseVisitor<RestRequest, IHttpResponse>
+    internal class RestResponseToHttpResponseConverter : IRestResponseVisitor<HttpRequest, IHttpResponse>
     {
         private BodySerializer _bodySerializer;
 
@@ -17,7 +17,7 @@ namespace Devkoes.Restup.WebServer.Converters
             _bodySerializer = new BodySerializer();
         }
 
-        public IHttpResponse Visit(DeleteResponse response, RestRequest restReq)
+        public IHttpResponse Visit(DeleteResponse response, HttpRequest restReq)
         {
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
@@ -26,7 +26,7 @@ namespace Devkoes.Restup.WebServer.Converters
             return CreateHttpResponse(rawHttpResponseBuilder);
         }
 
-        public IHttpResponse Visit(PostResponse response, RestRequest restReq)
+        public IHttpResponse Visit(PostResponse response, HttpRequest restReq)
         {
             var extraHeaders = new Dictionary<string, string>();
             if (response.Status == PostResponse.ResponseStatus.Created)
@@ -35,17 +35,17 @@ namespace Devkoes.Restup.WebServer.Converters
             return VisitWithBody(response, restReq, extraHeaders);
         }
 
-        public IHttpResponse Visit(GetResponse response, RestRequest restReq)
+        public IHttpResponse Visit(GetResponse response, HttpRequest restReq)
         {
             return VisitWithBody(response, restReq);
         }
 
-        public IHttpResponse Visit(PutResponse response, RestRequest restReq)
+        public IHttpResponse Visit(PutResponse response, HttpRequest restReq)
         {
             return VisitWithBody(response, restReq);
         }
 
-        public IHttpResponse Visit(StatusOnlyResponse statusOnlyResponse, RestRequest restReq)
+        public IHttpResponse Visit(StatusOnlyResponse statusOnlyResponse, HttpRequest restReq)
         {
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(statusOnlyResponse));
@@ -54,7 +54,7 @@ namespace Devkoes.Restup.WebServer.Converters
             return CreateHttpResponse(rawHttpResponseBuilder);
         }
 
-        public IHttpResponse Visit(MethodNotAllowedResponse methodNotAllowedResponse, RestRequest restReq)
+        public IHttpResponse Visit(MethodNotAllowedResponse methodNotAllowedResponse, HttpRequest restReq)
         {
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(methodNotAllowedResponse));
@@ -64,11 +64,12 @@ namespace Devkoes.Restup.WebServer.Converters
             return CreateHttpResponse(rawHttpResponseBuilder);
         }
 
-        private IHttpResponse VisitWithBody(IBodyRestResponse response, RestRequest restReq)
+        private IHttpResponse VisitWithBody(IBodyRestResponse response, HttpRequest restReq)
         {
             return VisitWithBody(response, restReq, null);
         }
-        private IHttpResponse VisitWithBody(IBodyRestResponse response, RestRequest restReq, IDictionary<string, string> extraHeaders)
+
+        private IHttpResponse VisitWithBody(IBodyRestResponse response, HttpRequest restReq, IDictionary<string, string> extraHeaders)
         {
             extraHeaders = extraHeaders ?? new Dictionary<string, string>();
 
@@ -79,7 +80,7 @@ namespace Devkoes.Restup.WebServer.Converters
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
             rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", bodyLength);
-            rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpCodesTranslator.GetMediaType(restReq.AcceptHeaders.First()));
+            rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpCodesTranslator.GetMediaType(restReq.ResponseContentType));
 
             foreach (var extraHeader in extraHeaders)
             {

@@ -11,8 +11,6 @@ namespace Devkoes.Restup.WebServer.Http
         internal static readonly byte LFByte;
         internal static readonly byte ColonByte;
 
-
-
         static HttpConstants()
         {
             // TODO this is not correct, for JSON the default encoding is UTF-8 (http://www.ietf.org/rfc/rfc4627.txt)

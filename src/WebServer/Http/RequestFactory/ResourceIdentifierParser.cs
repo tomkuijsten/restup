@@ -11,7 +11,7 @@ namespace Devkoes.Restup.WebServer.Http.RequestFactory
 
             if (word.WordFound)
             {
-                resultThisFar.Uri = new Uri(word.Word, UriKind.Relative);
+                resultThisFar.Uri = new Uri(word.Word, UriKind.RelativeOrAbsolute);
                 UnparsedData = word.RemainingBytes;
                 IsFinished = true;
                 IsSucceeded = true;

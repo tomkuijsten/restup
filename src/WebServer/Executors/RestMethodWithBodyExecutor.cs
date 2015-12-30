@@ -1,8 +1,8 @@
 ﻿using Devkoes.Restup.WebServer.Factories;
 using Devkoes.Restup.WebServer.Http;
+using Devkoes.Restup.WebServer.Http.RequestFactory;
 using Devkoes.Restup.WebServer.InstanceCreators;
 using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Models.Schemas;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace Devkoes.Restup.WebServer.Executors
             _responseFactory = new RestResponseFactory();
         }
 
-        public async Task<IRestResponse> ExecuteMethodAsync(RestMethodInfo info, RestRequest request)
+        public async Task<IRestResponse> ExecuteMethodAsync(RestMethodInfo info, HttpRequest request)
         {
             var methodInvokeResult = ExecuteAnonymousMethod(info, request);
 
@@ -31,14 +31,14 @@ namespace Devkoes.Restup.WebServer.Executors
             return await (dynamic)methodInvokeResult;
         }
 
-        private object ExecuteAnonymousMethod(RestMethodInfo info, RestRequest request)
+        private object ExecuteAnonymousMethod(RestMethodInfo info, HttpRequest request)
         {
             var instantiator = InstanceCreatorCache.GetCreator(info.MethodInfo.DeclaringType);
 
             object bodyObj = null;
             try
             {
-                bodyObj = _bodySerializer.FromBody(request.Body, request.BodyMediaType, info.BodyParameterType);
+                bodyObj = _bodySerializer.FromBody(request.Content, request.RequestContentType, info.BodyParameterType);
             }
             catch (JsonReaderException)
             {

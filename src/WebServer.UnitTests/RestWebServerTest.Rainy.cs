@@ -1,5 +1,6 @@
 ﻿using Devkoes.Restup.WebServer;
 using Devkoes.Restup.WebServer.Attributes;
+using Devkoes.Restup.WebServer.Http.RequestFactory;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
@@ -12,12 +13,14 @@ namespace WebServer.UnitTests
     public class RestWebServerRainyDayTest
     {
         #region ConflictingPost
-        private string _conflictingPOST =
-@"POST /users/1 HTTP/1.1
-Host: minwinpc:8800
-Content-Type: application/json
-
-{""Name"": ""Tom"", ""Age"": 33}";
+        private HttpRequest _conflictingPOST = new HttpRequest()
+        {
+            Method = RestVerb.POST,
+            Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            Content = "{\"Name\": \"Tom\", \"Age\": 33}",
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_CreateWithExistingId_Conflicted()
@@ -32,12 +35,14 @@ Content-Type: application/json
         #endregion
 
         #region MethodNotAllowed
-        private string _methodNotAllowedPUT =
-@"PUT /users/2 HTTP/1.1
-Host: minwinpc:8800
-Content-Type: application/json
-
-{""Name"": ""Tom"", ""Age"": 33}";
+        private HttpRequest _methodNotAllowedPUT = new HttpRequest()
+        {
+            Method = RestVerb.DELETE,
+            Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            Content = "{\"Name\": \"Tom\", \"Age\": 33}",
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_BasicPUT_MethodNotAllowed()
@@ -52,12 +57,14 @@ Content-Type: application/json
         #endregion
 
         #region ParameterParseException
-        private string _parameterParseExceptionPUT =
-@"POST /users/notanumber HTTP/1.1
-Host: minwinpc:8800
-Content-Type: application/json
-
-{""Name"": ""Tom"", ""Age"": 33}";
+        private HttpRequest _parameterParseExceptionPUT = new HttpRequest()
+        {
+            Method = RestVerb.PUT,
+            Uri = new Uri("/users/notanumber", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            Content = "{\"Name\": \"Tom\", \"Age\": 33}",
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_WrongParameterTypePUT_BadRequest()
@@ -91,12 +98,15 @@ Content-Type: application/json
         #endregion
 
         #region JsonBodyParameterValueParseException
-        private string _bodyParameterParseExPOST =
-@"POST /users/1 HTTP/1.1
-Host: minwinpc:8800
-Content-Type: application/json
+        private HttpRequest _bodyParameterParseExPOST = new HttpRequest()
+        {
+            Method = RestVerb.POST,
+            Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            Content = "{\"Name\": \"Tom\", \"Age\": notanumber}",
+            IsComplete = true
+        };
 
-{""Name"": ""Tom"", ""Age"": ""thirtythree""}";
 
         [TestMethod]
         public async Task HandleRequest_InvalidJSONBodyParameter_BadRequest()
@@ -110,12 +120,14 @@ Content-Type: application/json
         #endregion
 
         #region XmlBodyParameterValueParseException
-        private string _xmlBodyParameterParseExPOST =
-@"POST /users/1 HTTP/1.1
-Host: minwinpc:8800
-Content-Type: application/xml
-
-<User><Name>Tom</Name><Age>thirtythree</Age></User>";
+        private HttpRequest _xmlBodyParameterParseExPOST = new HttpRequest()
+        {
+            Method = RestVerb.POST,
+            Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            Content = "<User><Name>Tom</Name><Age>thirtythree</Age></User>",
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_InvalidXMLBodyParameter_BadRequest()
@@ -129,12 +141,14 @@ Content-Type: application/xml
         #endregion
 
         #region InvalidJsonFormatParseException
-        private string _invalidJsonFormatPOST =
-@"POST /users/1 HTTP/1.1
-Host: minwinpc:8800
-Content-Type: application/json
-
-{""Name"" = ""Tom""; ""Age"" = 33}";
+        private HttpRequest _invalidJsonFormatPOST = new HttpRequest()
+        {
+            Method = RestVerb.POST,
+            Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            Content = "{\"Name\": \"Tom\"; \"Age\": 33}",
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_InvalidJsonFormat_BadRequest()
@@ -148,12 +162,14 @@ Content-Type: application/json
         #endregion
 
         #region InvalidXmlFormatParseException
-        private string _invalidXmlFormatExPOST =
-@"POST /users/1 HTTP/1.1
-Host: minwinpc:8800
-Content-Type: application/xml
-
-<User><Name>Tom</><Age>thirtythree</Age></User>";
+        private HttpRequest _invalidXmlFormatExPOST = new HttpRequest()
+        {
+            Method = RestVerb.POST,
+            Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            Content = "<User><Name>Tom</><Age>thirtythree</Age></User>",
+            IsComplete = true
+        };
 
         [TestMethod]
         public async Task HandleRequest_InvalidJsonBodyParameter_BadRequest()
@@ -176,17 +192,23 @@ Content-Type: application/xml
             public int Age { get; set; }
         }
 
-        [UriFormat("/users/{id}")]
-        public PostResponse CreateUser(int id, [FromBody] User user)
+        [UriFormat("/users")]
+        public PostResponse CreateUser([FromBody] User user)
         {
             return new PostResponse(PostResponse.ResponseStatus.Conflict);
+        }
+
+        [UriFormat("/users/{id}")]
+        public PutResponse UpdateUser(int id, [FromBody] User user)
+        {
+            return new PutResponse(PutResponse.ResponseStatus.OK);
         }
     }
 
     [RestController(InstanceCreationType.Singleton)]
     public class ParameterTypeErrorTestController
     {
-        [UriFormat("/users/{id}")]
+        [UriFormat("/users")]
         public PostResponse CreateUser(object id)
         {
             return new PostResponse(PostResponse.ResponseStatus.Conflict);
