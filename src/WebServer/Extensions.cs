@@ -38,6 +38,16 @@ namespace Devkoes.Restup.WebServer
         }
 
         /// <summary>
+        /// The prefix will always be formatted as "/prefix"
+        /// </summary>
+        internal static string FormatRelativeUri(this string uri)
+        {
+            var cleanUrl = uri.RemovePreAndPostSlash();
+
+            return string.IsNullOrWhiteSpace(cleanUrl) ? string.Empty : "/" + cleanUrl;
+        }
+
+        /// <summary>
         /// Read the next sequence of bytes untill a space or a CRLF is reached
         /// </summary>
         /// <param name="stream"></param>
@@ -82,6 +92,21 @@ namespace Devkoes.Restup.WebServer
             Array.Copy(array2, 0, array1, array1OriginalLength, array2.Length);
 
             return array1;
+        }
+
+        internal static string ToRelativeString(this Uri uri)
+        {
+            string relativeUri = null;
+            if (uri.IsAbsoluteUri)
+            {
+                relativeUri = uri.PathAndQuery;
+            }
+            else
+            {
+                relativeUri = uri.ToString();
+            }
+
+            return relativeUri.FormatRelativeUri();
         }
     }
 }

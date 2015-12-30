@@ -12,7 +12,7 @@ namespace Devkoes.Restup.WebServer
 
         public RestWebServer(int port, string urlPrefix) : base(port)
         {
-            var fixedFormatUrlPrefix = FixPrefixUrlFormatting(urlPrefix);
+            var fixedFormatUrlPrefix = urlPrefix.FormatRelativeUri();
 
             _requestHandler = new RestControllerRequestHandler(fixedFormatUrlPrefix);
             _restToHttpConverter = new RestResponseToHttpResponseConverter();
@@ -25,16 +25,6 @@ namespace Devkoes.Restup.WebServer
         public void RegisterController<T>() where T : class
         {
             _requestHandler.RegisterController<T>();
-        }
-
-        /// <summary>
-        /// The prefix will always be formatted as "/prefix"
-        /// </summary>
-        private string FixPrefixUrlFormatting(string urlPrefix)
-        {
-            var cleanUrl = urlPrefix.RemovePreAndPostSlash();
-
-            return string.IsNullOrWhiteSpace(cleanUrl) ? string.Empty : "/" + cleanUrl;
         }
 
         internal override async Task<IHttpResponse> HandleRequest(HttpRequest request)
