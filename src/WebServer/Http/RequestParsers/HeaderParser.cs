@@ -25,12 +25,6 @@ namespace Devkoes.Restup.WebServer.Http.RequestParsers
     {
         private HeaderFactory _headerFactory;
 
-        private class Header
-        {
-            public string Name { get; set; }
-            public string Value { get; set; }
-        }
-
         public HeaderParser()
         {
             _headerFactory = new HeaderFactory();
