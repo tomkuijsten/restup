@@ -1,5 +1,5 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;

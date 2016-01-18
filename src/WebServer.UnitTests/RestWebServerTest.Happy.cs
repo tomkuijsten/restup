@@ -1,5 +1,5 @@
-﻿using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;

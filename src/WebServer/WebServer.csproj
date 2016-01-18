@@ -117,33 +117,10 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Rest\RestControllerMethodExecutorFactory.cs" />
     <Compile Include="Rest\RestResponseFactory.cs" />
-    <Compile Include="Http\Headers\AcceptCharsetHeader.cs" />
-    <Compile Include="Http\Headers\AcceptHeader.cs" />
-    <Compile Include="Http\Headers\ContentLengthHeader.cs" />
-    <Compile Include="Http\Headers\ContentTypeHeader.cs" />
-    <Compile Include="Http\Headers\HttpHeaderBase.cs" />
-    <Compile Include="Http\Headers\HttpMultiQuantifiedHeaderBase.cs" />
-    <Compile Include="Http\Headers\HttpSingleQuantifiedHeaderBase.cs" />
-    <Compile Include="Http\Headers\QuantifiedHeaderValue.cs" />
-    <Compile Include="Http\Headers\UntypedHeader.cs" />
-    <Compile Include="Http\HttpCodesTranslator.cs" />
     <Compile Include="Http\BodySerializer.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Http\HttpServer.cs" />
-    <Compile Include="Http\RequestParsers\ContentParser.cs" />
-    <Compile Include="Http\Headers\HeaderFactory.cs" />
-    <Compile Include="Http\RequestParsers\HeaderParser.cs" />
-    <Compile Include="Http\Headers\HttpRequestHandleHeaderData.cs" />
-    <Compile Include="Http\HttpRequestStream.cs" />
-    <Compile Include="Http\RequestParsers\HttpRequestParser.cs" />
     <Compile Include="Models\Contracts\IBodyRestResponse.cs" />
-    <Compile Include="Models\Contracts\IHttpHeader.cs" />
-    <Compile Include="Models\Contracts\IHttpHeaderVisitor.cs" />
-    <Compile Include="Models\Contracts\IHttpRequestPartParser.cs" />
-    <Compile Include="Http\HttpRequest.cs" />
-    <Compile Include="Http\RequestParsers\MethodParser.cs" />
-    <Compile Include="Http\RequestParsers\ProtocolVersionParser.cs" />
-    <Compile Include="Http\RequestParsers\ResourceIdentifierParser.cs" />
     <Compile Include="Rest\RestControllerMethodInfo.cs" />
     <Compile Include="InstanceCreators\InstanceCreatorCache.cs" />
     <Compile Include="InstanceCreators\PerCallInstanceCreator.cs" />
@@ -153,8 +130,6 @@
     <Compile Include="Models\Contracts\IRestResponse.cs" />
     <Compile Include="Models\Contracts\IRestResponseVisitor.cs" />
     <Compile Include="Models\Schemas\DeleteResponse.cs" />
-    <Compile Include="Models\Schemas\ExtractedWord.cs" />
-    <Compile Include="Models\Schemas\MediaType.cs" />
     <Compile Include="Models\Schemas\GetResponse.cs" />
     <Compile Include="Models\Schemas\HttpResponse.cs" />
     <Compile Include="Models\Schemas\InstanceCreationType.cs" />
@@ -163,10 +138,7 @@
     <Compile Include="Models\Schemas\MethodNotAllowedResponse.cs" />
     <Compile Include="Models\Schemas\PostResponse.cs" />
     <Compile Include="Models\Schemas\PutResponse.cs" />
-    <Compile Include="Http\RequestParsers\HttpRequestPartParser.cs" />
-    <Compile Include="Models\Schemas\RestVerb.cs" />
     <Compile Include="Models\Schemas\StatusOnlyResponse.cs" />
-    <Compile Include="Models\Schemas\StreamReadResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rest\RestControllerRequestHandler.cs" />
     <Compile Include="Rest\RestControllerMethodExecutor.cs" />
@@ -177,7 +149,12 @@
     <None Include="project.json" />
     <None Include="WebServer.nuspec" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\HttpMessage\HttpMessage.csproj">
+      <Project>{a76bffc6-b444-40e5-9461-00d586bec9d7}</Project>
+      <Name>HttpMessage</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

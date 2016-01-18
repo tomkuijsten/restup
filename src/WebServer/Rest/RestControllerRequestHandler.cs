@@ -1,5 +1,6 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Http;
+﻿using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.InstanceCreators;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;

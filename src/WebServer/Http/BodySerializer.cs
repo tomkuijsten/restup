@@ -1,4 +1,5 @@
-﻿using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Models.Schemas;
 using Newtonsoft.Json;
 using System;
 using System.IO;
