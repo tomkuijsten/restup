@@ -39,18 +39,19 @@ namespace Devkoes.Restup.WebServer.UnitTests.Http.RequestParsers
         {
             var s = new HttpRequestParser();
 
-            var streamedRequest =
-                @"GET /api/data HTTP/1.1
-Content-Length: 4
-Accept: application/json,text/xml
-Accept-Charset: utf-7;q=0.2, utf-8;q=0.1,*;q=0
-Content-Type: text/xml;charset=utf-8
-UnknownHeader: some:value
-
-data";
+            var streamedRequest = new[] {
+                "GET /api/data HTTP/1.1",
+                "Content-Length: 4",
+                "Accept: application/json,text/xml",
+                "Accept-Charset: utf-7;q=0.2, utf-8;q=0.1,*;q=0",
+                "Content-Type: text/xml;charset=utf-8",
+                "UnknownHeader: some:value",
+                "",
+                "data"
+            };
 
             var byteStreamParts = new List<byte[]>();
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(streamedRequest));
+            byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
 
             var request = s.ParseRequestStream(new TestStream(byteStreamParts)).Result;
 
@@ -69,13 +70,15 @@ data";
         {
             var s = new HttpRequestParser();
 
-            var streamedRequest =
-                @"GET /api/data HTTP/1.1
-Content-Length: four
+            var streamedRequest = new[] {
+                "GET /api/data HTTP/1.1",
+                "Content-Length: four",
+                "",
+                "data"
+            };
 
-data";
             var byteStreamParts = new List<byte[]>();
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(streamedRequest));
+            byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
 
             var request = s.ParseRequestStream(new TestStream(byteStreamParts)).Result;
 
@@ -87,14 +90,16 @@ data";
         {
             var s = new HttpRequestParser();
 
-            var streamedRequest =
-                @"GET /api/data HTTP/1.1
-Content-Length: 4
+            var streamedRequest = new[] {
+                "GET /api/data HTTP/1.1",
+                "Content-Length: 4",
+                "",
+                "data"
+            };
 
-data";
             var extraData = "plusanotherextrafewbytes";
             var byteStreamParts = new List<byte[]>();
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(streamedRequest + extraData));
+            byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest) + extraData));
 
             var request = s.ParseRequestStream(new TestStream(byteStreamParts)).Result;
 
@@ -106,14 +111,16 @@ data";
         {
             var s = new HttpRequestParser();
 
-            var streamedRequest =
-                @"GET /api/data HTTP/1.1
-Content-Length: 4
+            var streamedRequest = new[] {
+                "GET /api/data HTTP/1.1",
+                "Content-Length: 4",
+                "",
+                "data"
+            };
 
-data";
             var extraData = "plusanotherextrafewbytes";
             var byteStreamParts = new List<byte[]>();
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(streamedRequest));
+            byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
             byteStreamParts.Add(Encoding.UTF8.GetBytes(extraData));
 
             var request = s.ParseRequestStream(new TestStream(byteStreamParts)).Result;
@@ -126,14 +133,15 @@ data";
         {
             var s = new HttpRequestParser();
 
-            var httpHeadersPart1 =
-                @"GET /api/data HTTP/1.1
-Content-Length: 4
+            var streamedRequest = new[] {
+                "GET /api/data HTTP/1.1",
+                "Content-Length: 4\r\n", //to force double /r/n on string.Join
+                ""
+            };
 
-";
             var content = "data";
             var byteStreamParts = new List<byte[]>();
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(httpHeadersPart1));
+            byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
             byteStreamParts.Add(Encoding.UTF8.GetBytes(content));
 
             var request = s.ParseRequestStream(new TestStream(byteStreamParts)).Result;
@@ -147,14 +155,15 @@ Content-Length: 4
         {
             var s = new HttpRequestParser();
 
-            var httpHeadersPart1 =
-                @"GET /api/data HTTP/1.1
-Content-Length: 4
+            var streamedRequest = new[] {
+                "GET /api/data HTTP/1.1",
+                "Content-Length: 4\r\n", //to force double /r/n on string.Join
+                ""
+            };
 
-";
             var content = "data";
             var byteStreamParts = new List<byte[]>();
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(httpHeadersPart1));
+            byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
             byteStreamParts.Add(new byte[] { });
             byteStreamParts.Add(Encoding.UTF8.GetBytes(content));
 
@@ -209,12 +218,13 @@ Content-Length: 4
         {
             var s = new HttpRequestParser();
 
-            var httpHeadersPart1 =
-                @"GET /api/data HTTP/1.1
+            var streamedRequest = new[] {
+                "GET /api/data HTTP/1.1\r\n", //to force double /r/n on string.Join
+                ""
+            };
 
-";
             var byteStreamParts = new List<byte[]>();
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(httpHeadersPart1));
+            byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
 
             var request = s.ParseRequestStream(new TestStream(byteStreamParts)).Result;
 
@@ -226,14 +236,15 @@ Content-Length: 4
         {
             var s = new HttpRequestParser();
 
-            var httpHeadersPart1 =
-                @"GET /api/data HTTP/1.1
-Content-Length: 4
+            var streamedRequest = new[] {
+                "GET /api/data HTTP/1.1",
+                "Content-Length: 4\r\n", //to force double /r/n on string.Join
+                ""
+            };
 
-";
             var body = "data";
             var byteStreamParts = new List<byte[]>();
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(httpHeadersPart1));
+            byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
             byteStreamParts.Add(new byte[] { });
             byteStreamParts.Add(new byte[] { });
             byteStreamParts.Add(new byte[] { });
