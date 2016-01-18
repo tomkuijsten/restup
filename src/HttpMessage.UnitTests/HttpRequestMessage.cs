@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Devkoes.Restup.WebServer.UnitTests.Http.RequestParsers
+namespace Devkoes.Restup.HttpMessage.UnitTests
 {
     [TestClass]
-    public class HttpRequestParserTest
+    public class HttpRequestMessageTest
     {
         //TODO uri relative/absolute test
 

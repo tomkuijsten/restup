@@ -1,4 +1,5 @@
 ﻿using Devkoes.HttpMessage.Headers;
+using Devkoes.HttpMessage.Plumbing;
 using System;
 using System.Linq;
 
@@ -35,7 +36,7 @@ namespace Devkoes.HttpMessage.RequestParsers
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="resultThisFar"></param>
-        public override void HandleRequestPart(byte[] stream, HttpRequest resultThisFar)
+        public override void HandleRequestPart(byte[] stream, HttpServerRequest resultThisFar)
         {
             UnparsedData = stream;
 

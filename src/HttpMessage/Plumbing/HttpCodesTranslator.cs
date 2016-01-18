@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Devkoes.HttpMessage
+namespace Devkoes.HttpMessage.Plumbing
 {
     public class HttpCodesTranslator
     {

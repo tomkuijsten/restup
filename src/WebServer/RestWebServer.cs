@@ -39,7 +39,7 @@ namespace Devkoes.Restup.WebServer
             _requestHandler.RegisterController<T>(args);
         }
 
-        internal override async Task<IHttpResponse> HandleRequest(HttpRequest request)
+        internal override async Task<IHttpResponse> HandleRequest(HttpServerRequest request)
         {
             var restResponse = await _requestHandler.HandleRequest(request);
 

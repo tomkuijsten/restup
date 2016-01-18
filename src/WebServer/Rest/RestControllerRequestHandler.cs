@@ -81,7 +81,7 @@ namespace Devkoes.Restup.WebServer.Rest
             return allPublicRestMethods.ToArray();
         }
 
-        internal async Task<IRestResponse> HandleRequest(HttpRequest req)
+        internal async Task<IRestResponse> HandleRequest(HttpServerRequest req)
         {
             if (!req.IsComplete ||
                 req.Method == HttpMethod.Unsupported)

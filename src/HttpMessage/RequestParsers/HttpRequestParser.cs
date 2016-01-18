@@ -1,17 +1,24 @@
 ﻿using Devkoes.HttpMessage.Models.Contracts;
+using Devkoes.HttpMessage.Plumbing;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
 
 namespace Devkoes.HttpMessage.RequestParsers
 {
-    public class HttpRequestParser
+    internal class HttpRequestParser
     {
         private const uint BUFFER_SIZE = 8192;
+
+        internal static HttpRequestParser Default { get; }
+
+        static HttpRequestParser()
+        {
+            Default = new HttpRequestParser();
+        }
 
         private IEnumerable<IHttpRequestPartParser> GetPipeline()
         {
@@ -25,18 +32,10 @@ namespace Devkoes.HttpMessage.RequestParsers
             };
         }
 
-        public async Task<HttpRequest> ParseRequestStream(StreamSocket httpRequestSocket)
-        {
-            using (var inputStream = httpRequestSocket.InputStream)
-            {
-                return await ParseRequestStream(inputStream);
-            }
-        }
-
-        public async Task<HttpRequest> ParseRequestStream(IInputStream requestStream)
+        internal async Task<HttpServerRequest> ParseRequestStream(IInputStream requestStream)
         {
             var httpStream = new HttpRequestStream(requestStream);
-            var request = new HttpRequest();
+            var request = new HttpServerRequest();
 
             try
             {

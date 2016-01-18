@@ -20,7 +20,7 @@ namespace Devkoes.Restup.WebServer.Rest
             _responseFactory = new RestResponseFactory();
         }
 
-        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, HttpRequest request)
+        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, HttpServerRequest request)
         {
             var methodInvokeResult = ExecuteAnonymousMethod(info, request);
 
@@ -30,7 +30,7 @@ namespace Devkoes.Restup.WebServer.Rest
             return await (dynamic)methodInvokeResult;
         }
 
-        private object ExecuteAnonymousMethod(RestControllerMethodInfo info, HttpRequest request)
+        private object ExecuteAnonymousMethod(RestControllerMethodInfo info, HttpServerRequest request)
         {
             var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
 

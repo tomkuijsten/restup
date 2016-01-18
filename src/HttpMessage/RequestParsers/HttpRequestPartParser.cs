@@ -10,6 +10,6 @@ namespace Devkoes.HttpMessage.RequestParsers
 
         public byte[] UnparsedData { get; protected set; }
 
-        public abstract void HandleRequestPart(byte[] stream, HttpRequest resultThisFar);
+        public abstract void HandleRequestPart(byte[] stream, HttpServerRequest resultThisFar);
     }
 }

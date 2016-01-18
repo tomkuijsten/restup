@@ -11,7 +11,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
     public class RestWebServerHappyPathTest
     {
         #region BasicGetAcceptXML
-        private HttpRequest _basicGETAcceptXML = new HttpRequest()
+        private HttpServerRequest _basicGETAcceptXML = new HttpServerRequest()
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
@@ -34,7 +34,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicGetWithAbsoluteUri
-        private HttpRequest _basicGETAbsoluteUri = new HttpRequest()
+        private HttpServerRequest _basicGETAbsoluteUri = new HttpServerRequest()
         {
             Method = HttpMethod.GET,
             Uri = new Uri("http://myserverx:1234/users/2", UriKind.RelativeOrAbsolute),
@@ -53,7 +53,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicGetWithAbsoluteUri
-        private HttpRequest _basicGETUriPrefix = new HttpRequest()
+        private HttpServerRequest _basicGETUriPrefix = new HttpServerRequest()
         {
             Method = HttpMethod.GET,
             Uri = new Uri("api/users/2", UriKind.RelativeOrAbsolute),
@@ -72,7 +72,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicGetAcceptJSON
-        private HttpRequest _basicGETAcceptJSON = new HttpRequest()
+        private HttpServerRequest _basicGETAcceptJSON = new HttpServerRequest()
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
@@ -95,7 +95,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicPost
-        private HttpRequest _basicPOST = new HttpRequest()
+        private HttpServerRequest _basicPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
@@ -117,7 +117,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicPut
-        private HttpRequest _basicPUT = new HttpRequest()
+        private HttpServerRequest _basicPUT = new HttpServerRequest()
         {
             Method = HttpMethod.PUT,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
@@ -138,7 +138,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicDelete
-        private HttpRequest _basicDEL = new HttpRequest()
+        private HttpServerRequest _basicDEL = new HttpServerRequest()
         {
             Method = HttpMethod.DELETE,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
@@ -157,7 +157,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region RestControllerWithArgs
-        private HttpRequest _basicControllerWithArgs = new HttpRequest()
+        private HttpServerRequest _basicControllerWithArgs = new HttpServerRequest()
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),

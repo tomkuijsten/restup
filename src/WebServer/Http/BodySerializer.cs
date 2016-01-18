@@ -23,7 +23,7 @@ namespace Devkoes.Restup.WebServer.Http
             throw new NotImplementedException();
         }
 
-        internal string ToBody(object bodyObject, HttpRequest req)
+        internal string ToBody(object bodyObject, HttpServerRequest req)
         {
             if (bodyObject == null)
             {

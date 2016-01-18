@@ -1,11 +1,12 @@
 ﻿using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.HttpMessage.Plumbing;
 using System;
 
 namespace Devkoes.HttpMessage.RequestParsers
 {
     internal class MethodParser : HttpRequestPartParser
     {
-        public override void HandleRequestPart(byte[] stream, HttpRequest resultThisFar)
+        public override void HandleRequestPart(byte[] stream, HttpServerRequest resultThisFar)
         {
             var word = stream.ReadNextWord();
 

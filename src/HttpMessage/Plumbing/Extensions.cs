@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Devkoes.HttpMessage
+namespace Devkoes.HttpMessage.Plumbing
 {
     internal static class Extensions
     {

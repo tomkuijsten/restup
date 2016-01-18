@@ -1,5 +1,6 @@
 ﻿using Devkoes.HttpMessage.Models.Contracts;
 using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.HttpMessage.Plumbing;
 using System.Collections.Generic;
 using System.Linq;
 

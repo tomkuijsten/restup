@@ -17,7 +17,7 @@
             // Incoming data is read entirely, always, so there will never be any unparsed data
             UnparsedData = new byte[0];
         }
-        public override void HandleRequestPart(byte[] stream, HttpRequest resultThisFar)
+        public override void HandleRequestPart(byte[] stream, HttpServerRequest resultThisFar)
         {
             if (resultThisFar.ContentLength == 0)
             {

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 
-namespace Devkoes.HttpMessage
+namespace Devkoes.HttpMessage.Plumbing
 {
     /// <summary>
     /// Wrapper around an <see cref="IInputStream"/> which supports a retry meganism

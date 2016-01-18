@@ -13,7 +13,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
     public class RestWebServerRainyDayTest
     {
         #region ConflictingPost
-        private HttpRequest _conflictingPOST = new HttpRequest()
+        private HttpServerRequest _conflictingPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
@@ -35,7 +35,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region MethodNotAllowed
-        private HttpRequest _methodNotAllowedPUT = new HttpRequest()
+        private HttpServerRequest _methodNotAllowedPUT = new HttpServerRequest()
         {
             Method = HttpMethod.DELETE,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
@@ -57,7 +57,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region ParameterParseException
-        private HttpRequest _parameterParseExceptionPUT = new HttpRequest()
+        private HttpServerRequest _parameterParseExceptionPUT = new HttpServerRequest()
         {
             Method = HttpMethod.PUT,
             Uri = new Uri("/users/notanumber", UriKind.RelativeOrAbsolute),
@@ -98,7 +98,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region JsonBodyParameterValueParseException
-        private HttpRequest _bodyParameterParseExPOST = new HttpRequest()
+        private HttpServerRequest _bodyParameterParseExPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
@@ -120,7 +120,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region XmlBodyParameterValueParseException
-        private HttpRequest _xmlBodyParameterParseExPOST = new HttpRequest()
+        private HttpServerRequest _xmlBodyParameterParseExPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
@@ -141,7 +141,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region InvalidJsonFormatParseException
-        private HttpRequest _invalidJsonFormatPOST = new HttpRequest()
+        private HttpServerRequest _invalidJsonFormatPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
@@ -162,7 +162,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region InvalidXmlFormatParseException
-        private HttpRequest _invalidXmlFormatExPOST = new HttpRequest()
+        private HttpServerRequest _invalidXmlFormatExPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),

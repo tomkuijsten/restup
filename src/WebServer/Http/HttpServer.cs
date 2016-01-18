@@ -1,5 +1,4 @@
 ﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.RequestParsers;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using System;
 using System.Diagnostics;
@@ -14,17 +13,15 @@ namespace Devkoes.Restup.WebServer.Http
     {
         private readonly int _port;
         private readonly StreamSocketListener _listener;
-        private HttpRequestParser _requestParser;
 
         internal HttpServer(int serverPort)
         {
             _listener = new StreamSocketListener();
-            _requestParser = new HttpRequestParser();
             _port = serverPort;
             _listener.ConnectionReceived += ProcessRequestAsync;
         }
 
-        internal abstract Task<IHttpResponse> HandleRequest(HttpRequest request);
+        internal abstract Task<IHttpResponse> HandleRequest(HttpServerRequest request);
 
         public async Task StartServerAsync()
         {
@@ -46,11 +43,14 @@ namespace Devkoes.Restup.WebServer.Http
             {
                 try
                 {
-                    var request = await _requestParser.ParseRequestStream(args.Socket);
+                    using (var inputStream = args.Socket.InputStream)
+                    {
+                        var request = await HttpServerRequest.Parse(inputStream);
 
-                    var httpResponse = await HandleRequest(request);
+                        var httpResponse = await HandleRequest(request);
 
-                    await WriteResponseAsync(httpResponse, args.Socket);
+                        await WriteResponseAsync(httpResponse, args.Socket);
+                    }
                 }
                 catch (Exception ex)
                 {

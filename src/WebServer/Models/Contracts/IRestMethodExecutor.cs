@@ -6,6 +6,6 @@ namespace Devkoes.Restup.WebServer.Models.Contracts
 {
     interface IRestMethodExecutor
     {
-        Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, HttpRequest request);
+        Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, HttpServerRequest request);
     }
 }

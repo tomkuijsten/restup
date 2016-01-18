@@ -107,8 +107,8 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Plumbing\Constants.cs" />
+    <Compile Include="Plumbing\Extensions.cs" />
     <Compile Include="Headers\AcceptCharsetHeader.cs" />
     <Compile Include="Headers\AcceptHeader.cs" />
     <Compile Include="Headers\ContentLengthHeader.cs" />
@@ -120,9 +120,9 @@
     <Compile Include="Headers\HttpSingleQuantifiedHeaderBase.cs" />
     <Compile Include="Headers\QuantifiedHeaderValue.cs" />
     <Compile Include="Headers\UntypedHeader.cs" />
-    <Compile Include="HttpCodesTranslator.cs" />
-    <Compile Include="HttpRequest.cs" />
-    <Compile Include="HttpRequestStream.cs" />
+    <Compile Include="Plumbing\HttpCodesTranslator.cs" />
+    <Compile Include="HttpServerRequest.cs" />
+    <Compile Include="Plumbing\HttpRequestStream.cs" />
     <Compile Include="Models\Contracts\IHttpHeader.cs" />
     <Compile Include="Models\Contracts\IHttpHeaderVisitor.cs" />
     <Compile Include="Models\Contracts\IHttpRequestPartParser.cs" />

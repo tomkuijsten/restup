@@ -1,8 +1,10 @@
-﻿namespace Devkoes.HttpMessage.RequestParsers
+﻿using Devkoes.HttpMessage.Plumbing;
+
+namespace Devkoes.HttpMessage.RequestParsers
 {
     internal class ProtocolVersionParser : HttpRequestPartParser
     {
-        public override void HandleRequestPart(byte[] stream, HttpRequest resultThisFar)
+        public override void HandleRequestPart(byte[] stream, HttpServerRequest resultThisFar)
         {
             var word = stream.ReadNextWord();
 
