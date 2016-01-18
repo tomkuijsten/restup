@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 
-namespace Devkoes.HttpMessage.RequestParsers
+namespace Devkoes.HttpMessage.ServerRequestParsers
 {
     internal class HttpRequestParser
     {

@@ -3,7 +3,7 @@ using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.HttpMessage.Plumbing;
 using System.Text;
 
-namespace Devkoes.HttpMessage.Headers
+namespace Devkoes.HttpMessage.Headers.Request
 {
     public class ContentTypeHeader : HttpSingleQuantifiedHeaderBase
     {
@@ -17,10 +17,10 @@ namespace Devkoes.HttpMessage.Headers
         {
             ContentType = HttpCodesTranslator.Default.GetMediaType(QuantifiedHeaderValue.HeaderValue);
             string charset = QuantifiedHeaderValue.FindQuantifierValue(CHARSET_QUANTIFIER_NAME);
-            ContentEncoding = charset != null ? Encoding.GetEncoding(charset) : Constants.DefaultHttpMessageCharset;
+            ContentEncoding = charset != null ? Encoding.GetEncoding(charset) : Constants.DefaultHttpEncoding;
         }
 
-        public override void Visit<T>(IHttpHeaderVisitor<T> v, T arg)
+        public override void Visit<T>(IHttpRequestHeaderVisitor<T> v, T arg)
         {
             v.Visit(this, arg);
         }

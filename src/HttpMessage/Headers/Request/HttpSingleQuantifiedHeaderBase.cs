@@ -1,6 +1,6 @@
-﻿namespace Devkoes.HttpMessage.Headers
+﻿namespace Devkoes.HttpMessage.Headers.Request
 {
-    public abstract class HttpSingleQuantifiedHeaderBase : HttpHeaderBase
+    public abstract class HttpSingleQuantifiedHeaderBase : HttpRequestHeaderBase
     {
         public QuantifiedHeaderValue QuantifiedHeaderValue { get; set; }
 

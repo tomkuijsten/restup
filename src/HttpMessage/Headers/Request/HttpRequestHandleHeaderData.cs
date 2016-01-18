@@ -1,6 +1,6 @@
 ﻿using Devkoes.HttpMessage.Models.Contracts;
 
-namespace Devkoes.HttpMessage.Headers
+namespace Devkoes.HttpMessage.Headers.Request
 {
     /// <summary>
     /// Set specific properties on the <see cref="HttpServerRequest"/> object based
@@ -9,7 +9,7 @@ namespace Devkoes.HttpMessage.Headers
     /// <remarks>
     /// All methods in this class are thread safe
     /// </remarks>
-    public class HttpRequestHandleHeaderData : IHttpHeaderVisitor<HttpServerRequest>
+    public class HttpRequestHandleHeaderData : IHttpRequestHeaderVisitor<HttpServerRequest>
     {
         internal static HttpRequestHandleHeaderData Default { get; }
 
@@ -44,7 +44,7 @@ namespace Devkoes.HttpMessage.Headers
             arg.ContentLength = uh.Length;
         }
 
-        public void Visit(UntypedHeader uh, HttpServerRequest arg)
+        public void Visit(UntypedRequestHeader uh, HttpServerRequest arg)
         {
             // no specific info to set for untyped header
         }

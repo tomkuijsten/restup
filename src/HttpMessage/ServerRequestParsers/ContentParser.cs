@@ -1,4 +1,4 @@
-﻿namespace Devkoes.HttpMessage.RequestParsers
+﻿namespace Devkoes.HttpMessage.ServerRequestParsers
 {
     /// <summary>
     /// One bad request scenario we don't cover:

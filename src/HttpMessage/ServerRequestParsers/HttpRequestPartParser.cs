@@ -1,6 +1,6 @@
 ﻿using Devkoes.HttpMessage.Models.Contracts;
 
-namespace Devkoes.HttpMessage.RequestParsers
+namespace Devkoes.HttpMessage.ServerRequestParsers
 {
     internal abstract class HttpRequestPartParser : IHttpRequestPartParser
     {

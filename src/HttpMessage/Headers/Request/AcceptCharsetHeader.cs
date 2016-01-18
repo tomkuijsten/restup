@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Devkoes.HttpMessage.Headers
+namespace Devkoes.HttpMessage.Headers.Request
 {
     public class AcceptCharsetHeader : HttpMultiQuantifiedHeaderBase
     {
@@ -17,7 +17,7 @@ namespace Devkoes.HttpMessage.Headers
             ResponseContentEncoding = Encoding.GetEncoding(QuantifiedHeaderValues.First().HeaderValue);
         }
 
-        public override void Visit<T>(IHttpHeaderVisitor<T> v, T arg)
+        public override void Visit<T>(IHttpRequestHeaderVisitor<T> v, T arg)
         {
             v.Visit(this, arg);
         }

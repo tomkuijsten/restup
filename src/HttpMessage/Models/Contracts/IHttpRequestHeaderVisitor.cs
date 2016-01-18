@@ -1,10 +1,11 @@
 ﻿using Devkoes.HttpMessage.Headers;
+using Devkoes.HttpMessage.Headers.Request;
 
 namespace Devkoes.HttpMessage.Models.Contracts
 {
-    public interface IHttpHeaderVisitor<T>
+    public interface IHttpRequestHeaderVisitor<T>
     {
-        void Visit(UntypedHeader uh, T arg);
+        void Visit(UntypedRequestHeader uh, T arg);
         void Visit(ContentLengthHeader uh, T arg);
         void Visit(AcceptHeader uh, T arg);
         void Visit(ContentTypeHeader uh, T arg);

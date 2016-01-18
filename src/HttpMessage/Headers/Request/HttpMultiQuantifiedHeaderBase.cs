@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Devkoes.HttpMessage.Headers
+namespace Devkoes.HttpMessage.Headers.Request
 {
-    public abstract class HttpMultiQuantifiedHeaderBase : HttpHeaderBase
+    public abstract class HttpMultiQuantifiedHeaderBase : HttpRequestHeaderBase
     {
         public IEnumerable<QuantifiedHeaderValue> QuantifiedHeaderValues { get; set; }
 

@@ -1,8 +1,8 @@
-﻿using Devkoes.HttpMessage.Headers;
+﻿using Devkoes.HttpMessage.Headers.Request;
 using Devkoes.HttpMessage.Models.Contracts;
 using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.HttpMessage.Plumbing;
-using Devkoes.HttpMessage.RequestParsers;
+using Devkoes.HttpMessage.ServerRequestParsers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,20 +13,20 @@ namespace Devkoes.HttpMessage
 {
     public class HttpServerRequest
     {
-        private List<IHttpHeader> _headers;
+        private List<IHttpRequestHeader> _headers;
 
-        public HttpServerRequest()
+        internal HttpServerRequest()
         {
-            _headers = new List<IHttpHeader>();
+            _headers = new List<IHttpRequestHeader>();
 
             Method = HttpMethod.Unsupported;
-            RequestContentEncoding = Constants.DefaultHttpMessageCharset;
-            ResponseContentEncoding = Constants.DefaultHttpMessageCharset;
+            RequestContentEncoding = Constants.DefaultHttpEncoding;
+            ResponseContentEncoding = Constants.DefaultHttpEncoding;
             RequestContentType = MediaType.JSON;
             ResponseContentType = MediaType.JSON;
         }
 
-        public IEnumerable<IHttpHeader> Headers => _headers;
+        public IEnumerable<IHttpRequestHeader> Headers => _headers;
         public HttpMethod Method { get; set; }
         public Uri Uri { get; set; }
         public string HttpVersion { get; set; }
@@ -38,7 +38,7 @@ namespace Devkoes.HttpMessage
         public string Content { get; set; }
         public bool IsComplete { get; set; }
 
-        internal void AddHeader(IHttpHeader header)
+        internal void AddHeader(IHttpRequestHeader header)
         {
             if (IsComplete)
             {

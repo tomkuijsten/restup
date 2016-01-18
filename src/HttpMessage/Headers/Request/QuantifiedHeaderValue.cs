@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Devkoes.HttpMessage.Headers
+namespace Devkoes.HttpMessage.Headers.Request
 {
     public class QuantifiedHeaderValue
     {

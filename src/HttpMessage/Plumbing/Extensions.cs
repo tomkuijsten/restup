@@ -61,7 +61,7 @@ namespace Devkoes.HttpMessage.Plumbing
                 {
                     return new ExtractedWord()
                     {
-                        Word = Constants.DefaultHttpMessageCharset.GetString(stream.Take(i).ToArray()),
+                        Word = Constants.DefaultHttpEncoding.GetString(stream.Take(i).ToArray()),
                         RemainingBytes = stream.Skip(i + 1).ToArray(),
                         WordFound = true
                     };
@@ -73,7 +73,7 @@ namespace Devkoes.HttpMessage.Plumbing
                     {
                         return new ExtractedWord()
                         {
-                            Word = Constants.DefaultHttpMessageCharset.GetString(stream.Take(i).ToArray()),
+                            Word = Constants.DefaultHttpEncoding.GetString(stream.Take(i).ToArray()),
                             RemainingBytes = stream.Skip(i + 2).ToArray(),
                             WordFound = true
                         };

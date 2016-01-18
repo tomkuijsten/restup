@@ -5,14 +5,12 @@ namespace Devkoes.HttpMessage.Headers
     public abstract class HttpHeaderBase : IHttpHeader
     {
         public string Name { get; set; }
-        public string RawContent { get; set; }
+        public string Value { get; set; }
 
         public HttpHeaderBase(string name, string value)
         {
             Name = name;
-            RawContent = value;
+            Value = value;
         }
-
-        public abstract void Visit<T>(IHttpHeaderVisitor<T> v, T arg);
     }
 }

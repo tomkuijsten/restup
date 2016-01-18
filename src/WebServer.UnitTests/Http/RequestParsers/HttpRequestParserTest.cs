@@ -52,7 +52,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.Http.RequestParsers
             var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.IsTrue(request.Headers.Any(h => h.Name == "UnknownHeader" && h.RawContent == "some:value"));
+            Assert.IsTrue(request.Headers.Any(h => h.Name == "UnknownHeader" && h.Value == "some:value"));
             Assert.AreEqual(4, request.ContentLength);
             Assert.AreEqual(Encoding.UTF8, request.RequestContentEncoding);
             Assert.AreEqual(MediaType.XML, request.RequestContentType);
