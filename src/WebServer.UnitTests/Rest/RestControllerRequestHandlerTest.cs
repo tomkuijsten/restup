@@ -16,7 +16,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.Rest
         {
             var restHandler = new RestControllerRequestHandler(null);
 
-            var allDefs = restHandler.GetRestMethods<AsyncTestController>();
+            var allDefs = restHandler.GetRestMethods<AsyncTestController>(() => null);
 
             Assert.AreEqual(1, allDefs.Count());
             Assert.AreEqual(true, allDefs.First().IsAsync);

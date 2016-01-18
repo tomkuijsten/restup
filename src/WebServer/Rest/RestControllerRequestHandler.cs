@@ -3,6 +3,7 @@ using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.InstanceCreators;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -27,12 +28,17 @@ namespace Devkoes.Restup.WebServer.Rest
 
         internal void RegisterController<T>() where T : class
         {
-            _restMethodCollection.AddRange(GetRestMethods<T>());
+            RegisterController<T>(() => Enumerable.Empty<object>().ToArray());
+        }
+
+        internal void RegisterController<T>(Func<object[]> constructorArgs) where T : class
+        {
+            _restMethodCollection.AddRange(GetRestMethods<T>(constructorArgs));
 
             InstanceCreatorCache.Default.CacheCreator(typeof(T));
         }
 
-        internal IEnumerable<RestControllerMethodInfo> GetRestMethods<T>() where T : class
+        internal IEnumerable<RestControllerMethodInfo> GetRestMethods<T>(Func<object[]> constructorArgs) where T : class
         {
             var restMethods = new List<RestControllerMethodInfo>();
 
@@ -40,10 +46,10 @@ namespace Devkoes.Restup.WebServer.Rest
             var allPublicRestMethods = GetRestMethodDefinitions<T>();
 
             foreach (var methodDef in allPublicRestMethods)
-                restMethods.Add(new RestControllerMethodInfo(methodDef, _urlPrefix));
+                restMethods.Add(new RestControllerMethodInfo(methodDef, _urlPrefix, constructorArgs));
 
             foreach (var methodDef in allPublicAsyncRestMethods)
-                restMethods.Add(new RestControllerMethodInfo(methodDef, _urlPrefix, true));
+                restMethods.Add(new RestControllerMethodInfo(methodDef, _urlPrefix, constructorArgs, true));
 
             return restMethods;
         }

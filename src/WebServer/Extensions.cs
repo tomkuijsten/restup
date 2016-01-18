@@ -108,5 +108,13 @@ namespace Devkoes.Restup.WebServer
 
             return relativeUri.FormatRelativeUri();
         }
+
+        internal static void GuardNull(this object argument, string argumentName)
+        {
+            if (argument == null)
+            {
+                throw new ArgumentNullException(argumentName);
+            }
+        }
     }
 }

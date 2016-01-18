@@ -1,6 +1,7 @@
 ﻿using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Rest;
+using System;
 using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer
@@ -25,6 +26,16 @@ namespace Devkoes.Restup.WebServer
         public void RegisterController<T>() where T : class
         {
             _requestHandler.RegisterController<T>();
+        }
+
+        public void RegisterController<T>(params object[] args) where T : class
+        {
+            _requestHandler.RegisterController<T>(() => args);
+        }
+
+        public void RegisterController<T>(Func<object[]> args) where T : class
+        {
+            _requestHandler.RegisterController<T>(args);
         }
 
         internal override async Task<IHttpResponse> HandleRequest(HttpRequest request)

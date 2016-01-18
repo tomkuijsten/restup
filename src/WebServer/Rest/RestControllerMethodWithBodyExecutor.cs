@@ -58,7 +58,7 @@ namespace Devkoes.Restup.WebServer.Rest
             }
 
             return info.MethodInfo.Invoke(
-                    instantiator.Create(info.MethodInfo.DeclaringType),
+                    instantiator.Create(info.MethodInfo.DeclaringType, info.ControllerConstructorArgs()),
                     parameters);
         }
     }

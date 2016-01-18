@@ -4,6 +4,6 @@ namespace Devkoes.Restup.WebServer.Models.Contracts
 {
     interface IInstanceCreator
     {
-        object Create(Type instanceType, params object[] args);
+        object Create(Type instanceType, object[] args);
     }
 }

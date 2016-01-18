@@ -101,6 +101,7 @@
     <Compile Include="Rest\RestControllerRequestHandlerTest.cs" />
     <Compile Include="RestWebServerTest.Happy.cs" />
     <Compile Include="TestHelpers\TestInputStream.cs" />
+    <Compile Include="TestHelpers\TestRestControllers.cs" />
     <Compile Include="UnitTestApp.xaml.cs">
       <DependentUpon>UnitTestApp.xaml</DependentUpon>
     </Compile>

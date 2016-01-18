@@ -1,6 +1,6 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Http;
+﻿using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Schemas;
+using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
 using System.Threading.Tasks;
@@ -155,39 +155,44 @@ namespace Devkoes.Restup.WebServer.UnitTests
             StringAssert.Contains(response.Response, "200 OK");
         }
         #endregion
-    }
 
-    [RestController(InstanceCreationType.Singleton)]
-    public class HappyPathTestController
-    {
-        public class User
+        #region RestControllerWithArgs
+        private HttpRequest _basicControllerWithArgs = new HttpRequest()
         {
-            public string Name { get; set; }
-            public int Age { get; set; }
+            Method = HttpMethod.GET,
+            Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
+            ResponseContentType = MediaType.JSON,
+            IsComplete = true
+        };
+
+        [TestMethod]
+        public async Task HandleRequest_ControllerWithArgs_MatchConstructor()
+        {
+            var m = new RestWebServer();
+            m.RegisterController<HappyPathTestSingletonControllerWithArgs>("Johathan", 15);
+            var response = await m.HandleRequest(_basicControllerWithArgs);
+
+            StringAssert.Contains(response.Response, "\"Name\":\"Johathan\"");
+            StringAssert.Contains(response.Response, "\"Age\":15");
         }
 
-        [UriFormat("/users/{userId}")]
-        public GetResponse GetUser(int userId)
+        [TestMethod]
+        public async Task HandleRequest_PerCallControllerWithArgs_MatchConstructor()
         {
-            return new GetResponse(GetResponse.ResponseStatus.OK, new User() { Name = "Tom", Age = 30 });
-        }
+            int age = 15;
+            var m = new RestWebServer();
+            m.RegisterController<HappyPathTestPerCallControllerWithArgs>(() => new object[] { "Johathan", age++ });
+            var response = await m.HandleRequest(_basicControllerWithArgs);
 
-        [UriFormat("/users")]
-        public PostResponse CreateUser([FromBody] User user)
-        {
-            return new PostResponse(PostResponse.ResponseStatus.Created, $"/users/2");
-        }
+            StringAssert.Contains(response.Response, "\"Name\":\"Johathan\"");
+            StringAssert.Contains(response.Response, "\"Age\":15");
 
-        [UriFormat("/users/{userId}")]
-        public PutResponse UpdateUser(int userId)
-        {
-            return new PutResponse(PutResponse.ResponseStatus.OK);
-        }
+            response = await m.HandleRequest(_basicControllerWithArgs);
 
-        [UriFormat("/users/{userId}")]
-        public DeleteResponse DeleteUser(int userId)
-        {
-            return new DeleteResponse(DeleteResponse.ResponseStatus.OK);
+            StringAssert.Contains(response.Response, "\"Name\":\"Johathan\"");
+            StringAssert.Contains(response.Response, "\"Age\":16");
         }
+        #endregion
     }
 }
+

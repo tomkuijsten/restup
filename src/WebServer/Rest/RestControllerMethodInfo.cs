@@ -25,12 +25,19 @@ namespace Devkoes.Restup.WebServer.Rest
         internal bool HasBodyParameter { get; private set; }
         internal Type BodyParameterType { get; private set; }
         internal bool IsAsync { get; }
+        internal Func<object[]> ControllerConstructorArgs { get; }
 
-        internal RestControllerMethodInfo(MethodInfo methodInfo, string urlPrefix, bool isAsync)
+        internal RestControllerMethodInfo(
+            MethodInfo methodInfo,
+            string urlPrefix,
+            Func<object[]> constructorArgs,
+            bool isAsync)
         {
+            constructorArgs.GuardNull(nameof(constructorArgs));
+
             _urlPrefix = urlPrefix;
             IsAsync = isAsync;
-
+            ControllerConstructorArgs = constructorArgs;
             MethodInfo = methodInfo;
 
             InitializeValidParameterTypes();
@@ -41,7 +48,7 @@ namespace Devkoes.Restup.WebServer.Rest
             InitializeBodyParameter();
         }
 
-        internal RestControllerMethodInfo(MethodInfo methodInfo, string urlPrefix) : this(methodInfo, urlPrefix, false) { }
+        internal RestControllerMethodInfo(MethodInfo methodInfo, string urlPrefix, Func<object[]> constructorArgs) : this(methodInfo, urlPrefix, constructorArgs, false) { }
 
         private void InitializeValidParameterTypes()
         {
