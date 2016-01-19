@@ -7,13 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Devkoes.Restup.WebServer.UnitTests.Http.RequestParsers
+namespace Devkoes.Restup.HttpMessage.UnitTests
 {
     [TestClass]
-    public class HttpRequestParserTest
+    public class HttpRequestMessageTest
     {
-        //TODO uri relative/absolute test
-
         [TestMethod]
         public void ParseRequestStream_AllDataAtOnce_CompleteRequest()
         {
@@ -30,7 +28,6 @@ namespace Devkoes.Restup.WebServer.UnitTests.Http.RequestParsers
             Assert.AreEqual("HTTP/1.1", request.HttpVersion);
             Assert.AreEqual(true, request.IsComplete);
         }
-
 
         [TestMethod]
         public void ParseRequestStream_AllHeaderTypes_AllHeadersParsed()
@@ -59,7 +56,6 @@ namespace Devkoes.Restup.WebServer.UnitTests.Http.RequestParsers
             Assert.AreEqual(Encoding.UTF7, request.ResponseContentEncoding);
             Assert.AreEqual(MediaType.JSON, request.ResponseContentType);
         }
-
 
         [TestMethod]
         public void ParseRequestStream_ContentLengthNumberMissing_RequestIncomplete()
