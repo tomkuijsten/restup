@@ -10,7 +10,7 @@ using System.Text;
 namespace Devkoes.Restup.HttpMessage.UnitTests
 {
     [TestClass]
-    public class HttpRequestMessageTest
+    public class HttpServerRequestTest
     {
         [TestMethod]
         public void ParseRequestStream_AllDataAtOnce_CompleteRequest()

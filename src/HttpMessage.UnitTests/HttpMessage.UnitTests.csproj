@@ -95,7 +95,8 @@
     <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HttpRequestMessageTest.cs" />
+    <Compile Include="HttpServerRequestTest.cs" />
+    <Compile Include="HttpServerResponseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers\TestInputStream.cs" />
     <Compile Include="UnitTestApp.xaml.cs">

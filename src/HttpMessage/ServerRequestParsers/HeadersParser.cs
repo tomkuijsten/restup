@@ -22,11 +22,11 @@ namespace Devkoes.HttpMessage.ServerRequestParsers
     ///   request) if it cannot determine the length of the message, or with 411 (length required) if it wishes to insist 
     ///   on receiving a valid Content-Length. 
     /// </summary>
-    internal class HeaderParser : HttpRequestPartParser
+    internal class HeadersParser : HttpRequestPartParser
     {
         private RequestHeaderFactory _headerFactory;
 
-        public HeaderParser()
+        public HeadersParser()
         {
             _headerFactory = new RequestHeaderFactory();
         }

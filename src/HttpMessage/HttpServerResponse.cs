@@ -14,17 +14,16 @@ namespace Devkoes.HttpMessage
     {
         private List<IHttpHeader> _headers;
 
-        internal HttpServerResponse(string httpVersion, HttpResponseStatus status)
+        internal HttpServerResponse(Version httpVersion, HttpResponseStatus status)
         {
             _headers = new List<IHttpHeader>();
 
             HttpVersion = httpVersion;
             ResponseStatus = status;
-            Date = DateTime.Now;
         }
 
         public static HttpServerResponse Create(
-            string httpVersion,
+            Version httpVersion,
             HttpResponseStatus status)
         {
             return new HttpServerResponse(httpVersion, status)
@@ -50,7 +49,7 @@ namespace Devkoes.HttpMessage
         internal IEnumerable<IHttpHeader> Headers => _headers;
 
         // Header line info
-        public string HttpVersion { get; set; }
+        public Version HttpVersion { get; set; }
         public HttpResponseStatus ResponseStatus { get; set; }
 
         // Properties for the content
@@ -170,7 +169,6 @@ namespace Devkoes.HttpMessage
                 }
             }
         }
-
 
         public IEnumerable<HttpMethod> Allow
         {

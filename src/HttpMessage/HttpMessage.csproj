@@ -116,6 +116,7 @@
     <Compile Include="Headers\UntypedResponseHeader.cs" />
     <Compile Include="HttpServerResponse.cs" />
     <Compile Include="Models\Contracts\IHttpRequestHeader.cs" />
+    <Compile Include="Models\Contracts\IHttpResponsePartParser.cs" />
     <Compile Include="Models\Schemas\HttpResponseStatus.cs" />
     <Compile Include="Plumbing\Constants.cs" />
     <Compile Include="Plumbing\Extensions.cs" />
@@ -142,13 +143,16 @@
     <Compile Include="Models\Schemas\StreamReadResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerRequestParsers\ContentParser.cs" />
-    <Compile Include="ServerRequestParsers\HeaderParser.cs" />
+    <Compile Include="ServerRequestParsers\HeadersParser.cs" />
     <Compile Include="ServerRequestParsers\HttpRequestParser.cs" />
     <Compile Include="ServerRequestParsers\HttpRequestPartParser.cs" />
     <Compile Include="ServerRequestParsers\MethodParser.cs" />
     <Compile Include="ServerRequestParsers\ProtocolVersionParser.cs" />
     <Compile Include="ServerRequestParsers\ResourceIdentifierParser.cs" />
+    <Compile Include="ServerResponseParsers\ContentParser.cs" />
+    <Compile Include="ServerResponseParsers\HeadersParser.cs" />
     <Compile Include="ServerResponseParsers\HttpServerResponseParser.cs" />
+    <Compile Include="ServerResponseParsers\StartLineParser.cs" />
     <EmbeddedResource Include="Properties\HttpMessage.rd.xml" />
   </ItemGroup>
   <ItemGroup />

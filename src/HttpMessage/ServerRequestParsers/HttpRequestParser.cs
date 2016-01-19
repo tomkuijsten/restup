@@ -27,7 +27,7 @@ namespace Devkoes.HttpMessage.ServerRequestParsers
                     new MethodParser(),
                     new ResourceIdentifierParser(),
                     new ProtocolVersionParser(),
-                    new HeaderParser(),
+                    new HeadersParser(),
                     new ContentParser()
             };
         }
