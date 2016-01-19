@@ -8,7 +8,7 @@ namespace Devkoes.HttpMessage.UnitTests
     public class HttpServerResponseTest
     {
         [TestMethod]
-        public void Create_Valid_Valid()
+        public void Create_EmptyResponse_HttpFirstLineOnly()
         {
             var response = HttpServerResponse.Create(Version.Parse("1.1"), HttpResponseStatus.OK);
 

@@ -12,7 +12,10 @@ namespace Devkoes.HttpMessage.ServerResponseParsers
 
         public string ParseToString(HttpServerResponse response)
         {
-            return string.Empty;
+            if (string.IsNullOrEmpty(response.Content))
+                return string.Empty;
+
+            return response.Content;
         }
     }
 }

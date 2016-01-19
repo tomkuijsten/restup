@@ -26,10 +26,7 @@ namespace Devkoes.HttpMessage
             Version httpVersion,
             HttpResponseStatus status)
         {
-            return new HttpServerResponse(httpVersion, status)
-            {
-                IsConnectionClosed = true
-            };
+            return new HttpServerResponse(httpVersion, status);
         }
 
         public void AddHeader(string name, string value)
