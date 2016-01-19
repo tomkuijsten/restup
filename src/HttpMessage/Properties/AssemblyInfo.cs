@@ -29,3 +29,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 [assembly: InternalsVisibleTo("Devkoes.HttpMessage.UnitTests")]
+[assembly: InternalsVisibleTo("Devkoes.Restup.WebServer.UnitTests")]
