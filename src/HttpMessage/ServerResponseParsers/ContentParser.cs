@@ -1,5 +1,4 @@
 ﻿using Devkoes.HttpMessage.Models.Contracts;
-using System;
 
 namespace Devkoes.HttpMessage.ServerResponseParsers
 {
@@ -7,7 +6,12 @@ namespace Devkoes.HttpMessage.ServerResponseParsers
     {
         public byte[] ParseToBytes(HttpServerResponse response)
         {
-            throw new NotImplementedException();
+            var asString = ParseToString(response);
+
+            if (asString == string.Empty)
+                return new byte[0];
+
+            return response.ContentTypeEncoding.GetBytes(asString);
         }
 
         public string ParseToString(HttpServerResponse response)

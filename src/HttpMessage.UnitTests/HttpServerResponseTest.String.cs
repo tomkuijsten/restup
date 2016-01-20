@@ -1,15 +1,25 @@
 ﻿using Devkoes.HttpMessage.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
+using System.Text;
 
 namespace Devkoes.HttpMessage.UnitTests
 {
     [TestClass]
     public class HttpServerResponseTestString
     {
-        private void AssertDefaultFirstLineOnly(string responseMessage)
+        private static Encoding DefaultHttpEncoding = Encoding.GetEncoding("iso-8859-1");
+        private static Encoding DefaultJSONEncoding = Encoding.UTF8;
+
+        private static void AssertDefaultFirstLineOnly(string responseMessage, byte[] responseBytes)
         {
-            Assert.AreEqual("HTTP/1.1 200 OK\r\n\r\n", responseMessage);
+            AssertResponse("HTTP/1.1 200 OK\r\n\r\n", responseMessage, responseBytes);
+        }
+
+        private static void AssertResponse(string expected, string responseMessage, byte[] responseBytes)
+        {
+            Assert.AreEqual(expected, responseMessage);
+            CollectionAssert.AreEqual(DefaultHttpEncoding.GetBytes(expected), responseBytes);
         }
 
         [TestMethod]
@@ -18,8 +28,9 @@ namespace Devkoes.HttpMessage.UnitTests
             var response = HttpServerResponse.Create(HttpResponseStatus.OK);
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            AssertDefaultFirstLineOnly(responseMessage);
+            AssertDefaultFirstLineOnly(responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -28,8 +39,10 @@ namespace Devkoes.HttpMessage.UnitTests
             var response = HttpServerResponse.Create(new Version(2, 0), HttpResponseStatus.OK);
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            Assert.AreEqual("HTTP/2.0 200 OK\r\n\r\n", responseMessage);
+            string expectedValue = "HTTP/2.0 200 OK\r\n\r\n";
+            AssertResponse(expectedValue, responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -39,8 +52,10 @@ namespace Devkoes.HttpMessage.UnitTests
             response.Location = new Uri("/api/1", UriKind.Relative);
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            Assert.AreEqual("HTTP/1.1 200 OK\r\nLocation: /api/1\r\n\r\n", responseMessage);
+            string expectedValue = "HTTP/1.1 200 OK\r\nLocation: /api/1\r\n\r\n";
+            AssertResponse(expectedValue, responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -51,8 +66,9 @@ namespace Devkoes.HttpMessage.UnitTests
             response.Location = null;
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            AssertDefaultFirstLineOnly(responseMessage);
+            AssertDefaultFirstLineOnly(responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -62,6 +78,7 @@ namespace Devkoes.HttpMessage.UnitTests
             response.Content = "data";
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
             Assert.AreEqual("HTTP/1.1 200 OK\r\nContent-Length: 4\r\n\r\ndata", responseMessage);
         }
@@ -74,8 +91,9 @@ namespace Devkoes.HttpMessage.UnitTests
             response.Content = null;
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            AssertDefaultFirstLineOnly(responseMessage);
+            AssertDefaultFirstLineOnly(responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -85,8 +103,10 @@ namespace Devkoes.HttpMessage.UnitTests
             response.ContentType = MediaType.JSON;
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            Assert.AreEqual("HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n", responseMessage);
+            string expectedValue = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n";
+            AssertResponse(expectedValue, responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -97,8 +117,9 @@ namespace Devkoes.HttpMessage.UnitTests
             response.ContentType = null;
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            AssertDefaultFirstLineOnly(responseMessage);
+            AssertDefaultFirstLineOnly(responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -109,8 +130,10 @@ namespace Devkoes.HttpMessage.UnitTests
             response.ContentCharset = "utf-8";
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            Assert.AreEqual("HTTP/1.1 200 OK\r\nContent-Type: application/json;charset=utf-8\r\n\r\n", responseMessage);
+            string expectedValue = "HTTP/1.1 200 OK\r\nContent-Type: application/json;charset=utf-8\r\n\r\n";
+            AssertResponse(expectedValue, responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -122,8 +145,10 @@ namespace Devkoes.HttpMessage.UnitTests
             response.ContentCharset = "unicode";
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            Assert.AreEqual("HTTP/1.1 200 OK\r\nContent-Type: application/json;charset=unicode\r\n\r\n", responseMessage);
+            string expectedValue = "HTTP/1.1 200 OK\r\nContent-Type: application/json;charset=unicode\r\n\r\n";
+            AssertResponse(expectedValue, responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -133,8 +158,10 @@ namespace Devkoes.HttpMessage.UnitTests
             response.IsConnectionClosed = true;
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            Assert.AreEqual("HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n", responseMessage);
+            string expectedValue = "HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n";
+            AssertResponse(expectedValue, responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -145,8 +172,9 @@ namespace Devkoes.HttpMessage.UnitTests
             response.IsConnectionClosed = false;
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            AssertDefaultFirstLineOnly(responseMessage);
+            AssertDefaultFirstLineOnly(responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -156,8 +184,10 @@ namespace Devkoes.HttpMessage.UnitTests
             response.Date = DateTime.Parse("Tue, 15 Nov 1994 08:12:31");
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            Assert.AreEqual("HTTP/1.1 200 OK\r\nDate: Tue, 15 Nov 1994 08:12:31 GMT\r\n\r\n", responseMessage);
+            string expectedValue = "HTTP/1.1 200 OK\r\nDate: Tue, 15 Nov 1994 08:12:31 GMT\r\n\r\n";
+            AssertResponse(expectedValue, responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -168,8 +198,9 @@ namespace Devkoes.HttpMessage.UnitTests
             response.Date = null;
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            AssertDefaultFirstLineOnly(responseMessage);
+            AssertDefaultFirstLineOnly(responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -179,8 +210,10 @@ namespace Devkoes.HttpMessage.UnitTests
             response.AddHeader("my-own-header", "23");
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            Assert.AreEqual("HTTP/1.1 200 OK\r\nmy-own-header: 23\r\n\r\n", responseMessage);
+            string expectedValue = "HTTP/1.1 200 OK\r\nmy-own-header: 23\r\n\r\n";
+            AssertResponse(expectedValue, responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -191,8 +224,10 @@ namespace Devkoes.HttpMessage.UnitTests
             response.AddHeader("my-own-header", "11");
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            Assert.AreEqual("HTTP/1.1 200 OK\r\nmy-own-header: 11\r\n\r\n", responseMessage);
+            string expectedValue = "HTTP/1.1 200 OK\r\nmy-own-header: 11\r\n\r\n";
+            AssertResponse(expectedValue, responseMessage, responseBytes);
         }
 
         [TestMethod]
@@ -203,8 +238,11 @@ namespace Devkoes.HttpMessage.UnitTests
             response.RemoveHeader("my-own-header");
 
             var responseMessage = response.ToString();
+            var responseBytes = response.ToBytes();
 
-            AssertDefaultFirstLineOnly(responseMessage);
+            AssertDefaultFirstLineOnly(responseMessage, responseBytes);
         }
+
+        // TODO allow header
     }
 }

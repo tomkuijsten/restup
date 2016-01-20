@@ -1,5 +1,5 @@
 ﻿using Devkoes.HttpMessage.Models.Contracts;
-using System;
+using Devkoes.HttpMessage.Plumbing;
 using System.Text;
 
 namespace Devkoes.HttpMessage.ServerResponseParsers
@@ -8,7 +8,7 @@ namespace Devkoes.HttpMessage.ServerResponseParsers
     {
         public byte[] ParseToBytes(HttpServerResponse response)
         {
-            throw new NotImplementedException();
+            return Constants.DefaultHttpEncoding.GetBytes(ParseToString(response));
         }
 
         public string ParseToString(HttpServerResponse response)

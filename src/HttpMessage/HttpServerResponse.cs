@@ -2,6 +2,7 @@
 using Devkoes.HttpMessage.Headers.Response;
 using Devkoes.HttpMessage.Models.Contracts;
 using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.HttpMessage.Plumbing;
 using Devkoes.HttpMessage.ServerResponseParsers;
 using System;
 using System.Collections.Generic;
@@ -100,11 +101,11 @@ namespace Devkoes.HttpMessage
             }
         }
 
-        internal Encoder ContentTypeEncoder
+        internal Encoding ContentTypeEncoding
         {
             get
             {
-                return Headers.OfType<ContentTypeHeader>().SingleOrDefault()?.Encoder;
+                return Headers.OfType<ContentTypeHeader>().SingleOrDefault()?.Encoding ?? Constants.DefaultHttpEncoding;
             }
         }
 

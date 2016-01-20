@@ -7,11 +7,12 @@ namespace Devkoes.HttpMessage.Headers.Response
     public class ContentTypeHeader : HttpHeaderBase
     {
         internal static string NAME = "Content-Type";
+        private static string CHARSET_KEY = "charset";
 
         private MediaType _contentType;
         private string _charset;
 
-        public Encoder Encoder { get; private set; }
+        public Encoding Encoding { get; private set; }
 
         public ContentTypeHeader(MediaType contentType, string charset) :
             base(NAME, ContentTypeHeader.FormatContentType(contentType, charset))
@@ -48,21 +49,21 @@ namespace Devkoes.HttpMessage.Headers.Response
         {
             if (!string.IsNullOrWhiteSpace(_charset))
             {
-                Encoder = Encoding.GetEncoding(Charset).GetEncoder();
+                Encoding = Encoding.GetEncoding(Charset);
             }
             else if (ContentType == MediaType.JSON)
             {
-                Encoder = Constants.DefaultJSONEncoding.GetEncoder();
+                Encoding = Constants.DefaultJSONEncoding;
             }
             else
             {
-                Encoder = Constants.DefaultHttpEncoding.GetEncoder();
+                Encoding = Constants.DefaultHttpEncoding;
             }
         }
 
         private static string FormatContentType(MediaType contentType, string charset)
         {
-            string charsetPart = string.IsNullOrEmpty(charset) ? string.Empty : $";charset={charset}";
+            string charsetPart = string.IsNullOrEmpty(charset) ? string.Empty : $";{CHARSET_KEY}={charset}";
             return string.Concat(HttpCodesTranslator.Default.GetMediaType(contentType), charsetPart);
         }
     }
