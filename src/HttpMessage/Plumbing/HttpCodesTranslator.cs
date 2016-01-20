@@ -10,6 +10,7 @@ namespace Devkoes.HttpMessage.Plumbing
 
         private readonly IDictionary<MediaType, string> _mediaTypeTexts = new Dictionary<MediaType, string>()
         {
+            [MediaType.Unsupported] = "",
             [MediaType.JSON] = "application/json",
             [MediaType.XML] = "application/xml"
         };

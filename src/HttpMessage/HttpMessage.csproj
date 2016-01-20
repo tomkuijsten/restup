@@ -111,6 +111,7 @@
     <Compile Include="Headers\Response\AllowHeader.cs" />
     <Compile Include="Headers\Response\CloseConnectionHeader.cs" />
     <Compile Include="Headers\Response\ContentEncodingHeader.cs" />
+    <Compile Include="Headers\Response\ContentLengthHeader.cs" />
     <Compile Include="Headers\Response\DateHeader.cs" />
     <Compile Include="Headers\Response\LocationHeader.cs" />
     <Compile Include="Headers\UntypedResponseHeader.cs" />

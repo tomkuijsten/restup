@@ -13,35 +13,7 @@ namespace Devkoes.HttpMessage
     public class HttpServerResponse
     {
         private List<IHttpHeader> _headers;
-
-        internal HttpServerResponse(Version httpVersion, HttpResponseStatus status)
-        {
-            _headers = new List<IHttpHeader>();
-
-            HttpVersion = httpVersion;
-            ResponseStatus = status;
-        }
-
-        public static HttpServerResponse Create(
-            Version httpVersion,
-            HttpResponseStatus status)
-        {
-            return new HttpServerResponse(httpVersion, status);
-        }
-
-        public void AddHeader(string name, string value)
-        {
-            var knownHeader = Headers.SingleOrDefault(h => string.Equals(h.Name, name, StringComparison.OrdinalIgnoreCase));
-            _headers.Remove(knownHeader);
-            _headers.Add(new UntypedResponseHeader(name, value));
-        }
-
-        public void AddHeader(IHttpHeader header)
-        {
-            var knownHeader = Headers.SingleOrDefault(h => string.Equals(h.Name, header.Name, StringComparison.OrdinalIgnoreCase));
-            _headers.Remove(knownHeader);
-            _headers.Add(header);
-        }
+        private string _content;
 
         internal IEnumerable<IHttpHeader> Headers => _headers;
 
@@ -51,10 +23,44 @@ namespace Devkoes.HttpMessage
 
         // Properties for the content
         public int ContentLength => Content?.Length ?? 0;
-        public string Content { get; set; }
 
-        // This section contains shortcuts to headers. By setting the property a header is added
-        // or removed from the header collection.
+        internal HttpServerResponse(Version httpVersion, HttpResponseStatus status)
+        {
+            _headers = new List<IHttpHeader>();
+
+            HttpVersion = httpVersion;
+            ResponseStatus = status;
+        }
+
+        public static HttpServerResponse Create(HttpResponseStatus status)
+        {
+            return Create(new Version(1, 1), status);
+        }
+
+        public static HttpServerResponse Create(Version httpVersion, HttpResponseStatus status)
+        {
+            return new HttpServerResponse(httpVersion, status);
+        }
+
+        public string Content
+        {
+            get { return _content; }
+            set
+            {
+                _content = value;
+
+                var contentLengthHeader = Headers.OfType<ContentLengthHeader>().SingleOrDefault();
+                _headers.Remove(contentLengthHeader);
+
+                if (!string.IsNullOrEmpty(value))
+                {
+                    _headers.Add(new ContentLengthHeader(value.Length));
+                }
+            }
+        }
+
+        // This section contains shortcuts to headers. By setting the property a header is added,
+        // removed or updated from the header collection.
 
         public DateTime? Date
         {
@@ -94,11 +100,11 @@ namespace Devkoes.HttpMessage
             }
         }
 
-        public Encoding ContentEncoding
+        internal Encoder ContentTypeEncoder
         {
             get
             {
-                return Headers.OfType<ContentTypeHeader>().SingleOrDefault()?.Encoding;
+                return Headers.OfType<ContentTypeHeader>().SingleOrDefault()?.Encoder;
             }
         }
 
@@ -114,7 +120,7 @@ namespace Devkoes.HttpMessage
                 var contentTypeHeader = Headers.OfType<ContentTypeHeader>().SingleOrDefault();
                 if (contentTypeHeader == null)
                 {
-                    contentTypeHeader = new ContentTypeHeader(MediaType.JSON, value);
+                    contentTypeHeader = new ContentTypeHeader(MediaType.Unsupported, value);
                     _headers.Add(contentTypeHeader);
                 }
                 else
@@ -195,6 +201,35 @@ namespace Devkoes.HttpMessage
         public override string ToString()
         {
             return HttpServerResponseParser.Default.ConvertToString(this);
+        }
+
+        public IHttpHeader AddHeader(string name, string value)
+        {
+            var knownHeader = Headers.SingleOrDefault(h => string.Equals(h.Name, name, StringComparison.OrdinalIgnoreCase));
+            _headers.Remove(knownHeader);
+
+            var newHeader = new UntypedResponseHeader(name, value);
+            _headers.Add(newHeader);
+
+            return newHeader;
+        }
+
+        public void AddHeader(IHttpHeader header)
+        {
+            var knownHeader = Headers.SingleOrDefault(h => string.Equals(h.Name, header.Name, StringComparison.OrdinalIgnoreCase));
+            _headers.Remove(knownHeader);
+            _headers.Add(header);
+        }
+
+        public void RemoveHeader(string name)
+        {
+            var knownHeader = Headers.SingleOrDefault(h => string.Equals(h.Name, name, StringComparison.OrdinalIgnoreCase));
+            _headers.Remove(knownHeader);
+        }
+
+        public void RemoveHeader(IHttpHeader header)
+        {
+            _headers.Remove(header);
         }
     }
 }

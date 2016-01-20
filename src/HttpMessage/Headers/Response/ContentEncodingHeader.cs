@@ -11,7 +11,7 @@ namespace Devkoes.HttpMessage.Headers.Response
         private MediaType _contentType;
         private string _charset;
 
-        public Encoding Encoding { get; private set; }
+        public Encoder Encoder { get; private set; }
 
         public ContentTypeHeader(MediaType contentType, string charset) :
             base(NAME, ContentTypeHeader.FormatContentType(contentType, charset))
@@ -38,7 +38,12 @@ namespace Devkoes.HttpMessage.Headers.Response
             set
             {
                 _charset = value;
-                Encoding = Encoding.GetEncoding(Charset);
+
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    Encoder = Encoding.GetEncoding(Charset).GetEncoder();
+                }
+
                 Value = FormatContentType(_contentType, _charset);
             }
         }
