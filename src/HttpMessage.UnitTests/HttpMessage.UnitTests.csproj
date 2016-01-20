@@ -90,13 +90,14 @@
   </PropertyGroup>
   <ItemGroup>
     <!--A reference to the entire .Net Framework and Windows SDK are automatically included-->
+    <Compile Include="HttpServerResponseTest.Bytes.cs" />
     <None Include="project.json" />
     <SDKReference Include="MSTestFramework.Universal, Version=$(UnitTestPlatformVersion)" />
     <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HttpServerRequestTest.cs" />
-    <Compile Include="HttpServerResponseTest.cs" />
+    <Compile Include="HttpServerResponseTest.String.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers\TestInputStream.cs" />
     <Compile Include="UnitTestApp.xaml.cs">

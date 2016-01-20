@@ -29,6 +29,7 @@ namespace Devkoes.HttpMessage.Headers.Response
             {
                 _contentType = value;
                 Value = FormatContentType(_contentType, _charset);
+                UpdateEncoder();
             }
         }
 
@@ -38,13 +39,24 @@ namespace Devkoes.HttpMessage.Headers.Response
             set
             {
                 _charset = value;
-
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    Encoder = Encoding.GetEncoding(Charset).GetEncoder();
-                }
-
                 Value = FormatContentType(_contentType, _charset);
+                UpdateEncoder();
+            }
+        }
+
+        private void UpdateEncoder()
+        {
+            if (!string.IsNullOrWhiteSpace(_charset))
+            {
+                Encoder = Encoding.GetEncoding(Charset).GetEncoder();
+            }
+            else if (ContentType == MediaType.JSON)
+            {
+                Encoder = Constants.DefaultJSONEncoding.GetEncoder();
+            }
+            else
+            {
+                Encoder = Constants.DefaultHttpEncoding.GetEncoder();
             }
         }
 

@@ -5,7 +5,7 @@ using System;
 namespace Devkoes.HttpMessage.UnitTests
 {
     [TestClass]
-    public class HttpServerResponseTest
+    public class HttpServerResponseTestString
     {
         private void AssertDefaultFirstLineOnly(string responseMessage)
         {
