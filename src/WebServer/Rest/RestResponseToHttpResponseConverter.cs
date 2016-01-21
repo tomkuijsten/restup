@@ -1,10 +1,12 @@
 ﻿using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.HttpMessage.Plumbing;
 using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Devkoes.Restup.WebServer.Rest
@@ -81,7 +83,11 @@ namespace Devkoes.Restup.WebServer.Rest
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
             rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", bodyLength);
-            rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpCodesTranslator.Default.GetMediaType(restReq.ResponseContentType));
+
+            var suppTypeHiQuality = restReq.ResponseContentTypes.FirstOrDefault(r => r != MediaType.Unsupported);
+            suppTypeHiQuality = suppTypeHiQuality == MediaType.Unsupported ? Configuration.Default.ResponseContentType : suppTypeHiQuality;
+
+            rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpCodesTranslator.Default.GetMediaType(suppTypeHiQuality));
 
             foreach (var extraHeader in extraHeaders)
             {

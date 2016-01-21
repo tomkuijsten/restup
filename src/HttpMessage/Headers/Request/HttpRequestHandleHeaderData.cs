@@ -25,7 +25,7 @@ namespace Devkoes.HttpMessage.Headers.Request
 
         public void Visit(AcceptHeader uh, HttpServerRequest arg)
         {
-            arg.ResponseContentType = uh.AcceptType;
+            arg.ResponseContentTypes = uh.AcceptTypes;
         }
 
         public void Visit(AcceptCharsetHeader uh, HttpServerRequest arg)

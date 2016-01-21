@@ -113,6 +113,7 @@
     <Compile Include="Attributes\RestControllerAttribute.cs" />
     <Compile Include="Attributes\RestVerbAttribute.cs" />
     <Compile Include="Attributes\UriFormatAttribute.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Rest\RestControllerMethodWithBodyExecutor.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Rest\RestControllerMethodExecutorFactory.cs" />

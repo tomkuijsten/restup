@@ -3,6 +3,7 @@ using Devkoes.HttpMessage.Models.Schemas;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Devkoes.Restup.WebServer.Http
@@ -30,11 +31,14 @@ namespace Devkoes.Restup.WebServer.Http
                 return null;
             }
 
-            if (req.ResponseContentType == MediaType.JSON)
+            var suppTypeHiQuality = req.ResponseContentTypes.FirstOrDefault(r => r != MediaType.Unsupported);
+            suppTypeHiQuality = suppTypeHiQuality == MediaType.Unsupported ? Configuration.Default.ResponseContentType : suppTypeHiQuality;
+
+            if (suppTypeHiQuality == MediaType.JSON)
             {
                 return JsonConvert.SerializeObject(bodyObject);
             }
-            else if (req.ResponseContentType == MediaType.XML)
+            else if (suppTypeHiQuality == MediaType.XML)
             {
                 return XmlSerializeObject(bodyObject);
             }

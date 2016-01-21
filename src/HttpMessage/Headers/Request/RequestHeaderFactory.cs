@@ -54,10 +54,9 @@ namespace Devkoes.HttpMessage.Headers.Request
         internal IEnumerable<QuantifiedHeaderValue> ExtractQuantifiedHeaders(string value)
         {
             var headerValues = value.Split(',');
-            foreach (var headerValue in headerValues)
-            {
-                yield return ExtractQuantifiedHeader(headerValue);
-            }
+            var quantifiedValues = headerValues.Select(h => ExtractQuantifiedHeader(h));
+
+            return quantifiedValues.OrderByDescending(q => q.Quality).ToArray();
         }
 
         internal QuantifiedHeaderValue ExtractQuantifiedHeader(string value)

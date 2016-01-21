@@ -54,7 +54,33 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             Assert.AreEqual(Encoding.UTF8, request.RequestContentEncoding);
             Assert.AreEqual(MediaType.XML, request.RequestContentType);
             Assert.AreEqual(Encoding.UTF7, request.ResponseContentEncoding);
-            Assert.AreEqual(MediaType.JSON, request.ResponseContentType);
+            Assert.AreEqual(MediaType.JSON, request.ResponseContentTypes.First());
+        }
+
+        [TestMethod]
+        public void ParseRequestStream_AcceptWithQuality_QualityHighestAsAccept()
+        {
+            var streamedRequest = "GET /api/data HTTP/1.1\r\nAccept: application/json;q=0.5,text/xml;q=0.7\r\n\r\n";
+
+            var byteStreamParts = Encoding.UTF8.GetBytes(streamedRequest);
+
+            var request = HttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
+
+            Assert.AreEqual(true, request.IsComplete);
+            Assert.AreEqual(MediaType.XML, request.ResponseContentTypes.First());
+        }
+
+        [TestMethod]
+        public void ParseRequestStream_AcceptWithQuality_DefaultQuality1AsAccept()
+        {
+            var streamedRequest = "GET /api/data HTTP/1.1\r\nAccept: application/json,text/xml;q=0.7\r\n\r\n";
+
+            var byteStreamParts = Encoding.UTF8.GetBytes(streamedRequest);
+
+            var request = HttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
+
+            Assert.AreEqual(true, request.IsComplete);
+            Assert.AreEqual(MediaType.JSON, request.ResponseContentTypes.First());
         }
 
         [TestMethod]

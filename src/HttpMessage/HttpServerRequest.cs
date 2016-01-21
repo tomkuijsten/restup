@@ -23,7 +23,7 @@ namespace Devkoes.HttpMessage
             RequestContentEncoding = Constants.DefaultHttpEncoding;
             ResponseContentEncoding = Constants.DefaultHttpEncoding;
             RequestContentType = MediaType.JSON;
-            ResponseContentType = MediaType.JSON;
+            ResponseContentTypes = new[] { MediaType.JSON };
         }
 
         public IEnumerable<IHttpRequestHeader> Headers => _headers;
@@ -34,7 +34,7 @@ namespace Devkoes.HttpMessage
         public Encoding ResponseContentEncoding { get; set; }
         public int ContentLength { get; set; }
         public MediaType RequestContentType { get; set; }
-        public MediaType ResponseContentType { get; set; }
+        public IEnumerable<MediaType> ResponseContentTypes { get; set; }
         public string Content { get; set; }
         public bool IsComplete { get; set; }
 

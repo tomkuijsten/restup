@@ -10,12 +10,12 @@ namespace Devkoes.HttpMessage.Headers.Request
     {
         internal static string NAME = "Accept";
 
-        public MediaType AcceptType { get; set; }
+        public IEnumerable<MediaType> AcceptTypes { get; set; }
 
         public AcceptHeader(string value, IEnumerable<QuantifiedHeaderValue> quantifiedHeaderValues)
             : base(NAME, value, quantifiedHeaderValues)
         {
-            AcceptType = HttpCodesTranslator.Default.GetMediaType(QuantifiedHeaderValues.First().HeaderValue);
+            AcceptTypes = QuantifiedHeaderValues.Select(q => HttpCodesTranslator.Default.GetMediaType(q.HeaderValue)).ToArray();
         }
 
         public override void Visit<T>(IHttpRequestHeaderVisitor<T> v, T arg)

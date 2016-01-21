@@ -15,7 +15,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.XML,
+            ResponseContentTypes = new[] { MediaType.XML },
             IsComplete = true
         };
 
@@ -76,7 +76,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
+            ResponseContentTypes = new[] { MediaType.JSON },
             IsComplete = true
         };
 
@@ -99,7 +99,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
+            ResponseContentTypes = new[] { MediaType.JSON },
             Content = "{\"Name\": \"Tom\", \"Age\": 33}",
             IsComplete = true
         };
@@ -121,7 +121,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.PUT,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
+            ResponseContentTypes = new[] { MediaType.JSON },
             Content = "{Name: Tom, Age: 21}",
             IsComplete = true
         };
@@ -161,7 +161,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
+            ResponseContentTypes = new[] { MediaType.JSON },
             IsComplete = true
         };
 
