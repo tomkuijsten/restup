@@ -96,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HttpServerRequestTest.cs" />
-    <Compile Include="HttpServerResponseTest.String.cs" />
+    <Compile Include="HttpServerResponseTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers\TestInputStream.cs" />
     <Compile Include="UnitTestApp.xaml.cs">

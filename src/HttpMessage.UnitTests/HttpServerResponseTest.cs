@@ -1,12 +1,14 @@
 ﻿using Devkoes.HttpMessage.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Devkoes.HttpMessage.UnitTests
 {
     [TestClass]
-    public class HttpServerResponseTestString
+    public class HttpServerResponseTest
     {
         private static Encoding DefaultHttpEncoding = Encoding.GetEncoding("iso-8859-1");
         private static Encoding DefaultJSONEncoding = Encoding.UTF8;
@@ -20,6 +22,21 @@ namespace Devkoes.HttpMessage.UnitTests
         {
             Assert.AreEqual(expected, responseMessage);
             CollectionAssert.AreEqual(DefaultHttpEncoding.GetBytes(expected), responseBytes);
+        }
+
+        private static void AssertContentResponse(
+            string expectedStart,
+            string expectedBody,
+            HttpServerResponse response,
+            string responseMessage,
+            byte[] responseBytes)
+        {
+            Assert.AreEqual(expectedStart + expectedBody, responseMessage);
+            List<byte> bytes = new List<byte>();
+            bytes.AddRange(DefaultHttpEncoding.GetBytes(expectedStart));
+            bytes.AddRange(response.ContentTypeEncoding.GetBytes(expectedStart));
+
+            CollectionAssert.AreEqual(bytes, responseBytes);
         }
 
         [TestMethod]
@@ -72,15 +89,61 @@ namespace Devkoes.HttpMessage.UnitTests
         }
 
         [TestMethod]
-        public void Create_Content_ContentWithLengthHeader()
+        public void Create_ContentWithUnknownCharacter_UnkownCharAsQuestionMark()
         {
             var response = HttpServerResponse.Create(HttpResponseStatus.OK);
-            response.Content = "data";
+            response.Content = "€";
+            response.ContentType = MediaType.JSON;
+            response.ContentCharset = "iso-8859-1"; // doesn't support €
+
+            var responseBytes = response.ToBytes();
+
+            var questionMarkByte = DefaultHttpEncoding.GetBytes("?");
+
+            Assert.AreEqual(questionMarkByte.Single(), responseBytes.Last());
+        }
+
+        [TestMethod]
+        public void Create_ContentWithUTF8Content_EncodedContent()
+        {
+            var response = HttpServerResponse.Create(HttpResponseStatus.OK);
+            var expectedBody = "dat€";
+            var expectedContentLength = 6; // the € sign takes 3 bytes in UTF-8
+            response.Content = expectedBody;
+            response.ContentType = MediaType.JSON;
+
+            // UTF-8 is the default charset for json, should work without explicitly setting
+            //response.ContentCharset = "utf-8";
 
             var responseMessage = response.ToString();
             var responseBytes = response.ToBytes();
 
-            Assert.AreEqual("HTTP/1.1 200 OK\r\nContent-Length: 4\r\n\r\ndata", responseMessage);
+            var expectedStart = $"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {expectedContentLength}\r\n\r\n";
+
+
+            List<byte> bytes = new List<byte>();
+            bytes.AddRange(DefaultHttpEncoding.GetBytes(expectedStart));
+            bytes.AddRange(DefaultJSONEncoding.GetBytes(expectedBody));
+
+            Assert.AreEqual(expectedStart + expectedBody, responseMessage);
+            CollectionAssert.AreEqual(bytes, responseBytes);
+        }
+
+        [TestMethod]
+        public void Create_XmlContentWithoutExplicitCharset_EncodedContent()
+        {
+            var response = HttpServerResponse.Create(HttpResponseStatus.OK);
+            var expectedBody = "dat€";
+            response.Content = expectedBody;
+            response.ContentType = MediaType.XML;
+
+            // iso-8859-1 is the default charset for xml, which will not recognize the € char
+            //response.ContentCharset = "utf-8";
+
+            var responseBytes = response.ToBytes();
+            var questionMarkByte = DefaultHttpEncoding.GetBytes("?");
+
+            Assert.AreEqual(questionMarkByte.Single(), responseBytes.Last());
         }
 
         [TestMethod]

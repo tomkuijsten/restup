@@ -22,9 +22,6 @@ namespace Devkoes.HttpMessage
         public Version HttpVersion { get; set; }
         public HttpResponseStatus ResponseStatus { get; set; }
 
-        // Properties for the content
-        public int ContentLength => Content?.Length ?? 0;
-
         internal HttpServerResponse(Version httpVersion, HttpResponseStatus status)
         {
             _headers = new List<IHttpHeader>();
@@ -50,13 +47,18 @@ namespace Devkoes.HttpMessage
             {
                 _content = value;
 
-                var contentLengthHeader = Headers.OfType<ContentLengthHeader>().SingleOrDefault();
-                _headers.Remove(contentLengthHeader);
+                ResetContentLength();
+            }
+        }
 
-                if (!string.IsNullOrEmpty(value))
-                {
-                    _headers.Add(new ContentLengthHeader(value.Length));
-                }
+        public int ContentLength
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Content))
+                    return 0;
+
+                return ContentTypeEncoding.GetBytes(Content).Length;
             }
         }
 
@@ -128,6 +130,9 @@ namespace Devkoes.HttpMessage
                 {
                     contentTypeHeader.Charset = value;
                 }
+
+                // We should reset the content length, because the charset determines the encoding length
+                ResetContentLength();
             }
         }
 
@@ -153,6 +158,9 @@ namespace Devkoes.HttpMessage
                 {
                     contentTypeHeader.ContentType = value.Value;
                 }
+
+                // We should reset the length, because the default encoder is based on contenttype
+                ResetContentLength();
             }
         }
 
@@ -231,6 +239,17 @@ namespace Devkoes.HttpMessage
         public void RemoveHeader(IHttpHeader header)
         {
             _headers.Remove(header);
+        }
+
+        private void ResetContentLength()
+        {
+            var contentLengthHeader = Headers.OfType<ContentLengthHeader>().SingleOrDefault();
+            _headers.Remove(contentLengthHeader);
+
+            if (!string.IsNullOrEmpty(Content))
+            {
+                _headers.Add(new ContentLengthHeader(ContentLength));
+            }
         }
     }
 }
