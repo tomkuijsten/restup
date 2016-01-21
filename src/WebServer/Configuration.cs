@@ -13,9 +13,11 @@ namespace Devkoes.Restup.WebServer
 
         public Configuration()
         {
-            ResponseContentType = MediaType.JSON;
+            AcceptType = MediaType.JSON;
+            ContentType = MediaType.JSON;
         }
 
-        public MediaType ResponseContentType { get; set; }
+        public MediaType AcceptType { get; set; }
+        public MediaType ContentType { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using Devkoes.HttpMessage.Plumbing;
 using Devkoes.HttpMessage.ServerRequestParsers;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 
@@ -19,21 +19,20 @@ namespace Devkoes.HttpMessage
         {
             _headers = new List<IHttpRequestHeader>();
 
-            Method = HttpMethod.Unsupported;
-            RequestContentEncoding = Constants.DefaultHttpEncoding;
-            AcceptCharsets = new[] { Constants.DefaultHttpCharset };
-            ContentType = MediaType.JSON;
-            AcceptMediaTypes = new[] { MediaType.JSON };
+            ContentTypeCharset = Constants.DefaultHttpCharset;
+
+            AcceptCharsets = Enumerable.Empty<string>();
+            AcceptMediaTypes = Enumerable.Empty<MediaType>();
         }
 
         public IEnumerable<IHttpRequestHeader> Headers => _headers;
-        public HttpMethod Method { get; set; }
+        public HttpMethod? Method { get; set; }
         public Uri Uri { get; set; }
         public string HttpVersion { get; set; }
-        public Encoding RequestContentEncoding { get; set; }
+        public string ContentTypeCharset { get; set; }
         public IEnumerable<string> AcceptCharsets { get; set; }
         public int ContentLength { get; set; }
-        public MediaType ContentType { get; set; }
+        public MediaType? ContentType { get; set; }
         public IEnumerable<MediaType> AcceptMediaTypes { get; set; }
         public string Content { get; set; }
         public bool IsComplete { get; set; }

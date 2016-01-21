@@ -32,7 +32,7 @@ namespace Devkoes.Restup.WebServer.Http
             }
 
             var suppTypeHiQuality = req.AcceptMediaTypes.FirstOrDefault(r => r != MediaType.Unsupported);
-            suppTypeHiQuality = suppTypeHiQuality == MediaType.Unsupported ? Configuration.Default.ResponseContentType : suppTypeHiQuality;
+            suppTypeHiQuality = suppTypeHiQuality == MediaType.Unsupported ? Configuration.Default.AcceptType : suppTypeHiQuality;
 
             if (suppTypeHiQuality == MediaType.JSON)
             {

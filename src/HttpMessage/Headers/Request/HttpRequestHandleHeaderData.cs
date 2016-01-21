@@ -35,7 +35,7 @@ namespace Devkoes.HttpMessage.Headers.Request
 
         public void Visit(ContentTypeHeader uh, HttpServerRequest arg)
         {
-            arg.RequestContentEncoding = uh.ContentEncoding;
+            arg.ContentTypeCharset = uh.ContentCharset;
             arg.ContentType = uh.ContentType;
         }
 

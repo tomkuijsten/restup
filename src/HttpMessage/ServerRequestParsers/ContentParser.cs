@@ -1,4 +1,6 @@
-﻿namespace Devkoes.HttpMessage.ServerRequestParsers
+﻿using Devkoes.HttpMessage.Plumbing;
+
+namespace Devkoes.HttpMessage.ServerRequestParsers
 {
     /// <summary>
     /// One bad request scenario we don't cover:
@@ -26,7 +28,7 @@
             }
             else
             {
-                _content += resultThisFar.RequestContentEncoding.GetString(stream);
+                _content += EncodingCache.Default.GetEncoding(resultThisFar.ContentTypeCharset).GetString(stream);
                 if (_content.Length == resultThisFar.ContentLength)
                 {
                     resultThisFar.Content = _content;

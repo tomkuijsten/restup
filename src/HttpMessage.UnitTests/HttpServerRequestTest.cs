@@ -51,7 +51,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             Assert.AreEqual(true, request.IsComplete);
             Assert.IsTrue(request.Headers.Any(h => h.Name == "UnknownHeader" && h.Value == "some:value"));
             Assert.AreEqual(4, request.ContentLength);
-            Assert.AreEqual(Encoding.UTF8, request.RequestContentEncoding);
+            Assert.AreEqual("utf-8", request.ContentTypeCharset);
             Assert.AreEqual(MediaType.XML, request.ContentType);
             Assert.AreEqual("utf-7", request.AcceptCharsets.First());
             Assert.AreEqual(MediaType.JSON, request.AcceptMediaTypes.First());

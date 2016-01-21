@@ -1,7 +1,6 @@
 ﻿using Devkoes.HttpMessage.Models.Contracts;
 using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.HttpMessage.Plumbing;
-using System.Text;
 
 namespace Devkoes.HttpMessage.Headers.Request
 {
@@ -11,13 +10,13 @@ namespace Devkoes.HttpMessage.Headers.Request
         internal static string CHARSET_QUANTIFIER_NAME = "charset";
 
         public MediaType ContentType { get; internal set; }
-        public Encoding ContentEncoding { get; internal set; }
+        public string ContentCharset { get; internal set; }
 
         public ContentTypeHeader(string value, QuantifiedHeaderValue quantifiedHeaderValue) : base(NAME, value, quantifiedHeaderValue)
         {
             ContentType = HttpCodesTranslator.Default.GetMediaType(QuantifiedHeaderValue.HeaderValue);
             string charset = QuantifiedHeaderValue.FindQuantifierValue(CHARSET_QUANTIFIER_NAME);
-            ContentEncoding = charset != null ? Encoding.GetEncoding(charset) : Constants.DefaultHttpEncoding;
+            ContentCharset = charset ?? HttpDefaults.Default.GetDefaultCharset(ContentType);
         }
 
         public override void Visit<T>(IHttpRequestHeaderVisitor<T> v, T arg)
