@@ -12,7 +12,7 @@ namespace Devkoes.HttpMessage.Headers.Request
 
         internal RequestHeaderFactory()
         {
-            _headerCollection = new Dictionary<string, Func<string, IHttpRequestHeader>>()
+            _headerCollection = new Dictionary<string, Func<string, IHttpRequestHeader>>(StringComparer.OrdinalIgnoreCase)
             {
                 [ContentLengthHeader.NAME] = CreateContentLength,
                 [AcceptHeader.NAME] = CreateResponseContentType,
