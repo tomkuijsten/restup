@@ -84,7 +84,7 @@ namespace Devkoes.Restup.WebServer.Rest
             rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
             rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", bodyLength);
 
-            var suppTypeHiQuality = restReq.ResponseContentTypes.FirstOrDefault(r => r != MediaType.Unsupported);
+            var suppTypeHiQuality = restReq.AcceptMediaTypes.FirstOrDefault(r => r != MediaType.Unsupported);
             suppTypeHiQuality = suppTypeHiQuality == MediaType.Unsupported ? Configuration.Default.ResponseContentType : suppTypeHiQuality;
 
             rawHttpResponseBuilder.AppendFormat("Content-Type: {0}\r\n", HttpCodesTranslator.Default.GetMediaType(suppTypeHiQuality));

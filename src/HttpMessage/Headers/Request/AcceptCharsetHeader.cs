@@ -1,7 +1,6 @@
 ﻿using Devkoes.HttpMessage.Models.Contracts;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Devkoes.HttpMessage.Headers.Request
 {
@@ -9,12 +8,12 @@ namespace Devkoes.HttpMessage.Headers.Request
     {
         internal static string NAME = "Accept-Charset";
 
-        public Encoding ResponseContentEncoding { get; set; }
+        public IEnumerable<string> ResponseContentEncoding { get; set; }
 
         public AcceptCharsetHeader(string value, IEnumerable<QuantifiedHeaderValue> quantifiedHeaderValues)
             : base(NAME, value, quantifiedHeaderValues)
         {
-            ResponseContentEncoding = Encoding.GetEncoding(QuantifiedHeaderValues.First().HeaderValue);
+            ResponseContentEncoding = QuantifiedHeaderValues.Select(q => q.HeaderValue).ToArray();
         }
 
         public override void Visit<T>(IHttpRequestHeaderVisitor<T> v, T arg)

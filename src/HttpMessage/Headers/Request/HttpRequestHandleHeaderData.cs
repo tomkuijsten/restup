@@ -25,18 +25,18 @@ namespace Devkoes.HttpMessage.Headers.Request
 
         public void Visit(AcceptHeader uh, HttpServerRequest arg)
         {
-            arg.ResponseContentTypes = uh.AcceptTypes;
+            arg.AcceptMediaTypes = uh.AcceptTypes;
         }
 
         public void Visit(AcceptCharsetHeader uh, HttpServerRequest arg)
         {
-            arg.ResponseContentEncoding = uh.ResponseContentEncoding;
+            arg.AcceptCharsets = uh.ResponseContentEncoding;
         }
 
         public void Visit(ContentTypeHeader uh, HttpServerRequest arg)
         {
             arg.RequestContentEncoding = uh.ContentEncoding;
-            arg.RequestContentType = uh.ContentType;
+            arg.ContentType = uh.ContentType;
         }
 
         public void Visit(ContentLengthHeader uh, HttpServerRequest arg)

@@ -37,7 +37,7 @@ namespace Devkoes.Restup.WebServer.Rest
             object bodyObj = null;
             try
             {
-                bodyObj = _bodySerializer.FromBody(request.Content, request.RequestContentType, info.BodyParameterType);
+                bodyObj = _bodySerializer.FromBody(request.Content, request.ContentType, info.BodyParameterType);
             }
             catch (JsonReaderException)
             {

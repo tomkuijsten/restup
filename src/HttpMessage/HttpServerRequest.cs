@@ -21,9 +21,9 @@ namespace Devkoes.HttpMessage
 
             Method = HttpMethod.Unsupported;
             RequestContentEncoding = Constants.DefaultHttpEncoding;
-            ResponseContentEncoding = Constants.DefaultHttpEncoding;
-            RequestContentType = MediaType.JSON;
-            ResponseContentTypes = new[] { MediaType.JSON };
+            AcceptCharsets = new[] { Constants.DefaultHttpCharset };
+            ContentType = MediaType.JSON;
+            AcceptMediaTypes = new[] { MediaType.JSON };
         }
 
         public IEnumerable<IHttpRequestHeader> Headers => _headers;
@@ -31,10 +31,10 @@ namespace Devkoes.HttpMessage
         public Uri Uri { get; set; }
         public string HttpVersion { get; set; }
         public Encoding RequestContentEncoding { get; set; }
-        public Encoding ResponseContentEncoding { get; set; }
+        public IEnumerable<string> AcceptCharsets { get; set; }
         public int ContentLength { get; set; }
-        public MediaType RequestContentType { get; set; }
-        public IEnumerable<MediaType> ResponseContentTypes { get; set; }
+        public MediaType ContentType { get; set; }
+        public IEnumerable<MediaType> AcceptMediaTypes { get; set; }
         public string Content { get; set; }
         public bool IsComplete { get; set; }
 

@@ -52,9 +52,9 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             Assert.IsTrue(request.Headers.Any(h => h.Name == "UnknownHeader" && h.Value == "some:value"));
             Assert.AreEqual(4, request.ContentLength);
             Assert.AreEqual(Encoding.UTF8, request.RequestContentEncoding);
-            Assert.AreEqual(MediaType.XML, request.RequestContentType);
-            Assert.AreEqual(Encoding.UTF7, request.ResponseContentEncoding);
-            Assert.AreEqual(MediaType.JSON, request.ResponseContentTypes.First());
+            Assert.AreEqual(MediaType.XML, request.ContentType);
+            Assert.AreEqual("utf-7", request.AcceptCharsets.First());
+            Assert.AreEqual(MediaType.JSON, request.AcceptMediaTypes.First());
         }
 
         [TestMethod]
@@ -67,7 +67,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             var request = HttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.AreEqual(MediaType.XML, request.ResponseContentTypes.First());
+            Assert.AreEqual(MediaType.XML, request.AcceptMediaTypes.First());
         }
 
         [TestMethod]
@@ -80,7 +80,33 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             var request = HttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.AreEqual(MediaType.JSON, request.ResponseContentTypes.First());
+            Assert.AreEqual(MediaType.JSON, request.AcceptMediaTypes.First());
+        }
+
+        [TestMethod]
+        public void ParseRequestStream_AcceptCharsetWithQuality_QualityHighestAsAccept()
+        {
+            var streamedRequest = "GET /api/data HTTP/1.1\r\nAccept-Charset: iso-8859-1;q=0.5,utf-8;q=0.7\r\n\r\n";
+
+            var byteStreamParts = Encoding.UTF8.GetBytes(streamedRequest);
+
+            var request = HttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
+
+            Assert.AreEqual(true, request.IsComplete);
+            Assert.AreEqual("utf-8", request.AcceptCharsets.First());
+        }
+
+        [TestMethod]
+        public void ParseRequestStream_AcceptCharsetWithQuality_DefaultQuality1AsAccept()
+        {
+            var streamedRequest = "GET /api/data HTTP/1.1\r\nAccept-Charset: iso-8859-1,utf-8;q=0.7\r\n\r\n";
+
+            var byteStreamParts = Encoding.UTF8.GetBytes(streamedRequest);
+
+            var request = HttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
+
+            Assert.AreEqual(true, request.IsComplete);
+            Assert.AreEqual("iso-8859-1", request.AcceptCharsets.First());
         }
 
         [TestMethod]

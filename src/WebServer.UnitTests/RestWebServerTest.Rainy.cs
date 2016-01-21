@@ -17,7 +17,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { MediaType.JSON },
             Content = "{\"Name\": \"Tom\", \"Age\": 33}",
             IsComplete = true
         };
@@ -39,7 +39,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.DELETE,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { MediaType.JSON },
             Content = "{\"Name\": \"Tom\", \"Age\": 33}",
             IsComplete = true
         };
@@ -61,7 +61,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.PUT,
             Uri = new Uri("/users/notanumber", UriKind.RelativeOrAbsolute),
-            ResponseContentTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { MediaType.JSON },
             Content = "{\"Name\": \"Tom\", \"Age\": 33}",
             IsComplete = true
         };
@@ -102,7 +102,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { MediaType.JSON },
             Content = "{\"Name\": \"Tom\", \"Age\": notanumber}",
             IsComplete = true
         };
@@ -124,7 +124,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { MediaType.JSON },
             Content = "<User><Name>Tom</Name><Age>thirtythree</Age></User>",
             IsComplete = true
         };
@@ -145,7 +145,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { MediaType.JSON },
             Content = "{\"Name\": \"Tom\"; \"Age\": 33}",
             IsComplete = true
         };
@@ -166,7 +166,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { MediaType.JSON },
             Content = "<User><Name>Tom</><Age>thirtythree</Age></User>",
             IsComplete = true
         };
