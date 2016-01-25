@@ -19,6 +19,7 @@ namespace Devkoes.Restup.WebServer.Rest
         private Regex _matchUriRegex;
         private IDictionary<string, Type> _parametersForUri;
         private string _urlPrefix;
+        private string _urlToMatch;
 
         internal MethodInfo MethodInfo { get; private set; }
         internal HttpMethod Verb { get; private set; }
@@ -129,7 +130,9 @@ namespace Devkoes.Restup.WebServer.Rest
                 return "/" + uriFormat;
             }
 
-            return $"{_urlPrefix}/{uriFormat}";
+            _urlToMatch = $"{_urlPrefix}/{uriFormat}";
+
+            return _urlToMatch;
         }
 
         private void InitializeVerb()
@@ -168,6 +171,11 @@ namespace Devkoes.Restup.WebServer.Rest
             {
                 yield return Convert.ChangeType(m.Groups[parameter.Key].Value, parameter.Value);
             }
+        }
+
+        public override string ToString()
+        {
+            return $"Hosting {Verb.ToString()} method on {_urlToMatch}";
         }
     }
 }

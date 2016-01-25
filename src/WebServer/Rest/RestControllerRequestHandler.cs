@@ -1,11 +1,11 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
+﻿using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.InstanceCreators;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -51,6 +51,8 @@ namespace Devkoes.Restup.WebServer.Rest
 
             foreach (var methodDef in allPublicAsyncRestMethods)
                 restMethods.Add(new RestControllerMethodInfo(methodDef, _urlPrefix, constructorArgs, true));
+
+            Debug.WriteLine(string.Join(Environment.NewLine, restMethods));
 
             return restMethods;
         }
