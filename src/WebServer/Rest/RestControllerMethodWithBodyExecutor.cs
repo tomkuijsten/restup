@@ -37,10 +37,7 @@ namespace Devkoes.Restup.WebServer.Rest
             object bodyObj = null;
             try
             {
-                var contentType = request.ContentType ?? Configuration.Default.ContentType;
-                var charset = request.ContentTypeCharset ?? HttpDefaults.Default.GetDefaultCharset(contentType);
-                string content = _bodySerializer.GetContentString(charset, request.Content);
-                bodyObj = _bodySerializer.FromContent(content, contentType, info.BodyParameterType);
+                bodyObj = GetContentObject(info, request);
             }
             catch (JsonReaderException)
             {
@@ -64,6 +61,16 @@ namespace Devkoes.Restup.WebServer.Rest
             return info.MethodInfo.Invoke(
                     instantiator.Create(info.MethodInfo.DeclaringType, info.ControllerConstructorArgs()),
                     parameters);
+        }
+
+        private object GetContentObject(RestControllerMethodInfo info, HttpServerRequest request)
+        {
+            var contentType = request.ContentType ?? Configuration.Default.ContentType;
+            var charset = request.ContentTypeCharset ?? HttpDefaults.Default.GetDefaultCharset(contentType);
+            string content = _bodySerializer.GetContentString(charset, request.Content);
+            object bodyObj = _bodySerializer.FromContent(content, contentType, info.BodyParameterType);
+
+            return bodyObj;
         }
     }
 }
