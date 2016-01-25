@@ -1,6 +1,5 @@
 ﻿using Devkoes.HttpMessage;
 using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Models.Schemas;
 using Devkoes.Restup.WebServer.Rest;
 using System;
 using System.Threading.Tasks;
@@ -11,6 +10,7 @@ namespace Devkoes.Restup.WebServer
     {
         private RestControllerRequestHandler _requestHandler;
         private RestToHttpResponseConverter _restToHttpConverter;
+        private RestServerRequestFactory _restServerRequestFactory;
 
         public RestWebServer(int port, string urlPrefix) : base(port)
         {
@@ -41,7 +41,7 @@ namespace Devkoes.Restup.WebServer
 
         internal override async Task<HttpServerResponse> HandleRequest(HttpServerRequest request)
         {
-            var restServerRequest = new RestServerRequest(request);
+            var restServerRequest = _restServerRequestFactory.Create(request);
 
             var restResponse = await _requestHandler.HandleRequest(restServerRequest);
 

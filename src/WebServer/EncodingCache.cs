@@ -8,7 +8,6 @@ namespace Devkoes.Restup.WebServer
     {
         internal static EncodingCache Default;
 
-
         static EncodingCache()
         {
             Default = new EncodingCache();

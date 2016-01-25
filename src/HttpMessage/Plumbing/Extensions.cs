@@ -28,24 +28,6 @@ namespace Devkoes.HttpMessage.Plumbing
             return value;
         }
 
-        internal static string RemovePreAndPostSlash(this string uri)
-        {
-            if (uri == null)
-                return uri;
-
-            return uri.TrimStart('/').TrimEnd('/');
-        }
-
-        /// <summary>
-        /// The prefix will always be formatted as "/prefix"
-        /// </summary>
-        internal static string FormatRelativeUri(this string uri)
-        {
-            var cleanUrl = uri.RemovePreAndPostSlash();
-
-            return string.IsNullOrWhiteSpace(cleanUrl) ? string.Empty : "/" + cleanUrl;
-        }
-
         /// <summary>
         /// Read the next sequence of bytes untill a space or a CRLF is reached
         /// </summary>
