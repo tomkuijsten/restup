@@ -13,6 +13,11 @@ namespace Devkoes.Restup.DemoControllers
             public int Counter { get; set; }
         }
 
+        public struct MoreComplexData
+        {
+            public string Text { get; set; }
+        }
+
         [UriFormat("/fromcontent")]
         public PutResponse UpdateSomething([FromContent] FromContentData data)
         {
@@ -25,6 +30,13 @@ namespace Devkoes.Restup.DemoControllers
         {
             Debug.WriteLine($"Received counter value of {data.Counter}");
             return new PostResponse(PostResponse.ResponseStatus.Created, $"fromcontent/{data.Counter}");
+        }
+
+        [UriFormat("/stringencoding")]
+        public GetResponse EncodingDecodingTest([FromContent] MoreComplexData data)
+        {
+            Debug.WriteLine($"Received complex data with text {data.Text}");
+            return new GetResponse(GetResponse.ResponseStatus.OK, new MoreComplexData() { Text = data.Text });
         }
     }
 }

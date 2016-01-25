@@ -9,7 +9,7 @@ namespace Devkoes.Restup.DemoControllers
     {
         private long _totalNrOfCallsHandled;
 
-        private class WebserverInfo
+        public class WebserverInfo
         {
             public long TotalCallsHandled { get; set; }
         }
