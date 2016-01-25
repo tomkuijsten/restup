@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{FAA64EFD-F4FF-47DB-96DA-964454A9B82A}</ProjectGuid>
+    <ProjectGuid>{CCC377F6-F5D1-4A07-A0E8-58894E8196FA}</ProjectGuid>
     <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Devkoes.Restup.HeadlessDemo</RootNamespace>

@@ -15,10 +15,9 @@ namespace Devkoes.Restup.HeadlessDemo
         /// from closing prematurely by using BackgroundTaskDeferral as
         /// described in http://aka.ms/backgroundtaskdeferral
         /// </remarks>
-        /// <param name="taskInstance"></param>
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            var backgroundTaskDeferral = taskInstance.GetDeferral();
+            var taskDeferral = taskInstance.GetDeferral();
 
             _webserver = new RestWebServer(8800, "api");
 
@@ -32,8 +31,7 @@ namespace Devkoes.Restup.HeadlessDemo
 
             await _webserver.StartServerAsync();
 
-            // Just never complete to keep this program running
-            //backgroundTaskDeferral.Complete();
+            // Dont release deferral, otherwise app will stop
         }
     }
 }
