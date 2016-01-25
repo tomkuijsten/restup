@@ -37,10 +37,13 @@ namespace Devkoes.Restup.WebServer.Rest
             object contentObj = null;
             try
             {
-                contentObj = _contentSerializer.FromContent(
-                    request.ContentEncoding.GetString(request.HttpServerRequest.Content),
-                    request.ContentMediaType,
-                    info.ContentParameterType);
+                if (request.HttpServerRequest.Content != null)
+                {
+                    contentObj = _contentSerializer.FromContent(
+                        request.ContentEncoding.GetString(request.HttpServerRequest.Content),
+                        request.ContentMediaType,
+                        info.ContentParameterType);
+                }
             }
             catch (JsonReaderException)
             {
