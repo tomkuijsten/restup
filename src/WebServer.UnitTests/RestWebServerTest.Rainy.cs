@@ -186,63 +186,6 @@ namespace Devkoes.Restup.WebServer.UnitTests
             StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
-
-        //[TestMethod]
-        //public void Create_ContentWithUnknownCharacter_UnkownCharAsQuestionMark()
-        //{
-        //    var response = HttpServerResponse.Create(HttpResponseStatus.OK);
-        //    response.Content = Encoding.UTF8.GetBytes("€");
-        //    response.ContentType = MediaType.JSON;
-        //    response.ContentCharset = "iso-8859-1"; // doesn't support €
-
-        //    var responseBytes = response.ToBytes();
-
-        //    var questionMarkByte = DefaultHttpEncoding.GetBytes("?");
-
-        //    Assert.AreEqual(questionMarkByte.Single(), responseBytes.Last());
-        //}
-
-        //[TestMethod]
-        //public void Create_ContentWithUTF8Content_EncodedContent()
-        //{
-        //    var response = HttpServerResponse.Create(HttpResponseStatus.OK);
-        //    var expectedContent = Encoding.UTF8.GetBytes("dat€");
-        //    var expectedContentLength = 6; // the € sign takes 3 bytes in UTF-8
-        //    response.Content = expectedContent;
-        //    response.ContentType = MediaType.JSON;
-
-        //    // UTF-8 is the default charset for json, should work without explicitly setting
-        //    //response.ContentCharset = "utf-8";
-
-        //    var responseMessage = response.ToString();
-        //    var responseBytes = response.ToBytes();
-
-        //    var expectedStart = $"HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nContent-Length: {expectedContentLength}\r\n\r\n";
-
-        //    List<byte> bytes = new List<byte>();
-        //    bytes.AddRange(DefaultHttpEncoding.GetBytes(expectedStart));
-        //    bytes.AddRange(expectedContent);
-
-        //    Assert.AreEqual(expectedStart + expectedContent, responseMessage);
-        //    CollectionAssert.AreEqual(bytes, responseBytes);
-        //}
-
-        //[TestMethod]
-        //public void Create_XmlContentWithoutExplicitCharset_EncodedContent()
-        //{
-        //    var response = HttpServerResponse.Create(HttpResponseStatus.OK);
-        //    var expectedContent = Encoding.UTF8.GetBytes("dat€");
-        //    response.Content = expectedContent;
-        //    response.ContentType = MediaType.XML;
-
-        //    // iso-8859-1 is the default charset for xml, which will not recognize the € char
-        //    //response.ContentCharset = "utf-8";
-
-        //    var responseBytes = response.ToBytes();
-        //    var questionMarkByte = DefaultHttpEncoding.GetBytes("?");
-
-        //    Assert.AreEqual(questionMarkByte.Single(), responseBytes.Last());
-        //}
     }
 
     [RestController(InstanceCreationType.Singleton)]
