@@ -57,9 +57,12 @@ namespace Devkoes.Restup.WebServer.Rest
         {
             var defaultResponse = GetDefaultResponse(response);
 
-            defaultResponse.ContentType = restReq.AcceptMediaType;
-            defaultResponse.ContentCharset = restReq.AcceptCharset;
-            defaultResponse.Content = _contentSerializer.ToAcceptContent(response.ContentData, restReq);
+            if (response.ContentData != null)
+            {
+                defaultResponse.ContentType = restReq.AcceptMediaType;
+                defaultResponse.ContentCharset = restReq.AcceptCharset;
+                defaultResponse.Content = _contentSerializer.ToAcceptContent(response.ContentData, restReq);
+            }
 
             return defaultResponse;
         }
