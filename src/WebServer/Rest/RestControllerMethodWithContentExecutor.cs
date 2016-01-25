@@ -1,7 +1,7 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Http;
+﻿using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.InstanceCreators;
 using Devkoes.Restup.WebServer.Models.Contracts;
+using Devkoes.Restup.WebServer.Models.Schemas;
 using Newtonsoft.Json;
 using System;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace Devkoes.Restup.WebServer.Rest
             _responseFactory = new RestResponseFactory();
         }
 
-        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, HttpServerRequest request)
+        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, RestServerRequest request)
         {
             var methodInvokeResult = ExecuteAnonymousMethod(info, request);
 
@@ -30,14 +30,17 @@ namespace Devkoes.Restup.WebServer.Rest
             return await (dynamic)methodInvokeResult;
         }
 
-        private object ExecuteAnonymousMethod(RestControllerMethodInfo info, HttpServerRequest request)
+        private object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request)
         {
             var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
 
             object contentObj = null;
             try
             {
-                contentObj = GetContentObject(info, request);
+                contentObj = _contentSerializer.FromContent(
+                    request.ContentEncoding.GetString(request.HttpServerRequest.Content),
+                    request.ContentMediaType,
+                    info.ContentParameterType);
             }
             catch (JsonReaderException)
             {
@@ -51,7 +54,7 @@ namespace Devkoes.Restup.WebServer.Rest
             object[] parameters = null;
             try
             {
-                parameters = info.GetParametersFromUri(request.Uri).Concat(new[] { contentObj }).ToArray();
+                parameters = info.GetParametersFromUri(request.HttpServerRequest.Uri).Concat(new[] { contentObj }).ToArray();
             }
             catch (FormatException)
             {
@@ -61,16 +64,6 @@ namespace Devkoes.Restup.WebServer.Rest
             return info.MethodInfo.Invoke(
                     instantiator.Create(info.MethodInfo.DeclaringType, info.ControllerConstructorArgs()),
                     parameters);
-        }
-
-        private object GetContentObject(RestControllerMethodInfo info, HttpServerRequest request)
-        {
-            var contentType = request.ContentType ?? Configuration.Default.ContentType;
-            var charset = request.ContentTypeCharset ?? HttpDefaults.Default.GetDefaultCharset(contentType);
-            string content = _contentSerializer.GetContentString(charset, request.Content);
-            object contentObj = _contentSerializer.FromContent(content, contentType, info.ContentParameterType);
-
-            return contentObj;
         }
     }
 }

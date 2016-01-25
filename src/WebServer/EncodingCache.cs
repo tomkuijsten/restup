@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Devkoes.Restup.WebServer.Http
+namespace Devkoes.Restup.WebServer
 {
     internal class EncodingCache
     {
@@ -25,6 +25,11 @@ namespace Devkoes.Restup.WebServer.Http
 
         internal Encoding GetEncoding(string charset)
         {
+            if (string.IsNullOrEmpty(charset))
+            {
+                return null;
+            }
+
             if (!_cache.ContainsKey(charset))
             {
                 lock (_cacheLock)

@@ -1,21 +1,14 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
+﻿using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Models.Schemas;
 using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace Devkoes.Restup.WebServer.Http
 {
     internal class ContentSerializer
     {
-        internal string GetContentString(string charset, byte[] rawContent)
-        {
-            return Encoding.GetEncoding(charset).GetString(rawContent);
-        }
-
         internal object FromContent(string content, MediaType contentMediaType, Type contentType)
         {
             if (contentMediaType == MediaType.JSON)
@@ -30,26 +23,23 @@ namespace Devkoes.Restup.WebServer.Http
             throw new NotImplementedException();
         }
 
-        internal string ToContent(object contentObject, HttpServerRequest req)
+        internal byte[] ToAcceptContent(object contentObject, RestServerRequest req)
         {
             if (contentObject == null)
             {
-                return null;
+                return new byte[0];
             }
 
-            var suppTypeHiQuality = req.AcceptMediaTypes.FirstOrDefault(r => r != MediaType.Unsupported);
-            suppTypeHiQuality = suppTypeHiQuality == MediaType.Unsupported ? Configuration.Default.AcceptType : suppTypeHiQuality;
-
-            if (suppTypeHiQuality == MediaType.JSON)
+            if (req.AcceptMediaType == MediaType.JSON)
             {
-                return JsonConvert.SerializeObject(contentObject);
+                return req.AcceptEncoding.GetBytes(JsonConvert.SerializeObject(contentObject));
             }
-            else if (suppTypeHiQuality == MediaType.XML)
+            else if (req.AcceptMediaType == MediaType.XML)
             {
-                return XmlSerializeObject(contentObject);
+                return req.AcceptEncoding.GetBytes(XmlSerializeObject(contentObject));
             }
 
-            return null;
+            return new byte[0];
         }
 
         private static string XmlSerializeObject(object toSerialize)

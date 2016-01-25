@@ -1,5 +1,4 @@
 ﻿using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Models.Contracts;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -21,7 +20,7 @@ namespace Devkoes.Restup.WebServer.Http
             _listener.ConnectionReceived += ProcessRequestAsync;
         }
 
-        internal abstract Task<IHttpResponse> HandleRequest(HttpServerRequest request);
+        internal abstract Task<HttpServerResponse> HandleRequest(HttpServerRequest request);
 
         public async Task StartServerAsync()
         {
@@ -67,11 +66,11 @@ namespace Devkoes.Restup.WebServer.Http
             });
         }
 
-        private async Task WriteResponseAsync(IHttpResponse response, StreamSocket socket)
+        private async Task WriteResponseAsync(HttpServerResponse response, StreamSocket socket)
         {
             using (IOutputStream output = socket.OutputStream)
             {
-                await output.WriteAsync(response.RawResponse.AsBuffer());
+                await output.WriteAsync(response.ToBytes().AsBuffer());
                 await output.FlushAsync();
             }
         }

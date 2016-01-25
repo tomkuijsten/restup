@@ -1,6 +1,6 @@
 ﻿using Devkoes.HttpMessage;
 using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Models.Contracts;
+using Devkoes.Restup.WebServer.Models.Schemas;
 using Devkoes.Restup.WebServer.Rest;
 using System;
 using System.Threading.Tasks;
@@ -10,14 +10,14 @@ namespace Devkoes.Restup.WebServer
     public class RestWebServer : HttpServer
     {
         private RestControllerRequestHandler _requestHandler;
-        private RestResponseToHttpResponseConverter _restToHttpConverter;
+        private RestToHttpResponseConverter _restToHttpConverter;
 
         public RestWebServer(int port, string urlPrefix) : base(port)
         {
             var fixedFormatUrlPrefix = urlPrefix.FormatRelativeUri();
 
             _requestHandler = new RestControllerRequestHandler(fixedFormatUrlPrefix);
-            _restToHttpConverter = new RestResponseToHttpResponseConverter();
+            _restToHttpConverter = new RestToHttpResponseConverter();
         }
 
         public RestWebServer(int port) : this(port, null) { }
@@ -39,11 +39,13 @@ namespace Devkoes.Restup.WebServer
             _requestHandler.RegisterController<T>(args);
         }
 
-        internal override async Task<IHttpResponse> HandleRequest(HttpServerRequest request)
+        internal override async Task<HttpServerResponse> HandleRequest(HttpServerRequest request)
         {
-            var restResponse = await _requestHandler.HandleRequest(request);
+            var restServerRequest = new RestServerRequest(request);
 
-            var httpResponse = restResponse.Visit(_restToHttpConverter, request);
+            var restResponse = await _requestHandler.HandleRequest(restServerRequest);
+
+            var httpResponse = restResponse.Visit(_restToHttpConverter, restServerRequest);
 
             return httpResponse;
         }

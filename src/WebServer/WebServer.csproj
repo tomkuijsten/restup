@@ -116,6 +116,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="EncodingCache.cs" />
     <Compile Include="Http\HttpDefaults.cs" />
+    <Compile Include="Models\Schemas\RestServerRequest.cs" />
     <Compile Include="Rest\RestControllerMethodWithContentExecutor.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Rest\RestControllerMethodExecutorFactory.cs" />
@@ -128,13 +129,11 @@
     <Compile Include="InstanceCreators\InstanceCreatorCache.cs" />
     <Compile Include="InstanceCreators\PerCallInstanceCreator.cs" />
     <Compile Include="InstanceCreators\SingletonInstanceCreator.cs" />
-    <Compile Include="Models\Contracts\IHttpResponse.cs" />
     <Compile Include="Models\Contracts\IInstanceCreator.cs" />
     <Compile Include="Models\Contracts\IRestResponse.cs" />
     <Compile Include="Models\Contracts\IRestResponseVisitor.cs" />
     <Compile Include="Models\Schemas\DeleteResponse.cs" />
     <Compile Include="Models\Schemas\GetResponse.cs" />
-    <Compile Include="Models\Schemas\HttpResponse.cs" />
     <Compile Include="Models\Schemas\InstanceCreationType.cs" />
     <Compile Include="Models\Schemas\BadRequestResponse.cs" />
     <Compile Include="Models\Contracts\IRestMethodExecutor.cs" />
@@ -146,7 +145,7 @@
     <Compile Include="Rest\RestControllerRequestHandler.cs" />
     <Compile Include="Rest\RestControllerMethodExecutor.cs" />
     <Compile Include="RestWebServer.cs" />
-    <Compile Include="Rest\RestResponseToHttpResponseConverter.cs" />
+    <Compile Include="Rest\RestToHttpResponseConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />

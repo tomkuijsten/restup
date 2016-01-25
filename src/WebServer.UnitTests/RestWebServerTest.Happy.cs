@@ -27,10 +27,12 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<HappyPathTestController>();
             var response = await m.HandleRequest(_basicGETAcceptXML);
 
-            StringAssert.Contains(response.Response, "200 OK");
-            StringAssert.Contains(response.Response, "Content-Type: application/xml");
-            StringAssert.Contains(response.Response, "<Name>Tom</Name>");
-            StringAssert.Contains(response.Response, "<Age>30</Age>");
+            string content = response.ToString();
+
+            StringAssert.Contains(content, "200 OK");
+            StringAssert.Contains(content, "Content-Type: application/xml");
+            StringAssert.Contains(content, "<Name>Tom</Name>");
+            StringAssert.Contains(content, "<Age>30</Age>");
         }
         #endregion
 
@@ -49,7 +51,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<HappyPathTestController>();
             var response = await m.HandleRequest(_basicGETAbsoluteUri);
 
-            StringAssert.Contains(response.Response, "200 OK");
+            StringAssert.Contains(response.ToString(), "200 OK");
         }
         #endregion
 
@@ -68,7 +70,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<HappyPathTestController>();
             var response = await m.HandleRequest(_basicGETUriPrefix);
 
-            StringAssert.Contains(response.Response, "200 OK");
+            StringAssert.Contains(response.ToString(), "200 OK");
         }
         #endregion
 
@@ -88,10 +90,12 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<HappyPathTestController>();
             var response = await m.HandleRequest(_basicGETAcceptJSON);
 
-            StringAssert.Contains(response.Response, "200 OK");
-            StringAssert.Contains(response.Response, "Content-Type: application/json");
-            StringAssert.Contains(response.Response, "\"Name\":\"Tom\"");
-            StringAssert.Contains(response.Response, "\"Age\":30");
+            string content = response.ToString();
+
+            StringAssert.Contains(content, "200 OK");
+            StringAssert.Contains(content, "Content-Type: application/json");
+            StringAssert.Contains(content, "\"Name\":\"Tom\"");
+            StringAssert.Contains(content, "\"Age\":30");
         }
         #endregion
 
@@ -112,8 +116,10 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<HappyPathTestController>();
             var response = await m.HandleRequest(_basicPOST);
 
-            StringAssert.Contains(response.Response, "201 Created");
-            StringAssert.Contains(response.Response, "Location: /users/2");
+            string content = response.ToString();
+
+            StringAssert.Contains(content, "201 Created");
+            StringAssert.Contains(content, "Location: /users/2");
         }
         #endregion
 
@@ -134,7 +140,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<HappyPathTestController>();
             var response = await m.HandleRequest(_basicPUT);
 
-            StringAssert.Contains(response.Response, "200 OK");
+            StringAssert.Contains(response.ToString(), "200 OK");
         }
         #endregion
 
@@ -153,7 +159,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<HappyPathTestController>();
             var response = await m.HandleRequest(_basicDEL);
 
-            StringAssert.Contains(response.Response, "200 OK");
+            StringAssert.Contains(response.ToString(), "200 OK");
         }
         #endregion
 
@@ -173,8 +179,10 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<HappyPathTestSingletonControllerWithArgs>("Johathan", 15);
             var response = await m.HandleRequest(_basicControllerWithArgs);
 
-            StringAssert.Contains(response.Response, "\"Name\":\"Johathan\"");
-            StringAssert.Contains(response.Response, "\"Age\":15");
+            string content = response.ToString();
+
+            StringAssert.Contains(content, "\"Name\":\"Johathan\"");
+            StringAssert.Contains(content, "\"Age\":15");
         }
 
         [TestMethod]
@@ -185,13 +193,17 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<HappyPathTestPerCallControllerWithArgs>(() => new object[] { "Johathan", age++ });
             var response = await m.HandleRequest(_basicControllerWithArgs);
 
-            StringAssert.Contains(response.Response, "\"Name\":\"Johathan\"");
-            StringAssert.Contains(response.Response, "\"Age\":15");
+            string content = response.ToString();
+
+            StringAssert.Contains(content, "\"Name\":\"Johathan\"");
+            StringAssert.Contains(content, "\"Age\":15");
 
             response = await m.HandleRequest(_basicControllerWithArgs);
 
-            StringAssert.Contains(response.Response, "\"Name\":\"Johathan\"");
-            StringAssert.Contains(response.Response, "\"Age\":16");
+            content = response.ToString();
+
+            StringAssert.Contains(content, "\"Name\":\"Johathan\"");
+            StringAssert.Contains(content, "\"Age\":16");
         }
         #endregion
     }

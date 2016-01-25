@@ -28,6 +28,11 @@ namespace Devkoes.HttpMessage
             ResponseStatus = status;
         }
 
+        public static HttpServerResponse Create(int statusCode)
+        {
+            return Create((HttpResponseStatus)statusCode);
+        }
+
         public static HttpServerResponse Create(HttpResponseStatus status)
         {
             return Create(new Version(1, 1), status);

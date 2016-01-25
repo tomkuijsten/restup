@@ -30,8 +30,10 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_conflictingPOST);
 
-            StringAssert.Contains(response.Response, "409 Conflict");
-            StringAssert.DoesNotMatch(response.Response, new Regex("Location:"));
+            string content = response.ToString();
+
+            StringAssert.Contains(content, "409 Conflict");
+            StringAssert.DoesNotMatch(content, new Regex("Location:"));
         }
         #endregion
 
@@ -52,8 +54,10 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_methodNotAllowedPUT);
 
-            StringAssert.Contains(response.Response, "405 Method Not Allowed");
-            StringAssert.Contains(response.Response, "Allow: POST");
+            string content = response.ToString();
+
+            StringAssert.Contains(content, "405 Method Not Allowed");
+            StringAssert.Contains(content, "Allow: POST");
         }
         #endregion
 
@@ -74,7 +78,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_parameterParseExceptionPUT);
 
-            StringAssert.Contains(response.Response, "400 Bad Request");
+            StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
 
@@ -116,7 +120,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_contentParameterParseExPOST);
 
-            StringAssert.Contains(response.Response, "400 Bad Request");
+            StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
 
@@ -137,7 +141,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_xmlContentParameterParseExPOST);
 
-            StringAssert.Contains(response.Response, "400 Bad Request");
+            StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
 
@@ -158,7 +162,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_invalidJsonFormatPOST);
 
-            StringAssert.Contains(response.Response, "400 Bad Request");
+            StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
 
@@ -179,7 +183,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_invalidXmlFormatExPOST);
 
-            StringAssert.Contains(response.Response, "400 Bad Request");
+            StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
 
