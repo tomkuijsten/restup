@@ -16,6 +16,7 @@ namespace Devkoes.Restup.WebServer
         {
             var fixedFormatUrlPrefix = urlPrefix.FormatRelativeUri();
 
+            _restServerRequestFactory = new RestServerRequestFactory();
             _requestHandler = new RestControllerRequestHandler(fixedFormatUrlPrefix);
             _restToHttpConverter = new RestToHttpResponseConverter();
         }

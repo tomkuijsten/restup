@@ -10,6 +10,8 @@ namespace Devkoes.Restup.HeadlessDemo
     {
         private RestWebServer _webserver;
 
+        private BackgroundTaskDeferral _deferral;
+
         /// <remarks>
         /// If you start any asynchronous methods here, prevent the task
         /// from closing prematurely by using BackgroundTaskDeferral as
@@ -17,7 +19,10 @@ namespace Devkoes.Restup.HeadlessDemo
         /// </remarks>
         public async void Run(IBackgroundTaskInstance taskInstance)
         {
-            var taskDeferral = taskInstance.GetDeferral();
+            // This deferral should have an instance reference, if it doesn't... the GC will
+            // come some day, see that this method is not active anymore and the local variable
+            // should be removed. Which results in the application being closed.
+            _deferral = taskInstance.GetDeferral();
 
             _webserver = new RestWebServer(8800, "api");
 
