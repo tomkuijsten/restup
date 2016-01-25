@@ -1,5 +1,4 @@
 ﻿using Devkoes.HttpMessage.Models.Schemas;
-using System;
 using System.Collections.Generic;
 
 namespace Devkoes.HttpMessage.Plumbing
@@ -74,19 +73,6 @@ namespace Devkoes.HttpMessage.Plumbing
         }
 
         private HttpCodesTranslator() { }
-
-        public HttpMethod GetVerb(string verb)
-        {
-            foreach (var name in Enum.GetNames(typeof(HttpMethod)))
-            {
-                if (string.Equals(verb, name, StringComparison.OrdinalIgnoreCase))
-                {
-                    return (HttpMethod)Enum.Parse(typeof(HttpMethod), name);
-                }
-            }
-
-            return HttpMethod.Unsupported;
-        }
 
         public string GetHttpStatusCodeText(int statusCode)
         {

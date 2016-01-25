@@ -11,7 +11,7 @@ namespace Devkoes.HttpMessage.Plumbing
     /// if the stream is empty.
     /// </summary>
     /// <remarks>
-    /// This wrapper doesn't care about disposing the stream, it's not 
+    /// This wrapper doesn't handle disposing the stream, because it's not 
     /// the owner of the stream.
     /// </remarks>
     internal class HttpRequestStream

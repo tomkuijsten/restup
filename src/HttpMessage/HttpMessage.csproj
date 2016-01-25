@@ -120,7 +120,6 @@
     <Compile Include="Models\Contracts\IHttpResponsePartParser.cs" />
     <Compile Include="Models\Schemas\HttpResponseStatus.cs" />
     <Compile Include="Plumbing\Constants.cs" />
-    <Compile Include="Plumbing\EncodingCache.cs" />
     <Compile Include="Plumbing\Extensions.cs" />
     <Compile Include="Headers\Request\AcceptCharsetHeader.cs" />
     <Compile Include="Headers\Request\AcceptHeader.cs" />

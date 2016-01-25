@@ -5,9 +5,8 @@ namespace Devkoes.HttpMessage.Plumbing
 {
     internal class Constants
     {
-        internal static readonly Encoding DefaultHttpEncoding;
-        internal static readonly string DefaultHttpCharset;
-        internal static readonly string DefaultJSONCharset;
+        internal static Encoding DefaultHttpEncoding { get; }
+
         internal static readonly byte SpaceByte;
         internal static readonly byte CRByte;
         internal static readonly byte LFByte;
@@ -15,8 +14,7 @@ namespace Devkoes.HttpMessage.Plumbing
 
         static Constants()
         {
-            DefaultHttpCharset = "iso-8859-1";
-            DefaultHttpEncoding = Encoding.GetEncoding(DefaultHttpCharset);
+            DefaultHttpEncoding = Encoding.GetEncoding("iso-8859-1");
 
             SpaceByte = Constants.DefaultHttpEncoding.GetBytes(new[] { ' ' }).Single();
             CRByte = Constants.DefaultHttpEncoding.GetBytes(new[] { '\r' }).Single();

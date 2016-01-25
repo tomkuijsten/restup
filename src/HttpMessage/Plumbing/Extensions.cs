@@ -1,5 +1,4 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
+﻿using Devkoes.HttpMessage.Models.Schemas;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -92,29 +91,6 @@ namespace Devkoes.HttpMessage.Plumbing
             Array.Copy(array2, 0, array1, array1OriginalLength, array2.Length);
 
             return array1;
-        }
-
-        internal static string ToRelativeString(this Uri uri)
-        {
-            string relativeUri = null;
-            if (uri.IsAbsoluteUri)
-            {
-                relativeUri = uri.PathAndQuery;
-            }
-            else
-            {
-                relativeUri = uri.ToString();
-            }
-
-            return relativeUri.FormatRelativeUri();
-        }
-
-        internal static void GuardNull(this object argument, string argumentName)
-        {
-            if (argument == null)
-            {
-                throw new ArgumentNullException(argumentName);
-            }
         }
     }
 }

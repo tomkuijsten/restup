@@ -19,8 +19,6 @@ namespace Devkoes.HttpMessage
         {
             _headers = new List<IHttpRequestHeader>();
 
-            ContentTypeCharset = Constants.DefaultHttpCharset;
-
             AcceptCharsets = Enumerable.Empty<string>();
             AcceptMediaTypes = Enumerable.Empty<MediaType>();
         }

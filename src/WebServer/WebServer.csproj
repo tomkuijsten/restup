@@ -114,6 +114,7 @@
     <Compile Include="Attributes\RestVerbAttribute.cs" />
     <Compile Include="Attributes\UriFormatAttribute.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="EncodingCache.cs" />
     <Compile Include="Http\HttpDefaults.cs" />
     <Compile Include="Rest\RestControllerMethodWithBodyExecutor.cs" />
     <Compile Include="Extensions.cs" />

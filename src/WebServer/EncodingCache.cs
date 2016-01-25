@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Devkoes.HttpMessage.Plumbing
+namespace Devkoes.Restup.WebServer.Http
 {
     internal class EncodingCache
     {
