@@ -118,7 +118,6 @@
     <Compile Include="HttpServerResponse.cs" />
     <Compile Include="Models\Contracts\IHttpRequestHeader.cs" />
     <Compile Include="Models\Contracts\IHttpResponsePartParser.cs" />
-    <Compile Include="Plumbing\HttpDefaults.cs" />
     <Compile Include="Models\Schemas\HttpResponseStatus.cs" />
     <Compile Include="Plumbing\Constants.cs" />
     <Compile Include="Plumbing\EncodingCache.cs" />

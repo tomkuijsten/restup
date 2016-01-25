@@ -34,7 +34,7 @@ namespace Devkoes.HttpMessage
         public int ContentLength { get; set; }
         public MediaType? ContentType { get; set; }
         public IEnumerable<MediaType> AcceptMediaTypes { get; set; }
-        public string Content { get; set; }
+        public byte[] Content { get; set; }
         public bool IsComplete { get; set; }
 
         internal void AddHeader(IHttpRequestHeader header)

@@ -23,7 +23,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
 
             Assert.AreEqual(HttpMethod.GET, request.Method);
             Assert.AreEqual(new Uri("/api/data", UriKind.Relative), request.Uri);
-            Assert.AreEqual("data", request.Content);
+            CollectionAssert.AreEqual(Encoding.UTF8.GetBytes("data"), request.Content);
             Assert.AreEqual(4, request.ContentLength);
             Assert.AreEqual("HTTP/1.1", request.HttpVersion);
             Assert.AreEqual(true, request.IsComplete);
@@ -175,15 +175,15 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
                 ""
             };
 
-            var content = "data";
+            var content = Encoding.UTF8.GetBytes("data");
             var byteStreamParts = new List<byte[]>();
             byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(content));
+            byteStreamParts.Add(content);
 
             var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.AreEqual(content, request.Content);
+            CollectionAssert.AreEqual(content, request.Content);
         }
 
         [TestMethod]
@@ -195,16 +195,16 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
                 ""
             };
 
-            var content = "data";
+            var content = Encoding.UTF8.GetBytes("data");
             var byteStreamParts = new List<byte[]>();
             byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
             byteStreamParts.Add(new byte[] { });
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(content));
+            byteStreamParts.Add(content);
 
             var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.AreEqual(content, request.Content);
+            CollectionAssert.AreEqual(content, request.Content);
         }
 
         [TestMethod]
@@ -212,17 +212,17 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
         {
             var httpHeadersPart1 = "GET /api/data HTTP/1.1\r\n";
             var httpHeadersPart2 = "Content-Length: 4\r\n\r\n";
-            var content = "data";
+            var content = Encoding.UTF8.GetBytes("data");
             var byteStreamParts = new List<byte[]>();
             byteStreamParts.Add(Encoding.UTF8.GetBytes(httpHeadersPart1));
             byteStreamParts.Add(Encoding.UTF8.GetBytes(httpHeadersPart2));
             byteStreamParts.Add(new byte[] { });
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(content));
+            byteStreamParts.Add(content);
 
             var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.AreEqual(content, request.Content);
+            CollectionAssert.AreEqual(content, request.Content);
         }
 
         [TestMethod]
@@ -240,7 +240,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.AreEqual("data", request.Content);
+            CollectionAssert.AreEqual(Encoding.UTF8.GetBytes("data"), request.Content);
         }
 
         [TestMethod]

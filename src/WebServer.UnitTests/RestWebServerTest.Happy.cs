@@ -3,6 +3,7 @@ using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer.UnitTests
@@ -100,7 +101,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
             AcceptMediaTypes = new[] { MediaType.JSON },
-            Content = "{\"Name\": \"Tom\", \"Age\": 33}",
+            Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\", \"Age\": 33}"),
             IsComplete = true
         };
 
@@ -122,7 +123,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             Method = HttpMethod.PUT,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
             AcceptMediaTypes = new[] { MediaType.JSON },
-            Content = "{Name: Tom, Age: 21}",
+            Content = Encoding.UTF8.GetBytes("{Name: Tom, Age: 21}"),
             IsComplete = true
         };
 

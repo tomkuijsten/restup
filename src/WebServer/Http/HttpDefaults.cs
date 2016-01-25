@@ -1,6 +1,6 @@
 ﻿using Devkoes.HttpMessage.Models.Schemas;
 
-namespace Devkoes.HttpMessage.Plumbing
+namespace Devkoes.Restup.WebServer.Http
 {
     internal class HttpDefaults
     {

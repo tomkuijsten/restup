@@ -1,6 +1,5 @@
 ﻿using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.HttpMessage.Plumbing;
-using System.Text;
 
 namespace Devkoes.HttpMessage.Headers.Response
 {
@@ -11,8 +10,6 @@ namespace Devkoes.HttpMessage.Headers.Response
 
         private MediaType _contentType;
         private string _charset;
-
-        public Encoding Encoding { get; private set; }
 
         public ContentTypeHeader(MediaType contentType, string charset) :
             base(NAME, ContentTypeHeader.FormatContentType(contentType, charset))
@@ -30,7 +27,6 @@ namespace Devkoes.HttpMessage.Headers.Response
             {
                 _contentType = value;
                 Value = FormatContentType(_contentType, _charset);
-                UpdateEncoder();
             }
         }
 
@@ -41,23 +37,6 @@ namespace Devkoes.HttpMessage.Headers.Response
             {
                 _charset = value;
                 Value = FormatContentType(_contentType, _charset);
-                UpdateEncoder();
-            }
-        }
-
-        private void UpdateEncoder()
-        {
-            if (!string.IsNullOrWhiteSpace(_charset))
-            {
-                Encoding = Encoding.GetEncoding(Charset);
-            }
-            else if (ContentType == MediaType.JSON)
-            {
-                Encoding = Constants.DefaultJSONEncoding;
-            }
-            else
-            {
-                Encoding = Constants.DefaultHttpEncoding;
             }
         }
 

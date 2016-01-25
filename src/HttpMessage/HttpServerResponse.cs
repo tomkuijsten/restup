@@ -2,19 +2,17 @@
 using Devkoes.HttpMessage.Headers.Response;
 using Devkoes.HttpMessage.Models.Contracts;
 using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.HttpMessage.Plumbing;
 using Devkoes.HttpMessage.ServerResponseParsers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Devkoes.HttpMessage
 {
     public class HttpServerResponse
     {
         private List<IHttpHeader> _headers;
-        private string _content;
+        private byte[] _content;
 
         internal IEnumerable<IHttpHeader> Headers => _headers;
 
@@ -40,7 +38,7 @@ namespace Devkoes.HttpMessage
             return new HttpServerResponse(httpVersion, status);
         }
 
-        public string Content
+        public byte[] Content
         {
             get { return _content; }
             set
@@ -55,10 +53,10 @@ namespace Devkoes.HttpMessage
         {
             get
             {
-                if (string.IsNullOrEmpty(Content))
+                if (Content == null)
                     return 0;
 
-                return ContentTypeEncoding.GetBytes(Content).Length;
+                return Content.Length;
             }
         }
 
@@ -100,14 +98,6 @@ namespace Devkoes.HttpMessage
                 {
                     _headers.Remove(closeConnHeader);
                 }
-            }
-        }
-
-        internal Encoding ContentTypeEncoding
-        {
-            get
-            {
-                return Headers.OfType<ContentTypeHeader>().SingleOrDefault()?.Encoding ?? Constants.DefaultHttpEncoding;
             }
         }
 
@@ -207,10 +197,24 @@ namespace Devkoes.HttpMessage
             return HttpServerResponseParser.Default.ConvertToBytes(this);
         }
 
+#if DEBUG
+        /// <summary>
+        /// This is just used for debugging purposes and will not be available when running in release mode. Problem with
+        /// this method is that it uses Encoding to decode the content which is a fairly complicated process. For debugging
+        /// purposes I'm using UTF-8 which is working most of the time. In real life you want to use the charset provided, or
+        /// some default encoding as explained in the HTTP specs.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return HttpServerResponseParser.Default.ConvertToString(this);
         }
+#else
+        public override string ToString()
+        {
+            return $"{HttpVersion} {ResponseStatus} including {Headers.Count()} headers.";
+        }
+#endif
 
         public IHttpHeader AddHeader(string name, string value)
         {
@@ -246,7 +250,7 @@ namespace Devkoes.HttpMessage
             var contentLengthHeader = Headers.OfType<ContentLengthHeader>().SingleOrDefault();
             _headers.Remove(contentLengthHeader);
 
-            if (!string.IsNullOrEmpty(Content))
+            if (Content != null && Content.Any())
             {
                 _headers.Add(new ContentLengthHeader(ContentLength));
             }

@@ -15,8 +15,7 @@ namespace Devkoes.HttpMessage.Headers.Request
         public ContentTypeHeader(string value, QuantifiedHeaderValue quantifiedHeaderValue) : base(NAME, value, quantifiedHeaderValue)
         {
             ContentType = HttpCodesTranslator.Default.GetMediaType(QuantifiedHeaderValue.HeaderValue);
-            string charset = QuantifiedHeaderValue.FindQuantifierValue(CHARSET_QUANTIFIER_NAME);
-            ContentCharset = charset ?? HttpDefaults.Default.GetDefaultCharset(ContentType);
+            ContentCharset = QuantifiedHeaderValue.FindQuantifierValue(CHARSET_QUANTIFIER_NAME);
         }
 
         public override void Visit<T>(IHttpRequestHeaderVisitor<T> v, T arg)

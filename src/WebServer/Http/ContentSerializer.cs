@@ -4,27 +4,33 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace Devkoes.Restup.WebServer.Http
 {
-    internal class BodySerializer
+    internal class ContentSerializer
     {
-        internal object FromBody(string body, MediaType bodyMediaType, Type bodyType)
+        internal string GetContentString(string charset, byte[] rawContent)
         {
-            if (bodyMediaType == MediaType.JSON)
+            return Encoding.GetEncoding(charset).GetString(rawContent);
+        }
+
+        internal object FromContent(string content, MediaType contentMediaType, Type contentType)
+        {
+            if (contentMediaType == MediaType.JSON)
             {
-                return JsonConvert.DeserializeObject(body, bodyType);
+                return JsonConvert.DeserializeObject(content, contentType);
             }
-            else if (bodyMediaType == MediaType.XML)
+            else if (contentMediaType == MediaType.XML)
             {
-                return XmlDeserializeObject(body, bodyType);
+                return XmlDeserializeObject(content, contentType);
             }
 
             throw new NotImplementedException();
         }
 
-        internal string ToBody(object bodyObject, HttpServerRequest req)
+        internal string ToContent(object bodyObject, HttpServerRequest req)
         {
             if (bodyObject == null)
             {

@@ -11,12 +11,12 @@ namespace Devkoes.Restup.WebServer.Rest
 {
     internal class RestControllerMethodWithBodyExecutor : IRestMethodExecutor
     {
-        private BodySerializer _bodySerializer;
+        private ContentSerializer _bodySerializer;
         private RestResponseFactory _responseFactory;
 
         public RestControllerMethodWithBodyExecutor()
         {
-            _bodySerializer = new BodySerializer();
+            _bodySerializer = new ContentSerializer();
             _responseFactory = new RestResponseFactory();
         }
 
@@ -38,7 +38,9 @@ namespace Devkoes.Restup.WebServer.Rest
             try
             {
                 var contentType = request.ContentType ?? Configuration.Default.ContentType;
-                bodyObj = _bodySerializer.FromBody(request.Content, contentType, info.BodyParameterType);
+                var charset = request.ContentTypeCharset ?? HttpDefaults.Default.GetDefaultCharset(contentType);
+                string content = _bodySerializer.GetContentString(charset, request.Content);
+                bodyObj = _bodySerializer.FromContent(content, contentType, info.BodyParameterType);
             }
             catch (JsonReaderException)
             {

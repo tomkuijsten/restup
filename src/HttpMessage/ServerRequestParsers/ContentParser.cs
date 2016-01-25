@@ -1,4 +1,4 @@
-﻿using Devkoes.HttpMessage.Plumbing;
+﻿using System.Collections.Generic;
 
 namespace Devkoes.HttpMessage.ServerRequestParsers
 {
@@ -12,13 +12,15 @@ namespace Devkoes.HttpMessage.ServerRequestParsers
     /// </summary>
     internal class ContentParser : HttpRequestPartParser
     {
-        private string _content;
+        private List<byte> _content;
 
         public ContentParser()
         {
             // Incoming data is read entirely, always, so there will never be any unparsed data
             UnparsedData = new byte[0];
+            _content = new List<byte>();
         }
+
         public override void HandleRequestPart(byte[] stream, HttpServerRequest resultThisFar)
         {
             if (resultThisFar.ContentLength == 0)
@@ -28,10 +30,10 @@ namespace Devkoes.HttpMessage.ServerRequestParsers
             }
             else
             {
-                _content += EncodingCache.Default.GetEncoding(resultThisFar.ContentTypeCharset).GetString(stream);
-                if (_content.Length == resultThisFar.ContentLength)
+                _content.AddRange(stream);
+                if (_content.Count == resultThisFar.ContentLength)
                 {
-                    resultThisFar.Content = _content;
+                    resultThisFar.Content = _content.ToArray();
                     IsFinished = true;
                     IsSucceeded = true;
                 }

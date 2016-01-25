@@ -13,11 +13,11 @@ namespace Devkoes.Restup.WebServer.Rest
 {
     internal class RestResponseToHttpResponseConverter : IRestResponseVisitor<HttpServerRequest, IHttpResponse>
     {
-        private BodySerializer _bodySerializer;
+        private ContentSerializer _bodySerializer;
 
         public RestResponseToHttpResponseConverter()
         {
-            _bodySerializer = new BodySerializer();
+            _bodySerializer = new ContentSerializer();
         }
 
         public IHttpResponse Visit(DeleteResponse response, HttpServerRequest restReq)
@@ -76,7 +76,7 @@ namespace Devkoes.Restup.WebServer.Rest
         {
             extraHeaders = extraHeaders ?? new Dictionary<string, string>();
 
-            string bodyString = _bodySerializer.ToBody(response.BodyData, restReq);
+            string bodyString = _bodySerializer.ToContent(response.BodyData, restReq);
 
             int bodyLength = bodyString == null ? 0 : Encoding.UTF8.GetBytes(bodyString).Length;
 
