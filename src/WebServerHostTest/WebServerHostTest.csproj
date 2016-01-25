@@ -99,12 +99,12 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestControllers\AsyncControllerSample.cs" />
-    <Compile Include="RestControllers\FromBodyControllerSample.cs" />
+    <Compile Include="RestControllers\FromContentControllerSample.cs" />
     <Compile Include="RestControllers\SimpleParameterControllerSample.cs" />
     <Compile Include="RestControllers\PerCallControllerSample.cs" />
     <Compile Include="RestControllers\SingletonControllerSample.cs" />
     <Compile Include="RestControllers\ThrowExceptionControllerSample.cs" />
-    <Compile Include="RestControllers\WithResponseBodyControllerSample.cs" />
+    <Compile Include="RestControllers\WithResponseContentControllerSample.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

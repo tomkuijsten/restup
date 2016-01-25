@@ -22,8 +22,8 @@ namespace Devkoes.Restup.WebServer.Rest
 
         internal MethodInfo MethodInfo { get; private set; }
         internal HttpMethod Verb { get; private set; }
-        internal bool HasBodyParameter { get; private set; }
-        internal Type BodyParameterType { get; private set; }
+        internal bool HasContentParameter { get; private set; }
+        internal Type ContentParameterType { get; private set; }
         internal bool IsAsync { get; }
         internal Func<object[]> ControllerConstructorArgs { get; }
 
@@ -45,7 +45,7 @@ namespace Devkoes.Restup.WebServer.Rest
             InitializeVerb();
             InitializeFindParameterRegex();
             InitializeMatchUriRegex();
-            InitializeBodyParameter();
+            InitializeContentParameter();
         }
 
         internal RestControllerMethodInfo(MethodInfo methodInfo, string urlPrefix, Func<object[]> constructorArgs) : this(methodInfo, urlPrefix, constructorArgs, false) { }
@@ -71,22 +71,22 @@ namespace Devkoes.Restup.WebServer.Rest
             };
         }
 
-        private void InitializeBodyParameter()
+        private void InitializeContentParameter()
         {
-            var fromBodyParameter = MethodInfo.GetParameters().FirstOrDefault((p) => p.GetCustomAttribute<FromBodyAttribute>() != null);
-            if (fromBodyParameter == null)
+            var fromContentParameter = MethodInfo.GetParameters().FirstOrDefault((p) => p.GetCustomAttribute<FromContentAttribute>() != null);
+            if (fromContentParameter == null)
             {
                 return;
             }
 
-            HasBodyParameter = true;
-            BodyParameterType = fromBodyParameter.ParameterType;
+            HasContentParameter = true;
+            ContentParameterType = fromContentParameter.ParameterType;
         }
 
         private void InitializeParameters()
         {
             var fromUriParams = from p in MethodInfo.GetParameters()
-                                where p.GetCustomAttribute<FromBodyAttribute>() == null
+                                where p.GetCustomAttribute<FromContentAttribute>() == null
                                 select p;
 
             if (!ParametersHaveValidType(fromUriParams.Select(p => p.ParameterType)))

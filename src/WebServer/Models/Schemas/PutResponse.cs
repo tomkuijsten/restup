@@ -5,7 +5,7 @@ using Devkoes.Restup.WebServer.Models.Contracts;
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
     [RestVerb(HttpMethod.PUT)]
-    public struct PutResponse : IBodyRestResponse
+    public struct PutResponse : IContentRestResponse
     {
         public enum ResponseStatus : int
         {
@@ -16,12 +16,12 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
 
         public ResponseStatus Status { get; }
 
-        public object BodyData { get; set; }
+        public object ContentData { get; set; }
 
-        public PutResponse(ResponseStatus status, object body)
+        public PutResponse(ResponseStatus status, object content)
         {
             Status = status;
-            BodyData = body;
+            ContentData = content;
         }
 
         public PutResponse(ResponseStatus status) : this(status, null)

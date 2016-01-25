@@ -13,11 +13,11 @@ namespace Devkoes.Restup.WebServer.Rest
 {
     internal class RestResponseToHttpResponseConverter : IRestResponseVisitor<HttpServerRequest, IHttpResponse>
     {
-        private ContentSerializer _bodySerializer;
+        private ContentSerializer _contentSerializer;
 
         public RestResponseToHttpResponseConverter()
         {
-            _bodySerializer = new ContentSerializer();
+            _contentSerializer = new ContentSerializer();
         }
 
         public IHttpResponse Visit(DeleteResponse response, HttpServerRequest restReq)
@@ -35,17 +35,17 @@ namespace Devkoes.Restup.WebServer.Rest
             if (response.Status == PostResponse.ResponseStatus.Created)
                 extraHeaders.Add("Location", response.LocationRedirect);
 
-            return VisitWithBody(response, restReq, extraHeaders);
+            return VisitWithContent(response, restReq, extraHeaders);
         }
 
         public IHttpResponse Visit(GetResponse response, HttpServerRequest restReq)
         {
-            return VisitWithBody(response, restReq);
+            return VisitWithContent(response, restReq);
         }
 
         public IHttpResponse Visit(PutResponse response, HttpServerRequest restReq)
         {
-            return VisitWithBody(response, restReq);
+            return VisitWithContent(response, restReq);
         }
 
         public IHttpResponse Visit(StatusOnlyResponse statusOnlyResponse, HttpServerRequest restReq)
@@ -67,22 +67,22 @@ namespace Devkoes.Restup.WebServer.Rest
             return CreateHttpResponse(rawHttpResponseBuilder);
         }
 
-        private IHttpResponse VisitWithBody(IBodyRestResponse response, HttpServerRequest restReq)
+        private IHttpResponse VisitWithContent(IContentRestResponse response, HttpServerRequest restReq)
         {
-            return VisitWithBody(response, restReq, null);
+            return VisitWithContent(response, restReq, null);
         }
 
-        private IHttpResponse VisitWithBody(IBodyRestResponse response, HttpServerRequest restReq, IDictionary<string, string> extraHeaders)
+        private IHttpResponse VisitWithContent(IContentRestResponse response, HttpServerRequest restReq, IDictionary<string, string> extraHeaders)
         {
             extraHeaders = extraHeaders ?? new Dictionary<string, string>();
 
-            string bodyString = _bodySerializer.ToContent(response.BodyData, restReq);
+            string contentString = _contentSerializer.ToContent(response.ContentData, restReq);
 
-            int bodyLength = bodyString == null ? 0 : Encoding.UTF8.GetBytes(bodyString).Length;
+            int contentLength = contentString == null ? 0 : Encoding.UTF8.GetBytes(contentString).Length;
 
             var rawHttpResponseBuilder = new StringBuilder();
             rawHttpResponseBuilder.Append(CreateDefaultResponse(response));
-            rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", bodyLength);
+            rawHttpResponseBuilder.AppendFormat("Content-Length: {0}\r\n", contentLength);
 
             var suppTypeHiQuality = restReq.AcceptMediaTypes.FirstOrDefault(r => r != MediaType.Unsupported);
             suppTypeHiQuality = suppTypeHiQuality == MediaType.Unsupported ? Configuration.Default.AcceptType : suppTypeHiQuality;
@@ -95,7 +95,7 @@ namespace Devkoes.Restup.WebServer.Rest
             }
 
             rawHttpResponseBuilder.Append(CreateHttpNewLine());
-            rawHttpResponseBuilder.Append(bodyString);
+            rawHttpResponseBuilder.Append(contentString);
 
             return CreateHttpResponse(rawHttpResponseBuilder);
         }

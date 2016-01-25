@@ -268,14 +268,14 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
                 ""
             };
 
-            var body = "data";
+            var content = "data";
             var byteStreamParts = new List<byte[]>();
             byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
             byteStreamParts.Add(new byte[] { });
             byteStreamParts.Add(new byte[] { });
             byteStreamParts.Add(new byte[] { });
             byteStreamParts.Add(new byte[] { });
-            byteStreamParts.Add(Encoding.UTF8.GetBytes(body));
+            byteStreamParts.Add(Encoding.UTF8.GetBytes(content));
 
             var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 

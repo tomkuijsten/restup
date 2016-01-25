@@ -5,7 +5,7 @@ using Devkoes.Restup.WebServer.Models.Contracts;
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
     [RestVerb(HttpMethod.POST)]
-    public struct PostResponse : IBodyRestResponse
+    public struct PostResponse : IContentRestResponse
     {
         public enum ResponseStatus : int
         {
@@ -13,15 +13,15 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             Conflict = 409
         };
 
-        public object BodyData { get; }
+        public object ContentData { get; }
         public ResponseStatus Status { get; }
         public string LocationRedirect { get; }
 
-        public PostResponse(ResponseStatus status, string locationRedirectUri, object body)
+        public PostResponse(ResponseStatus status, string locationRedirectUri, object content)
         {
             Status = status;
             LocationRedirect = locationRedirectUri;
-            BodyData = body;
+            ContentData = content;
         }
 
         public PostResponse(ResponseStatus status, string locationRedirectUri) : this(status, locationRedirectUri, null)

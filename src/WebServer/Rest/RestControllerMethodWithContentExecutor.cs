@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer.Rest
 {
-    internal class RestControllerMethodWithBodyExecutor : IRestMethodExecutor
+    internal class RestControllerMethodWithContentExecutor : IRestMethodExecutor
     {
-        private ContentSerializer _bodySerializer;
+        private ContentSerializer _contentSerializer;
         private RestResponseFactory _responseFactory;
 
-        public RestControllerMethodWithBodyExecutor()
+        public RestControllerMethodWithContentExecutor()
         {
-            _bodySerializer = new ContentSerializer();
+            _contentSerializer = new ContentSerializer();
             _responseFactory = new RestResponseFactory();
         }
 
@@ -34,10 +34,10 @@ namespace Devkoes.Restup.WebServer.Rest
         {
             var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
 
-            object bodyObj = null;
+            object contentObj = null;
             try
             {
-                bodyObj = GetContentObject(info, request);
+                contentObj = GetContentObject(info, request);
             }
             catch (JsonReaderException)
             {
@@ -51,7 +51,7 @@ namespace Devkoes.Restup.WebServer.Rest
             object[] parameters = null;
             try
             {
-                parameters = info.GetParametersFromUri(request.Uri).Concat(new[] { bodyObj }).ToArray();
+                parameters = info.GetParametersFromUri(request.Uri).Concat(new[] { contentObj }).ToArray();
             }
             catch (FormatException)
             {
@@ -67,10 +67,10 @@ namespace Devkoes.Restup.WebServer.Rest
         {
             var contentType = request.ContentType ?? Configuration.Default.ContentType;
             var charset = request.ContentTypeCharset ?? HttpDefaults.Default.GetDefaultCharset(contentType);
-            string content = _bodySerializer.GetContentString(charset, request.Content);
-            object bodyObj = _bodySerializer.FromContent(content, contentType, info.BodyParameterType);
+            string content = _contentSerializer.GetContentString(charset, request.Content);
+            object contentObj = _contentSerializer.FromContent(content, contentType, info.ContentParameterType);
 
-            return bodyObj;
+            return contentObj;
         }
     }
 }

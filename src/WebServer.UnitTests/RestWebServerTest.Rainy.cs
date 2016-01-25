@@ -98,8 +98,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         }
         #endregion
 
-        #region JsonBodyParameterValueParseException
-        private HttpServerRequest _bodyParameterParseExPOST = new HttpServerRequest()
+        #region JsonContentParameterValueParseException
+        private HttpServerRequest _contentParameterParseExPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
@@ -110,18 +110,18 @@ namespace Devkoes.Restup.WebServer.UnitTests
 
 
         [TestMethod]
-        public async Task HandleRequest_InvalidJSONBodyParameter_BadRequest()
+        public async Task HandleRequest_InvalidJSONContentParameter_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = await m.HandleRequest(_bodyParameterParseExPOST);
+            var response = await m.HandleRequest(_contentParameterParseExPOST);
 
             StringAssert.Contains(response.Response, "400 Bad Request");
         }
         #endregion
 
-        #region XmlBodyParameterValueParseException
-        private HttpServerRequest _xmlBodyParameterParseExPOST = new HttpServerRequest()
+        #region XmlContentParameterValueParseException
+        private HttpServerRequest _xmlContentParameterParseExPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
@@ -131,11 +131,11 @@ namespace Devkoes.Restup.WebServer.UnitTests
         };
 
         [TestMethod]
-        public async Task HandleRequest_InvalidXMLBodyParameter_BadRequest()
+        public async Task HandleRequest_InvalidXMLContentParameter_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = await m.HandleRequest(_xmlBodyParameterParseExPOST);
+            var response = await m.HandleRequest(_xmlContentParameterParseExPOST);
 
             StringAssert.Contains(response.Response, "400 Bad Request");
         }
@@ -173,7 +173,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         };
 
         [TestMethod]
-        public async Task HandleRequest_InvalidJsonBodyParameter_BadRequest()
+        public async Task HandleRequest_InvalidJsonContentParameter_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
@@ -202,9 +202,9 @@ namespace Devkoes.Restup.WebServer.UnitTests
         //public void Create_ContentWithUTF8Content_EncodedContent()
         //{
         //    var response = HttpServerResponse.Create(HttpResponseStatus.OK);
-        //    var expectedBody = Encoding.UTF8.GetBytes("dat€");
+        //    var expectedContent = Encoding.UTF8.GetBytes("dat€");
         //    var expectedContentLength = 6; // the € sign takes 3 bytes in UTF-8
-        //    response.Content = expectedBody;
+        //    response.Content = expectedContent;
         //    response.ContentType = MediaType.JSON;
 
         //    // UTF-8 is the default charset for json, should work without explicitly setting
@@ -217,9 +217,9 @@ namespace Devkoes.Restup.WebServer.UnitTests
 
         //    List<byte> bytes = new List<byte>();
         //    bytes.AddRange(DefaultHttpEncoding.GetBytes(expectedStart));
-        //    bytes.AddRange(expectedBody);
+        //    bytes.AddRange(expectedContent);
 
-        //    Assert.AreEqual(expectedStart + expectedBody, responseMessage);
+        //    Assert.AreEqual(expectedStart + expectedContent, responseMessage);
         //    CollectionAssert.AreEqual(bytes, responseBytes);
         //}
 
@@ -227,8 +227,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         //public void Create_XmlContentWithoutExplicitCharset_EncodedContent()
         //{
         //    var response = HttpServerResponse.Create(HttpResponseStatus.OK);
-        //    var expectedBody = Encoding.UTF8.GetBytes("dat€");
-        //    response.Content = expectedBody;
+        //    var expectedContent = Encoding.UTF8.GetBytes("dat€");
+        //    response.Content = expectedContent;
         //    response.ContentType = MediaType.XML;
 
         //    // iso-8859-1 is the default charset for xml, which will not recognize the € char
@@ -251,13 +251,13 @@ namespace Devkoes.Restup.WebServer.UnitTests
         }
 
         [UriFormat("/users")]
-        public PostResponse CreateUser([FromBody] User user)
+        public PostResponse CreateUser([FromContent] User user)
         {
             return new PostResponse(PostResponse.ResponseStatus.Conflict);
         }
 
         [UriFormat("/users/{id}")]
-        public PutResponse UpdateUser(int id, [FromBody] User user)
+        public PutResponse UpdateUser(int id, [FromContent] User user)
         {
             return new PutResponse(PutResponse.ResponseStatus.OK);
         }

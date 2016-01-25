@@ -30,9 +30,9 @@ namespace Devkoes.Restup.WebServer.Http
             throw new NotImplementedException();
         }
 
-        internal string ToContent(object bodyObject, HttpServerRequest req)
+        internal string ToContent(object contentObject, HttpServerRequest req)
         {
-            if (bodyObject == null)
+            if (contentObject == null)
             {
                 return null;
             }
@@ -42,11 +42,11 @@ namespace Devkoes.Restup.WebServer.Http
 
             if (suppTypeHiQuality == MediaType.JSON)
             {
-                return JsonConvert.SerializeObject(bodyObject);
+                return JsonConvert.SerializeObject(contentObject);
             }
             else if (suppTypeHiQuality == MediaType.XML)
             {
-                return XmlSerializeObject(bodyObject);
+                return XmlSerializeObject(contentObject);
             }
 
             return null;
@@ -63,12 +63,12 @@ namespace Devkoes.Restup.WebServer.Http
             }
         }
 
-        private static object XmlDeserializeObject(string body, Type toType)
+        private static object XmlDeserializeObject(string content, Type toType)
         {
             var serializer = new XmlSerializer(toType);
             object result;
 
-            using (TextReader reader = new StringReader(body))
+            using (TextReader reader = new StringReader(content))
             {
                 result = serializer.Deserialize(reader);
             }

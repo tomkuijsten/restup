@@ -6,25 +6,25 @@ using System.Diagnostics;
 namespace Devkoes.Restup.WebServerHostTest.RestControllers
 {
     [RestController(InstanceCreationType.PerCall)]
-    public class FromBodyControllerSample
+    public class FromContentControllerSample
     {
-        public struct FromBodyData
+        public struct FromContentData
         {
             public int Counter { get; set; }
         }
 
-        [UriFormat("/frombody")]
-        public PutResponse UpdateSomething([FromBody] FromBodyData data)
+        [UriFormat("/fromcontent")]
+        public PutResponse UpdateSomething([FromContent] FromContentData data)
         {
             Debug.WriteLine($"Received counter value of {data.Counter}");
             return new PutResponse(PutResponse.ResponseStatus.OK);
         }
 
-        [UriFormat("/frombody")]
-        public PostResponse CreateSomething([FromBody] FromBodyData data)
+        [UriFormat("/fromcontent")]
+        public PostResponse CreateSomething([FromContent] FromContentData data)
         {
             Debug.WriteLine($"Received counter value of {data.Counter}");
-            return new PostResponse(PostResponse.ResponseStatus.Created, $"frombody/{data.Counter}");
+            return new PostResponse(PostResponse.ResponseStatus.Created, $"fromcontent/{data.Counter}");
         }
     }
 }

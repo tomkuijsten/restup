@@ -18,7 +18,7 @@ namespace Devkoes.HttpMessage.ServerRequestParsers
     ///   or forwarding the message downstream
     /// - Multiple message-header fields with the same field-name MAY be present in a message if and only if the entire 
     ///   field-value for that header field is defined as a comma-separated list.
-    /// - If a request contains a message-body and a Content-Length is not given, the server SHOULD respond with 400 (bad
+    /// - If a request contains a message-content and a Content-Length is not given, the server SHOULD respond with 400 (bad
     ///   request) if it cannot determine the length of the message, or with 411 (length required) if it wishes to insist 
     ///   on receiving a valid Content-Length. 
     /// </summary>

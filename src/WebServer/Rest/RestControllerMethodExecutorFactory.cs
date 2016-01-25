@@ -4,24 +4,24 @@ namespace Devkoes.Restup.WebServer.Rest
 {
     internal class RestControllerMethodExecutorFactory
     {
-        private IRestMethodExecutor _withoutBodyExecutor;
-        private IRestMethodExecutor _withBodyExecutor;
+        private IRestMethodExecutor _withoutContentExecutor;
+        private IRestMethodExecutor _withContentExecutor;
 
         public RestControllerMethodExecutorFactory()
         {
-            _withoutBodyExecutor = new RestControllerMethodExecutor();
-            _withBodyExecutor = new RestControllerMethodWithBodyExecutor();
+            _withoutContentExecutor = new RestControllerMethodExecutor();
+            _withContentExecutor = new RestControllerMethodWithContentExecutor();
 
         }
         internal IRestMethodExecutor Create(RestControllerMethodInfo info)
         {
-            if (info.HasBodyParameter)
+            if (info.HasContentParameter)
             {
-                return _withBodyExecutor;
+                return _withContentExecutor;
             }
             else
             {
-                return _withoutBodyExecutor;
+                return _withoutContentExecutor;
             }
         }
     }

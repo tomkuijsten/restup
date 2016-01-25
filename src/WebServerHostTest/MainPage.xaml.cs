@@ -31,12 +31,12 @@ namespace Devkoes.Restup.WebServerHostTest
             _webserver = new RestWebServer(8800, "api");
 
             _webserver.RegisterController<AsyncControllerSample>();
-            _webserver.RegisterController<FromBodyControllerSample>();
+            _webserver.RegisterController<FromContentControllerSample>();
             _webserver.RegisterController<PerCallControllerSample>();
             _webserver.RegisterController<SimpleParameterControllerSample>();
             _webserver.RegisterController<SingletonControllerSample>();
             _webserver.RegisterController<ThrowExceptionControllerSample>();
-            _webserver.RegisterController<WithResponseBodyControllerSample>();
+            _webserver.RegisterController<WithResponseContentControllerSample>();
 
             await _webserver.StartServerAsync();
         }

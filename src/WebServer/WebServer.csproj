@@ -109,21 +109,21 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Attributes\FromBodyAttribute.cs" />
+    <Compile Include="Attributes\FromContentAttribute.cs" />
     <Compile Include="Attributes\RestControllerAttribute.cs" />
     <Compile Include="Attributes\RestVerbAttribute.cs" />
     <Compile Include="Attributes\UriFormatAttribute.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="EncodingCache.cs" />
     <Compile Include="Http\HttpDefaults.cs" />
-    <Compile Include="Rest\RestControllerMethodWithBodyExecutor.cs" />
+    <Compile Include="Rest\RestControllerMethodWithContentExecutor.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Rest\RestControllerMethodExecutorFactory.cs" />
     <Compile Include="Rest\RestResponseFactory.cs" />
     <Compile Include="Http\ContentSerializer.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Http\HttpServer.cs" />
-    <Compile Include="Models\Contracts\IBodyRestResponse.cs" />
+    <Compile Include="Models\Contracts\IContentRestResponse.cs" />
     <Compile Include="Rest\RestControllerMethodInfo.cs" />
     <Compile Include="InstanceCreators\InstanceCreatorCache.cs" />
     <Compile Include="InstanceCreators\PerCallInstanceCreator.cs" />
