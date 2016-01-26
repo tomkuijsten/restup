@@ -150,12 +150,7 @@
     <None Include="project.json" />
     <None Include="WebServer.nuspec" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\HttpMessage\HttpMessage.csproj">
-      <Project>{a76bffc6-b444-40e5-9461-00d586bec9d7}</Project>
-      <Name>HttpMessage</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Import Project="..\HttpMessage\HttpMessage.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

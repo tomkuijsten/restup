@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>13aba022-a7c1-45b7-9e47-2bb74f2a7f9f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>HttpMessage</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\HttpHeaderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\HttpRequestHeaderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AcceptCharsetHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AcceptHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\ContentLengthHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\ContentTypeHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\HttpMultiQuantifiedHeaderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\HttpRequestHandleHeaderData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\HttpSingleQuantifiedHeaderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\QuantifiedHeaderValue.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\RequestHeaderFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\AllowHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\CloseConnectionHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\ContentEncodingHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\ContentLengthHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\DateHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\LocationHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\UntypedRequestHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\UntypedResponseHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpServerRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HttpServerResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpRequestHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpRequestHeaderVisitor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpRequestPartParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpResponsePartParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\ExtractedWord.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\HttpMethod.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\HttpResponseStatus.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\MediaType.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\StreamReadResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Plumbing\Constants.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Plumbing\Extensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Plumbing\HttpCodesTranslator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Plumbing\HttpRequestStream.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\ContentParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\HeadersParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\HttpRequestParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\HttpRequestPartParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\MethodParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\ProtocolVersionParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\ResourceIdentifierParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerResponseParsers\ContentParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerResponseParsers\HeadersParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerResponseParsers\HttpServerResponseParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerResponseParsers\StartLineParser.cs" />
+  </ItemGroup>
+</Project>
