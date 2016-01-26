@@ -21,7 +21,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
         }
 
         [UriFormat("/users")]
-        public PostResponse CreateUser([FromBody] User user)
+        public PostResponse CreateUser([FromContent] User user)
         {
             return new PostResponse(PostResponse.ResponseStatus.Created, $"/users/2");
         }

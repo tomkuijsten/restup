@@ -1,5 +1,5 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +19,12 @@ namespace Devkoes.Restup.WebServer.Rest
         private Regex _matchUriRegex;
         private IDictionary<string, Type> _parametersForUri;
         private string _urlPrefix;
+        private string _urlToMatch;
 
         internal MethodInfo MethodInfo { get; private set; }
         internal HttpMethod Verb { get; private set; }
-        internal bool HasBodyParameter { get; private set; }
-        internal Type BodyParameterType { get; private set; }
+        internal bool HasContentParameter { get; private set; }
+        internal Type ContentParameterType { get; private set; }
         internal bool IsAsync { get; }
         internal Func<object[]> ControllerConstructorArgs { get; }
 
@@ -45,7 +46,7 @@ namespace Devkoes.Restup.WebServer.Rest
             InitializeVerb();
             InitializeFindParameterRegex();
             InitializeMatchUriRegex();
-            InitializeBodyParameter();
+            InitializeContentParameter();
         }
 
         internal RestControllerMethodInfo(MethodInfo methodInfo, string urlPrefix, Func<object[]> constructorArgs) : this(methodInfo, urlPrefix, constructorArgs, false) { }
@@ -71,22 +72,22 @@ namespace Devkoes.Restup.WebServer.Rest
             };
         }
 
-        private void InitializeBodyParameter()
+        private void InitializeContentParameter()
         {
-            var fromBodyParameter = MethodInfo.GetParameters().FirstOrDefault((p) => p.GetCustomAttribute<FromBodyAttribute>() != null);
-            if (fromBodyParameter == null)
+            var fromContentParameter = MethodInfo.GetParameters().FirstOrDefault((p) => p.GetCustomAttribute<FromContentAttribute>() != null);
+            if (fromContentParameter == null)
             {
                 return;
             }
 
-            HasBodyParameter = true;
-            BodyParameterType = fromBodyParameter.ParameterType;
+            HasContentParameter = true;
+            ContentParameterType = fromContentParameter.ParameterType;
         }
 
         private void InitializeParameters()
         {
             var fromUriParams = from p in MethodInfo.GetParameters()
-                                where p.GetCustomAttribute<FromBodyAttribute>() == null
+                                where p.GetCustomAttribute<FromContentAttribute>() == null
                                 select p;
 
             if (!ParametersHaveValidType(fromUriParams.Select(p => p.ParameterType)))
@@ -129,7 +130,9 @@ namespace Devkoes.Restup.WebServer.Rest
                 return "/" + uriFormat;
             }
 
-            return $"{_urlPrefix}/{uriFormat}";
+            _urlToMatch = $"{_urlPrefix}/{uriFormat}";
+
+            return _urlToMatch;
         }
 
         private void InitializeVerb()
@@ -168,6 +171,11 @@ namespace Devkoes.Restup.WebServer.Rest
             {
                 yield return Convert.ChangeType(m.Groups[parameter.Key].Value, parameter.Value);
             }
+        }
+
+        public override string ToString()
+        {
+            return $"Hosting {Verb.ToString()} method on {_urlToMatch}";
         }
     }
 }

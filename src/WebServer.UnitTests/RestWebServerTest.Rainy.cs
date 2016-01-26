@@ -1,8 +1,10 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Http;
+﻿using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -12,12 +14,12 @@ namespace Devkoes.Restup.WebServer.UnitTests
     public class RestWebServerRainyDayTest
     {
         #region ConflictingPost
-        private HttpRequest _conflictingPOST = new HttpRequest()
+        private HttpServerRequest _conflictingPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
-            Content = "{\"Name\": \"Tom\", \"Age\": 33}",
+            AcceptMediaTypes = new[] { MediaType.JSON },
+            Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\", \"Age\": 33}"),
             IsComplete = true
         };
 
@@ -28,18 +30,20 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_conflictingPOST);
 
-            StringAssert.Contains(response.Response, "409 Conflict");
-            StringAssert.DoesNotMatch(response.Response, new Regex("Location:"));
+            string content = response.ToString();
+
+            StringAssert.Contains(content, "409 Conflict");
+            StringAssert.DoesNotMatch(content, new Regex("Location:"));
         }
         #endregion
 
         #region MethodNotAllowed
-        private HttpRequest _methodNotAllowedPUT = new HttpRequest()
+        private HttpServerRequest _methodNotAllowedPUT = new HttpServerRequest()
         {
             Method = HttpMethod.DELETE,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
-            Content = "{\"Name\": \"Tom\", \"Age\": 33}",
+            AcceptMediaTypes = new[] { MediaType.JSON },
+            Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\", \"Age\": 33}"),
             IsComplete = true
         };
 
@@ -50,18 +54,20 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_methodNotAllowedPUT);
 
-            StringAssert.Contains(response.Response, "405 Method Not Allowed");
-            StringAssert.Contains(response.Response, "Allow: POST");
+            string content = response.ToString();
+
+            StringAssert.Contains(content, "405 Method Not Allowed");
+            StringAssert.Contains(content, "Allow: POST");
         }
         #endregion
 
         #region ParameterParseException
-        private HttpRequest _parameterParseExceptionPUT = new HttpRequest()
+        private HttpServerRequest _parameterParseExceptionPUT = new HttpServerRequest()
         {
             Method = HttpMethod.PUT,
             Uri = new Uri("/users/notanumber", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
-            Content = "{\"Name\": \"Tom\", \"Age\": 33}",
+            AcceptMediaTypes = new[] { MediaType.JSON },
+            Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\", \"Age\": 33}"),
             IsComplete = true
         };
 
@@ -72,7 +78,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_parameterParseExceptionPUT);
 
-            StringAssert.Contains(response.Response, "400 Bad Request");
+            StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
 
@@ -96,56 +102,56 @@ namespace Devkoes.Restup.WebServer.UnitTests
         }
         #endregion
 
-        #region JsonBodyParameterValueParseException
-        private HttpRequest _bodyParameterParseExPOST = new HttpRequest()
+        #region JsonContentParameterValueParseException
+        private HttpServerRequest _contentParameterParseExPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
-            Content = "{\"Name\": \"Tom\", \"Age\": notanumber}",
+            AcceptMediaTypes = new[] { MediaType.JSON },
+            Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\", \"Age\": notanumber}"),
             IsComplete = true
         };
 
 
         [TestMethod]
-        public async Task HandleRequest_InvalidJSONBodyParameter_BadRequest()
+        public async Task HandleRequest_InvalidJSONContentParameter_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = await m.HandleRequest(_bodyParameterParseExPOST);
+            var response = await m.HandleRequest(_contentParameterParseExPOST);
 
-            StringAssert.Contains(response.Response, "400 Bad Request");
+            StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
 
-        #region XmlBodyParameterValueParseException
-        private HttpRequest _xmlBodyParameterParseExPOST = new HttpRequest()
+        #region XmlContentParameterValueParseException
+        private HttpServerRequest _xmlContentParameterParseExPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
-            Content = "<User><Name>Tom</Name><Age>thirtythree</Age></User>",
+            AcceptMediaTypes = new[] { MediaType.JSON },
+            Content = Encoding.UTF8.GetBytes("<User><Name>Tom</Name><Age>thirtythree</Age></User>"),
             IsComplete = true
         };
 
         [TestMethod]
-        public async Task HandleRequest_InvalidXMLBodyParameter_BadRequest()
+        public async Task HandleRequest_InvalidXMLContentParameter_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
-            var response = await m.HandleRequest(_xmlBodyParameterParseExPOST);
+            var response = await m.HandleRequest(_xmlContentParameterParseExPOST);
 
-            StringAssert.Contains(response.Response, "400 Bad Request");
+            StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
 
         #region InvalidJsonFormatParseException
-        private HttpRequest _invalidJsonFormatPOST = new HttpRequest()
+        private HttpServerRequest _invalidJsonFormatPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
-            Content = "{\"Name\": \"Tom\"; \"Age\": 33}",
+            AcceptMediaTypes = new[] { MediaType.JSON },
+            Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\"; \"Age\": 33}"),
             IsComplete = true
         };
 
@@ -156,28 +162,28 @@ namespace Devkoes.Restup.WebServer.UnitTests
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_invalidJsonFormatPOST);
 
-            StringAssert.Contains(response.Response, "400 Bad Request");
+            StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
 
         #region InvalidXmlFormatParseException
-        private HttpRequest _invalidXmlFormatExPOST = new HttpRequest()
+        private HttpServerRequest _invalidXmlFormatExPOST = new HttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            ResponseContentType = MediaType.JSON,
-            Content = "<User><Name>Tom</><Age>thirtythree</Age></User>",
+            AcceptMediaTypes = new[] { MediaType.JSON },
+            Content = Encoding.UTF8.GetBytes("<User><Name>Tom</><Age>thirtythree</Age></User>"),
             IsComplete = true
         };
 
         [TestMethod]
-        public async Task HandleRequest_InvalidJsonBodyParameter_BadRequest()
+        public async Task HandleRequest_InvalidJsonContentParameter_BadRequest()
         {
             var m = new RestWebServer();
             m.RegisterController<RaiyDayTestController>();
             var response = await m.HandleRequest(_invalidXmlFormatExPOST);
 
-            StringAssert.Contains(response.Response, "400 Bad Request");
+            StringAssert.Contains(response.ToString(), "400 Bad Request");
         }
         #endregion
     }
@@ -192,13 +198,13 @@ namespace Devkoes.Restup.WebServer.UnitTests
         }
 
         [UriFormat("/users")]
-        public PostResponse CreateUser([FromBody] User user)
+        public PostResponse CreateUser([FromContent] User user)
         {
             return new PostResponse(PostResponse.ResponseStatus.Conflict);
         }
 
         [UriFormat("/users/{id}")]
-        public PutResponse UpdateUser(int id, [FromBody] User user)
+        public PutResponse UpdateUser(int id, [FromContent] User user)
         {
             return new PutResponse(PutResponse.ResponseStatus.OK);
         }

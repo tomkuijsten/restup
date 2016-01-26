@@ -1,4 +1,5 @@
-﻿using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Models.Contracts;
 using System.Collections.Generic;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas

@@ -1,6 +1,6 @@
-﻿using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.InstanceCreators;
+﻿using Devkoes.Restup.WebServer.InstanceCreators;
 using Devkoes.Restup.WebServer.Models.Contracts;
+using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +16,7 @@ namespace Devkoes.Restup.WebServer.Rest
             _responseFactory = new RestResponseFactory();
         }
 
-        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, HttpRequest request)
+        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, RestServerRequest request)
         {
             var methodInvokeResult = ExecuteAnonymousMethod(info, request);
 
@@ -26,14 +26,14 @@ namespace Devkoes.Restup.WebServer.Rest
             return await (dynamic)methodInvokeResult;
         }
 
-        private object ExecuteAnonymousMethod(RestControllerMethodInfo info, HttpRequest request)
+        private object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request)
         {
             var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
 
             object[] parameters = null;
             try
             {
-                parameters = info.GetParametersFromUri(request.Uri).ToArray();
+                parameters = info.GetParametersFromUri(request.HttpServerRequest.Uri).ToArray();
             }
             catch (FormatException)
             {

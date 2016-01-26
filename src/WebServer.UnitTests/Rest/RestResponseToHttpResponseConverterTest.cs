@@ -10,14 +10,14 @@ namespace Devkoes.Restup.WebServer.UnitTests.Visitors
         [TestMethod]
         public void Visit_Delete_DefaultResponse()
         {
-            RestResponseToHttpResponseConverter v = new RestResponseToHttpResponseConverter();
-            var httpResponse = v.Visit(new DeleteResponse(DeleteResponse.ResponseStatus.OK), null);
+            RestToHttpResponseConverter v = new RestToHttpResponseConverter();
+            var httpResponse = v.Visit(new DeleteResponse(DeleteResponse.ResponseStatus.OK), default(RestServerRequest));
 
-            StringAssert.Contains(httpResponse.Response, "200 OK");
-            StringAssert.Contains(httpResponse.Response, "Connection: ");
-            StringAssert.Contains(httpResponse.Response, "Date: ");
+            string content = httpResponse.ToString();
+
+            StringAssert.Contains(content, "200 OK");
+            StringAssert.Contains(content, "Connection: ");
+            StringAssert.Contains(content, "Date: ");
         }
-
-        //todo, add more
     }
 }

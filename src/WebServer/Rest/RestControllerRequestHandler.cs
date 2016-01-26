@@ -1,10 +1,11 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Http;
+﻿using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.InstanceCreators;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -51,6 +52,8 @@ namespace Devkoes.Restup.WebServer.Rest
             foreach (var methodDef in allPublicAsyncRestMethods)
                 restMethods.Add(new RestControllerMethodInfo(methodDef, _urlPrefix, constructorArgs, true));
 
+            Debug.WriteLine(string.Join(Environment.NewLine, restMethods));
+
             return restMethods;
         }
 
@@ -80,21 +83,21 @@ namespace Devkoes.Restup.WebServer.Rest
             return allPublicRestMethods.ToArray();
         }
 
-        internal async Task<IRestResponse> HandleRequest(HttpRequest req)
+        internal async Task<IRestResponse> HandleRequest(RestServerRequest req)
         {
-            if (!req.IsComplete ||
-                req.Method == HttpMethod.Unsupported)
+            if (!req.HttpServerRequest.IsComplete ||
+                req.HttpServerRequest.Method == HttpMethod.Unsupported)
             {
                 return _responseFactory.CreateBadRequest();
             }
 
-            var restMethods = _restMethodCollection.Where(r => r.Match(req.Uri));
+            var restMethods = _restMethodCollection.Where(r => r.Match(req.HttpServerRequest.Uri));
             if (!restMethods.Any())
             {
                 return _responseFactory.CreateBadRequest();
             }
 
-            var restMethod = restMethods.SingleOrDefault(r => r.Verb == req.Method);
+            var restMethod = restMethods.SingleOrDefault(r => r.Verb == req.HttpServerRequest.Method);
             if (restMethod == null)
             {
                 return new MethodNotAllowedResponse(restMethods.Select(r => r.Verb));
