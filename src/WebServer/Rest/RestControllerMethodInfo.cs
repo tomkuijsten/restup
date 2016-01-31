@@ -123,7 +123,7 @@ namespace Devkoes.Restup.WebServer.Rest
 
         private string CreateUriFormat(UriFormatAttribute uriFormatter)
         {
-            string uriFormat = uriFormatter.UriFormat.RemovePreAndPostSlash();
+            string uriFormat = uriFormatter.UriFormat.RemovePreAndPostSlash().EscapeRegexChars();
 
             if (string.IsNullOrWhiteSpace(_urlPrefix))
             {

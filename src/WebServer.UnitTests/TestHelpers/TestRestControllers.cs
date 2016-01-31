@@ -20,6 +20,12 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
             return new GetResponse(GetResponse.ResponseStatus.OK, new User() { Name = "Tom", Age = 30 });
         }
 
+        [UriFormat("/users?userId={userId}")]
+        public GetResponse GetUserWithParam(int userId)
+        {
+          return new GetResponse(GetResponse.ResponseStatus.OK, new User() { Name = "Tom", Age = 30 });
+        }
+
         [UriFormat("/users")]
         public PostResponse CreateUser([FromContent] User user)
         {
