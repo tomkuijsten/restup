@@ -1,6 +1,7 @@
 ﻿using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
+using System.Globalization;
 
 namespace Devkoes.Restup.DemoControllers
 {
@@ -21,5 +22,13 @@ namespace Devkoes.Restup.DemoControllers
                 GetResponse.ResponseStatus.OK,
                 new WebserverInfo() { TotalCallsHandled = _totalNrOfCallsHandled++ });
         }
+
+    [UriFormat("/singletonwithparameter?p={v}")]
+    public GetResponse GetSingletonSampleValueWithParameter(string v) {
+      long.TryParse(v, out _totalNrOfCallsHandled);
+      return new GetResponse(
+          GetResponse.ResponseStatus.OK,
+          new WebserverInfo() { TotalCallsHandled = _totalNrOfCallsHandled++ });
     }
+  }
 }

@@ -12,10 +12,18 @@ namespace Devkoes.Restup.WebServer
             return uri.TrimStart('/').TrimEnd('/');
         }
 
-        /// <summary>
-        /// The prefix will always be formatted as "/prefix"
-        /// </summary>
-        internal static string FormatRelativeUri(this string uri)
+    internal static string EscapeRegexChars(this string uri)
+    {
+      if (uri == null)
+        return uri;
+
+      return uri.Replace("?", "\\?");
+    }
+
+    /// <summary>
+    /// The prefix will always be formatted as "/prefix"
+    /// </summary>
+    internal static string FormatRelativeUri(this string uri)
         {
             var cleanUrl = uri.RemovePreAndPostSlash();
 
