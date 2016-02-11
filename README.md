@@ -11,11 +11,11 @@ https://github.com/tfredrich/RestApiTutorial.com
 
 # Intro
 
-When the raspberry pi 2 was released, all windows 10 users were filled with joy when Microsoft announced the support of windows 10 for this neat device. After a couple of beta builds, we got the RTM version a couple of weeks ago. A crucial piece for this platform is missing, WCF. It might be supported in the future ([see post](https://social.msdn.microsoft.com/Forums/en-US/f462d578-368b-4218-b57e-19cd8852fd0c/wcf-hosting-in-windows-iot?forum=WindowsIoT)), but untill then I would need some simple REST implementation to keep my projects going. I decided to implement a simple HTTP REST service.
+When the raspberry pi 2 was released, all windows 10 users were filled with joy when Microsoft announced the support of windows 10 for this neat device. After a couple of beta builds, we got the RTM version a couple of weeks ago. A crucial piece for this platform is missing, WCF. It might be supported in the future ([see post](https://social.msdn.microsoft.com/Forums/en-US/f462d578-368b-4218-b57e-19cd8852fd0c/wcf-hosting-in-windows-iot?forum=WindowsIoT)), but until then I would need some simple REST implementation to keep my projects going. I decided to implement a simple HTTP REST service.
 
 # Samples
 
-All functionality is presented in a sample controller, which can be found in the [WebServerHostTest](https://github.com/tomkuijsten/restup/tree/master/src/WebServerHostTest) project.
+There are two samples, [HeadedDemo](src/HeadedDemo) and [HeadlessDemo](src/HeadlessDemo) who both use the controllers in the [DemoControllers](src/DemoControllers) project. The HeadedDemo contains a xaml rest client pointing to itself for easy testing. 
 
 # Quick tutorial
 
@@ -48,7 +48,7 @@ public class ParametersController
 
 # More
 ## Controller creation types
-You can choose to have one instance of your rest controller for the whole application cycle, or one per call. This is controller by the RestController class attribute.
+You can choose to have one instance of your rest controller for the whole application cycle, or one per call. This is controlled by the RestController class attribute.
 
     [RestController(InstanceCreationType.Singleton)]
     [RestController(InstanceCreationType.PerCall)]
