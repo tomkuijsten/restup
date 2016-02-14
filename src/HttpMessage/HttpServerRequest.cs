@@ -1,55 +1,39 @@
-﻿using Devkoes.HttpMessage.Headers.Request;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.HttpMessage.Plumbing;
-using Devkoes.HttpMessage.ServerRequestParsers;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Windows.Storage.Streams;
+using Devkoes.HttpMessage.Models.Contracts;
+using Devkoes.HttpMessage.Models.Schemas;
 
 namespace Devkoes.HttpMessage
 {
-    public class HttpServerRequest
+    internal class HttpServerRequest : IHttpServerRequest
     {
-        private List<IHttpRequestHeader> _headers;
+        public IEnumerable<IHttpRequestHeader> Headers { get; }
+        public HttpMethod? Method { get; }
+        public Uri Uri { get; }
+        public string HttpVersion { get; }
+        public string ContentTypeCharset { get; }
+        public IEnumerable<string> AcceptCharsets { get; }
+        public int ContentLength { get; }
+        public MediaType? ContentType { get; }
+        public IEnumerable<MediaType> AcceptMediaTypes { get; }
+        public byte[] Content { get; }
+        public bool IsComplete { get; }
 
-        internal HttpServerRequest()
+        public HttpServerRequest(IEnumerable<IHttpRequestHeader> headers, HttpMethod? method, Uri uri,
+            string httpVersion, string contentTypeCharset, IEnumerable<string> acceptCharsets, int contentLength,
+            MediaType? contentType, IEnumerable<MediaType> acceptMediaTypes, byte[] content, bool isComplete)
         {
-            _headers = new List<IHttpRequestHeader>();
-
-            AcceptCharsets = Enumerable.Empty<string>();
-            AcceptMediaTypes = Enumerable.Empty<MediaType>();
-        }
-
-        public IEnumerable<IHttpRequestHeader> Headers => _headers;
-        public HttpMethod? Method { get; set; }
-        public Uri Uri { get; set; }
-        public string HttpVersion { get; set; }
-        public string ContentTypeCharset { get; set; }
-        public IEnumerable<string> AcceptCharsets { get; set; }
-        public int ContentLength { get; set; }
-        public MediaType? ContentType { get; set; }
-        public IEnumerable<MediaType> AcceptMediaTypes { get; set; }
-        public byte[] Content { get; set; }
-        public bool IsComplete { get; set; }
-
-        internal void AddHeader(IHttpRequestHeader header)
-        {
-            if (IsComplete)
-            {
-                throw new InvalidOperationException("Can't add header after processing request is finished!");
-            }
-
-            header.Visit(HttpRequestHandleHeaderData.Default, this);
-
-            _headers.Add(header);
-        }
-
-        public async static Task<HttpServerRequest> Parse(IInputStream requestStream)
-        {
-            return await HttpRequestParser.Default.ParseRequestStream(requestStream);
+            Headers = headers;
+            Method = method;
+            Uri = uri;
+            HttpVersion = httpVersion;
+            ContentTypeCharset = contentTypeCharset;
+            AcceptCharsets = acceptCharsets;
+            ContentLength = contentLength;
+            ContentType = contentType;
+            AcceptMediaTypes = acceptMediaTypes;
+            Content = content;
+            IsComplete = isComplete;
         }
     }
 }

@@ -11,13 +11,14 @@ namespace Devkoes.Restup.WebServer
         private RestControllerRequestHandler _requestHandler;
         private RestToHttpResponseConverter _restToHttpConverter;
         private RestServerRequestFactory _restServerRequestFactory;
+        private readonly string fixedFormatUrlPrefix;
 
         public RestWebServer(int port, string urlPrefix) : base(port)
         {
-            var fixedFormatUrlPrefix = urlPrefix.FormatRelativeUri();
+            fixedFormatUrlPrefix = urlPrefix.FormatRelativeUri();
 
             _restServerRequestFactory = new RestServerRequestFactory();
-            _requestHandler = new RestControllerRequestHandler(fixedFormatUrlPrefix);
+            _requestHandler = new RestControllerRequestHandler();
             _restToHttpConverter = new RestToHttpResponseConverter();
         }
 
@@ -40,15 +41,36 @@ namespace Devkoes.Restup.WebServer
             _requestHandler.RegisterController<T>(args);
         }
 
-        internal override async Task<HttpServerResponse> HandleRequest(HttpServerRequest request)
+        internal override async Task<HttpServerResponse> HandleRequest(IHttpServerRequest request)
         {
-            var restServerRequest = _restServerRequestFactory.Create(request);
+            var unprefixedRequest = CreateHttpRequestWithUnprefixedUrl(request, fixedFormatUrlPrefix);
+
+            var restServerRequest = _restServerRequestFactory.Create(unprefixedRequest);
 
             var restResponse = await _requestHandler.HandleRequest(restServerRequest);
 
             var httpResponse = restResponse.Visit(_restToHttpConverter, restServerRequest);
 
             return httpResponse;
+        }
+
+        private static IHttpServerRequest CreateHttpRequestWithUnprefixedUrl(IHttpServerRequest request, string prefix)
+        {
+            return new HttpServerRequest(request.Headers, request.Method, RemovePrefix(request.Uri, prefix), request.HttpVersion,
+                request.ContentTypeCharset, request.AcceptCharsets, request.ContentLength, request.ContentType,
+                request.AcceptMediaTypes, request.Content, request.IsComplete);
+        }
+
+        private static Uri RemovePrefix(Uri uri, string prefix)
+        {
+            if (string.IsNullOrWhiteSpace(prefix))
+                return uri;
+
+            var uriToString = uri.ToString();
+            if (uriToString.StartsWith(prefix))
+                uriToString = uriToString.Remove(0, prefix.Length);
+
+            return new Uri(uriToString, UriKind.Relative);
         }
     }
 }

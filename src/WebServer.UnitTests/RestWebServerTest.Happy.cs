@@ -12,7 +12,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
     public class RestWebServerHappyPathTest
     {
         #region BasicGetAcceptXML
-        private HttpServerRequest _basicGETAcceptXML = new HttpServerRequest()
+        private MutableHttpServerRequest _basicGETAcceptXML = new MutableHttpServerRequest()
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
@@ -37,7 +37,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicGetWithAbsoluteUri
-        private HttpServerRequest _basicGETAbsoluteUri = new HttpServerRequest()
+        private MutableHttpServerRequest _basicGETAbsoluteUri = new MutableHttpServerRequest()
         {
             Method = HttpMethod.GET,
             Uri = new Uri("http://myserverx:1234/users/2", UriKind.RelativeOrAbsolute),
@@ -56,10 +56,10 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicGetWithAbsoluteUri
-        private HttpServerRequest _basicGETUriPrefix = new HttpServerRequest()
+        private MutableHttpServerRequest _basicGETUriPrefix = new MutableHttpServerRequest()
         {
             Method = HttpMethod.GET,
-            Uri = new Uri("api/users/2", UriKind.RelativeOrAbsolute),
+            Uri = new Uri("/api/users/2", UriKind.RelativeOrAbsolute),
             IsComplete = true
         };
 
@@ -75,7 +75,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicGetAcceptJSON
-        private HttpServerRequest _basicGETAcceptJSON = new HttpServerRequest()
+        private MutableHttpServerRequest _basicGETAcceptJSON = new MutableHttpServerRequest()
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
@@ -100,7 +100,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicPost
-        private HttpServerRequest _basicPOST = new HttpServerRequest()
+        private MutableHttpServerRequest _basicPOST = new MutableHttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
@@ -124,7 +124,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicPut
-        private HttpServerRequest _basicPUT = new HttpServerRequest()
+        private MutableHttpServerRequest _basicPUT = new MutableHttpServerRequest()
         {
             Method = HttpMethod.PUT,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
@@ -145,7 +145,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicDelete
-        private HttpServerRequest _basicDEL = new HttpServerRequest()
+        private MutableHttpServerRequest _basicDEL = new MutableHttpServerRequest()
         {
             Method = HttpMethod.DELETE,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
@@ -164,7 +164,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region RestControllerWithArgs
-        private HttpServerRequest _basicControllerWithArgs = new HttpServerRequest()
+        private MutableHttpServerRequest _basicControllerWithArgs = new MutableHttpServerRequest()
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),

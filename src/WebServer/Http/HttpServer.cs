@@ -5,7 +5,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
-
+    
 namespace Devkoes.Restup.WebServer.Http
 {
     public abstract class HttpServer : IDisposable
@@ -20,7 +20,7 @@ namespace Devkoes.Restup.WebServer.Http
             _listener.ConnectionReceived += ProcessRequestAsync;
         }
 
-        internal abstract Task<HttpServerResponse> HandleRequest(HttpServerRequest request);
+        internal abstract Task<HttpServerResponse> HandleRequest(IHttpServerRequest request);
 
         public async Task StartServerAsync()
         {
@@ -44,7 +44,7 @@ namespace Devkoes.Restup.WebServer.Http
                 {
                     using (var inputStream = args.Socket.InputStream)
                     {
-                        var request = await HttpServerRequest.Parse(inputStream);
+                        var request = await MutableHttpServerRequest.Parse(inputStream);
 
                         var httpResponse = await HandleRequest(request);
 

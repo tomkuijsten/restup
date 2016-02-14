@@ -21,7 +21,7 @@ namespace Devkoes.HttpMessage.ServerRequestParsers
             _content = new List<byte>();
         }
 
-        public override void HandleRequestPart(byte[] stream, HttpServerRequest resultThisFar)
+        public override void HandleRequestPart(byte[] stream, MutableHttpServerRequest resultThisFar)
         {
             if (resultThisFar.ContentLength == 0)
             {

@@ -8,7 +8,7 @@ namespace Devkoes.Restup.WebServer.Rest
 {
     internal class RestServerRequestFactory
     {
-        public RestServerRequest Create(HttpServerRequest httpRequest)
+        public RestServerRequest Create(IHttpServerRequest httpRequest)
         {
             var acceptMediaType = GetAcceptMediaType(httpRequest);
 
@@ -29,7 +29,7 @@ namespace Devkoes.Restup.WebServer.Rest
             );
         }
 
-        private MediaType GetContentMediaType(HttpServerRequest httpRequest)
+        private MediaType GetContentMediaType(IHttpServerRequest httpRequest)
         {
             if (httpRequest.ContentType.GetValueOrDefault() == MediaType.Unsupported)
             {
@@ -41,7 +41,7 @@ namespace Devkoes.Restup.WebServer.Rest
             }
         }
 
-        private string GetContentCharset(HttpServerRequest httpRequest, MediaType contentMediaType)
+        private string GetContentCharset(IHttpServerRequest httpRequest, MediaType contentMediaType)
         {
             var requestContentCharset = httpRequest.ContentTypeCharset;
             var encoding = EncodingCache.Default.GetEncoding(requestContentCharset);
@@ -64,7 +64,7 @@ namespace Devkoes.Restup.WebServer.Rest
             return requestContentCharset;
         }
 
-        private MediaType GetAcceptMediaType(HttpServerRequest httpRequest)
+        private MediaType GetAcceptMediaType(IHttpServerRequest httpRequest)
         {
             var preferredType = httpRequest.AcceptMediaTypes.FirstOrDefault(a => a != MediaType.Unsupported);
 
@@ -76,7 +76,7 @@ namespace Devkoes.Restup.WebServer.Rest
             return preferredType;
         }
 
-        private string GetAcceptCharset(HttpServerRequest httpRequest, MediaType acceptMediaType)
+        private string GetAcceptCharset(IHttpServerRequest httpRequest, MediaType acceptMediaType)
         {
             string firstAvailableEncoding = null;
 

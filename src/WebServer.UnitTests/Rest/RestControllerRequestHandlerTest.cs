@@ -14,7 +14,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.Rest
         [TestMethod]
         public void GetRestMethods_HasAsyncMethod_IsAsyncSet()
         {
-            var restHandler = new RestControllerRequestHandler(null);
+            var restHandler = new RestControllerRequestHandler();
 
             var allDefs = restHandler.GetRestMethods<AsyncTestController>(() => null);
 

@@ -29,6 +29,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Headers\UntypedRequestHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\UntypedResponseHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpServerRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IHttpServerRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MutableHttpServerRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpServerResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpRequestHeader.cs" />
