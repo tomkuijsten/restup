@@ -18,7 +18,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
             AcceptMediaTypes = new[] { MediaType.XML },
             IsComplete = true
-        };
+        };  
 
         [TestMethod]
         public async Task HandleRequest_BasicGETAcceptXML_Status200WithXml()
@@ -36,7 +36,32 @@ namespace Devkoes.Restup.WebServer.UnitTests
         }
         #endregion
 
-        #region BasicGetWithAbsoluteUri
+        #region BasicGetWithParamAcceptXML
+        private MutableHttpServerRequest _basicGETWithParamAcceptXML = new HttpServerRequest()
+        {
+          Method = HttpMethod.GET,
+          Uri = new Uri("/users?userId=2", UriKind.RelativeOrAbsolute),
+          AcceptMediaTypes = new[] { MediaType.XML },
+          IsComplete = true
+        };
+
+        [TestMethod]
+        public async Task HandleRequest_BasicGETWithParamAcceptXML_Status200WithXml()
+        {
+          var m = new RestWebServer();
+          m.RegisterController<HappyPathTestController>();
+          var response = await m.HandleRequest(_basicGETWithParamAcceptXML);
+
+          string content = response.ToString();
+
+          StringAssert.Contains(content, "200 OK");
+          StringAssert.Contains(content, "Content-Type: application/xml");
+          StringAssert.Contains(content, "<Name>Tom</Name>");
+          StringAssert.Contains(content, "<Age>30</Age>");
+        }
+        #endregion
+
+    #region BasicGetWithAbsoluteUri
         private MutableHttpServerRequest _basicGETAbsoluteUri = new MutableHttpServerRequest()
         {
             Method = HttpMethod.GET,
