@@ -3,6 +3,7 @@ using Devkoes.Restup.WebServer;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Devkoes.Restup.WebServer.Http;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -13,7 +14,7 @@ namespace HeadedDemo
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private RestWebServer _webserver;
+        private HttpServer _httpServer;
 
         public MainPage()
         {
@@ -27,17 +28,24 @@ namespace HeadedDemo
 
         private async Task InitializeWebServer()
         {
-            _webserver = new RestWebServer(8800, "api");
+            var httpServer = new HttpServer(8800);
+            _httpServer = httpServer;
 
-            _webserver.RegisterController<AsyncControllerSample>();
-            _webserver.RegisterController<FromContentControllerSample>();
-            _webserver.RegisterController<PerCallControllerSample>();
-            _webserver.RegisterController<SimpleParameterControllerSample>();
-            _webserver.RegisterController<SingletonControllerSample>();
-            _webserver.RegisterController<ThrowExceptionControllerSample>();
-            _webserver.RegisterController<WithResponseContentControllerSample>();
+            var restRouteHandler = new RestRoutehandler();
 
-            await _webserver.StartServerAsync();
+            restRouteHandler.RegisterController<AsyncControllerSample>();
+            restRouteHandler.RegisterController<FromContentControllerSample>();
+            restRouteHandler.RegisterController<PerCallControllerSample>();
+            restRouteHandler.RegisterController<SimpleParameterControllerSample>();
+            restRouteHandler.RegisterController<SingletonControllerSample>();
+            restRouteHandler.RegisterController<ThrowExceptionControllerSample>();
+            restRouteHandler.RegisterController<WithResponseContentControllerSample>();
+
+            httpServer.RegisterRoute("api", restRouteHandler);
+
+            await httpServer.StartServerAsync();
+
+            // Dont release deferral, otherwise app will stop
         }
     }
 }

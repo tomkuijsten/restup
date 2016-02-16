@@ -1,76 +1,63 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Rest;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Devkoes.HttpMessage;
+using Devkoes.Restup.WebServer.Http;
 
 namespace Devkoes.Restup.WebServer
 {
-    public class RestWebServer : HttpServer
+    [Obsolete("Use HttpServer and RegisterRoute instead")]
+    public class RestWebServer : IDisposable
     {
-        private RestControllerRequestHandler _requestHandler;
-        private RestToHttpResponseConverter _restToHttpConverter;
-        private RestServerRequestFactory _restServerRequestFactory;
-        private readonly string fixedFormatUrlPrefix;
+        private readonly HttpServer _httpServer;
+        private readonly RestRoutehandler _restRoutehandler;
 
-        public RestWebServer(int port, string urlPrefix) : base(port)
+        public RestWebServer(int port, string urlPrefix)
         {
-            fixedFormatUrlPrefix = urlPrefix.FormatRelativeUri();
+            var httpServer = new HttpServer(port);
+            _restRoutehandler = new RestRoutehandler();
+            httpServer.RegisterRoute(urlPrefix, _restRoutehandler);
 
-            _restServerRequestFactory = new RestServerRequestFactory();
-            _requestHandler = new RestControllerRequestHandler();
-            _restToHttpConverter = new RestToHttpResponseConverter();
+            _httpServer = httpServer;
         }
 
-        public RestWebServer(int port) : this(port, null) { }
+        public RestWebServer(int port) : this(port, null)
+        {
+            
+        }
 
-        public RestWebServer() : this(8800, null) { }
+        public RestWebServer() : this(8800, null)
+        {
+            
+        }
 
         public void RegisterController<T>() where T : class
         {
-            _requestHandler.RegisterController<T>();
+            _restRoutehandler.RegisterController<T>();
         }
 
         public void RegisterController<T>(params object[] args) where T : class
         {
-            _requestHandler.RegisterController<T>(() => args);
+            _restRoutehandler.RegisterController<T>(() => args);
         }
 
         public void RegisterController<T>(Func<object[]> args) where T : class
         {
-            _requestHandler.RegisterController<T>(args);
+            _restRoutehandler.RegisterController<T>(args);
         }
 
-        internal override async Task<HttpServerResponse> HandleRequest(IHttpServerRequest request)
+        internal Task<HttpServerResponse> HandleRequest(IHttpServerRequest request)
         {
-            var unprefixedRequest = CreateHttpRequestWithUnprefixedUrl(request, fixedFormatUrlPrefix);
-
-            var restServerRequest = _restServerRequestFactory.Create(unprefixedRequest);
-
-            var restResponse = await _requestHandler.HandleRequest(restServerRequest);
-
-            var httpResponse = restResponse.Visit(_restToHttpConverter, restServerRequest);
-
-            return httpResponse;
+            return _httpServer.HandleRequest(request);
         }
 
-        private static IHttpServerRequest CreateHttpRequestWithUnprefixedUrl(IHttpServerRequest request, string prefix)
+        public async Task StartServerAsync()
         {
-            return new HttpServerRequest(request.Headers, request.Method, RemovePrefix(request.Uri, prefix), request.HttpVersion,
-                request.ContentTypeCharset, request.AcceptCharsets, request.ContentLength, request.ContentType,
-                request.AcceptMediaTypes, request.Content, request.IsComplete);
+            await _httpServer.StartServerAsync();
         }
 
-        private static Uri RemovePrefix(Uri uri, string prefix)
+        public void Dispose()
         {
-            if (string.IsNullOrWhiteSpace(prefix))
-                return uri;
-
-            var uriToString = uri.ToString();
-            if (uriToString.StartsWith(prefix))
-                uriToString = uriToString.Remove(0, prefix.Length);
-
-            return new Uri(uriToString, UriKind.Relative);
+            ((IDisposable) _httpServer).Dispose();
         }
     }
 }

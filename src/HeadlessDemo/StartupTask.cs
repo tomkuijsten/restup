@@ -1,6 +1,7 @@
 ﻿using Devkoes.Restup.DemoControllers;
 using Devkoes.Restup.WebServer;
 using Windows.ApplicationModel.Background;
+using Devkoes.Restup.WebServer.Http;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -8,7 +9,7 @@ namespace Devkoes.Restup.HeadlessDemo
 {
     public sealed class StartupTask : IBackgroundTask
     {
-        private RestWebServer _webserver;
+        private HttpServer _httpServer;
 
         private BackgroundTaskDeferral _deferral;
 
@@ -23,18 +24,23 @@ namespace Devkoes.Restup.HeadlessDemo
             // come some day, see that this method is not active anymore and the local variable
             // should be removed. Which results in the application being closed.
             _deferral = taskInstance.GetDeferral();
+            
+            var httpServer = new HttpServer(8800);
+            _httpServer = httpServer;
 
-            _webserver = new RestWebServer(8800, "api");
+            var restRouteHandler = new RestRoutehandler();
 
-            _webserver.RegisterController<AsyncControllerSample>();
-            _webserver.RegisterController<FromContentControllerSample>();
-            _webserver.RegisterController<PerCallControllerSample>();
-            _webserver.RegisterController<SimpleParameterControllerSample>();
-            _webserver.RegisterController<SingletonControllerSample>();
-            _webserver.RegisterController<ThrowExceptionControllerSample>();
-            _webserver.RegisterController<WithResponseContentControllerSample>();
+            restRouteHandler.RegisterController<AsyncControllerSample>();
+            restRouteHandler.RegisterController<FromContentControllerSample>();
+            restRouteHandler.RegisterController<PerCallControllerSample>();
+            restRouteHandler.RegisterController<SimpleParameterControllerSample>();
+            restRouteHandler.RegisterController<SingletonControllerSample>();
+            restRouteHandler.RegisterController<ThrowExceptionControllerSample>();
+            restRouteHandler.RegisterController<WithResponseContentControllerSample>();
 
-            await _webserver.StartServerAsync();
+            httpServer.RegisterRoute("api", restRouteHandler);
+
+            await httpServer.StartServerAsync();
 
             // Dont release deferral, otherwise app will stop
         }
