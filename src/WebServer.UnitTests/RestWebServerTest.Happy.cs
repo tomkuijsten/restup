@@ -37,7 +37,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #endregion
 
         #region BasicGetWithParamAcceptXML
-        private MutableHttpServerRequest _basicGETWithParamAcceptXML = new HttpServerRequest()
+        private MutableHttpServerRequest _basicGETWithParamAcceptXML = new MutableHttpServerRequest()
         {
           Method = HttpMethod.GET,
           Uri = new Uri("/users?userId=2", UriKind.RelativeOrAbsolute),
