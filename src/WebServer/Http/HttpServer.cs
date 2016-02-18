@@ -94,17 +94,31 @@ namespace Devkoes.Restup.WebServer.Http
             _listener.Dispose();
         }
 
-        public void RegisterRoute(string urlPrefix, RestRoutehandler restRoutehandler)
+        /// <summary>
+        /// Registers the <see cref="IRouteHandler"/> on the root url.
+        /// </summary>
+        /// <param name="restRoutehandler">The rest route handler to register.</param>
+        public void RegisterRoute(IRouteHandler restRoutehandler)
+        {
+            RegisterRoute(string.Empty, restRoutehandler);
+        }
+
+        /// <summary>
+        /// Registers the <see cref="IRouteHandler"/> on the specified url prefix.
+        /// </summary>
+        /// <param name="urlPrefix">The urlprefix to use, e.g. /api, /api/v001, etc. </param>
+        /// <param name="restRoutehandler">The rest route handler to register.</param>
+        public void RegisterRoute(string urlPrefix, IRouteHandler restRoutehandler)
         {
             _routes.Add(new RouteRegistration(urlPrefix, restRoutehandler));
         }
 
         private class RouteRegistration
         {
-            private readonly RestRoutehandler routeHandler;
+            private readonly IRouteHandler routeHandler;
             private readonly string urlPrefix;
 
-            public RouteRegistration(string urlPrefix, RestRoutehandler routeHandler)
+            public RouteRegistration(string urlPrefix, IRouteHandler routeHandler)
             {
                 this.urlPrefix = urlPrefix.FormatRelativeUri();
                 this.routeHandler = routeHandler;
@@ -124,7 +138,7 @@ namespace Devkoes.Restup.WebServer.Http
 
             private static Uri RemovePrefix(Uri uri, string prefix)
             {
-                if (String.IsNullOrWhiteSpace(prefix))
+                if (string.IsNullOrWhiteSpace(prefix))
                     return uri;
 
                 var uriToString = uri.ToString();

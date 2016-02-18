@@ -5,7 +5,7 @@ using Devkoes.Restup.WebServer.Rest;
 
 namespace Devkoes.Restup.WebServer
 {
-    public class RestRoutehandler
+    public class RestRoutehandler : IRouteHandler
     {
         private readonly RestControllerRequestHandler _requestHandler;
         private readonly RestToHttpResponseConverter _restToHttpConverter;

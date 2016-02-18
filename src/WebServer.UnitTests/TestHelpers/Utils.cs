@@ -1,4 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Models.Contracts;
+using Devkoes.HttpMessage.Models.Schemas;
 
 namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
 {
@@ -30,6 +36,25 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
         {
             var restRouteHandler = new RestRoutehandler();
             return restRouteHandler;
+        }
+
+        public static HttpServerResponse CreateOkHttpServerResponse()
+        {
+            return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.OK);
+        }
+
+        public static IHttpServerRequest CreateHttpRequest(IEnumerable<IHttpRequestHeader> headers = null,
+            HttpMethod? method = HttpMethod.GET, Uri uri = null, string httpVersion = "HTTP / 1.1",
+            string contentTypeCharset = null, IEnumerable<string> acceptCharsets = null,
+            int contentLength = 0, MediaType? contentType = null,
+            IEnumerable<MediaType> acceptMediaTypes = null, byte[] content = null,
+            bool isComplete = true)
+        {
+            return new HttpServerRequest(headers ?? Enumerable.Empty<IHttpRequestHeader>(), method,
+                uri ?? new Uri("/Get", UriKind.Relative), httpVersion, contentTypeCharset,
+                acceptCharsets ?? Enumerable.Empty<string>(),
+                contentLength, contentType, acceptMediaTypes ?? Enumerable.Empty<MediaType>(), content ?? new byte[] {},
+                isComplete);
         }
     }
 }
