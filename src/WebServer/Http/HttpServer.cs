@@ -15,7 +15,6 @@ namespace Devkoes.Restup.WebServer.Http
     {
         private readonly int _port;
         private readonly StreamSocketListener _listener;
-        private readonly string _fixedFormatUrlPrefix;
         private readonly List<RouteRegistration> _routes;
 
         public HttpServer(int serverPort)

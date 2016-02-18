@@ -23,8 +23,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_BasicGETAcceptXML_Status200WithXml()
         {
-            var m = new RestWebServer();
-            m.RegisterController<HappyPathTestController>();
+            var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
+
             var response = await m.HandleRequest(_basicGETAcceptXML);
 
             string content = response.ToString();
@@ -48,8 +48,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_BasicGETWithParamAcceptXML_Status200WithXml()
         {
-          var m = new RestWebServer();
-          m.RegisterController<HappyPathTestController>();
+          var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
+
           var response = await m.HandleRequest(_basicGETWithParamAcceptXML);
 
           string content = response.ToString();
@@ -72,8 +72,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_BasicGETAbsoluteUri_Status200()
         {
-            var m = new RestWebServer();
-            m.RegisterController<HappyPathTestController>();
+            var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
+
             var response = await m.HandleRequest(_basicGETAbsoluteUri);
 
             StringAssert.Contains(response.ToString(), "200 OK");
@@ -91,8 +91,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_BasicGETUriPrefix_Status200()
         {
-            var m = new RestWebServer(8800, "api");
-            m.RegisterController<HappyPathTestController>();
+            var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
+
             var response = await m.HandleRequest(_basicGETUriPrefix);
 
             StringAssert.Contains(response.ToString(), "200 OK");
@@ -111,8 +111,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_BasicGETAcceptJSON_Status200WithJSON()
         {
-            var m = new RestWebServer();
-            m.RegisterController<HappyPathTestController>();
+            var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
+
             var response = await m.HandleRequest(_basicGETAcceptJSON);
 
             string content = response.ToString();
@@ -137,8 +137,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_BasicPOST_LocationHeaderStatus201()
         {
-            var m = new RestWebServer();
-            m.RegisterController<HappyPathTestController>();
+            var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
+
             var response = await m.HandleRequest(_basicPOST);
 
             string content = response.ToString();
@@ -161,8 +161,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_BasicPUT_Status200()
         {
-            var m = new RestWebServer();
-            m.RegisterController<HappyPathTestController>();
+            var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
+
             var response = await m.HandleRequest(_basicPUT);
 
             StringAssert.Contains(response.ToString(), "200 OK");
@@ -180,8 +180,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_BasicDEL_Status200()
         {
-            var m = new RestWebServer();
-            m.RegisterController<HappyPathTestController>();
+            var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
+
             var response = await m.HandleRequest(_basicDEL);
 
             StringAssert.Contains(response.ToString(), "200 OK");
@@ -200,8 +200,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_ControllerWithArgs_MatchConstructor()
         {
-            var m = new RestWebServer();
-            m.RegisterController<HappyPathTestSingletonControllerWithArgs>("Johathan", 15);
+            var m = Utils.CreateRestRoutehandler<HappyPathTestSingletonControllerWithArgs>("Johathan", 15);
+
             var response = await m.HandleRequest(_basicControllerWithArgs);
 
             string content = response.ToString();
@@ -214,8 +214,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         public async Task HandleRequest_PerCallControllerWithArgs_MatchConstructor()
         {
             int age = 15;
-            var m = new RestWebServer();
-            m.RegisterController<HappyPathTestPerCallControllerWithArgs>(() => new object[] { "Johathan", age++ });
+            var m = Utils.CreateRestRoutehandler<HappyPathTestPerCallControllerWithArgs>(() => new object[] { "Johathan", age++ });
+
             var response = await m.HandleRequest(_basicControllerWithArgs);
 
             string content = response.ToString();

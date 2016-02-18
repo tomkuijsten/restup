@@ -104,6 +104,7 @@
       <DependentUpon>UnitTestApp.xaml</DependentUpon>
     </Compile>
     <Compile Include="Rest\RestResponseToHttpResponseConverterTest.cs" />
+    <Compile Include="TestHelpers\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="UnitTestApp.xaml">

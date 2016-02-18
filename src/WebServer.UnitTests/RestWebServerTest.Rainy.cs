@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
 
 namespace Devkoes.Restup.WebServer.UnitTests
 {
@@ -26,8 +27,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_CreateWithExistingId_Conflicted()
         {
-            var m = new RestWebServer();
-            m.RegisterController<RaiyDayTestController>();
+            var m = Utils.CreateRestRoutehandler<RainyDayTestController>();
+
             var response = await m.HandleRequest(_conflictingPOST);
 
             string content = response.ToString();
@@ -50,8 +51,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_BasicPUT_MethodNotAllowed()
         {
-            var m = new RestWebServer();
-            m.RegisterController<RaiyDayTestController>();
+            var m = Utils.CreateRestRoutehandler<RainyDayTestController>();
+
             var response = await m.HandleRequest(_methodNotAllowedPUT);
 
             string content = response.ToString();
@@ -74,8 +75,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_WrongParameterTypePUT_BadRequest()
         {
-            var m = new RestWebServer();
-            m.RegisterController<RaiyDayTestController>();
+            var m = Utils.CreateRestRoutehandler<RainyDayTestController>();
+
             var response = await m.HandleRequest(_parameterParseExceptionPUT);
 
             StringAssert.Contains(response.ToString(), "400 Bad Request");
@@ -86,7 +87,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public void HandleRequest_WrongParameterTypeInController_InvalidOperationException()
         {
-            var m = new RestWebServer();
+            var m = Utils.CreateRestRoutehandler();
 
             bool invOpThrown = false;
             try
@@ -116,8 +117,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_InvalidJSONContentParameter_BadRequest()
         {
-            var m = new RestWebServer();
-            m.RegisterController<RaiyDayTestController>();
+            var m = Utils.CreateRestRoutehandler<RainyDayTestController>();
+
             var response = await m.HandleRequest(_contentParameterParseExPOST);
 
             StringAssert.Contains(response.ToString(), "400 Bad Request");
@@ -137,8 +138,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_InvalidXMLContentParameter_BadRequest()
         {
-            var m = new RestWebServer();
-            m.RegisterController<RaiyDayTestController>();
+            var m = Utils.CreateRestRoutehandler<RainyDayTestController>();
+
             var response = await m.HandleRequest(_xmlContentParameterParseExPOST);
 
             StringAssert.Contains(response.ToString(), "400 Bad Request");
@@ -158,8 +159,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_InvalidJsonFormat_BadRequest()
         {
-            var m = new RestWebServer();
-            m.RegisterController<RaiyDayTestController>();
+            var m = Utils.CreateRestRoutehandler<RainyDayTestController>();
+
             var response = await m.HandleRequest(_invalidJsonFormatPOST);
 
             StringAssert.Contains(response.ToString(), "400 Bad Request");
@@ -179,8 +180,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
         [TestMethod]
         public async Task HandleRequest_InvalidJsonContentParameter_BadRequest()
         {
-            var m = new RestWebServer();
-            m.RegisterController<RaiyDayTestController>();
+            var m = Utils.CreateRestRoutehandler<RainyDayTestController>();
+
             var response = await m.HandleRequest(_invalidXmlFormatExPOST);
 
             StringAssert.Contains(response.ToString(), "400 Bad Request");
@@ -189,7 +190,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
     }
 
     [RestController(InstanceCreationType.Singleton)]
-    public class RaiyDayTestController
+    public class RainyDayTestController
     {
         public class User
         {
