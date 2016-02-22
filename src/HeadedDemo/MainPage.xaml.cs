@@ -36,6 +36,7 @@ namespace HeadedDemo
             _webserver.RegisterController<SingletonControllerSample>();
             _webserver.RegisterController<ThrowExceptionControllerSample>();
             _webserver.RegisterController<WithResponseContentControllerSample>();
+            _webserver.RegisterController<FileSample>();
 
             await _webserver.StartServerAsync();
         }

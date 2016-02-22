@@ -111,6 +111,7 @@
     <Compile Include="AsyncControllerSample.cs" />
     <Compile Include="FromContentControllerSample.cs" />
     <Compile Include="PerCallControllerSample.cs" />
+    <Compile Include="SendFileSample.cs" />
     <Compile Include="SimpleParameterControllerSample.cs" />
     <Compile Include="SingletonControllerSample.cs" />
     <Compile Include="ThrowExceptionControllerSample.cs" />

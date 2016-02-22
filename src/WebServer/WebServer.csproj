@@ -116,6 +116,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="EncodingCache.cs" />
     <Compile Include="Models\Schemas\RestServerRequest.cs" />
+    <Compile Include="Models\Schemas\SendFile.cs" />
     <Compile Include="Rest\RestControllerMethodWithContentExecutor.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Rest\RestControllerMethodExecutorFactory.cs" />
