@@ -100,7 +100,7 @@ namespace Devkoes.Restup.WebServer.Http
         /// <param name="restRoutehandler">The rest route handler to register.</param>
         public void RegisterRoute(IRouteHandler restRoutehandler)
         {
-            RegisterRoute(string.Empty, restRoutehandler);
+            RegisterRoute("/", restRoutehandler);
         }
 
         /// <summary>
