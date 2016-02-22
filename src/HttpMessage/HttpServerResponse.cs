@@ -123,7 +123,8 @@ namespace Devkoes.HttpMessage
                 }
                 else
                 {
-                    contentTypeHeader.Charset = value;
+                    _headers.Remove(contentTypeHeader);
+                    _headers.Add(new ContentTypeHeader(contentTypeHeader.ContentType, value));
                 }
 
                 // We should reset the content length, because the charset determines the encoding length
@@ -151,7 +152,8 @@ namespace Devkoes.HttpMessage
                 }
                 else if (value.HasValue)
                 {
-                    contentTypeHeader.ContentType = value.Value;
+                    _headers.Remove(contentTypeHeader);
+                    _headers.Add(new ContentTypeHeader(value.Value, contentTypeHeader.Charset));
                 }
 
                 // We should reset the length, because the default encoder is based on contenttype

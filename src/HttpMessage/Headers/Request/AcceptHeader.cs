@@ -10,7 +10,7 @@ namespace Devkoes.HttpMessage.Headers.Request
     {
         internal static string NAME = "Accept";
 
-        public IEnumerable<MediaType> AcceptTypes { get; set; }
+        public IEnumerable<MediaType> AcceptTypes { get; }
 
         public AcceptHeader(string value, IEnumerable<QuantifiedHeaderValue> quantifiedHeaderValues)
             : base(NAME, value, quantifiedHeaderValues)

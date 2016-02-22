@@ -4,9 +4,9 @@ namespace Devkoes.HttpMessage.Headers.Request
 {
     public abstract class HttpMultiQuantifiedHeaderBase : HttpRequestHeaderBase
     {
-        public IEnumerable<QuantifiedHeaderValue> QuantifiedHeaderValues { get; set; }
+        public IEnumerable<QuantifiedHeaderValue> QuantifiedHeaderValues { get; }
 
-        public HttpMultiQuantifiedHeaderBase(
+        protected HttpMultiQuantifiedHeaderBase(
             string name,
             string value,
             IEnumerable<QuantifiedHeaderValue> quantifiedHeaderValues) : base(name, value)

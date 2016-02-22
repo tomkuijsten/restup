@@ -6,7 +6,7 @@ namespace Devkoes.HttpMessage.Headers.Request
     {
         internal static string NAME = "Content-Length";
 
-        public int Length { get; set; }
+        public int Length { get; }
 
         public ContentLengthHeader(string value) : base(NAME, value)
         {

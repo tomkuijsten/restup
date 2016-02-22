@@ -9,10 +9,11 @@ namespace Devkoes.HttpMessage.Headers.Request
         internal static string NAME = "Content-Type";
         internal static string CHARSET_QUANTIFIER_NAME = "charset";
 
-        public MediaType ContentType { get; internal set; }
-        public string ContentCharset { get; internal set; }
+        public MediaType ContentType { get; }
+        public string ContentCharset { get; }
 
-        public ContentTypeHeader(string value, QuantifiedHeaderValue quantifiedHeaderValue) : base(NAME, value, quantifiedHeaderValue)
+        public ContentTypeHeader(string value, QuantifiedHeaderValue quantifiedHeaderValue)             
+            : base(NAME, value, quantifiedHeaderValue)
         {
             ContentType = HttpCodesTranslator.Default.GetMediaType(QuantifiedHeaderValue.HeaderValue);
             ContentCharset = QuantifiedHeaderValue.FindQuantifierValue(CHARSET_QUANTIFIER_NAME);

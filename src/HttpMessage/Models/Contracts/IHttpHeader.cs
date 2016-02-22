@@ -2,7 +2,7 @@
 {
     public interface IHttpHeader
     {
-        string Name { get; set; }
-        string Value { get; set; }
+        string Name { get; }
+        string Value { get; }
     }
 }
