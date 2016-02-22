@@ -40,7 +40,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\ExtractedWord.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\HttpMethod.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\HttpResponseStatus.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\MediaType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\StreamReadResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plumbing\Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plumbing\Extensions.cs" />

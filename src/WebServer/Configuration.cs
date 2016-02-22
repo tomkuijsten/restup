@@ -1,4 +1,4 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
+﻿using Devkoes.Restup.WebServer.Models.Schemas;
 
 namespace Devkoes.Restup.WebServer
 {

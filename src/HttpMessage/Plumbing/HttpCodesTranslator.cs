@@ -1,26 +1,10 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Devkoes.HttpMessage.Plumbing
 {
     public class HttpCodesTranslator
     {
         public static HttpCodesTranslator Default { get; }
-
-        private readonly IDictionary<MediaType, string> _mediaTypeTexts = new Dictionary<MediaType, string>()
-        {
-            [MediaType.Unsupported] = "",
-            [MediaType.JSON] = "application/json",
-            [MediaType.XML] = "application/xml"
-        };
-
-        private readonly IDictionary<string, MediaType> _textAsMediaType = new Dictionary<string, MediaType>()
-        {
-            ["application/json"] = MediaType.JSON,
-            ["text/json"] = MediaType.JSON,
-            ["application/xml"] = MediaType.XML,
-            ["text/xml"] = MediaType.XML,
-        };
 
         // From http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html
         private readonly IDictionary<int, string> _statusCodeTexts = new Dictionary<int, string>()
@@ -77,21 +61,6 @@ namespace Devkoes.HttpMessage.Plumbing
         public string GetHttpStatusCodeText(int statusCode)
         {
             return _statusCodeTexts[statusCode];
-        }
-
-        public string GetMediaType(MediaType mediaType)
-        {
-            return _mediaTypeTexts[mediaType];
-        }
-
-        public MediaType GetMediaType(string value)
-        {
-            if (_textAsMediaType.ContainsKey(value))
-            {
-                return _textAsMediaType[value];
-            }
-
-            return MediaType.Unsupported;
         }
     }
 }

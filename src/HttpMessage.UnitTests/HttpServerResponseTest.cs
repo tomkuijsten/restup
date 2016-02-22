@@ -88,7 +88,7 @@ namespace Devkoes.HttpMessage.UnitTests
         public void Create_ContentType_ContentTypeHeader()
         {
             var response = HttpServerResponse.Create(HttpResponseStatus.OK);
-            response.ContentType = MediaType.JSON;
+            response.ContentType = "application/json";
 
             var responseMessage = response.ToString();
             var responseBytes = response.ToBytes();
@@ -101,7 +101,7 @@ namespace Devkoes.HttpMessage.UnitTests
         public void Create_SetAndRemoveContentType_FirstLineOnly()
         {
             var response = HttpServerResponse.Create(HttpResponseStatus.OK);
-            response.ContentType = MediaType.JSON;
+            response.ContentType = "application/json";
             response.ContentType = null;
 
             var responseMessage = response.ToString();
@@ -114,7 +114,7 @@ namespace Devkoes.HttpMessage.UnitTests
         public void Create_ContentTypeAndCharset_ContentTypeHeaderWithCharset()
         {
             var response = HttpServerResponse.Create(HttpResponseStatus.OK);
-            response.ContentType = MediaType.JSON;
+            response.ContentType = "application/json";
             response.ContentCharset = "utf-8";
 
             var responseMessage = response.ToString();
@@ -128,7 +128,7 @@ namespace Devkoes.HttpMessage.UnitTests
         public void Create_UpdateContentCharset_UpdatedCharset()
         {
             var response = HttpServerResponse.Create(HttpResponseStatus.OK);
-            response.ContentType = MediaType.JSON;
+            response.ContentType = "application/json";
             response.ContentCharset = "utf-8";
             response.ContentCharset = "unicode";
 

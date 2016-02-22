@@ -52,9 +52,10 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             Assert.IsTrue(request.Headers.Any(h => h.Name == "UnknownHeader" && h.Value == "some:value"));
             Assert.AreEqual(4, request.ContentLength);
             Assert.AreEqual("utf-8", request.ContentTypeCharset);
-            Assert.AreEqual(MediaType.XML, request.ContentType);
+            Assert.AreEqual("text/xml", request.ContentType);
             Assert.AreEqual("utf-7", request.AcceptCharsets.First());
-            Assert.AreEqual(MediaType.JSON, request.AcceptMediaTypes.First());
+            Assert.AreEqual("application/json", request.AcceptMediaTypes.First());
+            Assert.AreEqual("text/xml", request.AcceptMediaTypes.Skip(1).First());
         }
 
         [TestMethod]
@@ -67,7 +68,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             var request = MutableHttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.AreEqual(MediaType.XML, request.AcceptMediaTypes.First());
+            Assert.AreEqual("text/xml", request.AcceptMediaTypes.First());
         }
 
         [TestMethod]
@@ -80,7 +81,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             var request = MutableHttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.AreEqual(MediaType.JSON, request.AcceptMediaTypes.First());
+            Assert.AreEqual("application/json", request.AcceptMediaTypes.First());
         }
 
         [TestMethod]

@@ -14,14 +14,14 @@ namespace Devkoes.HttpMessage
         public string ContentTypeCharset { get; }
         public IEnumerable<string> AcceptCharsets { get; }
         public int ContentLength { get; }
-        public MediaType? ContentType { get; }
-        public IEnumerable<MediaType> AcceptMediaTypes { get; }
+        public string ContentType { get; }
+        public IEnumerable<string> AcceptMediaTypes { get; }
         public byte[] Content { get; }
         public bool IsComplete { get; }
 
         public HttpServerRequest(IEnumerable<IHttpRequestHeader> headers, HttpMethod? method, Uri uri,
             string httpVersion, string contentTypeCharset, IEnumerable<string> acceptCharsets, int contentLength,
-            MediaType? contentType, IEnumerable<MediaType> acceptMediaTypes, byte[] content, bool isComplete)
+            string contentType, IEnumerable<string> acceptMediaTypes, byte[] content, bool isComplete)
         {
             Headers = headers;
             Method = method;

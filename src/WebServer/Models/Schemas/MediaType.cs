@@ -1,4 +1,4 @@
-﻿namespace Devkoes.HttpMessage.Models.Schemas
+﻿namespace Devkoes.Restup.WebServer.Models.Schemas
 {
     public enum MediaType
     {

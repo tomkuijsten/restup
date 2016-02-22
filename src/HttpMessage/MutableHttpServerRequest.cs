@@ -19,7 +19,7 @@ namespace Devkoes.HttpMessage
             _headers = new List<IHttpRequestHeader>();
 
             AcceptCharsets = Enumerable.Empty<string>();
-            AcceptMediaTypes = Enumerable.Empty<MediaType>();
+            AcceptMediaTypes = Enumerable.Empty<string>();
         }
 
         public IEnumerable<IHttpRequestHeader> Headers => _headers;
@@ -29,8 +29,8 @@ namespace Devkoes.HttpMessage
         public string ContentTypeCharset { get; set; }
         public IEnumerable<string> AcceptCharsets { get; set; }
         public int ContentLength { get; set; }
-        public MediaType? ContentType { get; set; }
-        public IEnumerable<MediaType> AcceptMediaTypes { get; set; }
+        public string ContentType { get; set; }
+        public IEnumerable<string> AcceptMediaTypes { get; set; }
         public byte[] Content { get; set; }
         public bool IsComplete { get; set; }
 

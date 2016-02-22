@@ -19,7 +19,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "application/json" },
             Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\", \"Age\": 33}"),
             IsComplete = true
         };
@@ -43,7 +43,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.DELETE,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "text/json" },
             Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\", \"Age\": 33}"),
             IsComplete = true
         };
@@ -67,7 +67,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.PUT,
             Uri = new Uri("/users/notanumber", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "application/json" },
             Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\", \"Age\": 33}"),
             IsComplete = true
         };
@@ -108,7 +108,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "text/json" },
             Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\", \"Age\": notanumber}"),
             IsComplete = true
         };
@@ -130,7 +130,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "application/json" },
             Content = Encoding.UTF8.GetBytes("<User><Name>Tom</Name><Age>thirtythree</Age></User>"),
             IsComplete = true
         };
@@ -151,7 +151,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "application/json" },
             Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\"; \"Age\": 33}"),
             IsComplete = true
         };
@@ -172,7 +172,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "text/json" },
             Content = Encoding.UTF8.GetBytes("<User><Name>Tom</><Age>thirtythree</Age></User>"),
             IsComplete = true
         };

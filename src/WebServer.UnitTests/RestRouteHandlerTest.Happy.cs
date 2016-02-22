@@ -16,7 +16,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.XML },
+            AcceptMediaTypes = new[] { "application/xml" },
             IsComplete = true
         };  
 
@@ -41,7 +41,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
           Method = HttpMethod.GET,
           Uri = new Uri("/users?userId=2", UriKind.RelativeOrAbsolute),
-          AcceptMediaTypes = new[] { MediaType.XML },
+          AcceptMediaTypes = new[] { "application/xml" },
           IsComplete = true
         };
 
@@ -104,7 +104,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "text/json" },
             IsComplete = true
         };
 
@@ -129,7 +129,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "application/json" },
             Content = Encoding.UTF8.GetBytes("{\"Name\": \"Tom\", \"Age\": 33}"),
             IsComplete = true
         };
@@ -153,7 +153,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.PUT,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "application/json" },
             Content = Encoding.UTF8.GetBytes("{Name: Tom, Age: 21}"),
             IsComplete = true
         };
@@ -193,7 +193,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
         {
             Method = HttpMethod.GET,
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
-            AcceptMediaTypes = new[] { MediaType.JSON },
+            AcceptMediaTypes = new[] { "text/json" },
             IsComplete = true
         };
 

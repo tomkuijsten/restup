@@ -14,8 +14,8 @@ namespace Devkoes.HttpMessage
         string ContentTypeCharset { get;  }
         IEnumerable<string> AcceptCharsets { get;  }
         int ContentLength { get;  }
-        MediaType? ContentType { get;  }
-        IEnumerable<MediaType> AcceptMediaTypes { get;  }
+        string ContentType { get;  }
+        IEnumerable<string> AcceptMediaTypes { get;  }
         byte[] Content { get;  }
         bool IsComplete { get;  }
     }

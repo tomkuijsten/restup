@@ -46,14 +46,14 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
         public static IHttpServerRequest CreateHttpRequest(IEnumerable<IHttpRequestHeader> headers = null,
             HttpMethod? method = HttpMethod.GET, Uri uri = null, string httpVersion = "HTTP / 1.1",
             string contentTypeCharset = null, IEnumerable<string> acceptCharsets = null,
-            int contentLength = 0, MediaType? contentType = null,
-            IEnumerable<MediaType> acceptMediaTypes = null, byte[] content = null,
+            int contentLength = 0, string contentType = null,
+            IEnumerable<string> acceptMediaTypes = null, byte[] content = null,
             bool isComplete = true)
         {
             return new HttpServerRequest(headers ?? Enumerable.Empty<IHttpRequestHeader>(), method,
                 uri ?? new Uri("/Get", UriKind.Relative), httpVersion, contentTypeCharset,
                 acceptCharsets ?? Enumerable.Empty<string>(),
-                contentLength, contentType, acceptMediaTypes ?? Enumerable.Empty<MediaType>(), content ?? new byte[] {},
+                contentLength, contentType, acceptMediaTypes ?? Enumerable.Empty<string>(), content ?? new byte[] {},
                 isComplete);
         }
     }
