@@ -118,7 +118,7 @@
     <Compile Include="IRouteHandler.cs" />
     <Compile Include="Models\Schemas\MediaType.cs" />
     <Compile Include="Models\Schemas\RestServerRequest.cs" />
-    <Compile Include="RestRoutehandler.cs" />
+    <Compile Include="Rest\RestRoutehandler.cs" />
     <Compile Include="Rest\RestControllerMethodWithContentExecutor.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Rest\RestControllerMethodExecutorFactory.cs" />

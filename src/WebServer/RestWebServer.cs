@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Devkoes.HttpMessage;
 using Devkoes.Restup.WebServer.Http;
+using Devkoes.Restup.WebServer.Rest;
 
 namespace Devkoes.Restup.WebServer
 {

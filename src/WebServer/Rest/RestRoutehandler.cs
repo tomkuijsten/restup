@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Rest;
 
-namespace Devkoes.Restup.WebServer
+namespace Devkoes.Restup.WebServer.Rest
 {
     public class RestRoutehandler : IRouteHandler
     {

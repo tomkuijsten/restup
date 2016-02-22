@@ -5,6 +5,7 @@ using System.Net;
 using Devkoes.HttpMessage;
 using Devkoes.HttpMessage.Models.Contracts;
 using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Rest;
 
 namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
 {
