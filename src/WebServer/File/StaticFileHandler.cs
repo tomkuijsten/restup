@@ -51,7 +51,7 @@ namespace Devkoes.Restup.WebServer.File
         {
             var notFoundResponse = new HttpServerResponse(new Version(1, 1), HttpResponseStatus.NotFound)
             {
-                Content = Encoding.UTF8.GetBytes($"File not found at {localPath} not found"),
+                Content = Encoding.UTF8.GetBytes($"File at {localPath} not found."),
                 ContentType = "text/plain",
                 ContentCharset = "utf-8"
             };
