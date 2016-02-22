@@ -136,6 +136,10 @@
       <Project>{8383dc52-161b-4085-b133-4420e995668d}</Project>
       <Name>DemoControllers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DemoStaticFiles\DemoStaticFiles.csproj">
+      <Project>{71394b97-2990-4e92-a7cc-0642d4860651}</Project>
+      <Name>DemoStaticFiles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebServer\WebServer.csproj">
       <Project>{837b8ff3-ded6-4dc7-ad58-dbb0b3e44dd4}</Project>
       <Name>WebServer</Name>

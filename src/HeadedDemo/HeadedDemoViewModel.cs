@@ -19,6 +19,7 @@ namespace HeadedDemo
         private string _relativeUri;
         private string _method;
         private string _body;
+        private Uri _webViewUri;
 
         public bool IsNotSendingRequest
         {
@@ -49,6 +50,12 @@ namespace HeadedDemo
             set { _relativeUri = value; OnPropertyChanged(); }
         }
 
+        public Uri WebViewUri
+        {
+            get { return _webViewUri; }
+            set { _webViewUri = value; OnPropertyChanged(); }
+        }
+
         public string Method
         {
             get { return _method; }
@@ -72,9 +79,10 @@ namespace HeadedDemo
         {
             SendCommand = new DelegateCommand<string>(SendRequest, _ => IsNotSendingRequest);
 
-            _baseUri = new Uri("http://127.0.0.1:8800/api/");
+            _baseUri = new Uri("http://127.0.0.1:8800/");
             Method = "GET";
-            RelativeUri = "/simpleparameter/2/property/propname";
+            RelativeUri = "/api/simpleparameter/2/property/propname";
+            WebViewUri = GetAbsoluteUri();
             IsNotSendingRequest = true;
         }
 
@@ -98,7 +106,8 @@ namespace HeadedDemo
 
         private async Task SendRequest()
         {
-            var requestUri = new Uri(_baseUri + RelativeUri.TrimStart('/'));
+            var requestUri = GetAbsoluteUri();
+            WebViewUri = requestUri;
 
             var webRequest = WebRequest.CreateHttp(requestUri);
             webRequest.Accept = "application/json";
@@ -124,6 +133,11 @@ namespace HeadedDemo
                 WriteToOutput((HttpWebResponse)response, readAll);
             }
             response.Dispose();
+        }
+
+        private Uri GetAbsoluteUri()
+        {
+            return new Uri(_baseUri + RelativeUri.TrimStart('/'));
         }
 
         private void WriteToOutput(HttpWebResponse response, string readAll)

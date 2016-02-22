@@ -1,6 +1,7 @@
 ﻿using Devkoes.Restup.DemoControllers;
 using Devkoes.Restup.WebServer;
 using Windows.ApplicationModel.Background;
+using Devkoes.Restup.WebServer.File;
 using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Rest;
 
@@ -40,6 +41,7 @@ namespace Devkoes.Restup.HeadlessDemo
             restRouteHandler.RegisterController<WithResponseContentControllerSample>();
 
             httpServer.RegisterRoute("api", restRouteHandler);
+            httpServer.RegisterRoute(new StaticFileHandler(@"DemoStaticFiles\Web"));
 
             await httpServer.StartServerAsync();
 

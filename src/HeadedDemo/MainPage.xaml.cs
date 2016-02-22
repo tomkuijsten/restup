@@ -3,6 +3,7 @@ using Devkoes.Restup.WebServer;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Devkoes.Restup.WebServer.File;
 using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Rest;
 
@@ -44,6 +45,7 @@ namespace HeadedDemo
 
             httpServer.RegisterRoute("api", restRouteHandler);
 
+            httpServer.RegisterRoute(new StaticFileHandler(@"DemoStaticFiles\Web"));
             await httpServer.StartServerAsync();
 
             // Dont release deferral, otherwise app will stop
