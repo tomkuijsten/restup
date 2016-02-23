@@ -4,13 +4,13 @@ using Devkoes.HttpMessage;
 
 namespace Devkoes.Restup.WebServer.Rest
 {
-    public class RestRoutehandler : IRouteHandler
+    public class RestRouteHandler : IRouteHandler
     {
         private readonly RestControllerRequestHandler _requestHandler;
         private readonly RestToHttpResponseConverter _restToHttpConverter;
         private readonly RestServerRequestFactory _restServerRequestFactory;
 
-        public RestRoutehandler()
+        public RestRouteHandler()
         {
             _restServerRequestFactory = new RestServerRequestFactory();
             _requestHandler = new RestControllerRequestHandler();

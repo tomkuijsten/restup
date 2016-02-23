@@ -33,7 +33,7 @@ namespace HeadedDemo
             var httpServer = new HttpServer(8800);
             _httpServer = httpServer;
 
-            var restRouteHandler = new RestRoutehandler();
+            var restRouteHandler = new RestRouteHandler();
 
             restRouteHandler.RegisterController<AsyncControllerSample>();
             restRouteHandler.RegisterController<FromContentControllerSample>();
@@ -45,7 +45,7 @@ namespace HeadedDemo
 
             httpServer.RegisterRoute("api", restRouteHandler);
 
-            httpServer.RegisterRoute(new StaticFileHandler(@"DemoStaticFiles\Web"));
+            httpServer.RegisterRoute(new StaticFileRouteHandler(@"DemoStaticFiles\Web"));
             await httpServer.StartServerAsync();
 
             // Dont release deferral, otherwise app will stop

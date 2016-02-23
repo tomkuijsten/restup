@@ -10,13 +10,13 @@ namespace Devkoes.Restup.WebServer
     public class RestWebServer : IDisposable
     {
         private readonly HttpServer _httpServer;
-        private readonly RestRoutehandler _restRoutehandler;
+        private readonly RestRouteHandler _restRouteHandler;
 
         public RestWebServer(int port, string urlPrefix)
         {
             var httpServer = new HttpServer(port);
-            _restRoutehandler = new RestRoutehandler();
-            httpServer.RegisterRoute(urlPrefix, _restRoutehandler);
+            _restRouteHandler = new RestRouteHandler();
+            httpServer.RegisterRoute(urlPrefix, _restRouteHandler);
 
             _httpServer = httpServer;
         }
@@ -33,17 +33,17 @@ namespace Devkoes.Restup.WebServer
 
         public void RegisterController<T>() where T : class
         {
-            _restRoutehandler.RegisterController<T>();
+            _restRouteHandler.RegisterController<T>();
         }
 
         public void RegisterController<T>(params object[] args) where T : class
         {
-            _restRoutehandler.RegisterController<T>(() => args);
+            _restRouteHandler.RegisterController<T>(() => args);
         }
 
         public void RegisterController<T>(Func<object[]> args) where T : class
         {
-            _restRoutehandler.RegisterController<T>(args);
+            _restRouteHandler.RegisterController<T>(args);
         }
 
         internal Task<HttpServerResponse> HandleRequest(IHttpServerRequest request)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,11 +9,11 @@ using Devkoes.HttpMessage.Models.Schemas;
 
 namespace Devkoes.Restup.WebServer.File
 {
-    public class StaticFileHandler : IRouteHandler
+    public class StaticFileRouteHandler : IRouteHandler
     {
         private readonly string basePath;
 
-        public StaticFileHandler(string basePath)
+        public StaticFileRouteHandler(string basePath)
         {
             this.basePath = GetAbsoluteBasePathUri(basePath);
         }
