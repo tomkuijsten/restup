@@ -15,18 +15,18 @@ namespace Devkoes.Restup.WebServer.Http
     {
         private readonly int _port;
         private readonly StreamSocketListener _listener;
-        private readonly List<RouteRegistration> _routes;
+        private readonly SortedSet<RouteRegistration> _routes;
 
         public HttpServer(int serverPort)
-        {            
+        {
             _listener = new StreamSocketListener();
             _listener.ConnectionReceived += ProcessRequestAsync;
 
-            _port = serverPort;            
+            _port = serverPort;
 
-            _routes = new List<RouteRegistration>();
+            _routes = new SortedSet<RouteRegistration>();
         }
-       
+
         public async Task StartServerAsync()
         {
             await _listener.BindServiceNameAsync(_port.ToString());
@@ -110,10 +110,15 @@ namespace Devkoes.Restup.WebServer.Http
         /// <param name="restRoutehandler">The rest route handler to register.</param>
         public void RegisterRoute(string urlPrefix, IRouteHandler restRoutehandler)
         {
-            _routes.Add(new RouteRegistration(urlPrefix, restRoutehandler));
+            var routeRegistration = new RouteRegistration(urlPrefix, restRoutehandler);
+
+            if (_routes.Contains(routeRegistration))
+                throw new Exception($"RouteHandler already registered for prefix: {urlPrefix}");
+
+            _routes.Add(routeRegistration);
         }
 
-        private class RouteRegistration
+        private class RouteRegistration : IComparable<RouteRegistration>
         {
             private readonly IRouteHandler routeHandler;
             private readonly string urlPrefix;
@@ -126,7 +131,7 @@ namespace Devkoes.Restup.WebServer.Http
 
             public bool Match(IHttpServerRequest request)
             {
-                return request.Uri.ToString().StartsWith(urlPrefix);
+                return request.Uri.ToString().StartsWith(urlPrefix, StringComparison.OrdinalIgnoreCase);
             }
 
             private static IHttpServerRequest CreateHttpRequestWithUnprefixedUrl(IHttpServerRequest request, string prefix)
@@ -153,6 +158,11 @@ namespace Devkoes.Restup.WebServer.Http
                 var unPrefixedRequest = CreateHttpRequestWithUnprefixedUrl(request, urlPrefix);
 
                 return routeHandler.HandleRequest(unPrefixedRequest);
+            }
+
+            public int CompareTo(RouteRegistration other)
+            {
+                return string.Compare(other.urlPrefix, urlPrefix, StringComparison.OrdinalIgnoreCase);
             }
         }
     }

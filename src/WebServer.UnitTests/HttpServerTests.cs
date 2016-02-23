@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Devkoes.HttpMessage;
 using Devkoes.HttpMessage.Models.Schemas;
@@ -24,8 +26,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
 
-            Assert.IsNotNull(routeHandler.LastRequest);
-            Assert.AreEqual(routeHandler.LastRequest.Uri, uri);
+            Assert.AreEqual(routeHandler.Requests.Count(), 1);
+            Assert.AreEqual(routeHandler.Requests.First().Uri, uri);
         }
 
         [TestMethod]
@@ -44,8 +46,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
 
-            Assert.IsNotNull(routeHandler.LastRequest);
-            Assert.AreEqual(new Uri("/Get", UriKind.Relative), routeHandler.LastRequest.Uri);
+            Assert.AreEqual(routeHandler.Requests.Count(), 1);
+            Assert.AreEqual(new Uri("/Get", UriKind.Relative), routeHandler.Requests.First().Uri);
         }
 
         [TestMethod]
@@ -60,13 +62,113 @@ namespace Devkoes.Restup.WebServer.UnitTests
             Assert.AreEqual(HttpResponseStatus.BadRequest, response.ResponseStatus);
         }
 
+        [TestMethod]
+        public void GivenMultipleRouteHandlersAreAddedInSequentialOrder_WhenRequestIsReceivedOnApiRoute_ThenRequestIsSuccesfullyReceived()
+        {
+            var httpServer = new HttpServer(80);
+            var anyRouteHandler = new TestRouteHandler();
+            var apiRouteHandler = new TestRouteHandler();
+
+            httpServer.RegisterRoute(anyRouteHandler);
+            httpServer.RegisterRoute("api", apiRouteHandler);
+
+            var apiUri = new Uri("/api/Get", UriKind.Relative);
+            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: apiUri)).Result;
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
+
+            Assert.AreEqual(apiRouteHandler.Requests.Count(), 1);
+            Assert.AreEqual(anyRouteHandler.Requests.Count(), 0);
+        }
+
+        [TestMethod]
+        public void GivenMultipleRouteHandlersAreAddedInSequentialOrder_WhenRequestIsReceivedOnAnyRoute_ThenRequestIsSuccesfullyReceived()
+        {
+            var httpServer = new HttpServer(80);
+            var anyRouteHandler = new TestRouteHandler();
+            var apiRouteHandler = new TestRouteHandler();
+
+            httpServer.RegisterRoute(anyRouteHandler);
+            httpServer.RegisterRoute("api", apiRouteHandler);
+
+            var apiUri = new Uri("/index.html", UriKind.Relative);
+            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: apiUri)).Result;
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
+
+            Assert.AreEqual(apiRouteHandler.Requests.Count(), 0);
+            Assert.AreEqual(anyRouteHandler.Requests.Count(), 1);
+        }
+
+        [TestMethod]
+        public void GivenMultipleRouteHandlersAreAddedInReverseOrder_WhenRequestIsReceivedOnApiRoute_ThenRequestIsSuccesfullyReceived()
+        {
+            var httpServer = new HttpServer(80);
+            var anyRouteHandler = new TestRouteHandler();
+            var apiRouteHandler = new TestRouteHandler();
+
+            httpServer.RegisterRoute("api", apiRouteHandler);
+            httpServer.RegisterRoute(anyRouteHandler);
+
+            var apiUri = new Uri("/api/Get", UriKind.Relative);
+            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: apiUri)).Result;
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
+
+            Assert.AreEqual(apiRouteHandler.Requests.Count(), 1);
+            Assert.AreEqual(anyRouteHandler.Requests.Count(), 0);
+        }
+
+        [TestMethod]
+        public void GivenMultipleRouteHandlersAreAddedInReverseOrder_WhenRequestIsReceivedOnAnyRoute_ThenRequestIsSuccesfullyReceived()
+        {
+            var httpServer = new HttpServer(80);
+            var anyRouteHandler = new TestRouteHandler();
+            var apiRouteHandler = new TestRouteHandler();
+
+            httpServer.RegisterRoute("api", apiRouteHandler);
+            httpServer.RegisterRoute(anyRouteHandler);
+
+            var apiUri = new Uri("/index.html", UriKind.Relative);
+            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: apiUri)).Result;
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
+
+            Assert.AreEqual(apiRouteHandler.Requests.Count(), 0);
+            Assert.AreEqual(anyRouteHandler.Requests.Count(), 1);
+        }
+
+        [TestMethod]
+        public void GivenMultipleRouteHandlersAreBeingAddedWithTheSamePrefix_ThenAnExceptionShouldBeThrown()
+        {
+            var httpServer = new HttpServer(80);
+            httpServer.RegisterRoute("api", new TestRouteHandler());
+
+            Assert.ThrowsException<Exception>(() => httpServer.RegisterRoute("api", new TestRouteHandler()));
+        }
+
+        [TestMethod]
+        public void GivenMultipleRouteHandlersAreBeingAddedOnTheCatchAllRoute_ThenAnExceptionShouldBeThrown()
+        {
+            var httpServer = new HttpServer(80);
+            httpServer.RegisterRoute(new TestRouteHandler());
+
+            Assert.ThrowsException<Exception>(() => httpServer.RegisterRoute(new TestRouteHandler()));
+        }
+
         private class TestRouteHandler : IRouteHandler
         {
-            internal IHttpServerRequest LastRequest { get; private set; }
+            private readonly List<IHttpServerRequest> _requests = new List<IHttpServerRequest>();
+
+            internal IEnumerable<IHttpServerRequest> Requests => _requests;
 
             public Task<HttpServerResponse> HandleRequest(IHttpServerRequest request)
             {
-                LastRequest = request;
+                _requests.Add(request);
                 return Task.FromResult(Utils.CreateOkHttpServerResponse());
             }            
         }
