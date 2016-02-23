@@ -10,5 +10,6 @@ namespace Devkoes.Restup.WebServer.Models.Contracts
         TResult Visit(PostResponse response, TParam param);
         TResult Visit(StatusOnlyResponse statusOnlyResponse, TParam param);
         TResult Visit(MethodNotAllowedResponse methodNotAllowedResponse, TParam param);
+        TResult Visit(SendFile response, TParam param);
     }
 }

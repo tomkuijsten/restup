@@ -99,6 +99,11 @@ namespace Devkoes.Restup.WebServer.Rest
                 {
                     firstAvailableEncoding = Configuration.Default.DefaultXMLCharset;
                 }
+                //added to support HTML requests and file serving
+                else if ((acceptMediaType == MediaType.HTML) || (acceptMediaType == MediaType.CSS))
+                {
+                    firstAvailableEncoding = Configuration.Default.DefaultHTMLCharset;
+                }
                 else
                 {
                     throw new NotImplementedException("Accept media type is not supported.");

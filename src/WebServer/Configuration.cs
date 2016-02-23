@@ -18,6 +18,7 @@ namespace Devkoes.Restup.WebServer
 
             DefaultJSONCharset = "utf-8";
             DefaultXMLCharset = "utf-8";
+            DefaultHTMLCharset = "utf-8";
         }
 
         public MediaType DefaultAcceptType { get; set; }
@@ -25,5 +26,6 @@ namespace Devkoes.Restup.WebServer
 
         public string DefaultJSONCharset { get; set; }
         public string DefaultXMLCharset { get; set; }
+        public string DefaultHTMLCharset { get; set; } 
     }
 }

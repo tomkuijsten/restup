@@ -11,7 +11,10 @@ namespace Devkoes.HttpMessage.Plumbing
         {
             [MediaType.Unsupported] = "",
             [MediaType.JSON] = "application/json",
-            [MediaType.XML] = "application/xml"
+            [MediaType.XML] = "application/xml",
+            [MediaType.HTML] = "text/html",
+            [MediaType.CSS] = "text/css",
+            [MediaType.IMAGE] = "image"
         };
 
         private readonly IDictionary<string, MediaType> _textAsMediaType = new Dictionary<string, MediaType>()
@@ -20,6 +23,10 @@ namespace Devkoes.HttpMessage.Plumbing
             ["text/json"] = MediaType.JSON,
             ["application/xml"] = MediaType.XML,
             ["text/xml"] = MediaType.XML,
+            ["text/html"] = MediaType.HTML,
+            ["image"] = MediaType.IMAGE,
+            ["text/css"] = MediaType.CSS,
+            ["text/plain"] = MediaType.HTML
         };
 
         // From http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html
