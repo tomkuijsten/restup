@@ -96,6 +96,10 @@
     <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="File\MockFile.cs" />
+    <Compile Include="File\MockFileSystem.cs" />
+    <Compile Include="File\StaticFileRouteHandlerFluentTests.cs" />
+    <Compile Include="File\StaticFileRouteHandlerTests.cs" />
     <Compile Include="HttpServerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rest\RestControllerRequestHandlerTest.cs" />

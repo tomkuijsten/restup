@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
-using Windows.Storage;
 using Devkoes.HttpMessage;
 using Devkoes.HttpMessage.Models.Schemas;
 
@@ -11,17 +10,23 @@ namespace Devkoes.Restup.WebServer.File
 {
     public class StaticFileRouteHandler : IRouteHandler
     {
-        private readonly string basePath;
+        private readonly string _basePath;
+        private readonly IFileSystem _fileSystem;
 
-        public StaticFileRouteHandler(string basePath)
+        public StaticFileRouteHandler(string basePath = null, IFileSystem fileSystem = null)
         {
-            this.basePath = GetAbsoluteBasePathUri(basePath);
+            _basePath = GetAbsoluteBasePathUri(basePath ?? string.Empty);
+            _fileSystem = fileSystem ?? new PhysicalFileSystem();
+
+            if (!_fileSystem.Exists(_basePath))
+                throw new Exception($"Path at {_basePath} could not be found.");
         }
 
         private static string GetAbsoluteBasePathUri(string relativeOrAbsoluteBasePath)
         {
-            var basePathUri = new Uri(relativeOrAbsoluteBasePath, UriKind.RelativeOrAbsolute);
-            if (basePathUri.IsAbsoluteUri)
+            relativeOrAbsoluteBasePath = relativeOrAbsoluteBasePath.TrimStart('\\');
+
+            if (Path.IsPathRooted(relativeOrAbsoluteBasePath))
                 return relativeOrAbsoluteBasePath;
 
             return Path.Combine(Package.Current.InstalledLocation.Path, relativeOrAbsoluteBasePath);
@@ -33,10 +38,10 @@ namespace Devkoes.Restup.WebServer.File
             var absoluteFilePath = GetAbsoluteFilePath(localFilePath);
 
             // todo: add validation for invalid path characters / invalid filename characters
-            StorageFile item;
+            IFile item;
             try
             {
-                item = await StorageFile.GetFileFromPathAsync(absoluteFilePath);
+                item = await _fileSystem.GetFileFromPathAsync(absoluteFilePath);
             }
             catch (FileNotFoundException)
             {
@@ -57,7 +62,7 @@ namespace Devkoes.Restup.WebServer.File
             return notFoundResponse;
         }
 
-        private async Task<HttpServerResponse> GetHttpResponse(StorageFile item)
+        private async Task<HttpServerResponse> GetHttpResponse(IFile item)
         {
             // todo: do validation on file extension, probably want to have a whitelist
             using (var inputStream = await item.OpenStreamForReadAsync())
@@ -85,7 +90,7 @@ namespace Devkoes.Restup.WebServer.File
 
         private string GetAbsoluteFilePath(string localFilePath)
         {
-            var absoluteFilePath = Path.Combine(basePath, localFilePath);
+            var absoluteFilePath = Path.Combine(_basePath, localFilePath);
             return absoluteFilePath;
         }
 

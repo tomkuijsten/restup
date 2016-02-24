@@ -115,6 +115,10 @@
     <Compile Include="Attributes\UriFormatAttribute.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="EncodingCache.cs" />
+    <Compile Include="File\IFile.cs" />
+    <Compile Include="File\IFileSystem.cs" />
+    <Compile Include="File\PhysicalFile.cs" />
+    <Compile Include="File\PhysicalFileSystem.cs" />
     <Compile Include="File\StaticFileRouteHandler.cs" />
     <Compile Include="IRouteHandler.cs" />
     <Compile Include="Models\Schemas\MediaType.cs" />
