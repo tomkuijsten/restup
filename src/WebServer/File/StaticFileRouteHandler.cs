@@ -34,6 +34,9 @@ namespace Devkoes.Restup.WebServer.File
 
         public async Task<HttpServerResponse> HandleRequest(IHttpServerRequest request)
         {
+            if(request.Method != HttpMethod.GET)
+                return GetMethodNotAllowedResponse(request.Method);
+
             var localFilePath = GetFilePath(request.Uri);
             var absoluteFilePath = GetAbsoluteFilePath(localFilePath);
 
@@ -60,6 +63,20 @@ namespace Devkoes.Restup.WebServer.File
                 ContentCharset = "utf-8"
             };
             return notFoundResponse;
+        }
+
+        private static HttpServerResponse GetMethodNotAllowedResponse(HttpMethod? method)
+        {
+            // https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
+            // The method specified in the Request-Line is not allowed for the resource identified by the Request-URI. The response MUST include an Allow header containing a list of valid methods for the requested resource.
+            var methodNotAllowedResponse = new HttpServerResponse(new Version(1, 1), HttpResponseStatus.MethodNotAllowed)
+            {
+                Content = Encoding.UTF8.GetBytes($"Unsupported method {method}."),
+                Allow = new [] { HttpMethod.GET },
+                ContentType = "text/plain",
+                ContentCharset = "utf-8"
+            };
+            return methodNotAllowedResponse;
         }
 
         private async Task<HttpServerResponse> GetHttpResponse(IFile item)

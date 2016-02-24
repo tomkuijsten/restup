@@ -1,4 +1,5 @@
 ﻿using Windows.ApplicationModel;
+using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.Restup.WebServer.File;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
@@ -84,6 +85,37 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
                     .FileExists(@"c:\wwwroot\path.html")
                 .When
                     .GetRequestReceived("/path.html?key=value")
+                .Then
+                    .AssertOkResponseExists();
+        }
+
+        [TestMethod]
+        [DataRow(HttpMethod.POST)]
+        [DataRow(HttpMethod.DELETE)]
+        [DataRow(HttpMethod.PUT)]
+        [DataRow(HttpMethod.Unsupported)]
+        [DataRow(null)]
+        public void UnsupportedHttpMethodReturnsMethodNotAllowed(HttpMethod httpMethod)
+        {
+            new StaticFileRouteHandlerFluentTests()
+                .Given
+                    .SetUp(basePath: null)
+                    .FileExists(Package.Current.InstalledLocation.Path + @"\index.html", "test test test")
+                .When
+                    .GetRequestReceived("/index.html", httpMethod)
+                .Then
+                    .AssertMethodNotAllowedResponseExists();
+        }
+
+        [TestMethod]
+        public void GetHttpMethodReturnsOkRequest()
+        {
+            new StaticFileRouteHandlerFluentTests()
+                .Given
+                    .SetUp(basePath: null)
+                    .FileExists(Package.Current.InstalledLocation.Path + @"\index.html", "test test test")
+                .When
+                    .GetRequestReceived("/index.html", HttpMethod.GET)
                 .Then
                     .AssertOkResponseExists();
         }

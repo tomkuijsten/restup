@@ -34,9 +34,9 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
             return this;
         }
 
-        public StaticFileRouteHandlerFluentTests GetRequestReceived(string uri)
+        public StaticFileRouteHandlerFluentTests GetRequestReceived(string uri, HttpMethod method = HttpMethod.GET)
         {
-            var request = Utils.CreateHttpRequest(uri: new Uri(uri, UriKind.Relative));
+            var request = Utils.CreateHttpRequest(uri: new Uri(uri, UriKind.Relative), method: method);
             response = routeHandler.HandleRequest(request).Result;
             
             return this;
@@ -59,6 +59,13 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
         {
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpResponseStatus.NotFound, response.ResponseStatus);
+            return this;
+        }
+
+        public StaticFileRouteHandlerFluentTests AssertMethodNotAllowedResponseExists()
+        {
+            Assert.IsNotNull(response);
+            Assert.AreEqual(HttpResponseStatus.MethodNotAllowed, response.ResponseStatus);
             return this;
         }
 
