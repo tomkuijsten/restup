@@ -118,12 +118,13 @@ namespace Devkoes.HttpMessage
                 var contentTypeHeader = Headers.OfType<ContentTypeHeader>().SingleOrDefault();
                 if (contentTypeHeader == null)
                 {
-                    contentTypeHeader = new ContentTypeHeader(MediaType.Unsupported, value);
+                    contentTypeHeader = new ContentTypeHeader(string.Empty, value);
                     _headers.Add(contentTypeHeader);
                 }
                 else
                 {
-                    contentTypeHeader.Charset = value;
+                    _headers.Remove(contentTypeHeader);
+                    _headers.Add(new ContentTypeHeader(contentTypeHeader.ContentType, value));
                 }
 
                 // We should reset the content length, because the charset determines the encoding length
@@ -131,7 +132,7 @@ namespace Devkoes.HttpMessage
             }
         }
 
-        public MediaType? ContentType
+        public string ContentType
         {
             get
             {
@@ -144,14 +145,15 @@ namespace Devkoes.HttpMessage
                 {
                     _headers.Remove(contentTypeHeader);
                 }
-                else if (value.HasValue && contentTypeHeader == null)
+                else if (!string.IsNullOrWhiteSpace(value) && contentTypeHeader == null)
                 {
-                    contentTypeHeader = new ContentTypeHeader(value.Value, null);
+                    contentTypeHeader = new ContentTypeHeader(value, null);
                     _headers.Add(contentTypeHeader);
                 }
-                else if (value.HasValue)
+                else if (!string.IsNullOrWhiteSpace(value))
                 {
-                    contentTypeHeader.ContentType = value.Value;
+                    _headers.Remove(contentTypeHeader);
+                    _headers.Add(new ContentTypeHeader(value, contentTypeHeader.Charset));
                 }
 
                 // We should reset the length, because the default encoder is based on contenttype

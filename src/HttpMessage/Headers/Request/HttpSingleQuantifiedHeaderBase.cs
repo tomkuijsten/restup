@@ -2,13 +2,12 @@
 {
     public abstract class HttpSingleQuantifiedHeaderBase : HttpRequestHeaderBase
     {
-        public QuantifiedHeaderValue QuantifiedHeaderValue { get; set; }
+        public QuantifiedHeaderValue QuantifiedHeaderValue { get; }
 
-        public HttpSingleQuantifiedHeaderBase(string name, string value, QuantifiedHeaderValue quantifiedHeaderValue)
+        protected HttpSingleQuantifiedHeaderBase(string name, string value, QuantifiedHeaderValue quantifiedHeaderValue)
             : base(name, value)
         {
             QuantifiedHeaderValue = quantifiedHeaderValue;
-
         }
     }
 }

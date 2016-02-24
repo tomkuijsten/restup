@@ -29,6 +29,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)Headers\UntypedRequestHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\UntypedResponseHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpServerRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IHttpServerRequest.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MutableHttpServerRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpServerResponse.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpRequestHeader.cs" />
@@ -38,7 +40,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\ExtractedWord.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\HttpMethod.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\HttpResponseStatus.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\MediaType.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\StreamReadResult.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plumbing\Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plumbing\Extensions.cs" />

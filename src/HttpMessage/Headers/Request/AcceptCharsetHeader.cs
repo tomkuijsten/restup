@@ -8,7 +8,7 @@ namespace Devkoes.HttpMessage.Headers.Request
     {
         internal static string NAME = "Accept-Charset";
 
-        public IEnumerable<string> ResponseContentEncoding { get; set; }
+        public IEnumerable<string> ResponseContentEncoding { get; }
 
         public AcceptCharsetHeader(string value, IEnumerable<QuantifiedHeaderValue> quantifiedHeaderValues)
             : base(NAME, value, quantifiedHeaderValues)

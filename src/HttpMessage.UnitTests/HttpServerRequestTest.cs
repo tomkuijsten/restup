@@ -19,7 +19,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             var byteStreamParts = new List<byte[]>();
             byteStreamParts.Add(Encoding.UTF8.GetBytes(streamedRequest));
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(HttpMethod.GET, request.Method);
             Assert.AreEqual(new Uri("/api/data", UriKind.Relative), request.Uri);
@@ -46,15 +46,16 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             var byteStreamParts = new List<byte[]>();
             byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
             Assert.IsTrue(request.Headers.Any(h => h.Name == "UnknownHeader" && h.Value == "some:value"));
             Assert.AreEqual(4, request.ContentLength);
             Assert.AreEqual("utf-8", request.ContentTypeCharset);
-            Assert.AreEqual(MediaType.XML, request.ContentType);
+            Assert.AreEqual("text/xml", request.ContentType);
             Assert.AreEqual("utf-7", request.AcceptCharsets.First());
-            Assert.AreEqual(MediaType.JSON, request.AcceptMediaTypes.First());
+            Assert.AreEqual("application/json", request.AcceptMediaTypes.First());
+            Assert.AreEqual("text/xml", request.AcceptMediaTypes.Skip(1).First());
         }
 
         [TestMethod]
@@ -64,10 +65,10 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
 
             var byteStreamParts = Encoding.UTF8.GetBytes(streamedRequest);
 
-            var request = HttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.AreEqual(MediaType.XML, request.AcceptMediaTypes.First());
+            Assert.AreEqual("text/xml", request.AcceptMediaTypes.First());
         }
 
         [TestMethod]
@@ -77,10 +78,10 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
 
             var byteStreamParts = Encoding.UTF8.GetBytes(streamedRequest);
 
-            var request = HttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
 
             Assert.AreEqual(true, request.IsComplete);
-            Assert.AreEqual(MediaType.JSON, request.AcceptMediaTypes.First());
+            Assert.AreEqual("application/json", request.AcceptMediaTypes.First());
         }
 
         [TestMethod]
@@ -90,7 +91,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
 
             var byteStreamParts = Encoding.UTF8.GetBytes(streamedRequest);
 
-            var request = HttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
 
             Assert.AreEqual(true, request.IsComplete);
             Assert.AreEqual("utf-8", request.AcceptCharsets.First());
@@ -103,7 +104,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
 
             var byteStreamParts = Encoding.UTF8.GetBytes(streamedRequest);
 
-            var request = HttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(new[] { byteStreamParts })).Result;
 
             Assert.AreEqual(true, request.IsComplete);
             Assert.AreEqual("iso-8859-1", request.AcceptCharsets.First());
@@ -122,7 +123,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             var byteStreamParts = new List<byte[]>();
             byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(false, request.IsComplete);
         }
@@ -141,7 +142,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             var byteStreamParts = new List<byte[]>();
             byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest) + extraData));
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(false, request.IsComplete);
         }
@@ -161,7 +162,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
             byteStreamParts.Add(Encoding.UTF8.GetBytes(extraData));
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
         }
@@ -180,7 +181,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
             byteStreamParts.Add(content);
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
             CollectionAssert.AreEqual(content, request.Content);
@@ -201,7 +202,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             byteStreamParts.Add(new byte[] { });
             byteStreamParts.Add(content);
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
             CollectionAssert.AreEqual(content, request.Content);
@@ -219,7 +220,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             byteStreamParts.Add(new byte[] { });
             byteStreamParts.Add(content);
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
             CollectionAssert.AreEqual(content, request.Content);
@@ -237,7 +238,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             byteStreamParts.Add(Encoding.UTF8.GetBytes("t"));
             byteStreamParts.Add(Encoding.UTF8.GetBytes("a"));
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
             CollectionAssert.AreEqual(Encoding.UTF8.GetBytes("data"), request.Content);
@@ -254,7 +255,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             var byteStreamParts = new List<byte[]>();
             byteStreamParts.Add(Encoding.UTF8.GetBytes(string.Join("\r\n", streamedRequest)));
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(true, request.IsComplete);
         }
@@ -277,7 +278,7 @@ namespace Devkoes.Restup.HttpMessage.UnitTests
             byteStreamParts.Add(new byte[] { });
             byteStreamParts.Add(Encoding.UTF8.GetBytes(content));
 
-            var request = HttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
+            var request = MutableHttpServerRequest.Parse(new TestStream(byteStreamParts)).Result;
 
             Assert.AreEqual(false, request.IsComplete);
         }

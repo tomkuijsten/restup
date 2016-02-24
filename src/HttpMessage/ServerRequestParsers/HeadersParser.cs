@@ -36,7 +36,7 @@ namespace Devkoes.HttpMessage.ServerRequestParsers
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="resultThisFar"></param>
-        public override void HandleRequestPart(byte[] stream, HttpServerRequest resultThisFar)
+        public override void HandleRequestPart(byte[] stream, MutableHttpServerRequest resultThisFar)
         {
             UnparsedData = stream;
 

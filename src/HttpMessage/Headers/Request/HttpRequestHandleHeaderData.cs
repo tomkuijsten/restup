@@ -3,13 +3,13 @@
 namespace Devkoes.HttpMessage.Headers.Request
 {
     /// <summary>
-    /// Set specific properties on the <see cref="HttpServerRequest"/> object based
+    /// Set specific properties on the <see cref="MutableHttpServerRequest"/> object based
     /// on the httpheader.
     /// </summary>
     /// <remarks>
     /// All methods in this class are thread safe
     /// </remarks>
-    public class HttpRequestHandleHeaderData : IHttpRequestHeaderVisitor<HttpServerRequest>
+    public class HttpRequestHandleHeaderData : IHttpRequestHeaderVisitor<MutableHttpServerRequest>
     {
         internal static HttpRequestHandleHeaderData Default { get; }
 
@@ -23,28 +23,28 @@ namespace Devkoes.HttpMessage.Headers.Request
 
         }
 
-        public void Visit(AcceptHeader uh, HttpServerRequest arg)
+        public void Visit(AcceptHeader uh, MutableHttpServerRequest arg)
         {
             arg.AcceptMediaTypes = uh.AcceptTypes;
         }
 
-        public void Visit(AcceptCharsetHeader uh, HttpServerRequest arg)
+        public void Visit(AcceptCharsetHeader uh, MutableHttpServerRequest arg)
         {
             arg.AcceptCharsets = uh.ResponseContentEncoding;
         }
 
-        public void Visit(ContentTypeHeader uh, HttpServerRequest arg)
+        public void Visit(ContentTypeHeader uh, MutableHttpServerRequest arg)
         {
             arg.ContentTypeCharset = uh.ContentCharset;
             arg.ContentType = uh.ContentType;
         }
 
-        public void Visit(ContentLengthHeader uh, HttpServerRequest arg)
+        public void Visit(ContentLengthHeader uh, MutableHttpServerRequest arg)
         {
             arg.ContentLength = uh.Length;
         }
 
-        public void Visit(UntypedRequestHeader uh, HttpServerRequest arg)
+        public void Visit(UntypedRequestHeader uh, MutableHttpServerRequest arg)
         {
             // no specific info to set for untyped header
         }

@@ -10,7 +10,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
     /// </summary>
     internal struct RestServerRequest
     {
-        internal HttpServerRequest HttpServerRequest { get; private set; }
+        internal IHttpServerRequest HttpServerRequest { get; private set; }
 
         internal string AcceptCharset { get; private set; }
 
@@ -25,7 +25,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
         internal Encoding ContentEncoding { get; private set; }
 
         internal RestServerRequest(
-            HttpServerRequest httpServerRequest,
+            IHttpServerRequest httpServerRequest,
             string acceptCharset,
             MediaType acceptMediaType,
             Encoding acceptEncoding,

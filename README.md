@@ -5,9 +5,7 @@
 
 [![NuGet downloads](https://img.shields.io/nuget/dt/restup.svg)](https://www.nuget.org/packages/Restup/)
 
-Using guidelines from:
-
-https://github.com/tfredrich/RestApiTutorial.com
+Using guidelines from: https://github.com/tfredrich/RestApiTutorial.com
 
 # Intro
 
@@ -15,21 +13,43 @@ When the raspberry pi 2 was released, all windows 10 users were filled with joy 
 
 # Samples
 
-There are two samples, [HeadedDemo](src/HeadedDemo) and [HeadlessDemo](src/HeadlessDemo) who both use the controllers in the [DemoControllers](src/DemoControllers) project. The HeadedDemo contains a xaml rest client pointing to itself for easy testing. 
+There are two samples, [HeadedDemo](src/HeadedDemo) and [HeadlessDemo](src/HeadlessDemo). They use the [RestRouteHandler](src/WebServer/Rest/RestRouteHandler.cs) to serve the controllers in the [DemoControllers](src/DemoControllers) project and the [StaticFileHandler](src/WebServer/File/StaticFileRouteHandler.cs) to serve the content in the [StaticFiles](src/DemoStaticFiles) project.
 
-# Quick tutorial
+The HeadedDemo also contains a xaml rest client and a web view that points at the url you send to the server for easy testing.
+
+# Design
+
+The restup web server is setup in a modular fashion. You start by creating a HttpServer and then you can use multiple IRouteHandlers to add functionality to that server. Each IRouteHandler has to serve it's content from a different prefix. More specific (read: longer) url prefixes will be matched first.
+
+For example:
+```cs
+// all requests that follow the following pattern will be forwarded:  `/api/v001/<request>`
+// the rest routehandler will receive the <request> part
+httpServer.RegisterRoute("api/v001", new RestRouteHandler()); 
+
+// all requests that do not match any of the other routes will be forwarded: `/index.html`
+// the static file handler will receive the index.html part
+httpServer.RegisterRoute(new StaticFileHandler("wwwroot")); 
+```
+
+## Using the rest route handler
 
 We're all coders, so I'll explain in a way a coder understands best... sample code :)
 
 ```cs
 using Devkoes.Restup.WebServer;
+using Devkoes.Restup.WebServer.Rest;
+using Devkoes.Restup.WebServer.Http;
 
 private async Task InitializeWebServer()
 {
-    RestWebServer webserver = new RestWebServer(80); //defaults to 8800
-    webserver.RegisterController<ParametersController>();
-
-    await webserver.StartServerAsync();
+    HttpServer httpServer = new HttpServer(80); // defaults to 8800
+    
+    var restRouteHandler = new RestRoutehandler();
+    restRouteHandler.RegisterController<ParametersController>();
+    httpServer.RegisterRoute(restRouteHandler);       
+    
+    await httpServer.StartServerAsync();
 }
 
 ```
@@ -44,6 +64,26 @@ public class ParametersController
     return new PostResponse(PostResponse.ResponseStatus.Created, $"/users/{userId}"); 
   }
 }
+```
+
+## Using the static file handler
+
+```cs
+using Devkoes.Restup.WebServer;
+using Devkoes.Restup.WebServer.File;
+using Devkoes.Restup.WebServer.Http;
+
+private async Task InitializeWebServer()
+{
+    HttpServer httpServer = new HttpServer(80); // defaults to 8800
+    
+    var staticFileHandler = new StaticFileHandler("wwwroot"); // this will be relative to where the app is installed (Package.Current.InstalledLocation.Path)
+    
+    httpServer.RegisterRoute(staticFileHandler);
+    
+    await webserver.StartServerAsync();
+}
+
 ```
 
 # More

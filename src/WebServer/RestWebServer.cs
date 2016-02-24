@@ -1,54 +1,64 @@
-﻿using Devkoes.HttpMessage;
+﻿using System;
+using System.Threading.Tasks;
+using Devkoes.HttpMessage;
 using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Rest;
-using System;
-using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer
 {
-    public class RestWebServer : HttpServer
+    [Obsolete("Use HttpServer and RegisterRoute instead")]
+    public class RestWebServer : IDisposable
     {
-        private RestControllerRequestHandler _requestHandler;
-        private RestToHttpResponseConverter _restToHttpConverter;
-        private RestServerRequestFactory _restServerRequestFactory;
+        private readonly HttpServer _httpServer;
+        private readonly RestRouteHandler _restRouteHandler;
 
-        public RestWebServer(int port, string urlPrefix) : base(port)
+        public RestWebServer(int port, string urlPrefix)
         {
-            var fixedFormatUrlPrefix = urlPrefix.FormatRelativeUri();
+            var httpServer = new HttpServer(port);
+            _restRouteHandler = new RestRouteHandler();
+            httpServer.RegisterRoute(urlPrefix, _restRouteHandler);
 
-            _restServerRequestFactory = new RestServerRequestFactory();
-            _requestHandler = new RestControllerRequestHandler(fixedFormatUrlPrefix);
-            _restToHttpConverter = new RestToHttpResponseConverter();
+            _httpServer = httpServer;
         }
 
-        public RestWebServer(int port) : this(port, null) { }
+        public RestWebServer(int port) : this(port, null)
+        {
+            
+        }
 
-        public RestWebServer() : this(8800, null) { }
+        public RestWebServer() : this(8800, null)
+        {
+            
+        }
 
         public void RegisterController<T>() where T : class
         {
-            _requestHandler.RegisterController<T>();
+            _restRouteHandler.RegisterController<T>();
         }
 
         public void RegisterController<T>(params object[] args) where T : class
         {
-            _requestHandler.RegisterController<T>(() => args);
+            _restRouteHandler.RegisterController<T>(() => args);
         }
 
         public void RegisterController<T>(Func<object[]> args) where T : class
         {
-            _requestHandler.RegisterController<T>(args);
+            _restRouteHandler.RegisterController<T>(args);
         }
 
-        internal override async Task<HttpServerResponse> HandleRequest(HttpServerRequest request)
+        internal Task<HttpServerResponse> HandleRequest(IHttpServerRequest request)
         {
-            var restServerRequest = _restServerRequestFactory.Create(request);
+            return _httpServer.HandleRequest(request);
+        }
 
-            var restResponse = await _requestHandler.HandleRequest(restServerRequest);
+        public async Task StartServerAsync()
+        {
+            await _httpServer.StartServerAsync();
+        }
 
-            var httpResponse = restResponse.Visit(_restToHttpConverter, restServerRequest);
-
-            return httpResponse;
+        public void Dispose()
+        {
+            ((IDisposable) _httpServer).Dispose();
         }
     }
 }

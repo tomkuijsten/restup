@@ -3,6 +3,7 @@ using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
+using Devkoes.HttpMessage.Models.Schemas;
 
 namespace Devkoes.Restup.WebServer.Rest
 {
@@ -59,12 +60,27 @@ namespace Devkoes.Restup.WebServer.Rest
 
             if (response.ContentData != null)
             {
-                defaultResponse.ContentType = restReq.AcceptMediaType;
+                defaultResponse.ContentType = GetMediaTypeAsString(restReq.AcceptMediaType);
                 defaultResponse.ContentCharset = restReq.AcceptCharset;
                 defaultResponse.Content = _contentSerializer.ToAcceptContent(response.ContentData, restReq);
             }
 
             return defaultResponse;
+        }
+
+        private string GetMediaTypeAsString(MediaType acceptMediaType)
+        {
+            switch (acceptMediaType)
+            {
+                case MediaType.JSON:
+                    return "application/json";
+                case MediaType.XML:
+                    return "application/xml";
+                case MediaType.Unsupported:
+                    return "";
+            }
+
+            throw new ArgumentException($"Don't know how to convert {nameof(acceptMediaType)}.");
         }
 
         private HttpServerResponse GetDefaultResponse(IRestResponse response)

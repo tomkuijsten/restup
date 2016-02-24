@@ -1,14 +1,14 @@
-﻿using Devkoes.HttpMessage;
+﻿using System;
+using System.Linq;
+using Devkoes.HttpMessage;
 using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.Restup.WebServer.Models.Schemas;
-using System;
-using System.Linq;
 
 namespace Devkoes.Restup.WebServer.Rest
 {
     internal class RestServerRequestFactory
     {
-        public RestServerRequest Create(HttpServerRequest httpRequest)
+        public RestServerRequest Create(IHttpServerRequest httpRequest)
         {
             var acceptMediaType = GetAcceptMediaType(httpRequest);
 
@@ -29,19 +29,29 @@ namespace Devkoes.Restup.WebServer.Rest
             );
         }
 
-        private MediaType GetContentMediaType(HttpServerRequest httpRequest)
+        private MediaType GetContentMediaType(IHttpServerRequest httpRequest)
         {
-            if (httpRequest.ContentType.GetValueOrDefault() == MediaType.Unsupported)
-            {
+            var contentMediaType = GetMediaType(httpRequest.ContentType ?? string.Empty); // guard against nulls
+            if (contentMediaType == MediaType.Unsupported)
                 return Configuration.Default.DefaultContentType;
-            }
-            else
-            {
-                return httpRequest.ContentType.Value;
-            }
+
+            return contentMediaType;
         }
 
-        private string GetContentCharset(HttpServerRequest httpRequest, MediaType contentMediaType)
+        private static MediaType GetMediaType(string contentType)
+        {
+            if ("application/json".Equals(contentType, StringComparison.OrdinalIgnoreCase) ||
+                "text/json".Equals(contentType, StringComparison.OrdinalIgnoreCase))
+                return MediaType.JSON;
+
+            if ("application/xml".Equals(contentType, StringComparison.OrdinalIgnoreCase) ||
+                "text/xml".Equals(contentType, StringComparison.OrdinalIgnoreCase))
+                return MediaType.XML;
+
+            return MediaType.Unsupported;
+        }
+
+        private string GetContentCharset(IHttpServerRequest httpRequest, MediaType contentMediaType)
         {
             var requestContentCharset = httpRequest.ContentTypeCharset;
             var encoding = EncodingCache.Default.GetEncoding(requestContentCharset);
@@ -64,19 +74,19 @@ namespace Devkoes.Restup.WebServer.Rest
             return requestContentCharset;
         }
 
-        private MediaType GetAcceptMediaType(HttpServerRequest httpRequest)
+        private MediaType GetAcceptMediaType(IHttpServerRequest httpRequest)
         {
-            var preferredType = httpRequest.AcceptMediaTypes.FirstOrDefault(a => a != MediaType.Unsupported);
+            var preferredType = httpRequest.AcceptMediaTypes
+                                    .Select(GetMediaType)
+                                    .FirstOrDefault(a => a != MediaType.Unsupported);
 
             if (preferredType == MediaType.Unsupported)
-            {
                 preferredType = Configuration.Default.DefaultAcceptType;
-            }
 
             return preferredType;
         }
 
-        private string GetAcceptCharset(HttpServerRequest httpRequest, MediaType acceptMediaType)
+        private string GetAcceptCharset(IHttpServerRequest httpRequest, MediaType acceptMediaType)
         {
             string firstAvailableEncoding = null;
 

@@ -32,10 +32,10 @@ namespace Devkoes.HttpMessage.ServerRequestParsers
             };
         }
 
-        internal async Task<HttpServerRequest> ParseRequestStream(IInputStream requestStream)
+        internal async Task<MutableHttpServerRequest> ParseRequestStream(IInputStream requestStream)
         {
             var httpStream = new HttpRequestStream(requestStream);
-            var request = new HttpServerRequest();
+            var request = new MutableHttpServerRequest();
 
             try
             {
