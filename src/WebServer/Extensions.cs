@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Windows.ApplicationModel;
 
 namespace Devkoes.Restup.WebServer
 {
@@ -12,18 +14,18 @@ namespace Devkoes.Restup.WebServer
             return uri.TrimStart('/').TrimEnd('/');
         }
 
-    internal static string EscapeRegexChars(this string uri)
-    {
-      if (uri == null)
-        return uri;
+        internal static string EscapeRegexChars(this string uri)
+        {
+            if (uri == null)
+                return uri;
 
-      return uri.Replace("?", "\\?");
-    }
+            return uri.Replace("?", "\\?");
+        }
 
-    /// <summary>
-    /// The prefix will always be formatted as "/prefix"
-    /// </summary>
-    internal static string FormatRelativeUri(this string uri)
+        /// <summary>
+        /// The prefix will always be formatted as "/prefix"
+        /// </summary>
+        internal static string FormatRelativeUri(this string uri)
         {
             var cleanUrl = uri.RemovePreAndPostSlash();
 
@@ -51,6 +53,30 @@ namespace Devkoes.Restup.WebServer
             {
                 throw new ArgumentNullException(argumentName);
             }
+        }
+
+        internal static Uri RemovePrefix(this Uri uri, string prefix)
+        {
+            if (string.IsNullOrWhiteSpace(prefix))
+                return uri;
+
+            var uriToString = uri.ToString();
+            if (uriToString.StartsWith(prefix))
+                uriToString = uriToString.Remove(0, prefix.Length);
+
+            return new Uri(uriToString, UriKind.Relative);
+        }
+
+        internal static string GetAbsoluteBasePathUri(this string relativeOrAbsoluteBasePath)
+        {
+            relativeOrAbsoluteBasePath = relativeOrAbsoluteBasePath ?? string.Empty;
+
+            relativeOrAbsoluteBasePath = relativeOrAbsoluteBasePath.TrimStart('\\');
+
+            if (Path.IsPathRooted(relativeOrAbsoluteBasePath))
+                return relativeOrAbsoluteBasePath;
+
+            return Path.Combine(Package.Current.InstalledLocation.Path, relativeOrAbsoluteBasePath);
         }
     }
 }

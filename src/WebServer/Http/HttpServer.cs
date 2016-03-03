@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Models.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,8 +9,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 using Windows.Storage.Streams;
-using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
 
 namespace Devkoes.Restup.WebServer.Http
 {
@@ -19,12 +20,11 @@ namespace Devkoes.Restup.WebServer.Http
 
         public HttpServer(int serverPort)
         {
-            _listener = new StreamSocketListener();
-            _listener.ConnectionReceived += ProcessRequestAsync;
-
             _port = serverPort;
-
             _routes = new SortedSet<RouteRegistration>();
+            _listener = new StreamSocketListener();
+
+            _listener.ConnectionReceived += ProcessRequestAsync;
         }
 
         public async Task StartServerAsync()
@@ -39,59 +39,6 @@ namespace Devkoes.Restup.WebServer.Http
             ((IDisposable)this).Dispose();
 
             Debug.WriteLine($"Webserver on port {_port} stopped");
-        }
-
-        private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
-        {
-            await Task.Run(async () =>
-            {
-                try
-                {
-                    using (var inputStream = args.Socket.InputStream)
-                    {
-                        var request = await MutableHttpServerRequest.Parse(inputStream);
-
-                        var httpResponse = await HandleRequest(request);
-
-                        await WriteResponseAsync(httpResponse, args.Socket);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"Exception while handling process: {ex.Message}");
-                }
-                finally
-                {
-                    try
-                    {
-                        args.Socket.Dispose();
-                    }
-                    catch { }
-                }
-            });
-        }
-
-        internal Task<HttpServerResponse> HandleRequest(IHttpServerRequest request)
-        {
-            var routeRegistration = _routes.FirstOrDefault(x => x.Match(request));
-            if (routeRegistration == null)
-                return Task.FromResult(new HttpServerResponse(new Version(1, 1), HttpResponseStatus.BadRequest));
-
-            return routeRegistration.Handle(request);
-        }
-
-        private async Task WriteResponseAsync(HttpServerResponse response, StreamSocket socket)
-        {
-            using (IOutputStream output = socket.OutputStream)
-            {
-                await output.WriteAsync(response.ToBytes().AsBuffer());
-                await output.FlushAsync();
-            }
-        }
-
-        void IDisposable.Dispose()
-        {
-            _listener.Dispose();
         }
 
         /// <summary>
@@ -113,57 +60,66 @@ namespace Devkoes.Restup.WebServer.Http
             var routeRegistration = new RouteRegistration(urlPrefix, restRoutehandler);
 
             if (_routes.Contains(routeRegistration))
+            {
                 throw new Exception($"RouteHandler already registered for prefix: {urlPrefix}");
+            }
 
             _routes.Add(routeRegistration);
         }
 
-        private class RouteRegistration : IComparable<RouteRegistration>
+        private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
-            private readonly IRouteHandler routeHandler;
-            private readonly string urlPrefix;
-
-            public RouteRegistration(string urlPrefix, IRouteHandler routeHandler)
+            await Task.Run(async () =>
             {
-                this.urlPrefix = urlPrefix.FormatRelativeUri();
-                this.routeHandler = routeHandler;
+                try
+                {
+                    using (var inputStream = args.Socket.InputStream)
+                    {
+                        var request = await MutableHttpServerRequest.Parse(inputStream);
+
+                        var httpResponse = await HandleRequestAsync(request);
+
+                        await WriteResponseAsync(httpResponse, args.Socket);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Exception while handling process: {ex.Message}");
+                }
+                finally
+                {
+                    try
+                    {
+                        args.Socket.Dispose();
+                    }
+                    catch { }
+                }
+            });
+        }
+
+        internal async Task<HttpServerResponse> HandleRequestAsync(IHttpServerRequest request)
+        {
+            var routeRegistration = _routes.FirstOrDefault(x => x.Match(request));
+            if (routeRegistration == null)
+            {
+                return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.BadRequest);
             }
 
-            public bool Match(IHttpServerRequest request)
+            return await routeRegistration.HandleAsync(request);
+        }
+
+        private async Task WriteResponseAsync(HttpServerResponse response, StreamSocket socket)
+        {
+            using (IOutputStream output = socket.OutputStream)
             {
-                return request.Uri.ToString().StartsWith(urlPrefix, StringComparison.OrdinalIgnoreCase);
+                await output.WriteAsync(response.ToBytes().AsBuffer());
+                await output.FlushAsync();
             }
+        }
 
-            private static IHttpServerRequest CreateHttpRequestWithUnprefixedUrl(IHttpServerRequest request, string prefix)
-            {
-                return new HttpServerRequest(request.Headers, request.Method, RemovePrefix(request.Uri, prefix), request.HttpVersion,
-                    request.ContentTypeCharset, request.AcceptCharsets, request.ContentLength, request.ContentType,
-                    request.AcceptMediaTypes, request.Content, request.IsComplete);
-            }
-
-            private static Uri RemovePrefix(Uri uri, string prefix)
-            {
-                if (string.IsNullOrWhiteSpace(prefix))
-                    return uri;
-
-                var uriToString = uri.ToString();
-                if (uriToString.StartsWith(prefix))
-                    uriToString = uriToString.Remove(0, prefix.Length);
-
-                return new Uri(uriToString, UriKind.Relative);
-            }
-
-            public Task<HttpServerResponse> Handle(IHttpServerRequest request)
-            {
-                var unPrefixedRequest = CreateHttpRequestWithUnprefixedUrl(request, urlPrefix);
-
-                return routeHandler.HandleRequest(unPrefixedRequest);
-            }
-
-            public int CompareTo(RouteRegistration other)
-            {
-                return string.Compare(other.urlPrefix, urlPrefix, StringComparison.OrdinalIgnoreCase);
-            }
+        void IDisposable.Dispose()
+        {
+            _listener.Dispose();
         }
     }
 }

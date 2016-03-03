@@ -15,6 +15,7 @@ namespace Devkoes.Restup.WebServer.File
         public async Task<IFile> GetFileFromPathAsync(string path)
         {
             var storageFile = await StorageFile.GetFileFromPathAsync(path);
+
             return new PhysicalFile(storageFile);
         }
     }

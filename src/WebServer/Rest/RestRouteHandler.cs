@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Devkoes.HttpMessage;
+using Devkoes.Restup.WebServer.Models.Contracts;
+using System;
 using System.Threading.Tasks;
-using Devkoes.HttpMessage;
 
 namespace Devkoes.Restup.WebServer.Rest
 {

@@ -204,24 +204,18 @@ namespace Devkoes.HttpMessage
             return HttpServerResponseParser.Default.ConvertToBytes(this);
         }
 
+        public override string ToString()
+        {
 #if DEBUG
-        /// <summary>
-        /// This is just used for debugging purposes and will not be available when running in release mode. Problem with
-        /// this method is that it uses Encoding to decode the content which is a fairly complicated process. For debugging
-        /// purposes I'm using UTF-8 which is working most of the time. In real life you want to use the charset provided, or
-        /// some default encoding as explained in the HTTP specs.
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
+            // This is just used for debugging purposes and will not be available when running in release mode. Problem with
+            // this method is that it uses Encoding to decode the content which is a fairly complicated process. For debugging
+            // purposes I'm using UTF-8 which is working most of the time. In real life you want to use the charset provided, or
+            // some default encoding as explained in the HTTP specs.
             return HttpServerResponseParser.Default.ConvertToString(this);
-        }
 #else
-        public override string ToString()
-        {
             return $"{HttpVersion} {ResponseStatus} including {Headers.Count()} headers.";
-        }
 #endif
+        }
 
         public IHttpHeader AddHeader(string name, string value)
         {

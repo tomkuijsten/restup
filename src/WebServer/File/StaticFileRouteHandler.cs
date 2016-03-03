@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Models.Contracts;
+using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Windows.ApplicationModel;
-using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
 
 namespace Devkoes.Restup.WebServer.File
 {
@@ -13,29 +13,27 @@ namespace Devkoes.Restup.WebServer.File
         private readonly string _basePath;
         private readonly IFileSystem _fileSystem;
 
-        public StaticFileRouteHandler(string basePath = null, IFileSystem fileSystem = null)
+        public StaticFileRouteHandler() : this(null, null) { }
+
+        public StaticFileRouteHandler(string basePath) : this(basePath, null) { }
+
+        public StaticFileRouteHandler(string basePath, IFileSystem fileSystem)
         {
-            _basePath = GetAbsoluteBasePathUri(basePath ?? string.Empty);
+            _basePath = basePath.GetAbsoluteBasePathUri();
             _fileSystem = fileSystem ?? new PhysicalFileSystem();
 
             if (!_fileSystem.Exists(_basePath))
+            {
                 throw new Exception($"Path at {_basePath} could not be found.");
-        }
-
-        private static string GetAbsoluteBasePathUri(string relativeOrAbsoluteBasePath)
-        {
-            relativeOrAbsoluteBasePath = relativeOrAbsoluteBasePath.TrimStart('\\');
-
-            if (Path.IsPathRooted(relativeOrAbsoluteBasePath))
-                return relativeOrAbsoluteBasePath;
-
-            return Path.Combine(Package.Current.InstalledLocation.Path, relativeOrAbsoluteBasePath);
+            }
         }
 
         public async Task<HttpServerResponse> HandleRequest(IHttpServerRequest request)
         {
-            if(request.Method != HttpMethod.GET)
+            if (request.Method != HttpMethod.GET)
+            {
                 return GetMethodNotAllowedResponse(request.Method);
+            }
 
             var localFilePath = GetFilePath(request.Uri);
             var absoluteFilePath = GetAbsoluteFilePath(localFilePath);
@@ -62,6 +60,7 @@ namespace Devkoes.Restup.WebServer.File
                 ContentType = "text/plain",
                 ContentCharset = "utf-8"
             };
+
             return notFoundResponse;
         }
 
@@ -72,10 +71,11 @@ namespace Devkoes.Restup.WebServer.File
             var methodNotAllowedResponse = new HttpServerResponse(new Version(1, 1), HttpResponseStatus.MethodNotAllowed)
             {
                 Content = Encoding.UTF8.GetBytes($"Unsupported method {method}."),
-                Allow = new [] { HttpMethod.GET },
+                Allow = new[] { HttpMethod.GET },
                 ContentType = "text/plain",
                 ContentCharset = "utf-8"
             };
+
             return methodNotAllowedResponse;
         }
 
@@ -87,6 +87,7 @@ namespace Devkoes.Restup.WebServer.File
                 var memoryStream = new MemoryStream();
                 // slightly inefficient since we're reading the whole file into memory... Should probably expose the http response stream directly somehow
                 await inputStream.CopyToAsync(memoryStream);
+
                 return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.OK)
                 {
                     Content = memoryStream.ToArray(), // and make another copy of the file... for now this will do
@@ -99,15 +100,17 @@ namespace Devkoes.Restup.WebServer.File
         {
             var uriString = uri.ToString();
             var localPath = GetLocalPath(uriString);
-            
+
             localPath = ParseLocalPath(localPath);
             var filePath = localPath.Replace('/', '\\');
+
             return filePath;
         }
 
         private string GetAbsoluteFilePath(string localFilePath)
         {
             var absoluteFilePath = Path.Combine(_basePath, localFilePath);
+
             return absoluteFilePath;
         }
 
@@ -119,10 +122,15 @@ namespace Devkoes.Restup.WebServer.File
         private static string ParseLocalPath(string localPath)
         {
             if (localPath.EndsWith("/"))
+            {
                 localPath += "index.html";
+            }
 
             if (localPath.StartsWith("/"))
+            {
                 localPath = localPath.Substring(1);
+            }
+
             return localPath;
         }
     }

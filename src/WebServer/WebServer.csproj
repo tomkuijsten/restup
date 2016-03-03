@@ -120,7 +120,8 @@
     <Compile Include="File\PhysicalFile.cs" />
     <Compile Include="File\PhysicalFileSystem.cs" />
     <Compile Include="File\StaticFileRouteHandler.cs" />
-    <Compile Include="IRouteHandler.cs" />
+    <Compile Include="Http\RouteRegistration.cs" />
+    <Compile Include="Models\Contracts\IRouteHandler.cs" />
     <Compile Include="Models\Schemas\MediaType.cs" />
     <Compile Include="Models\Schemas\RestServerRequest.cs" />
     <Compile Include="Rest\RestRoutehandler.cs" />

@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Http;
+using Devkoes.Restup.WebServer.Models.Contracts;
+using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace Devkoes.Restup.WebServer.UnitTests
 {
@@ -21,8 +22,8 @@ namespace Devkoes.Restup.WebServer.UnitTests
             httpServer.RegisterRoute(routeHandler);
 
             var uri = new Uri("/Get", UriKind.Relative);
-            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: uri)).Result;
-            
+            var response = httpServer.HandleRequestAsync(Utils.CreateHttpRequest(uri: uri)).Result;
+
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
 
@@ -41,7 +42,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             httpServer.RegisterRoute(registeredPrefix, routeHandler);
 
             var uri = new Uri("/api/Get", UriKind.Relative);
-            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: uri)).Result;
+            var response = httpServer.HandleRequestAsync(Utils.CreateHttpRequest(uri: uri)).Result;
 
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
@@ -56,7 +57,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             var httpServer = new HttpServer(80);
 
             var uri = new Uri("/api/Get", UriKind.Relative);
-            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: uri)).Result;
+            var response = httpServer.HandleRequestAsync(Utils.CreateHttpRequest(uri: uri)).Result;
 
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpResponseStatus.BadRequest, response.ResponseStatus);
@@ -73,7 +74,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             httpServer.RegisterRoute("api", apiRouteHandler);
 
             var apiUri = new Uri("/api/Get", UriKind.Relative);
-            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: apiUri)).Result;
+            var response = httpServer.HandleRequestAsync(Utils.CreateHttpRequest(uri: apiUri)).Result;
 
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
@@ -93,7 +94,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             httpServer.RegisterRoute("api", apiRouteHandler);
 
             var apiUri = new Uri("/index.html", UriKind.Relative);
-            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: apiUri)).Result;
+            var response = httpServer.HandleRequestAsync(Utils.CreateHttpRequest(uri: apiUri)).Result;
 
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
@@ -113,7 +114,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             httpServer.RegisterRoute(anyRouteHandler);
 
             var apiUri = new Uri("/api/Get", UriKind.Relative);
-            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: apiUri)).Result;
+            var response = httpServer.HandleRequestAsync(Utils.CreateHttpRequest(uri: apiUri)).Result;
 
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
@@ -133,7 +134,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             httpServer.RegisterRoute(anyRouteHandler);
 
             var apiUri = new Uri("/index.html", UriKind.Relative);
-            var response = httpServer.HandleRequest(Utils.CreateHttpRequest(uri: apiUri)).Result;
+            var response = httpServer.HandleRequestAsync(Utils.CreateHttpRequest(uri: apiUri)).Result;
 
             Assert.IsNotNull(response);
             Assert.AreEqual(HttpResponseStatus.OK, response.ResponseStatus);
@@ -170,7 +171,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             {
                 _requests.Add(request);
                 return Task.FromResult(Utils.CreateOkHttpServerResponse());
-            }            
+            }
         }
     }
 }

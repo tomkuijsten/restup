@@ -24,6 +24,8 @@ namespace HeadedDemo
             command(parameter as T);
         }
 
+        #pragma warning disable 67
         public event EventHandler CanExecuteChanged;
+        #pragma warning restore 67
     }
 }

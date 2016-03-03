@@ -45,10 +45,14 @@ namespace Devkoes.Restup.WebServer.Rest
             var allPublicRestMethods = GetRestMethodDefinitions<T>();
 
             foreach (var methodDef in allPublicRestMethods)
+            {
                 restMethods.Add(new RestControllerMethodInfo(methodDef, constructorArgs));
+            }
 
             foreach (var methodDef in allPublicAsyncRestMethods)
+            {
                 restMethods.Add(new RestControllerMethodInfo(methodDef, constructorArgs, true));
+            }
 
             Debug.WriteLine(string.Join(Environment.NewLine, restMethods));
 
@@ -117,11 +121,15 @@ namespace Devkoes.Restup.WebServer.Rest
         {
             var isTask = m.ReturnType.GetTypeInfo().IsSubclassOf(typeof(Task));
             if (!isTask)
+            {
                 return false;
+            }
 
             var genericArgs = m.ReturnType.GetGenericArguments();
             if (!genericArgs.Any())
+            {
                 return false;
+            }
 
             return genericArgs[0].GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
         }

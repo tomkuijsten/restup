@@ -48,7 +48,7 @@ namespace Devkoes.Restup.WebServer
 
         internal Task<HttpServerResponse> HandleRequest(IHttpServerRequest request)
         {
-            return _httpServer.HandleRequest(request);
+            return _httpServer.HandleRequestAsync(request);
         }
 
         public async Task StartServerAsync()
