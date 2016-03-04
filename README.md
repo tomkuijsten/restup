@@ -1,12 +1,10 @@
 # Webservice for Universal Windows Apps
 
-[![Build status](https://ci.appveyor.com/api/projects/status/1aj7614fb0o1bjdy?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup)
+[![Build status](https://ci.appveyor.com/api/projects/status/1aj7614fb0o1bjdy?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup) [![NuGet downloads](https://img.shields.io/nuget/dt/restup.svg)](https://www.nuget.org/packages/Restup/)
 
-[![NuGet downloads](https://img.shields.io/nuget/dt/restup.svg)](https://www.nuget.org/packages/Restup/)
-
-# Release notes (beta2)
- - Added RouteHandlers to support custom handling of a request (big thanks to @Jark)
- - Added static file handler (big thanks to @Jark)
+### Release notes (beta2)
+ - Added RouteHandlers to support custom handling of a request (big thanks to [Jark](https://github.com/Jark))
+ - Added static file handler (big thanks to [Jark](https://github.com/Jark))
  - ...
 
 # Intro
