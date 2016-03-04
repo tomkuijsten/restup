@@ -2,7 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/1aj7614fb0o1bjdy?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup) [![NuGet downloads](https://img.shields.io/nuget/dt/restup.svg)](https://www.nuget.org/packages/Restup/)
 
-### Release notes (beta2)
+### Latest release notes (beta2)
 - Introducing RouteHandlers
 - RestWebServer is obsolete, see [wiki](https://github.com/tomkuijsten/restup/wiki) for more info
 - Static files can be served now
