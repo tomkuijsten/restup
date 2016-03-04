@@ -1,12 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
-using Devkoes.HttpMessage;
+﻿using Devkoes.HttpMessage;
 using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Rest;
+using System;
+using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer
 {
-    [Obsolete("Use HttpServer and RegisterRoute instead")]
+    [Obsolete("Checkout the HeadedDemo MainPage.xaml.cs on github for the new route functionality. This class will be removed in beta3.")]
     public class RestWebServer : IDisposable
     {
         private readonly HttpServer _httpServer;
@@ -23,12 +23,12 @@ namespace Devkoes.Restup.WebServer
 
         public RestWebServer(int port) : this(port, null)
         {
-            
+
         }
 
         public RestWebServer() : this(8800, null)
         {
-            
+
         }
 
         public void RegisterController<T>() where T : class
@@ -58,7 +58,7 @@ namespace Devkoes.Restup.WebServer
 
         public void Dispose()
         {
-            ((IDisposable) _httpServer).Dispose();
+            ((IDisposable)_httpServer).Dispose();
         }
     }
 }
