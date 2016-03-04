@@ -3,9 +3,12 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/1aj7614fb0o1bjdy?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup) [![NuGet downloads](https://img.shields.io/nuget/dt/restup.svg)](https://www.nuget.org/packages/Restup/)
 
 ### Release notes (beta2)
- - Added RouteHandlers to support custom handling of a request (big thanks to [Jark](https://github.com/Jark))
- - Added static file handler (big thanks to [Jark](https://github.com/Jark))
- - ...
+- Introducing RouteHandlers
+- RestWebServer is obsolete, see [wiki](https://github.com/tomkuijsten/restup/wiki) for more info
+- Static files can be served now
+- Basic url query strings can be used
+- The headed demo has a testing capabilities now 
+
 
 # Intro
 
