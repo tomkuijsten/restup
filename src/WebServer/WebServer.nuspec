@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Restup</id>
-    <version>1.0.0-beta1</version>
+    <version>1.0.0-beta2</version>
     <title>Restup</title>
     <authors>Devkoes</authors>
     <owners>Devkoes</owners>
@@ -10,10 +10,16 @@
     <projectUrl>https://github.com/tomkuijsten/restup</projectUrl>
     <iconUrl>https://github.com/tomkuijsten/restup/blob/master/restup.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>A REST server for the Windows Universal framework</description>
-    <releaseNotes>beta test 1</releaseNotes>
-    <copyright>Devkoes Copyright 2015</copyright>
-    <tags>UWP REST WebService Universal Windows .NET</tags>
+    <description>A webserver for the Windows Universal framework</description>
+    <releaseNotes>
+      Introducing RouteHandlers
+      RestWebServer is obsolete, see github wiki for more info
+      Static files can be served now
+      Basic url query strings can be used
+      The headed demo has a testing capabilities now 
+    </releaseNotes>
+    <copyright>Copyright © Devkoes 2016</copyright>
+    <tags>UWP REST WebService Universal Windows</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="7.0.1" />
     </dependencies>

@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Restup webserver")]
-[assembly: AssemblyDescription("REST server implementation for UWP apps")]
+[assembly: AssemblyDescription("Webserver implementation for UWP software")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Devkoes")]
 [assembly: AssemblyProduct("Restup webserver")]
-[assembly: AssemblyCopyright("Copyright © Devkoes 2015")]
+[assembly: AssemblyCopyright("Copyright © Devkoes 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
