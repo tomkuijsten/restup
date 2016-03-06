@@ -39,6 +39,7 @@ namespace Devkoes.Restup.HeadlessDemo
             restRouteHandler.RegisterController<SingletonControllerSample>();
             restRouteHandler.RegisterController<ThrowExceptionControllerSample>();
             restRouteHandler.RegisterController<WithResponseContentControllerSample>();
+            restRouteHandler.RegisterController<HTMLControllerSample>();
 
             httpServer.RegisterRoute("api", restRouteHandler);
             httpServer.RegisterRoute(new StaticFileRouteHandler(@"DemoStaticFiles\Web"));

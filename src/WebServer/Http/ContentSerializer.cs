@@ -19,6 +19,10 @@ namespace Devkoes.Restup.WebServer.Http
             {
                 return XmlDeserializeObject(content, contentType);
             }
+            else if (contentMediaType == MediaType.HTML)
+            {
+                return content.ToString();
+            }
 
             throw new NotImplementedException();
         }
@@ -37,6 +41,10 @@ namespace Devkoes.Restup.WebServer.Http
             else if (req.AcceptMediaType == MediaType.XML)
             {
                 return req.AcceptEncoding.GetBytes(XmlSerializeObject(contentObject));
+            }
+            else if (req.AcceptMediaType == MediaType.HTML)
+            {
+                return req.AcceptEncoding.GetBytes(contentObject.ToString());
             }
 
             return new byte[0];
