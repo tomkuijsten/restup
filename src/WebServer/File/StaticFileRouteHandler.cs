@@ -49,7 +49,7 @@ namespace Devkoes.Restup.WebServer.File
                 return GetFileNotFoundResponse(localFilePath);
             }
 
-            return await GetHttpResponse(item);
+            return await GetHttpResponse(item, absoluteFilePath);
         }
 
         private static HttpServerResponse GetFileNotFoundResponse(string localPath)
@@ -79,7 +79,7 @@ namespace Devkoes.Restup.WebServer.File
             return methodNotAllowedResponse;
         }
 
-        private async Task<HttpServerResponse> GetHttpResponse(IFile item)
+        private async Task<HttpServerResponse> GetHttpResponse(IFile item, string itemPath)
         {
             // todo: do validation on file extension, probably want to have a whitelist
             using (var inputStream = await item.OpenStreamForReadAsync())
@@ -91,9 +91,36 @@ namespace Devkoes.Restup.WebServer.File
                 return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.OK)
                 {
                     Content = memoryStream.ToArray(), // and make another copy of the file... for now this will do
-                    ContentType = item.ContentType
+                    ContentType = GetContentType(item, itemPath),
                 };
             }
+        }
+
+        private string GetContentType(IFile item, string itemPath)
+        {
+            bool isOverride = MimeType.IsOverrideEnabled;
+            // switch contenttype if override is enabled
+            string contentType = isOverride ? null : item.ContentType;
+
+            // check if we got no contenttype 
+            if (string.IsNullOrEmpty(contentType) && !string.IsNullOrEmpty(itemPath))
+            {
+                // get contenttype based on extension
+                string ext = Path.GetExtension(itemPath);
+                if (MimeType.MimeTypes.ContainsKey(ext))
+                {
+                    // set contentype from mimetype 
+                    contentType = MimeType.MimeTypes[ext];
+                }
+                else
+                {
+                    // no mimetype found, reset.
+                    if (isOverride)
+                        contentType = item.ContentType;
+                }
+            }
+
+            return contentType;
         }
 
         private static string GetFilePath(Uri uri)
