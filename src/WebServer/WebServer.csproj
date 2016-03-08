@@ -117,7 +117,7 @@
     <Compile Include="EncodingCache.cs" />
     <Compile Include="File\IFile.cs" />
     <Compile Include="File\IFileSystem.cs" />
-    <Compile Include="File\MimeType.cs" />
+    <Compile Include="File\MimeTypeProvider.cs" />
     <Compile Include="File\PhysicalFile.cs" />
     <Compile Include="File\PhysicalFileSystem.cs" />
     <Compile Include="File\StaticFileRouteHandler.cs" />

@@ -91,14 +91,14 @@ namespace Devkoes.Restup.WebServer.File
                 return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.OK)
                 {
                     Content = memoryStream.ToArray(), // and make another copy of the file... for now this will do
-                    ContentType = GetContentType(item, itemPath),
+                    ContentType = await GetContentType(item, itemPath),
                 };
             }
         }
 
-        private string GetContentType(IFile item, string itemPath)
+        private async Task<string> GetContentType(IFile item, string itemPath)
         {
-            bool isOverride = MimeType.IsOverrideEnabled;
+            bool isOverride = MimeTypeProvider.IsOverrideEnabled;
             // switch contenttype if override is enabled
             string contentType = isOverride ? null : item.ContentType;
 
@@ -107,10 +107,11 @@ namespace Devkoes.Restup.WebServer.File
             {
                 // get contenttype based on extension
                 string ext = Path.GetExtension(itemPath);
-                if (MimeType.MimeTypes.ContainsKey(ext))
+                string mimeType = await MimeTypeProvider.GetMimeType(ext);
+                if (!string.IsNullOrEmpty(mimeType))
                 {
                     // set contentype from mimetype 
-                    contentType = MimeType.MimeTypes[ext];
+                    contentType = mimeType;
                 }
                 else
                 {
