@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Devkoes.Restup.WebServer.File
@@ -10,7 +12,7 @@ namespace Devkoes.Restup.WebServer.File
     /// MimeTypes for <see cref="StaticFileRouteHandler"/> used as fallback if the system returned no mime type or as override if set. 
     /// Should be set 
     /// </summary>
-    public static class MimeType
+    public static class MimeTypeProvider
     {
         /// <summary>
         /// Will override all default MimeTypes the system provides, as long as it is defined in <see cref="MimeTypes"/>.
@@ -18,9 +20,14 @@ namespace Devkoes.Restup.WebServer.File
         public static bool IsOverrideEnabled { get; set; } = false;
 
         /// <summary>
+        /// WriteLock for <see cref="MimeTypes"/>
+        /// </summary>
+        private static SemaphoreSlim _lockMimeTypes { get; set; } = new SemaphoreSlim(1, 1);
+
+        /// <summary>
         /// List of MimeTypes the <see cref="StaticFileRouteHandler"/> will use if no MimeType was found by the System or if the <see cref="IsOverrideEnabled"/> property is set.
         /// </summary>
-        public static Dictionary<string, string> MimeTypes { get; private set; } = new Dictionary<string, string>()
+        private static Dictionary<string, string> _mimeTypes { get; set; } = new Dictionary<string, string>()
         {
             { ".3dm", "x-world/x-3dmf" },
             { ".3dmf", "x-world/x-3dmf" },
@@ -467,5 +474,74 @@ namespace Devkoes.Restup.WebServer.File
             { ".zoo", "application/octet-stream" },
             { ".zsh", "text/x-script.zsh" },
         };
+
+        /// <summary>
+        /// Adds or replace a MimeType based on its extension.
+        /// </summary>
+        /// <param name="extension">File extension e.g. .png, .txt, .html</param>
+        /// <param name="mimeType">MimeType to add, e.g. application/json, text/plain, etc..</param>
+        public static async Task AddMimeType(string extension, string mimeType)
+        {
+            await _lockMimeTypes.WaitAsync();
+
+            try
+            {
+                if (!_mimeTypes.ContainsKey(extension))
+                    _mimeTypes.Add(extension, mimeType);
+                else
+                    _mimeTypes[extension] = mimeType;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+
+            _lockMimeTypes.Release();
+        }
+
+        /// <summary>
+        /// Removes a MimeType based on its extension
+        /// </summary>
+        /// <param name="extension">File extension e.g. .png, .txt, .html</param>
+        public static async Task RemoveMimeType(string extension)
+        {
+            await _lockMimeTypes.WaitAsync();
+
+            try
+            {
+                if (_mimeTypes.ContainsKey(extension))
+                    _mimeTypes.Remove(extension);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+
+            _lockMimeTypes.Release();
+        }
+        /// <summary>
+        /// Get the MimeType based on its extension.
+        /// </summary>
+        /// <param name="extension">File extension e.g. .png, .txt, .html</param>
+        /// <returns>MimeType if found else null.</returns>
+        public static async Task<string> GetMimeType(string extension)
+        {
+            await _lockMimeTypes.WaitAsync();
+            string mimeType = null;
+
+            try
+            {
+                if (_mimeTypes.ContainsKey(extension))
+                    mimeType = _mimeTypes[extension];
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+
+            _lockMimeTypes.Release();
+
+            return mimeType;
+        }
     }
 }
