@@ -48,6 +48,9 @@ namespace Devkoes.Restup.WebServer.Rest
                 "text/xml".Equals(contentType, StringComparison.OrdinalIgnoreCase))
                 return MediaType.XML;
 
+            if ("text/html".Equals(contentType, StringComparison.OrdinalIgnoreCase))
+                return MediaType.HTML;
+
             return MediaType.Unsupported;
         }
 
@@ -62,6 +65,10 @@ namespace Devkoes.Restup.WebServer.Rest
                     requestContentCharset = Configuration.Default.DefaultJSONCharset;
                 }
                 else if (contentMediaType == MediaType.XML)
+                {
+                    requestContentCharset = Configuration.Default.DefaultXMLCharset;
+                }
+                else if (contentMediaType == MediaType.HTML)
                 {
                     requestContentCharset = Configuration.Default.DefaultXMLCharset;
                 }
@@ -106,6 +113,10 @@ namespace Devkoes.Restup.WebServer.Rest
                     firstAvailableEncoding = Configuration.Default.DefaultJSONCharset;
                 }
                 else if (acceptMediaType == MediaType.XML)
+                {
+                    firstAvailableEncoding = Configuration.Default.DefaultXMLCharset;
+                }
+                else if (acceptMediaType == MediaType.HTML)
                 {
                     firstAvailableEncoding = Configuration.Default.DefaultXMLCharset;
                 }

@@ -76,6 +76,8 @@ namespace Devkoes.Restup.WebServer.Rest
                     return "application/json";
                 case MediaType.XML:
                     return "application/xml";
+                case MediaType.HTML:
+                    return "text/html";
                 case MediaType.Unsupported:
                     return "";
             }

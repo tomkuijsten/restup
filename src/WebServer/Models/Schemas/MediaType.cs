@@ -4,6 +4,7 @@
     {
         Unsupported = 0, // Will be the default(MediaType)
         JSON,
-        XML
+        XML,
+        HTML
     }
 }

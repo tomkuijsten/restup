@@ -41,6 +41,7 @@ namespace HeadedDemo
             restRouteHandler.RegisterController<SingletonControllerSample>();
             restRouteHandler.RegisterController<ThrowExceptionControllerSample>();
             restRouteHandler.RegisterController<WithResponseContentControllerSample>();
+            restRouteHandler.RegisterController<HTMLControllerSample>();
 
             httpServer.RegisterRoute("api", restRouteHandler);
 

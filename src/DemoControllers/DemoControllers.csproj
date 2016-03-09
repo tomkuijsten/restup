@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HTMLControllerSample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AsyncControllerSample.cs" />
     <Compile Include="FromContentControllerSample.cs" />
