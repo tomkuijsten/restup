@@ -10,6 +10,8 @@ namespace Devkoes.Restup.WebServer.File
 
         public string ContentType => _storageFile.ContentType;
 
+        public string Extension => _storageFile.FileType;
+
         public PhysicalFile(StorageFile storageFile)
         {
             _storageFile = storageFile;

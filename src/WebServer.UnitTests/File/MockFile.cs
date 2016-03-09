@@ -9,17 +9,18 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
     {
         public string Content { get; }
         public string ContentType { get; }
+        public string Extension { get; }
 
-        public MockFile(string content, string contentType)
+        public MockFile(string content, string contentType, string extension)
         {
             Content = content;
             ContentType = contentType;
+            Extension = extension;
         }
 
         public Task<Stream> OpenStreamForReadAsync()
         {
-            var encoding = Encoding.GetEncoding(ContentType);
-            var stream = new MemoryStream(encoding.GetBytes(Content));
+            var stream = new MemoryStream(Encoding.UTF8.GetBytes(Content));
 
             return Task.FromResult((Stream)stream);
         }
