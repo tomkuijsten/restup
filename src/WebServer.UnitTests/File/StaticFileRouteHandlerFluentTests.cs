@@ -21,14 +21,14 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
         public StaticFileRouteHandlerFluentTests SetUp(string basePath, bool pathExists = true)
         {
             mockFileSystem = new MockFileSystem(pathExists);
-            routeHandler = new StaticFileRouteHandler(basePath, mockFileSystem);
+            routeHandler = new StaticFileRouteHandler(basePath, null, mockFileSystem);
 
             return this;
         }
 
-        public StaticFileRouteHandlerFluentTests FileExists(string filePath, string content = null, string contentType = "utf-8")
+        public StaticFileRouteHandlerFluentTests FileExists(string filePath, string content = null, string extension = ".html", string contentType = "text/html")
         {
-            var mockFile = new MockFile(content ?? string.Empty, contentType);
+            var mockFile = new MockFile(content ?? string.Empty, contentType, extension);
             mockFileSystem.AddFile(filePath, mockFile);
 
             return this;
@@ -44,7 +44,8 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
 
         public StaticFileRouteHandlerFluentTests AssertResponse<T>(Func<HttpServerResponse, T> actualValueFunc, T expectedValue)
         {
-            actualValueFunc(response);
+            var actual = actualValueFunc(response);
+            Assert.AreEqual(expectedValue, actual);
             return this;
         }
 
@@ -71,8 +72,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
 
         public StaticFileRouteHandlerFluentTests AssertResponseContent(string content)
         {
-            var encoding = Encoding.GetEncoding(response.ContentType);
-            var contentAsBytes = encoding.GetBytes(content);
+            var contentAsBytes = Encoding.UTF8.GetBytes(content);
 
             CollectionAssert.AreEqual(contentAsBytes, response.Content);
             return this;

@@ -1,6 +1,5 @@
 ﻿using Windows.ApplicationModel;
 using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.File;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace Devkoes.Restup.WebServer.UnitTests.File
@@ -19,22 +18,36 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
                     .GetRequestReceived("/")
                 .Then
                     .AssertOkResponseExists()
-                    .AssertResponse(x => x.ContentType, "utf-8")
+                    .AssertResponse(x => x.ContentType, "text/html")
                     .AssertResponseContent("test test test");            
         }
 
         [TestMethod]
-        public void ContentTypeIsTakenIntoAccount()
+        public void ContentTypeFromFileIsTakenIntoAccount()
         {
             new StaticFileRouteHandlerFluentTests()
                 .Given
                     .SetUp(basePath: null)
-                    .FileExists(Package.Current.InstalledLocation.Path + @"\path.html", contentType: "utf-16")
+                    .FileExists(Package.Current.InstalledLocation.Path + @"\path.js", extension: ".js", contentType: "application/x-javascript")
                 .When
-                    .GetRequestReceived("/path.html")
+                    .GetRequestReceived("/path.js")
                 .Then
                     .AssertOkResponseExists()
-                    .AssertResponse(x => x.ContentType, "utf-16");
+                    .AssertResponse(x => x.ContentType, "application/x-javascript");
+        }
+
+        [TestMethod]
+        public void WhenFileDoesNotHaveAContentType()
+        {
+            new StaticFileRouteHandlerFluentTests()
+                .Given
+                    .SetUp(basePath: null)
+                    .FileExists(Package.Current.InstalledLocation.Path + @"\path.js", extension: ".js", contentType: null)
+                .When
+                    .GetRequestReceived("/path.js")
+                .Then
+                    .AssertOkResponseExists()
+                    .AssertResponse(x => x.ContentType, "application/x-javascript");
         }
 
         [TestMethod]

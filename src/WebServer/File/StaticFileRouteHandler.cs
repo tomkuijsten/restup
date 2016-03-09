@@ -1,10 +1,11 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.File
 {
@@ -12,15 +13,17 @@ namespace Devkoes.Restup.WebServer.File
     {
         private readonly string _basePath;
         private readonly IFileSystem _fileSystem;
+        private readonly MimeTypeProvider _mimeTypeProvider;
 
-        public StaticFileRouteHandler() : this(null, null) { }
+        public StaticFileRouteHandler() : this(null, null, null) { }
+        public StaticFileRouteHandler(string basePath) : this(basePath, null, null) { }
+        public StaticFileRouteHandler(string basePath, IReadOnlyDictionary<string, string> extensionsToMimeTypes) : this(basePath, extensionsToMimeTypes, null) { }
 
-        public StaticFileRouteHandler(string basePath) : this(basePath, null) { }
-
-        public StaticFileRouteHandler(string basePath, IFileSystem fileSystem)
+        public StaticFileRouteHandler(string basePath, IReadOnlyDictionary<string, string> extensionsToMimeTypes, IFileSystem fileSystem)
         {
             _basePath = basePath.GetAbsoluteBasePathUri();
             _fileSystem = fileSystem ?? new PhysicalFileSystem();
+            _mimeTypeProvider = new MimeTypeProvider(extensionsToMimeTypes ?? MimeTypeProvider.DefaultMimeTypesByExtension);
 
             if (!_fileSystem.Exists(_basePath))
             {
@@ -49,7 +52,7 @@ namespace Devkoes.Restup.WebServer.File
                 return GetFileNotFoundResponse(localFilePath);
             }
 
-            return await GetHttpResponse(item, absoluteFilePath);
+            return await GetHttpResponse(item);
         }
 
         private static HttpServerResponse GetFileNotFoundResponse(string localPath)
@@ -79,7 +82,7 @@ namespace Devkoes.Restup.WebServer.File
             return methodNotAllowedResponse;
         }
 
-        private async Task<HttpServerResponse> GetHttpResponse(IFile item, string itemPath)
+        private async Task<HttpServerResponse> GetHttpResponse(IFile item)
         {
             // todo: do validation on file extension, probably want to have a whitelist
             using (var inputStream = await item.OpenStreamForReadAsync())
@@ -91,36 +94,9 @@ namespace Devkoes.Restup.WebServer.File
                 return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.OK)
                 {
                     Content = memoryStream.ToArray(), // and make another copy of the file... for now this will do
-                    ContentType = GetContentType(item, itemPath),
+                    ContentType = _mimeTypeProvider.GetMimeType(item)
                 };
             }
-        }
-
-        private string GetContentType(IFile item, string itemPath)
-        {
-            bool isOverride = MimeType.IsOverrideEnabled;
-            // switch contenttype if override is enabled
-            string contentType = isOverride ? null : item.ContentType;
-
-            // check if we got no contenttype 
-            if (string.IsNullOrEmpty(contentType) && !string.IsNullOrEmpty(itemPath))
-            {
-                // get contenttype based on extension
-                string ext = Path.GetExtension(itemPath);
-                if (MimeType.MimeTypes.ContainsKey(ext))
-                {
-                    // set contentype from mimetype 
-                    contentType = MimeType.MimeTypes[ext];
-                }
-                else
-                {
-                    // no mimetype found, reset.
-                    if (isOverride)
-                        contentType = item.ContentType;
-                }
-            }
-
-            return contentType;
         }
 
         private static string GetFilePath(Uri uri)
