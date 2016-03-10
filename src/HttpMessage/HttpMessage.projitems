@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Headers\HttpHeaderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\HttpRequestHeaderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AcceptCharsetHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AcceptEncodingHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AcceptHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\ContentLengthHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\ContentTypeHeader.cs" />
@@ -23,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\AllowHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\CloseConnectionHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\ContentEncodingHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\ContentTypeHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\ContentLengthHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\DateHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\LocationHeader.cs" />

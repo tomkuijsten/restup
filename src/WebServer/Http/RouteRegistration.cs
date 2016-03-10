@@ -34,6 +34,7 @@ namespace Devkoes.Restup.WebServer.Http
                 request.AcceptCharsets,
                 request.ContentLength,
                 request.ContentType,
+                request.AcceptEncodings,
                 request.AcceptMediaTypes,
                 request.Content,
                 request.IsComplete);

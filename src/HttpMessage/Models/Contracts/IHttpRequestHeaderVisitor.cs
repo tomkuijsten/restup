@@ -10,5 +10,6 @@ namespace Devkoes.HttpMessage.Models.Contracts
         void Visit(AcceptHeader uh, T arg);
         void Visit(ContentTypeHeader uh, T arg);
         void Visit(AcceptCharsetHeader uh, T arg);
+        void Visit(AcceptEncodingHeader uh, T arg);
     }
 }

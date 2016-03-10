@@ -20,6 +20,7 @@ namespace Devkoes.HttpMessage
 
             AcceptCharsets = Enumerable.Empty<string>();
             AcceptMediaTypes = Enumerable.Empty<string>();
+            AcceptEncodings = Enumerable.Empty<string>();
         }
 
         public IEnumerable<IHttpRequestHeader> Headers => _headers;
@@ -30,6 +31,7 @@ namespace Devkoes.HttpMessage
         public IEnumerable<string> AcceptCharsets { get; set; }
         public int ContentLength { get; set; }
         public string ContentType { get; set; }
+        public IEnumerable<string> AcceptEncodings { get; set; }
         public IEnumerable<string> AcceptMediaTypes { get; set; }
         public byte[] Content { get; set; }
         public bool IsComplete { get; set; }

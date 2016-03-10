@@ -17,7 +17,8 @@ namespace Devkoes.HttpMessage.Headers.Request
                 [ContentLengthHeader.NAME] = CreateContentLength,
                 [AcceptHeader.NAME] = CreateResponseContentType,
                 [ContentTypeHeader.NAME] = CreateRequestContentType,
-                [AcceptCharsetHeader.NAME] = CreateResponseContentCharset
+                [AcceptCharsetHeader.NAME] = CreateResponseContentCharset,
+                [AcceptEncodingHeader.NAME] = CreateResponseAcceptEncoding
             };
         }
 
@@ -49,6 +50,11 @@ namespace Devkoes.HttpMessage.Headers.Request
         private IHttpRequestHeader CreateResponseContentCharset(string headerValue)
         {
             return new AcceptCharsetHeader(headerValue, ExtractQuantifiedHeaders(headerValue));
+        }
+
+        private IHttpRequestHeader CreateResponseAcceptEncoding(string headerValue)
+        {
+            return new AcceptEncodingHeader(headerValue, ExtractQuantifiedHeaders(headerValue));
         }
 
         internal IEnumerable<QuantifiedHeaderValue> ExtractQuantifiedHeaders(string value)

@@ -11,14 +11,16 @@ namespace Devkoes.HttpMessage
 {
     public class HttpServerResponse
     {
-        private List<IHttpHeader> _headers;
-        private byte[] _content;
+        private readonly List<IHttpHeader> _headers;
 
         internal IEnumerable<IHttpHeader> Headers => _headers;
 
         // Header line info
         public Version HttpVersion { get; set; }
         public HttpResponseStatus ResponseStatus { get; set; }
+
+        // Content
+        public byte[] Content { get; set; }
 
         internal HttpServerResponse(Version httpVersion, HttpResponseStatus status)
         {
@@ -41,28 +43,6 @@ namespace Devkoes.HttpMessage
         public static HttpServerResponse Create(Version httpVersion, HttpResponseStatus status)
         {
             return new HttpServerResponse(httpVersion, status);
-        }
-
-        public byte[] Content
-        {
-            get { return _content; }
-            set
-            {
-                _content = value;
-
-                ResetContentLength();
-            }
-        }
-
-        public int ContentLength
-        {
-            get
-            {
-                if (Content == null)
-                    return 0;
-
-                return Content.Length;
-            }
         }
 
         // This section contains shortcuts to headers. By setting the property a header is added,
@@ -126,9 +106,6 @@ namespace Devkoes.HttpMessage
                     _headers.Remove(contentTypeHeader);
                     _headers.Add(new ContentTypeHeader(contentTypeHeader.ContentType, value));
                 }
-
-                // We should reset the content length, because the charset determines the encoding length
-                ResetContentLength();
             }
         }
 
@@ -155,9 +132,6 @@ namespace Devkoes.HttpMessage
                     _headers.Remove(contentTypeHeader);
                     _headers.Add(new ContentTypeHeader(value, contentTypeHeader.Charset));
                 }
-
-                // We should reset the length, because the default encoder is based on contenttype
-                ResetContentLength();
             }
         }
 
@@ -228,6 +202,9 @@ namespace Devkoes.HttpMessage
             return newHeader;
         }
 
+        /// <summary>
+        /// Will update header if a header with the same name already exists.
+        /// </summary>
         public void AddHeader(IHttpHeader header)
         {
             var knownHeader = Headers.SingleOrDefault(h => string.Equals(h.Name, header.Name, StringComparison.OrdinalIgnoreCase));
@@ -244,17 +221,6 @@ namespace Devkoes.HttpMessage
         public void RemoveHeader(IHttpHeader header)
         {
             _headers.Remove(header);
-        }
-
-        private void ResetContentLength()
-        {
-            var contentLengthHeader = Headers.OfType<ContentLengthHeader>().SingleOrDefault();
-            _headers.Remove(contentLengthHeader);
-
-            if (Content != null && Content.Any())
-            {
-                _headers.Add(new ContentLengthHeader(ContentLength));
-            }
         }
     }
 }

@@ -40,22 +40,24 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
             return restRouteHandler;
         }
 
-        public static HttpServerResponse CreateOkHttpServerResponse()
+        public static HttpServerResponse CreateOkHttpServerResponse(byte[] content = null)
         {
-            return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.OK);
+            return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.OK) { Content = content };
         }
 
         public static IHttpServerRequest CreateHttpRequest(IEnumerable<IHttpRequestHeader> headers = null,
             HttpMethod? method = HttpMethod.GET, Uri uri = null, string httpVersion = "HTTP / 1.1",
             string contentTypeCharset = null, IEnumerable<string> acceptCharsets = null,
             int contentLength = 0, string contentType = null,
+            IEnumerable<string> acceptEncodings = null,
             IEnumerable<string> acceptMediaTypes = null, byte[] content = null,
             bool isComplete = true)
         {
             return new HttpServerRequest(headers ?? Enumerable.Empty<IHttpRequestHeader>(), method,
                 uri ?? new Uri("/Get", UriKind.Relative), httpVersion, contentTypeCharset,
                 acceptCharsets ?? Enumerable.Empty<string>(),
-                contentLength, contentType, acceptMediaTypes ?? Enumerable.Empty<string>(), content ?? new byte[] {},
+                contentLength, contentType, acceptEncodings ?? Enumerable.Empty<string>(), 
+                acceptMediaTypes ?? Enumerable.Empty<string>(), content ?? new byte[] {},
                 isComplete);
         }
 
@@ -63,12 +65,12 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
             HttpMethod? method = HttpMethod.GET, Uri uri = null, string httpVersion = "HTTP / 1.1",
             string contentTypeCharset = null, IEnumerable<string> acceptCharsets = null,
             int contentLength = 0, string contentType = null,
-            IEnumerable<string> acceptMediaTypes = null, byte[] content = null,
-            bool isComplete = true)
+            IEnumerable<string> acceptEncodings = null, IEnumerable<string> acceptMediaTypes = null,
+            byte[] content = null, bool isComplete = true)
         {
             var restServerRequestFactory = new RestServerRequestFactory();
             var httpRequest = Utils.CreateHttpRequest(headers, method, uri, httpVersion, contentTypeCharset,
-                acceptCharsets, contentLength, contentType, acceptMediaTypes, content, isComplete);
+                acceptCharsets, contentLength, contentType, acceptEncodings, acceptMediaTypes, content, isComplete);
 
             return restServerRequestFactory.Create(httpRequest);
         }
