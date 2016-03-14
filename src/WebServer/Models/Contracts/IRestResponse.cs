@@ -3,7 +3,5 @@
     interface IRestResponse
     {
         int StatusCode { get; }
-
-        T Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param);
     }
 }

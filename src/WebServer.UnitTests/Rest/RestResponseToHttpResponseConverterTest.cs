@@ -11,7 +11,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.Visitors
         public void Visit_Delete_DefaultResponse()
         {
             RestToHttpResponseConverter v = new RestToHttpResponseConverter();
-            var httpResponse = v.Visit(new DeleteResponse(DeleteResponse.ResponseStatus.OK), default(RestServerRequest));
+            var httpResponse = v.ConvertToHttpResponse(new DeleteResponse(DeleteResponse.ResponseStatus.OK), default(RestServerRequest));
 
             string content = httpResponse.ToString();
 

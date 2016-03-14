@@ -40,10 +40,5 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
                 return (int)Status;
             }
         }
-
-        T IRestResponse.Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param)
-        {
-            return visitor.Visit(this, param);
-        }
     }
 }

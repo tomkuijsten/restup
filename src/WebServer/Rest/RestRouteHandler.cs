@@ -1,7 +1,7 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Devkoes.HttpMessage;
+using Devkoes.Restup.WebServer.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Rest
 {
@@ -39,7 +39,7 @@ namespace Devkoes.Restup.WebServer.Rest
 
             var restResponse = await _requestHandler.HandleRequest(restServerRequest);
 
-            var httpResponse = restResponse.Visit(_restToHttpConverter, restServerRequest);
+            var httpResponse = _restToHttpConverter.ConvertToHttpResponse(restResponse, restServerRequest);
 
             return httpResponse;
         }

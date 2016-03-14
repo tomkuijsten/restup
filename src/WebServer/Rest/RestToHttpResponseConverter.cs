@@ -1,55 +1,51 @@
-﻿using Devkoes.HttpMessage;
+﻿using System;
+using Devkoes.HttpMessage;
 using Devkoes.Restup.WebServer.Http;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
-using System;
-using Devkoes.HttpMessage.Models.Schemas;
 
 namespace Devkoes.Restup.WebServer.Rest
 {
-    internal class RestToHttpResponseConverter : IRestResponseVisitor<RestServerRequest, HttpServerResponse>
+    internal class RestToHttpResponseConverter
     {
-        private ContentSerializer _contentSerializer;
+        private readonly ContentSerializer _contentSerializer;
 
         public RestToHttpResponseConverter()
         {
             _contentSerializer = new ContentSerializer();
         }
 
-        public HttpServerResponse Visit(DeleteResponse response, RestServerRequest restReq)
+        internal HttpServerResponse ConvertToHttpResponse(IRestResponse restResponse, RestServerRequest restServerRequest)
         {
-            return GetDefaultResponse(response);
+            var methodNotAllowedResponse = restResponse as MethodNotAllowedResponse;
+            if (methodNotAllowedResponse != null)
+                return GetMethodNotAllowedResponse(methodNotAllowedResponse, restServerRequest);
+
+            var postResponse = restResponse as PostResponse;
+            if (postResponse != null)
+                return GetPostResponse(postResponse, restServerRequest);
+
+            var response = restResponse as IContentRestResponse;
+            if (response != null)
+                return GetDefaultContentResponse(response, restServerRequest);
+            
+            return GetDefaultResponse(restResponse);
+        }        
+
+        private static HttpServerResponse GetMethodNotAllowedResponse(MethodNotAllowedResponse methodNotAllowedResponse, RestServerRequest restReq)
+        {
+            var serverResponse = GetDefaultResponse(methodNotAllowedResponse);
+            serverResponse.Allow = methodNotAllowedResponse.Allows;
+
+            return serverResponse;
         }
 
-        public HttpServerResponse Visit(PostResponse response, RestServerRequest restReq)
+        private HttpServerResponse GetPostResponse(PostResponse response, RestServerRequest restReq)
         {
             var serverResponse = GetDefaultContentResponse(response, restReq);
 
             if (response.Status == PostResponse.ResponseStatus.Created)
                 serverResponse.Location = new Uri(response.LocationRedirect, UriKind.RelativeOrAbsolute);
-
-            return serverResponse;
-        }
-
-        public HttpServerResponse Visit(GetResponse response, RestServerRequest restReq)
-        {
-            return GetDefaultContentResponse(response, restReq);
-        }
-
-        public HttpServerResponse Visit(PutResponse response, RestServerRequest restReq)
-        {
-            return GetDefaultContentResponse(response, restReq);
-        }
-
-        public HttpServerResponse Visit(StatusOnlyResponse response, RestServerRequest restReq)
-        {
-            return GetDefaultResponse(response);
-        }
-
-        public HttpServerResponse Visit(MethodNotAllowedResponse methodNotAllowedResponse, RestServerRequest restReq)
-        {
-            var serverResponse = GetDefaultResponse(methodNotAllowedResponse);
-            serverResponse.Allow = methodNotAllowedResponse.Allows;
 
             return serverResponse;
         }
@@ -68,6 +64,15 @@ namespace Devkoes.Restup.WebServer.Rest
             return defaultResponse;
         }
 
+        private static HttpServerResponse GetDefaultResponse(IRestResponse response)
+        {
+            var serverResponse = HttpServerResponse.Create(response.StatusCode);
+            serverResponse.Date = DateTime.Now;
+            serverResponse.IsConnectionClosed = true;
+
+            return serverResponse;
+        }
+
         private string GetMediaTypeAsString(MediaType acceptMediaType)
         {
             switch (acceptMediaType)
@@ -81,15 +86,6 @@ namespace Devkoes.Restup.WebServer.Rest
             }
 
             throw new ArgumentException($"Don't know how to convert {nameof(acceptMediaType)}.");
-        }
-
-        private HttpServerResponse GetDefaultResponse(IRestResponse response)
-        {
-            var serverResponse = HttpServerResponse.Create(response.StatusCode);
-            serverResponse.Date = DateTime.Now;
-            serverResponse.IsConnectionClosed = true;
-
-            return serverResponse;
         }
     }
 }

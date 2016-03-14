@@ -10,10 +10,5 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
         {
             StatusCode = statusCode;
         }
-
-        public virtual T Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param)
-        {
-            return visitor.Visit(this, param);
-        }
     }
 }
