@@ -1,4 +1,4 @@
-﻿using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {

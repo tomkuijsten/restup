@@ -1,4 +1,4 @@
-﻿namespace Devkoes.Restup.WebServer.Models.Contracts
+namespace WebServer.Rest.Models.Contracts
 {
     public interface IGetResponse : IContentRestResponse
     {

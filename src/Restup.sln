@@ -23,6 +23,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "HttpMessage", "HttpMessage\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoStaticFiles", "DemoStaticFiles\DemoStaticFiles.csproj", "{71394B97-2990-4E92-A7CC-0642D4860651}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer.Rest.Models.Contracts", "WebServer.Rest.Models.Contracts\WebServer.Rest.Models.Contracts.csproj", "{0B20D095-2896-41A6-865D-172DFD5ECC99}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		HttpMessage\HttpMessage.projitems*{837b8ff3-ded6-4dc7-ad58-dbb0b3e44dd4}*SharedItemsImports = 4
@@ -160,6 +162,22 @@ Global
 		{71394B97-2990-4E92-A7CC-0642D4860651}.Release|x64.Build.0 = Release|x64
 		{71394B97-2990-4E92-A7CC-0642D4860651}.Release|x86.ActiveCfg = Release|x86
 		{71394B97-2990-4E92-A7CC-0642D4860651}.Release|x86.Build.0 = Release|x86
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Debug|ARM.ActiveCfg = Debug|ARM
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Debug|ARM.Build.0 = Debug|ARM
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Debug|x64.ActiveCfg = Debug|x64
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Debug|x64.Build.0 = Debug|x64
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Debug|x86.ActiveCfg = Debug|x86
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Debug|x86.Build.0 = Debug|x86
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Release|ARM.ActiveCfg = Release|ARM
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Release|ARM.Build.0 = Release|ARM
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Release|x64.ActiveCfg = Release|x64
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Release|x64.Build.0 = Release|x64
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Release|x86.ActiveCfg = Release|x86
+		{0B20D095-2896-41A6-865D-172DFD5ECC99}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

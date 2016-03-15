@@ -122,10 +122,6 @@
     <Compile Include="File\StaticFileRouteHandler.cs" />
     <Compile Include="Http\RouteRegistration.cs" />
     <Compile Include="Models\Contracts\IRouteHandler.cs" />
-    <Compile Include="Models\Contracts\IDeleteResponse.cs" />
-    <Compile Include="Models\Contracts\IGetResponse.cs" />
-    <Compile Include="Models\Contracts\IPostResponse.cs" />
-    <Compile Include="Models\Contracts\IPutResponse.cs" />
     <Compile Include="Models\Schemas\MediaType.cs" />
     <Compile Include="Models\Schemas\RestServerRequest.cs" />
     <Compile Include="Rest\RestRoutehandler.cs" />
@@ -135,13 +131,11 @@
     <Compile Include="Rest\RestResponseFactory.cs" />
     <Compile Include="Http\ContentSerializer.cs" />
     <Compile Include="Http\HttpServer.cs" />
-    <Compile Include="Models\Contracts\IContentRestResponse.cs" />
     <Compile Include="Rest\RestControllerMethodInfo.cs" />
     <Compile Include="InstanceCreators\InstanceCreatorCache.cs" />
     <Compile Include="InstanceCreators\PerCallInstanceCreator.cs" />
     <Compile Include="InstanceCreators\SingletonInstanceCreator.cs" />
     <Compile Include="Models\Contracts\IInstanceCreator.cs" />
-    <Compile Include="Models\Contracts\IRestResponse.cs" />
     <Compile Include="Models\Schemas\DeleteResponse.cs" />
     <Compile Include="Models\Schemas\GetResponse.cs" />
     <Compile Include="Models\Schemas\InstanceCreationType.cs" />
@@ -161,6 +155,12 @@
   <ItemGroup>
     <None Include="project.json" />
     <None Include="WebServer.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebServer.Rest.Models.Contracts\WebServer.Rest.Models.Contracts.csproj">
+      <Project>{0B20D095-2896-41A6-865D-172DFD5ECC99}</Project>
+      <Name>WebServer.Rest.Models.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\HttpMessage\HttpMessage.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
