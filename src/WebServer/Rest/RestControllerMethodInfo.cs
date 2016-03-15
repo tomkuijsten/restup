@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Devkoes.Restup.WebServer.Models.Contracts;
+using Devkoes.Restup.WebServer.Models.Schemas;
 
 namespace Devkoes.Restup.WebServer.Rest
 {
@@ -140,7 +142,26 @@ namespace Devkoes.Restup.WebServer.Rest
             else
                 returnType = MethodInfo.ReturnType.GetGenericArguments()[0].GetTypeInfo();
 
-            Verb = returnType.GetCustomAttribute<RestVerbAttribute>().Verb;
+            Verb = GetVerb(returnType);
+        }
+
+        private HttpMethod GetVerb(TypeInfo returnType)
+        {
+            if (IsRestResponseOfType<IGetResponse>(returnType))
+                return HttpMethod.GET;
+            if (IsRestResponseOfType<IPostResponse>(returnType))
+                return HttpMethod.POST;
+            if (IsRestResponseOfType<IPutResponse>(returnType))
+                return HttpMethod.PUT;
+            if (IsRestResponseOfType<IDeleteResponse>(returnType))
+                return HttpMethod.DELETE;
+
+            throw new ArgumentException($"Verb for return type {returnType} not know. Please use only {typeof(IGetResponse)}, {typeof(IPostResponse)}, {typeof(IPutResponse)}, {typeof(IDeleteResponse)} as return types.");
+        }
+
+        private static bool IsRestResponseOfType<T>(TypeInfo returnType)
+        {
+            return returnType.ImplementedInterfaces.Contains(typeof (T)) || returnType.AsType() == typeof (T);
         }
 
         internal bool Match(Uri uri)

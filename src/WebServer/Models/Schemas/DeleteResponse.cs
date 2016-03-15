@@ -1,11 +1,8 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Devkoes.Restup.WebServer.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    [RestVerb(HttpMethod.DELETE)]
-    public struct DeleteResponse : IRestResponse
+    public class DeleteResponse : IDeleteResponse
     {
         public enum ResponseStatus : int
         {

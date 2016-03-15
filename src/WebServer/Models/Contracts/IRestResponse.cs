@@ -1,6 +1,6 @@
 ﻿namespace Devkoes.Restup.WebServer.Models.Contracts
 {
-    interface IRestResponse
+    public interface IRestResponse
     {
         int StatusCode { get; }
     }

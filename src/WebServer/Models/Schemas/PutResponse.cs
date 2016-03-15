@@ -1,11 +1,8 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Devkoes.Restup.WebServer.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    [RestVerb(HttpMethod.PUT)]
-    public struct PutResponse : IContentRestResponse
+    public class PutResponse : IPutResponse
     {
         public enum ResponseStatus : int
         {

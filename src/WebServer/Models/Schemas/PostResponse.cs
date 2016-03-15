@@ -4,8 +4,7 @@ using Devkoes.Restup.WebServer.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    [RestVerb(HttpMethod.POST)]
-    public struct PostResponse : IContentRestResponse
+    public class PostResponse : IPostResponse
     {
         public enum ResponseStatus : int
         {

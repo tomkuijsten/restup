@@ -1,6 +1,6 @@
 ﻿namespace Devkoes.Restup.WebServer.Models.Contracts
 {
-    interface IContentRestResponse : IRestResponse
+    public interface IContentRestResponse : IRestResponse
     {
         object ContentData { get; }
     }
