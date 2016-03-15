@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8383DC52-161B-4085-B133-4420E995668D}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Devkoes.Restup.DemoControllers</RootNamespace>
     <AssemblyName>Devkoes.Restup.DemoControllers</AssemblyName>
@@ -107,17 +107,26 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\DataReceived.cs" />
+    <Compile Include="Model\FromContentData.cs" />
+    <Compile Include="Model\MoreComplexData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AsyncControllerSample.cs" />
     <Compile Include="FromContentControllerSample.cs" />
     <Compile Include="PerCallControllerSample.cs" />
+    <Compile Include="Model\ResponseData.cs" />
     <Compile Include="SimpleParameterControllerSample.cs" />
     <Compile Include="SingletonControllerSample.cs" />
     <Compile Include="ThrowExceptionControllerSample.cs" />
+    <Compile Include="Model\WebserverInfo.cs" />
     <Compile Include="WithResponseContentControllerSample.cs" />
     <EmbeddedResource Include="Properties\DemoControllers.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WebServer.Rest.Models.Contracts\WebServer.Rest.Models.Contracts.csproj">
+      <Project>{0B20D095-2896-41A6-865D-172DFD5ECC99}</Project>
+      <Name>WebServer.Rest.Models.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebServer\WebServer.csproj">
       <Project>{837b8ff3-ded6-4dc7-ad58-dbb0b3e44dd4}</Project>
       <Name>WebServer</Name>
@@ -125,6 +134,9 @@
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
