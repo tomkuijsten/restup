@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Rest
@@ -120,11 +121,13 @@ namespace Devkoes.Restup.WebServer.Rest
 
         private static bool HasAsyncRestResponse(MethodInfo m)
         {
-            var isTask = m.ReturnType.GetTypeInfo().IsSubclassOf(typeof(Task));
-            if (!isTask)
-            {
+            if (!m.ReturnType.IsConstructedGenericType)
                 return false;
-            }
+
+            var genericTypeDefinition = m.ReturnType.GetGenericTypeDefinition();
+            var isAsync = genericTypeDefinition == typeof (Task<>) || genericTypeDefinition == typeof (IAsyncOperation<>);
+            if (!isAsync)
+                return false;
 
             var genericArgs = m.ReturnType.GetGenericArguments();
             if (!genericArgs.Any())

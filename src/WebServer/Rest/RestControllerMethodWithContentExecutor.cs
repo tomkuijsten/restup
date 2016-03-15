@@ -6,11 +6,12 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Rest
 {
-    internal class RestControllerMethodWithContentExecutor : IRestMethodExecutor
+    internal class RestControllerMethodWithContentExecutor : RestMethodExecutor
     {
         private ContentSerializer _contentSerializer;
         private RestResponseFactory _responseFactory;
@@ -21,17 +22,7 @@ namespace Devkoes.Restup.WebServer.Rest
             _responseFactory = new RestResponseFactory();
         }
 
-        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, RestServerRequest request)
-        {
-            var methodInvokeResult = ExecuteAnonymousMethod(info, request);
-
-            if (!info.IsAsync)
-                return await Task.Run(() => (IRestResponse)methodInvokeResult);
-
-            return await (dynamic)methodInvokeResult;
-        }
-
-        private object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request)
+        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request)
         {
             var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
 
