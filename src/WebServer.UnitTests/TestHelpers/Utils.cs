@@ -5,6 +5,7 @@ using System.Net;
 using Devkoes.HttpMessage;
 using Devkoes.HttpMessage.Models.Contracts;
 using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Models.Schemas;
 using Devkoes.Restup.WebServer.Rest;
 
 namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
@@ -56,6 +57,20 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
                 acceptCharsets ?? Enumerable.Empty<string>(),
                 contentLength, contentType, acceptMediaTypes ?? Enumerable.Empty<string>(), content ?? new byte[] {},
                 isComplete);
+        }
+
+        internal static RestServerRequest CreateRestServerRequest(IEnumerable<IHttpRequestHeader> headers = null,
+            HttpMethod? method = HttpMethod.GET, Uri uri = null, string httpVersion = "HTTP / 1.1",
+            string contentTypeCharset = null, IEnumerable<string> acceptCharsets = null,
+            int contentLength = 0, string contentType = null,
+            IEnumerable<string> acceptMediaTypes = null, byte[] content = null,
+            bool isComplete = true)
+        {
+            var restServerRequestFactory = new RestServerRequestFactory();
+            var httpRequest = Utils.CreateHttpRequest(headers, method, uri, httpVersion, contentTypeCharset,
+                acceptCharsets, contentLength, contentType, acceptMediaTypes, content, isComplete);
+
+            return restServerRequestFactory.Create(httpRequest);
         }
     }
 }

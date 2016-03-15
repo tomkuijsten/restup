@@ -12,28 +12,22 @@ namespace Devkoes.Restup.WebServer.Rest
         public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, RestServerRequest request)
         {
             var methodInvokeResult = ExecuteAnonymousMethod(info, request);
+            switch (info.ReturnTypeWrapper)
+            {
+                case RestControllerMethodInfo.TypeWrapper.None:
+                    return await Task.FromResult((IRestResponse)methodInvokeResult);
+                case RestControllerMethodInfo.TypeWrapper.AsyncOperation:
+                    return await ConvertToTask((dynamic)methodInvokeResult);
+                case RestControllerMethodInfo.TypeWrapper.Task:
+                    return await (dynamic)methodInvokeResult;
+            }
 
-            if (!info.IsAsync)
-                return await Task.Run(() => (IRestResponse)methodInvokeResult);
-
-            if (IsAsyncOperation(info))
-                methodInvokeResult = ConvertToTask((dynamic)methodInvokeResult);
-
-            return await(dynamic)methodInvokeResult;
+            throw new Exception($"ReturnTypeWrapper of type {info.ReturnTypeWrapper} not known.");
         }
 
         private static Task<T> ConvertToTask<T>(IAsyncOperation<T> methodInvokeResult)
         {
             return methodInvokeResult.AsTask();
-        }
-
-        private static bool IsAsyncOperation(RestControllerMethodInfo info)
-        {
-            var returnType = info.MethodInfo.ReturnType;
-            if (returnType.IsConstructedGenericType && returnType.GetGenericTypeDefinition() == typeof (IAsyncOperation<>))
-                return true;
-
-            return false;
         }
 
         protected abstract object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request);

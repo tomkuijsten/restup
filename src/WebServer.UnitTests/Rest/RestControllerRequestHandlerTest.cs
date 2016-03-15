@@ -3,9 +3,11 @@ using Devkoes.Restup.WebServer.Models.Schemas;
 using Devkoes.Restup.WebServer.Rest;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
 using WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.UnitTests.Rest
@@ -14,34 +16,36 @@ namespace Devkoes.Restup.WebServer.UnitTests.Rest
     public class RestControllerRequestHandlerTest
     {
         [TestMethod]
-        public void GetRestMethods_HasAsyncTaskMethod_IsAsyncSet()
+        public void GetRestMethods_HasTaskMethod_CanHandleRequest()
         {
             var restHandler = new RestControllerRequestHandler();
+            restHandler.RegisterController<AsyncTaskTestController>();
 
-            var allDefs = restHandler.GetRestMethods<AsyncTaskTestController>(() => null);
+            var request = restHandler.HandleRequest(Utils.CreateRestServerRequest(uri: new Uri("/users/1", UriKind.Relative)));
 
-            Assert.AreEqual(1, allDefs.Count());
-            Assert.AreEqual(true, allDefs.First().IsAsync);
+            Assert.IsNotNull(request.Result);
+            Assert.AreEqual((int)GetResponse.ResponseStatus.OK, request.Result.StatusCode);
         }
 
         [TestMethod]
-        public void GetRestMethods_HasIAsyncOperationMethod_IsAsyncSet()
+        public void GetRestMethods_HasIAsyncOperationMethod_CanHandleRequest()
         {
             var restHandler = new RestControllerRequestHandler();
+            restHandler.RegisterController<AsyncOperationTestController>();
 
-            var allDefs = restHandler.GetRestMethods<AsyncOperationTestController>(() => null);
+            var request = restHandler.HandleRequest(Utils.CreateRestServerRequest(uri: new Uri("/users/1", UriKind.Relative)));
 
-            Assert.AreEqual(1, allDefs.Count());
-            Assert.AreEqual(true, allDefs.First().IsAsync);
+            Assert.IsNotNull(request.Result);
+            Assert.AreEqual((int)GetResponse.ResponseStatus.OK, request.Result.StatusCode);
         }
 
         [RestController(InstanceCreationType.Singleton)]
         public class AsyncTaskTestController
-        {
+        {           
             [UriFormat("/users/{userId}")]
             public async Task<GetResponse> GetUser(int userId)
             {
-                return await Task.Run(() => new GetResponse(GetResponse.ResponseStatus.OK, "test"));
+                return await Task.FromResult(new GetResponse(GetResponse.ResponseStatus.OK, "test")) ;
             }
         }
 
@@ -51,7 +55,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.Rest
             [UriFormat("/users/{userId}")]
             public IAsyncOperation<IGetResponse> GetUser(int userId)
             {
-                return Task.Run(() => (IGetResponse) new GetResponse(GetResponse.ResponseStatus.OK, "test")).AsAsyncOperation();
+                return Task.FromResult<IGetResponse>(new GetResponse(GetResponse.ResponseStatus.OK, "test")).AsAsyncOperation();
             }
         }
     }

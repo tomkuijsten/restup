@@ -7,7 +7,7 @@ namespace Devkoes.Restup.WebServer.Rest
 {
     internal class RestControllerMethodExecutor : RestMethodExecutor
     {
-        private RestResponseFactory _responseFactory;
+        private readonly RestResponseFactory _responseFactory;
 
         public RestControllerMethodExecutor()
         {

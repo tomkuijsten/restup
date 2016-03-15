@@ -1,12 +1,10 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Attributes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Models.Schemas;
+using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Attributes;
 using WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Rest
@@ -27,17 +25,17 @@ namespace Devkoes.Restup.WebServer.Rest
         internal HttpMethod Verb { get; private set; }
         internal bool HasContentParameter { get; private set; }
         internal Type ContentParameterType { get; private set; }
-        internal bool IsAsync { get; }
+        internal TypeWrapper ReturnTypeWrapper { get; }
         internal Func<object[]> ControllerConstructorArgs { get; }
 
         internal RestControllerMethodInfo(
             MethodInfo methodInfo,
             Func<object[]> constructorArgs,
-            bool isAsync)
+            TypeWrapper typeWrapper)
         {
             constructorArgs.GuardNull(nameof(constructorArgs));
 
-            IsAsync = isAsync;
+            ReturnTypeWrapper = typeWrapper;
             ControllerConstructorArgs = constructorArgs;
             MethodInfo = methodInfo;
 
@@ -57,8 +55,6 @@ namespace Devkoes.Restup.WebServer.Rest
             var uriFormatter = methodInfo.GetCustomAttribute<UriFormatAttribute>();
             _urlToMatch = CreateUriFormat(uriFormatter);
         }
-
-        internal RestControllerMethodInfo(MethodInfo methodInfo, Func<object[]> constructorArgs) : this(methodInfo, constructorArgs, false) { }
 
         private void InitializeValidParameterTypes()
         {
@@ -138,7 +134,7 @@ namespace Devkoes.Restup.WebServer.Rest
         {
             TypeInfo returnType = null;
 
-            if (!IsAsync)
+            if (ReturnTypeWrapper == TypeWrapper.None)
                 returnType = MethodInfo.ReturnType.GetTypeInfo();
             else
                 returnType = MethodInfo.ReturnType.GetGenericArguments()[0].GetTypeInfo();
@@ -194,6 +190,13 @@ namespace Devkoes.Restup.WebServer.Rest
         public override string ToString()
         {
             return $"Hosting {Verb.ToString()} method on {_urlToMatch}";
+        }
+
+        internal enum TypeWrapper
+        {
+            None,
+            Task,
+            AsyncOperation
         }
     }
 }

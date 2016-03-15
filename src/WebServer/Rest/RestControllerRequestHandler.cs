@@ -1,24 +1,22 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.InstanceCreators;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Attributes;
+using Devkoes.Restup.WebServer.InstanceCreators;
+using Devkoes.Restup.WebServer.Models.Schemas;
 using WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Rest
 {
     internal class RestControllerRequestHandler
     {
-        private List<RestControllerMethodInfo> _restMethodCollection;
-        private RestResponseFactory _responseFactory;
-        private RestControllerMethodExecutorFactory _methodExecuteFactory;
+        private readonly List<RestControllerMethodInfo> _restMethodCollection;
+        private readonly RestResponseFactory _responseFactory;
+        private readonly RestControllerMethodExecutorFactory _methodExecuteFactory;
 
         internal RestControllerRequestHandler()
         {
@@ -41,51 +39,45 @@ namespace Devkoes.Restup.WebServer.Rest
 
         internal IEnumerable<RestControllerMethodInfo> GetRestMethods<T>(Func<object[]> constructorArgs) where T : class
         {
-            var restMethods = new List<RestControllerMethodInfo>();
-
-            var allPublicAsyncRestMethods = GetRestAsyncMethodDefinitions<T>();
-            var allPublicRestMethods = GetRestMethodDefinitions<T>();
-
-            foreach (var methodDef in allPublicRestMethods)
+            var possibleValidRestMethods = (from m in typeof (T).GetRuntimeMethods()
+                                            where m.IsPublic &&
+                                                  m.IsDefined(typeof (UriFormatAttribute))
+                                            select m).ToList();
+            
+            foreach (var restMethod in possibleValidRestMethods)
             {
-                restMethods.Add(new RestControllerMethodInfo(methodDef, constructorArgs));
+                if (HasRestResponse(restMethod))
+                    yield return new RestControllerMethodInfo(restMethod, constructorArgs, RestControllerMethodInfo.TypeWrapper.None);
+                if (HasAsyncRestResponse(restMethod, typeof(Task<>)))
+                    yield return new RestControllerMethodInfo(restMethod, constructorArgs, RestControllerMethodInfo.TypeWrapper.Task);
+                if (HasAsyncRestResponse(restMethod, typeof(IAsyncOperation<>)))
+                    yield return new RestControllerMethodInfo(restMethod, constructorArgs, RestControllerMethodInfo.TypeWrapper.AsyncOperation);
+            }
+        }
+
+        private static bool HasRestResponse(MethodInfo m)
+        {
+            return m.ReturnType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
+        }
+
+        private static bool HasAsyncRestResponse(MethodInfo m, Type type)
+        {
+            if (!m.ReturnType.IsConstructedGenericType)
+                return false;
+
+            var genericTypeDefinition = m.ReturnType.GetGenericTypeDefinition();
+            var isAsync = genericTypeDefinition == type;
+            if (!isAsync)
+                return false;
+
+            var genericArgs = m.ReturnType.GetGenericArguments();
+            if (!genericArgs.Any())
+            {
+                return false;
             }
 
-            foreach (var methodDef in allPublicAsyncRestMethods)
-            {
-                restMethods.Add(new RestControllerMethodInfo(methodDef, constructorArgs, true));
-            }
-
-            Debug.WriteLine(string.Join(Environment.NewLine, restMethods));
-
-            return restMethods;
-        }
-
-        internal IEnumerable<MethodInfo> GetRestMethodDefinitions<T>()
-        {
-            var allPublicRestMethods =
-               from m in typeof(T).GetRuntimeMethods()
-               where
-                   m.IsPublic &&
-                   m.IsDefined(typeof(UriFormatAttribute)) &&
-                   HasRestResponse(m)
-               select m;
-
-            return allPublicRestMethods.ToArray();
-        }
-
-        internal IEnumerable<MethodInfo> GetRestAsyncMethodDefinitions<T>()
-        {
-            var allPublicRestMethods =
-               from m in typeof(T).GetRuntimeMethods()
-               where
-                   m.IsPublic &&
-                   m.IsDefined(typeof(UriFormatAttribute)) &&
-                   HasAsyncRestResponse(m)
-               select m;
-
-            return allPublicRestMethods.ToArray();
-        }
+            return genericArgs[0].GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
+        }        
 
         internal async Task<IRestResponse> HandleRequest(RestServerRequest req)
         {
@@ -118,29 +110,5 @@ namespace Devkoes.Restup.WebServer.Rest
                 return _responseFactory.CreateBadRequest();
             }
         }
-
-        private static bool HasAsyncRestResponse(MethodInfo m)
-        {
-            if (!m.ReturnType.IsConstructedGenericType)
-                return false;
-
-            var genericTypeDefinition = m.ReturnType.GetGenericTypeDefinition();
-            var isAsync = genericTypeDefinition == typeof (Task<>) || genericTypeDefinition == typeof (IAsyncOperation<>);
-            if (!isAsync)
-                return false;
-
-            var genericArgs = m.ReturnType.GetGenericArguments();
-            if (!genericArgs.Any())
-            {
-                return false;
-            }
-
-            return genericArgs[0].GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
-        }
-
-        private static bool HasRestResponse(MethodInfo m)
-        {
-            return m.ReturnType.GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
-        }
-    }
+    }    
 }
