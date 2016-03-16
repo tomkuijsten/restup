@@ -20,7 +20,7 @@ namespace Devkoes.HttpMessage
         public Version HttpVersion { get; set; }
         public HttpResponseStatus ResponseStatus { get; set; }
 
-        internal HttpServerResponse(Version httpVersion, HttpResponseStatus status)
+        public HttpServerResponse(Version httpVersion, HttpResponseStatus status)
         {
             _headers = new List<IHttpHeader>();
 
