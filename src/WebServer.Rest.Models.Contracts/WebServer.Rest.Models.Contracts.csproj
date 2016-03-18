@@ -7,8 +7,8 @@
     <ProjectGuid>{0B20D095-2896-41A6-865D-172DFD5ECC99}</ProjectGuid>
     <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WebServer.Rest.Models.Contracts</RootNamespace>
-    <AssemblyName>WebServer.Rest.Models.Contracts</AssemblyName>
+    <RootNamespace>Devkoes.Restup.WebServer.Rest.Models.Contracts</RootNamespace>
+    <AssemblyName>Devkoes.Restup.WebServer.Rest.Models.Contracts</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>

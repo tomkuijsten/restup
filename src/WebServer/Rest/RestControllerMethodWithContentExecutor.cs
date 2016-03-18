@@ -7,7 +7,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Rest
 {

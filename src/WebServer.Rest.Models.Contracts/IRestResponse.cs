@@ -1,4 +1,4 @@
-namespace WebServer.Rest.Models.Contracts
+namespace Devkoes.Restup.WebServer.Rest.Models.Contracts
 {
     public interface IRestResponse
     {

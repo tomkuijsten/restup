@@ -1,7 +1,7 @@
 ﻿using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using System;
-using WebServer.Rest.Models.Contracts;
+using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.DemoControllers
 {

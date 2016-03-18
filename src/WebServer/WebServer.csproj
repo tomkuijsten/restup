@@ -159,7 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WebServer.Rest.Models.Contracts\WebServer.Rest.Models.Contracts.csproj">
-      <Project>{0B20D095-2896-41A6-865D-172DFD5ECC99}</Project>
+      <Project>{0b20d095-2896-41a6-865d-172dfd5ecc99}</Project>
       <Name>WebServer.Rest.Models.Contracts</Name>
     </ProjectReference>
   </ItemGroup>

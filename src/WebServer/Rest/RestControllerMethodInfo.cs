@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.Restup.WebServer.Attributes;
-using WebServer.Rest.Models.Contracts;
+using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Rest
 {

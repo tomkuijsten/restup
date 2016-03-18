@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Devkoes.Restup.WebServer.Models.Contracts;
 using Devkoes.Restup.WebServer.Models.Schemas;
-using WebServer.Rest.Models.Contracts;
+using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Rest
 {
