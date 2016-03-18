@@ -1,11 +1,11 @@
 ﻿using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
-using System;
+using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.DemoControllers
 {
     [RestController(InstanceCreationType.PerCall)]
-    public class PerCallControllerSample
+    public sealed class PerCallControllerSample
     {
         private long _totalNrOfCallsHandled;
 
@@ -19,7 +19,7 @@ namespace Devkoes.Restup.DemoControllers
         /// </summary>
         /// <returns></returns>
         [UriFormat("/percall")]
-        public GetResponse GetPerCallSampleValue()
+        public IGetResponse GetPerCallSampleValue()
         {
             return new GetResponse(
                 GetResponse.ResponseStatus.OK,

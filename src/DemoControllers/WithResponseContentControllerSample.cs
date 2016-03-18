@@ -1,6 +1,7 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
+﻿using Devkoes.Restup.DemoControllers.Model;
+using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
-using System;
+using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.DemoControllers
 {
@@ -8,15 +9,10 @@ namespace Devkoes.Restup.DemoControllers
     /// Sample controller with all verbs supporting a response content.
     /// </summary>
     [RestController(InstanceCreationType.PerCall)]
-    public class WithResponseContentControllerSample
+    public sealed class WithResponseContentControllerSample
     {
-        public struct ResponseData
-        {
-            public string Status { get; set; }
-        }
-
         [UriFormat("/withresponsecontent")]
-        public PutResponse UpdateSomething()
+        public IPutResponse UpdateSomething()
         {
             return new PutResponse(
                 PutResponse.ResponseStatus.OK,
@@ -24,7 +20,7 @@ namespace Devkoes.Restup.DemoControllers
         }
 
         [UriFormat("/withresponsecontent")]
-        public PostResponse CreateSomething()
+        public IPostResponse CreateSomething()
         {
             return new PostResponse(
                 PostResponse.ResponseStatus.Created,
@@ -33,7 +29,7 @@ namespace Devkoes.Restup.DemoControllers
         }
 
         [UriFormat("/withresponsecontent")]
-        public GetResponse GetSomething()
+        public IGetResponse GetSomething()
         {
             return new GetResponse(
                 GetResponse.ResponseStatus.OK,

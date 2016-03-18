@@ -1,11 +1,9 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Devkoes.Restup.WebServer.Models.Contracts;
+using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
-    [RestVerb(HttpMethod.GET)]
-    public struct GetResponse : IContentRestResponse
+    public class GetResponse : IGetResponse
     {
         public enum ResponseStatus : int
         {
@@ -30,11 +28,6 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             {
                 return (int)Status;
             }
-        }
-
-        T IRestResponse.Visit<P, T>(IRestResponseVisitor<P, T> visitor, P param)
-        {
-            return visitor.Visit(this, param);
         }
     }
 }

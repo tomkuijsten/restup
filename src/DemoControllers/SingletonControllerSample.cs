@@ -1,22 +1,17 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
+﻿using Devkoes.Restup.DemoControllers.Model;
+using Devkoes.Restup.WebServer.Attributes;
 using Devkoes.Restup.WebServer.Models.Schemas;
-using System;
-using System.Globalization;
+using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
 namespace Devkoes.Restup.DemoControllers
 {
     [RestController(InstanceCreationType.Singleton)]
-    public class SingletonControllerSample
+    public sealed class SingletonControllerSample
     {
         private long _totalNrOfCallsHandled;
 
-        public class WebserverInfo
-        {
-            public long TotalCallsHandled { get; set; }
-        }
-
         [UriFormat("/singleton")]
-        public GetResponse GetSingletonSampleValue()
+        public IGetResponse GetSingletonSampleValue()
         {
             return new GetResponse(
                 GetResponse.ResponseStatus.OK,
@@ -24,7 +19,7 @@ namespace Devkoes.Restup.DemoControllers
         }
 
     [UriFormat("/singletonwithparameter?p={v}")]
-    public GetResponse GetSingletonSampleValueWithParameter(string v) {
+    public IGetResponse GetSingletonSampleValueWithParameter(string v) {
       long.TryParse(v, out _totalNrOfCallsHandled);
       return new GetResponse(
           GetResponse.ResponseStatus.OK,
