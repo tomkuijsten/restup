@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
+using Restup.WebServer.Logging;
 
 namespace Restup.Webserver.Http
 {
@@ -19,9 +20,11 @@ namespace Restup.Webserver.Http
         private readonly StreamSocketListener _listener;
         private readonly SortedSet<RouteRegistration> _routes;
         private readonly ContentEncoderFactory _contentEncoderFactory;
+        private ILogger _log;
 
         public HttpServer(int serverPort)
         {
+            _log = LogManager.GetLogger<HttpServer>();
             _port = serverPort;
             _routes = new SortedSet<RouteRegistration>();
             _listener = new StreamSocketListener();
@@ -34,14 +37,14 @@ namespace Restup.Webserver.Http
         {
             await _listener.BindServiceNameAsync(_port.ToString());
 
-            Debug.WriteLine($"Webserver started on port {_port}");
+            _log.Info($"Webserver listening on port {_port}");
         }
 
         public void StopServer()
         {
             ((IDisposable)this).Dispose();
 
-            Debug.WriteLine($"Webserver on port {_port} stopped");
+            _log.Info($"Webserver stopped listening on port {_port}");
         }
 
         /// <summary>
@@ -87,7 +90,7 @@ namespace Restup.Webserver.Http
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Exception while handling process: {ex.Message}");
+                    _log.Error($"Exception while handling process: {ex.Message}");
                 }
                 finally
                 {
