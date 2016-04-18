@@ -120,6 +120,13 @@
     <Compile Include="File\PhysicalFile.cs" />
     <Compile Include="File\PhysicalFileSystem.cs" />
     <Compile Include="File\StaticFileRouteHandler.cs" />
+    <Compile Include="Http\ContentCoding.cs" />
+    <Compile Include="Http\CompressContentEncoder.cs" />
+    <Compile Include="Http\ContentEncoderFactory.cs" />
+    <Compile Include="Http\DeflateContentEncoder.cs" />
+    <Compile Include="Http\GzipContentEncoder.cs" />
+    <Compile Include="Http\IContentEncoder.cs" />
+    <Compile Include="Http\NoContentEncoder.cs" />
     <Compile Include="Http\RouteRegistration.cs" />
     <Compile Include="Models\Contracts\IRouteHandler.cs" />
     <Compile Include="Models\Schemas\MediaType.cs" />

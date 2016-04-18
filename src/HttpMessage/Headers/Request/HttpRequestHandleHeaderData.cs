@@ -33,6 +33,11 @@ namespace Devkoes.HttpMessage.Headers.Request
             arg.AcceptCharsets = uh.ResponseContentEncoding;
         }
 
+        public void Visit(AcceptEncodingHeader uh, MutableHttpServerRequest arg)
+        {
+            arg.AcceptEncodings = uh.AcceptEncodings;
+        }
+
         public void Visit(ContentTypeHeader uh, MutableHttpServerRequest arg)
         {
             arg.ContentTypeCharset = uh.ContentCharset;

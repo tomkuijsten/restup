@@ -101,7 +101,10 @@
     <Compile Include="File\MockFileSystem.cs" />
     <Compile Include="File\StaticFileRouteHandlerFluentTests.cs" />
     <Compile Include="File\StaticFileRouteHandlerTests.cs" />
-    <Compile Include="HttpServerTests.cs" />
+    <Compile Include="Http\HttpServerContentEncodingTests.cs" />
+    <Compile Include="Http\HttpServerFluentTests.cs" />
+    <Compile Include="Http\HttpServerTests.cs" />
+    <Compile Include="Http\EchoRouteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rest\RestControllerRequestHandlerTest.cs" />
     <Compile Include="RestRouteHandlerTest.Happy.cs" />
