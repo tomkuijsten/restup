@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -14,13 +15,13 @@ namespace Devkoes.Restup.WebServer.Rest
 {
     internal class RestControllerRequestHandler
     {
-        private readonly List<RestControllerMethodInfo> _restMethodCollection;
+        private ImmutableArray<RestControllerMethodInfo> _restMethodCollection;
         private readonly RestResponseFactory _responseFactory;
         private readonly RestControllerMethodExecutorFactory _methodExecuteFactory;
 
         internal RestControllerRequestHandler()
         {
-            _restMethodCollection = new List<RestControllerMethodInfo>();
+            _restMethodCollection = ImmutableArray<RestControllerMethodInfo>.Empty;
             _responseFactory = new RestResponseFactory();
             _methodExecuteFactory = new RestControllerMethodExecutorFactory();
         }
@@ -32,18 +33,20 @@ namespace Devkoes.Restup.WebServer.Rest
 
         internal void RegisterController<T>(Func<object[]> constructorArgs) where T : class
         {
-            _restMethodCollection.AddRange(GetRestMethods<T>(constructorArgs));
+            _restMethodCollection = _restMethodCollection.Concat(GetRestMethods<T>(constructorArgs))
+                    .OrderByDescending(x => x.MethodInfo.GetParameters().Count())
+                    .ToImmutableArray();
 
             InstanceCreatorCache.Default.CacheCreator(typeof(T));
         }
 
         internal IEnumerable<RestControllerMethodInfo> GetRestMethods<T>(Func<object[]> constructorArgs) where T : class
         {
-            var possibleValidRestMethods = (from m in typeof (T).GetRuntimeMethods()
+            var possibleValidRestMethods = (from m in typeof(T).GetRuntimeMethods()
                                             where m.IsPublic &&
-                                                  m.IsDefined(typeof (UriFormatAttribute))
+                                                  m.IsDefined(typeof(UriFormatAttribute))
                                             select m).ToList();
-            
+
             foreach (var restMethod in possibleValidRestMethods)
             {
                 if (HasRestResponse(restMethod))
@@ -77,7 +80,7 @@ namespace Devkoes.Restup.WebServer.Rest
             }
 
             return genericArgs[0].GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
-        }        
+        }
 
         internal async Task<IRestResponse> HandleRequest(RestServerRequest req)
         {
@@ -87,13 +90,13 @@ namespace Devkoes.Restup.WebServer.Rest
                 return _responseFactory.CreateBadRequest();
             }
 
-            var restMethods = _restMethodCollection.Where(r => r.Match(req.HttpServerRequest.Uri));
+            var restMethods = _restMethodCollection.Where(r => r.Match(req.HttpServerRequest.Uri)).ToList();
             if (!restMethods.Any())
             {
                 return _responseFactory.CreateBadRequest();
             }
 
-            var restMethod = restMethods.SingleOrDefault(r => r.Verb == req.HttpServerRequest.Method);
+            var restMethod = restMethods.FirstOrDefault(r => r.Verb == req.HttpServerRequest.Method);
             if (restMethod == null)
             {
                 return new MethodNotAllowedResponse(restMethods.Select(r => r.Verb));
@@ -110,5 +113,5 @@ namespace Devkoes.Restup.WebServer.Rest
                 return _responseFactory.CreateBadRequest();
             }
         }
-    }    
+    }
 }
