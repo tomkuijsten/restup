@@ -156,7 +156,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rest\RestControllerRequestHandler.cs" />
     <Compile Include="Rest\RestControllerMethodExecutor.cs" />
-    <Compile Include="RestWebServer.cs" />
     <Compile Include="Rest\RestServerRequestFactory.cs" />
     <Compile Include="Rest\RestToHttpResponseConverter.cs" />
   </ItemGroup>
