@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Restup</id>
-    <version>1.0.0-beta3</version>
+    <version>1.0.0-beta4</version>
     <title>Restup</title>
     <authors>Devkoes, Jark</authors>
     <owners>Devkoes, Jark</owners>
@@ -12,11 +12,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A webserver for the Windows Universal framework</description>
     <releaseNotes>
-      Uri matching improved (#57)
-      Added gzip and deflate support (#43)
-      Removed RestWebServer (was obsolete)
-      Fixed resolution of mime-types for static file router (#38)
-      Fixed package problems in demo projects
+.... (#xx)
     </releaseNotes>
     <copyright>Copyright © Devkoes 2016</copyright>
     <tags>UWP REST WebService Universal Windows</tags>
