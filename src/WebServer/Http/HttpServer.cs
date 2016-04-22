@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Devkoes.HttpMessage;
+using Devkoes.HttpMessage.Headers.Response;
+using Devkoes.HttpMessage.Models.Contracts;
+using Devkoes.HttpMessage.Models.Schemas;
+using Devkoes.Restup.WebServer.Models.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
-using Windows.Storage.Streams;
-using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Headers.Response;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Models.Contracts;
 
 namespace Devkoes.Restup.WebServer.Http
 {
@@ -106,7 +105,7 @@ namespace Devkoes.Restup.WebServer.Http
             var routeRegistration = _routes.FirstOrDefault(x => x.Match(request));
             if (routeRegistration == null)
             {
-                return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.BadRequest);
+                return HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.BadRequest);
             }
 
             var httpResponse = await routeRegistration.HandleAsync(request);
@@ -118,8 +117,8 @@ namespace Devkoes.Restup.WebServer.Http
             var contentEncoder = _contentEncoderFactory.GetEncoder(acceptEncodings);
             var encodedContent = await contentEncoder.Encode(httpResponse.Content);
 
-            var newResponse = new HttpServerResponse(httpResponse.HttpVersion, httpResponse.ResponseStatus);
-            
+            var newResponse = HttpServerResponse.Create(httpResponse.HttpVersion, httpResponse.ResponseStatus);
+
             foreach (var header in httpResponse.Headers)
             {
                 newResponse.AddHeader(header);

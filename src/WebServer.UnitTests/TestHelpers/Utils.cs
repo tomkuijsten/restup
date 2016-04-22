@@ -1,12 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using Devkoes.HttpMessage;
 using Devkoes.HttpMessage.Models.Contracts;
 using Devkoes.HttpMessage.Models.Schemas;
 using Devkoes.Restup.WebServer.Models.Schemas;
 using Devkoes.Restup.WebServer.Rest;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
 {
@@ -42,7 +41,10 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
 
         public static HttpServerResponse CreateOkHttpServerResponse(byte[] content = null)
         {
-            return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.OK) { Content = content };
+            var response = HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.OK);
+            response.Content = content;
+
+            return response;
         }
 
         public static IHttpServerRequest CreateHttpRequest(IEnumerable<IHttpRequestHeader> headers = null,
@@ -56,8 +58,8 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
             return new HttpServerRequest(headers ?? Enumerable.Empty<IHttpRequestHeader>(), method,
                 uri ?? new Uri("/Get", UriKind.Relative), httpVersion, contentTypeCharset,
                 acceptCharsets ?? Enumerable.Empty<string>(),
-                contentLength, contentType, acceptEncodings ?? Enumerable.Empty<string>(), 
-                acceptMediaTypes ?? Enumerable.Empty<string>(), content ?? new byte[] {},
+                contentLength, contentType, acceptEncodings ?? Enumerable.Empty<string>(),
+                acceptMediaTypes ?? Enumerable.Empty<string>(), content ?? new byte[] { },
                 isComplete);
         }
 
