@@ -1,17 +1,17 @@
-﻿using System;
+﻿using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Attributes;
+using Restup.Webserver.InstanceCreators;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.InstanceCreators;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal class RestControllerRequestHandler
     {

@@ -1,6 +1,6 @@
-﻿using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Restup.Webserver.Models.Schemas;
 
-namespace Devkoes.Restup.WebServer
+namespace Restup.Webserver
 {
     internal class Configuration
     {

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Http;
+using System;
 
-namespace Devkoes.Restup.WebServer.UnitTests.Http
+namespace Restup.Webserver.UnitTests.Http
 {
     [TestClass]
     public class HttpServerTests

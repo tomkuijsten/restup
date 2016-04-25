@@ -1,8 +1,8 @@
-﻿using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.Webserver.Models.Schemas;
+using Restup.Webserver.Rest;
 
-namespace Devkoes.Restup.WebServer.UnitTests.Visitors
+namespace Restup.Webserver.UnitTests.Visitors
 {
     [TestClass]
     public class RestResponseVisitorTest

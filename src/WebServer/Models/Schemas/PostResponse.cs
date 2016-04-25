@@ -1,6 +1,6 @@
-﻿using Devkoes.Restup.WebServer.Rest.Models.Contracts;
+﻿using Restup.Webserver.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.Models.Schemas
+namespace Restup.Webserver.Models.Schemas
 {
     public class PostResponse : IPostResponse
     {
@@ -35,6 +35,6 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             {
                 return (int)Status;
             }
-        }        
+        }
     }
 }

@@ -1,6 +1,6 @@
-﻿using Devkoes.HttpMessage.Models.Contracts;
+﻿using Restup.HttpMessage.Models.Contracts;
 
-namespace Devkoes.HttpMessage.Headers
+namespace Restup.HttpMessage.Headers
 {
     public abstract class HttpRequestHeaderBase : HttpHeaderBase, IHttpRequestHeader
     {

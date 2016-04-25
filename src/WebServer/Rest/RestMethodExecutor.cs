@@ -1,11 +1,11 @@
+using Restup.Webserver.Models;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
 using System;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal abstract class RestMethodExecutor : IRestMethodExecutor
     {

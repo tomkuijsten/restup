@@ -1,9 +1,9 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage.Models.Schemas;
 using System;
 using System.Text;
 
-namespace Devkoes.HttpMessage.UnitTests
+namespace Restup.HttpMessage.UnitTests
 {
     [TestClass]
     public class HttpServerResponseTest

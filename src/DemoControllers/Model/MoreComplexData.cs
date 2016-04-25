@@ -1,4 +1,4 @@
-﻿namespace Devkoes.Restup.DemoControllers.Model
+﻿namespace Restup.DemoControllers.Model
 {
     public sealed class MoreComplexData
     {

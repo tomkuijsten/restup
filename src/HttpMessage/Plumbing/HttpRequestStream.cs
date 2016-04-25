@@ -1,10 +1,10 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
+﻿using Restup.HttpMessage.Models.Schemas;
 using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 
-namespace Devkoes.HttpMessage.Plumbing
+namespace Restup.HttpMessage.Plumbing
 {
     /// <summary>
     /// Wrapper around an <see cref="IInputStream"/> which supports a retry meganism

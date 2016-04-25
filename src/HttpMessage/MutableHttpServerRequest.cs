@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
-using Devkoes.HttpMessage.Headers.Request;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.HttpMessage.ServerRequestParsers;
+using Restup.HttpMessage.Headers.Request;
+using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.HttpMessage.ServerRequestParsers;
 
-namespace Devkoes.HttpMessage
+namespace Restup.HttpMessage
 {
     public class MutableHttpServerRequest : IHttpServerRequest
     {

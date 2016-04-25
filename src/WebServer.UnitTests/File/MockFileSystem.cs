@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Restup.Webserver.File;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Devkoes.Restup.WebServer.File;
 
-namespace Devkoes.Restup.WebServer.UnitTests.File
+namespace Restup.Webserver.UnitTests.File
 {
     public class MockFileSystem : IFileSystem
     {

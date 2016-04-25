@@ -1,10 +1,10 @@
-﻿using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.HttpMessage.Plumbing;
+﻿using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.HttpMessage.Plumbing;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Devkoes.HttpMessage.Headers.Request
+namespace Restup.HttpMessage.Headers.Request
 {
     public class AcceptHeader : HttpMultiQuantifiedHeaderBase
     {

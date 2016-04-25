@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Text;
 
-namespace Devkoes.HttpMessage.Plumbing
+namespace Restup.HttpMessage.Plumbing
 {
     internal class Constants
     {

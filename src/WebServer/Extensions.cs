@@ -2,7 +2,7 @@
 using System.IO;
 using Windows.ApplicationModel;
 
-namespace Devkoes.Restup.WebServer
+namespace Restup.Webserver
 {
     internal static class Extensions
     {

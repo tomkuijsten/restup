@@ -1,8 +1,8 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.HttpMessage.Plumbing;
+﻿using Restup.HttpMessage.Models.Schemas;
+using Restup.HttpMessage.Plumbing;
 using System;
 
-namespace Devkoes.HttpMessage.ServerRequestParsers
+namespace Restup.HttpMessage.ServerRequestParsers
 {
     internal class MethodParser : HttpRequestPartParser
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Devkoes.Restup.WebServer.File
+namespace Restup.Webserver.File
 {
     public class PhysicalFileSystem : IFileSystem
     {

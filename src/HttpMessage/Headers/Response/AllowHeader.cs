@@ -1,7 +1,7 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
+﻿using Restup.HttpMessage.Models.Schemas;
 using System.Collections.Generic;
 
-namespace Devkoes.HttpMessage.Headers.Response
+namespace Restup.HttpMessage.Headers.Response
 {
     public class AllowHeader : HttpHeaderBase
     {

@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using Restup.Webserver.File;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Devkoes.Restup.WebServer.File;
 
-namespace Devkoes.Restup.WebServer.UnitTests.File
+namespace Restup.Webserver.UnitTests.File
 {
     public class MockFile : IFile
     {

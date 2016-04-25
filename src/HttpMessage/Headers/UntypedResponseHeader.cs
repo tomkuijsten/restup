@@ -1,4 +1,4 @@
-﻿namespace Devkoes.HttpMessage.Headers
+﻿namespace Restup.HttpMessage.Headers
 {
     public class UntypedResponseHeader : HttpHeaderBase
     {

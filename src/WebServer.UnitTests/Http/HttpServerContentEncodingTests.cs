@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage.Headers.Request;
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using Devkoes.HttpMessage.Headers.Request;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
-namespace Devkoes.Restup.WebServer.UnitTests.Http
+namespace Restup.Webserver.UnitTests.Http
 {
     [TestClass]
     public class HttpServerContentEncodingTests

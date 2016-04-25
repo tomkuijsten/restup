@@ -1,7 +1,7 @@
-﻿using Devkoes.HttpMessage.Headers;
-using Devkoes.HttpMessage.Headers.Request;
+﻿using Restup.HttpMessage.Headers;
+using Restup.HttpMessage.Headers.Request;
 
-namespace Devkoes.HttpMessage.Models.Contracts
+namespace Restup.HttpMessage.Models.Contracts
 {
     public interface IHttpRequestHeaderVisitor<T>
     {

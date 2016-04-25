@@ -1,13 +1,13 @@
-using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest;
+using Restup.HttpMessage;
+using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Models.Schemas;
+using Restup.Webserver.Rest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
+namespace Restup.Webserver.UnitTests.TestHelpers
 {
     // helper methods to make it easier to change the creation of classes in the future
     public static class Utils

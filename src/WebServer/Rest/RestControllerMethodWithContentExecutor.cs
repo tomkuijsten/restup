@@ -1,14 +1,11 @@
-﻿using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.InstanceCreators;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Restup.Webserver.Http;
+using Restup.Webserver.InstanceCreators;
+using Restup.Webserver.Models.Schemas;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Windows.Foundation;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal class RestControllerMethodWithContentExecutor : RestMethodExecutor
     {

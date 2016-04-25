@@ -1,13 +1,12 @@
-﻿using Devkoes.Restup.DemoControllers;
-using Devkoes.Restup.WebServer;
+﻿using Restup.DemoControllers;
+using Restup.Webserver.File;
+using Restup.Webserver.Http;
+using Restup.Webserver.Rest;
 using Windows.ApplicationModel.Background;
-using Devkoes.Restup.WebServer.File;
-using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Rest;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
-namespace Devkoes.Restup.HeadlessDemo
+namespace Restup.HeadlessDemo
 {
     public sealed class StartupTask : IBackgroundTask
     {
@@ -26,7 +25,7 @@ namespace Devkoes.Restup.HeadlessDemo
             // come some day, see that this method is not active anymore and the local variable
             // should be removed. Which results in the application being closed.
             _deferral = taskInstance.GetDeferral();
-            
+
             var httpServer = new HttpServer(8800);
             _httpServer = httpServer;
 

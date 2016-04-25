@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
+using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
 
-namespace Devkoes.HttpMessage
+namespace Restup.HttpMessage
 {
     internal class HttpServerRequest : IHttpServerRequest
     {

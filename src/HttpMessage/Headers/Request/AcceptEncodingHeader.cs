@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Devkoes.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Contracts;
 
-namespace Devkoes.HttpMessage.Headers.Request
+namespace Restup.HttpMessage.Headers.Request
 {
     public class AcceptEncodingHeader : HttpMultiQuantifiedHeaderBase
     {

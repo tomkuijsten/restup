@@ -7,8 +7,8 @@
     <ProjectGuid>{0B20D095-2896-41A6-865D-172DFD5ECC99}</ProjectGuid>
     <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Devkoes.Restup.WebServer.Rest.Models.Contracts</RootNamespace>
-    <AssemblyName>Devkoes.Restup.WebServer.Rest.Models.Contracts</AssemblyName>
+    <RootNamespace>Restup.Webserver.Models</RootNamespace>
+    <AssemblyName>Restup.Webserver.Models</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
@@ -108,16 +108,19 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IContentRestResponse.cs" />
-    <Compile Include="IDeleteResponse.cs" />
-    <Compile Include="IGetResponse.cs" />
-    <Compile Include="IPostResponse.cs" />
-    <Compile Include="IPutResponse.cs" />
-    <Compile Include="IRestResponse.cs" />
+    <Compile Include="Contracts\IContentRestResponse.cs" />
+    <Compile Include="Contracts\IDeleteResponse.cs" />
+    <Compile Include="Contracts\IGetResponse.cs" />
+    <Compile Include="Contracts\IPostResponse.cs" />
+    <Compile Include="Contracts\IPutResponse.cs" />
+    <Compile Include="Contracts\IRestResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="About.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Schemas\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

@@ -7,8 +7,8 @@
     <ProjectGuid>{D313F525-2D90-4BF5-8857-2698EE580A65}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Devkoes.HttpMessage.UnitTests</RootNamespace>
-    <AssemblyName>Devkoes.HttpMessage.UnitTests</AssemblyName>
+    <RootNamespace>Restup.HttpMessage.UnitTests</RootNamespace>
+    <AssemblyName>Restup.HttpMessage.UnitTests</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>

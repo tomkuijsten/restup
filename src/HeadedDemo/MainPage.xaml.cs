@@ -1,14 +1,14 @@
-﻿using Devkoes.Restup.DemoControllers;
-using Devkoes.Restup.WebServer.File;
-using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Rest;
+﻿using Restup.DemoControllers;
+using Restup.Webserver.File;
+using Restup.Webserver.Http;
+using Restup.Webserver.Rest;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace HeadedDemo
+namespace Restup.HeadedDemo
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -44,10 +44,10 @@ namespace HeadedDemo
 
             httpServer.RegisterRoute("api", restRouteHandler);
 
-            httpServer.RegisterRoute(new StaticFileRouteHandler(@"DemoStaticFiles\Web"));
+            httpServer.RegisterRoute(new StaticFileRouteHandler(@"Restup.DemoStaticFiles\Web"));
             await httpServer.StartServerAsync();
 
-            // Dont release deferral, otherwise app will stop
+            // Don't release deferral, otherwise app will stop
         }
     }
 }

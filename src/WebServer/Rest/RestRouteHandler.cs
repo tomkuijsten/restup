@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Restup.HttpMessage;
+using Restup.Webserver.Models.Contracts;
+using System;
 using System.Threading.Tasks;
-using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     public class RestRouteHandler : IRouteHandler
     {

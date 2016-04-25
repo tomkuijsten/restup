@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal class RestControllerMethodInfo
     {
@@ -118,7 +118,7 @@ namespace Devkoes.Restup.WebServer.Rest
         }
 
         private void InitializeFindParameterRegex(string uriFormatWithPrefix)
-        {            
+        {
             string regexToFindParamValues = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatWithPrefix, MATCHPARAMETER_REPLACE_STRING));
 
             _findParameterValuesRegex = new Regex(regexToFindParamValues, RegexOptions.Compiled);
@@ -126,7 +126,7 @@ namespace Devkoes.Restup.WebServer.Rest
 
         private string CreateUriFormat(UriFormatAttribute uriFormatter)
         {
-            string uriFormat = uriFormatter.UriFormat.RemovePreAndPostSlash().EscapeRegexChars();;
+            string uriFormat = uriFormatter.UriFormat.RemovePreAndPostSlash().EscapeRegexChars(); ;
             return string.Format("/{0}", uriFormat);
         }
 
@@ -158,7 +158,7 @@ namespace Devkoes.Restup.WebServer.Rest
 
         private static bool IsRestResponseOfType<T>(TypeInfo returnType)
         {
-            return returnType.ImplementedInterfaces.Contains(typeof (T)) || returnType.AsType() == typeof (T);
+            return returnType.ImplementedInterfaces.Contains(typeof(T)) || returnType.AsType() == typeof(T);
         }
 
         internal bool Match(Uri uri)

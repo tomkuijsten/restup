@@ -1,8 +1,8 @@
-﻿using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Plumbing;
+﻿using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Plumbing;
 using System.Text;
 
-namespace Devkoes.HttpMessage.ServerResponseParsers
+namespace Restup.HttpMessage.ServerResponseParsers
 {
     internal class HeadersParser : IHttpResponsePartParser
     {

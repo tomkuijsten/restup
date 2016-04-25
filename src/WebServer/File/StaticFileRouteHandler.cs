@@ -1,13 +1,13 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Restup.HttpMessage;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Models.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Devkoes.Restup.WebServer.File
+namespace Restup.Webserver.File
 {
     public class StaticFileRouteHandler : IRouteHandler
     {

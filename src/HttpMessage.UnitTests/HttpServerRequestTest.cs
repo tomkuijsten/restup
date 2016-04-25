@@ -1,13 +1,12 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.HttpMessage.UnitTests.TestHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Devkoes.Restup.HttpMessage.UnitTests
+namespace Restup.HttpMessage.UnitTests
 {
     [TestClass]
     public class HttpServerRequestTest

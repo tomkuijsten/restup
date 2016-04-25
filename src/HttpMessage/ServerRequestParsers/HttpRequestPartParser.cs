@@ -1,6 +1,6 @@
-﻿using Devkoes.HttpMessage.Models.Contracts;
+﻿using Restup.HttpMessage.Models.Contracts;
 
-namespace Devkoes.HttpMessage.ServerRequestParsers
+namespace Restup.HttpMessage.ServerRequestParsers
 {
     internal abstract class HttpRequestPartParser : IHttpRequestPartParser
     {

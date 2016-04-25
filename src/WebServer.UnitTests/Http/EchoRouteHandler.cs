@@ -1,10 +1,10 @@
+using Restup.HttpMessage;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.UnitTests.TestHelpers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
 
-namespace Devkoes.Restup.WebServer.UnitTests.Http
+namespace Restup.Webserver.UnitTests.Http
 {
     public class EchoRouteHandler : IRouteHandler
     {

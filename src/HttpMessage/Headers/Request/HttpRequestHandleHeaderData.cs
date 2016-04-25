@@ -1,6 +1,6 @@
-﻿using Devkoes.HttpMessage.Models.Contracts;
+﻿using Restup.HttpMessage.Models.Contracts;
 
-namespace Devkoes.HttpMessage.Headers.Request
+namespace Restup.HttpMessage.Headers.Request
 {
     /// <summary>
     /// Set specific properties on the <see cref="MutableHttpServerRequest"/> object based

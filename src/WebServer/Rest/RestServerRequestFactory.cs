@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Restup.HttpMessage;
+using Restup.Webserver.Models.Schemas;
+using System;
 using System.Linq;
-using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Models.Schemas;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal class RestServerRequestFactory
     {

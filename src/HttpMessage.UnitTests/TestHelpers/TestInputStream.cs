@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Storage.Streams;
 
-namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
+namespace Restup.HttpMessage.UnitTests.TestHelpers
 {
     public class TestStream : IInputStream
     {

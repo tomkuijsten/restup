@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
+using Restup.Webserver.Rest;
+using Restup.Webserver.UnitTests.TestHelpers;
+using System;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
-namespace Devkoes.Restup.WebServer.UnitTests.Rest
+namespace Restup.Webserver.UnitTests.Rest
 {
     [TestClass]
     public class RestControllerRequestHandlerAsyncMethodsTest

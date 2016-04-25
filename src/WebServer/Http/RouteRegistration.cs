@@ -1,9 +1,9 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Restup.HttpMessage;
+using Restup.Webserver.Models.Contracts;
 using System;
 using System.Threading.Tasks;
 
-namespace Devkoes.Restup.WebServer.Http
+namespace Restup.Webserver.Http
 {
     internal class RouteRegistration : IComparable<RouteRegistration>
     {

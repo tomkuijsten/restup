@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Devkoes.Restup.WebServer.Attributes
+namespace Restup.Webserver.Attributes
 {
     /// <summary>
     /// This class is only used as a marker

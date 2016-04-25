@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="473501c5-2026-488f-81f0-97fa87888414" Publisher="CN=t-kuijsten" Version="1.0.0.0" />
+  <Identity Name="Restup.HeadedDemo" Publisher="CN=t-kuijsten" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="473501c5-2026-488f-81f0-97fa87888414" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>HeadedDemo</DisplayName>
+    <DisplayName>Restup.HeadedDemo</DisplayName>
     <PublisherDisplayName>t-kuijsten</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -14,7 +14,7 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="HeadedDemo.App">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Restup.HeadedDemo.App">
       <uap:VisualElements DisplayName="HeadedDemo" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="HeadedDemo" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>

@@ -1,6 +1,6 @@
-﻿using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Restup.Webserver.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal class RestControllerMethodExecutorFactory
     {

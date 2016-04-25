@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using Devkoes.HttpMessage.Models.Schemas;
+﻿using Restup.HttpMessage.Models.Schemas;
+using System.Collections.Generic;
 
-namespace Devkoes.Restup.WebServer.Models.Schemas
+namespace Restup.Webserver.Models.Schemas
 {
     internal class MethodNotAllowedResponse : StatusOnlyResponse
     {

@@ -1,12 +1,12 @@
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.File;
+using Restup.Webserver.UnitTests.TestHelpers;
 using System;
 using System.Text;
-using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.File;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
-namespace Devkoes.Restup.WebServer.UnitTests.File
+namespace Restup.Webserver.UnitTests.File
 {
     public class StaticFileRouteHandlerFluentTests
     {
@@ -17,7 +17,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
         public StaticFileRouteHandlerFluentTests Given => this;
         public StaticFileRouteHandlerFluentTests When => this;
         public StaticFileRouteHandlerFluentTests Then => this;
-        
+
         public StaticFileRouteHandlerFluentTests SetUp(string basePath, bool pathExists = true)
         {
             mockFileSystem = new MockFileSystem(pathExists);
@@ -38,7 +38,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
         {
             var request = Utils.CreateHttpRequest(uri: new Uri(uri, UriKind.Relative), method: method);
             response = routeHandler.HandleRequest(request).Result;
-            
+
             return this;
         }
 

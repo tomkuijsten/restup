@@ -1,9 +1,8 @@
-﻿using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest;
+﻿using Restup.Webserver.Models.Schemas;
+using Restup.Webserver.Rest;
 using System.Threading.Tasks;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.Models.Contracts
+namespace Restup.Webserver.Models.Contracts
 {
     interface IRestMethodExecutor
     {

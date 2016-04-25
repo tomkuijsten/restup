@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Restup webserver")]
 [assembly: AssemblyDescription("Webserver implementation for UWP software")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Devkoes")]
+[assembly: AssemblyCompany("Restup")]
 [assembly: AssemblyProduct("Restup webserver")]
-[assembly: AssemblyCopyright("Copyright © Devkoes 2016")]
+[assembly: AssemblyCopyright("None")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -28,4 +28,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 [assembly: ComVisible(false)]
-[assembly: InternalsVisibleTo("Devkoes.Restup.WebServer.UnitTests")]
+[assembly: InternalsVisibleTo("Restup.Webserver.UnitTests")]

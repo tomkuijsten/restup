@@ -1,13 +1,13 @@
-﻿using Devkoes.Restup.DemoControllers.Model;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
+﻿using Restup.DemoControllers.Model;
+using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
 
-namespace Devkoes.Restup.DemoControllers
+namespace Restup.DemoControllers
 {
     [RestController(InstanceCreationType.Singleton)]
     public sealed class SimpleParameterControllerSample
-    {       
+    {
         /// <summary>
         /// Make sure the number of parameters in your UriFormat match the parameters in your method and
         /// the names (case sensitive) and order are respected.

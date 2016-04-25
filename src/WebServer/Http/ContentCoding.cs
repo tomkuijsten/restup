@@ -1,4 +1,4 @@
-namespace Devkoes.Restup.WebServer.Http
+namespace Restup.Webserver.Http
 {
     public enum ContentCoding
     {

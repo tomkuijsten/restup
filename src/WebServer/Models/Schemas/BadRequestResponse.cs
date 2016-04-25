@@ -1,4 +1,4 @@
-﻿namespace Devkoes.Restup.WebServer.Models.Schemas
+﻿namespace Restup.Webserver.Models.Schemas
 {
     internal class BadRequestResponse : StatusOnlyResponse
     {

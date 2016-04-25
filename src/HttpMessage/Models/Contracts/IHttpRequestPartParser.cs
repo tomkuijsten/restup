@@ -1,6 +1,6 @@
-﻿using Devkoes.HttpMessage;
+﻿using Restup.HttpMessage;
 
-namespace Devkoes.HttpMessage.Models.Contracts
+namespace Restup.HttpMessage.Models.Contracts
 {
     interface IHttpRequestPartParser
     {

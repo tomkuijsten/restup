@@ -1,11 +1,10 @@
-﻿using System;
-using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
+﻿using Restup.HttpMessage;
+using Restup.Webserver.Http;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
+using System;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal class RestToHttpResponseConverter
     {
@@ -29,9 +28,9 @@ namespace Devkoes.Restup.WebServer.Rest
             var response = restResponse as IContentRestResponse;
             if (response != null)
                 return GetDefaultContentResponse(response, restServerRequest);
-            
+
             return GetDefaultResponse(restResponse);
-        }        
+        }
 
         private static HttpServerResponse GetMethodNotAllowedResponse(MethodNotAllowedResponse methodNotAllowedResponse, RestServerRequest restReq)
         {

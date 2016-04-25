@@ -1,8 +1,8 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
+﻿using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
 
-namespace Devkoes.Restup.DemoControllers
+namespace Restup.DemoControllers
 {
     [RestController(InstanceCreationType.PerCall)]
     public sealed class PerCallControllerSample

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Devkoes.Restup.WebServer.Models.Contracts
+namespace Restup.Webserver.Models.Contracts
 {
     interface IInstanceCreator
     {

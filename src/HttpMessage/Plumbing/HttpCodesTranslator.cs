@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Devkoes.HttpMessage.Plumbing
+namespace Restup.HttpMessage.Plumbing
 {
     public class HttpCodesTranslator
     {

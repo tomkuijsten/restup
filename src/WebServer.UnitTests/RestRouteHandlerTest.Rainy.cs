@@ -1,15 +1,15 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Schemas;
+using Restup.Webserver.UnitTests.TestHelpers;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
 
-namespace Devkoes.Restup.WebServer.UnitTests
+namespace Restup.Webserver.UnitTests
 {
     [TestClass]
     public class RestRouteHandlerRainyDayTest

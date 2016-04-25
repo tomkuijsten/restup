@@ -1,15 +1,13 @@
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage;
+using Restup.HttpMessage.Headers.Response;
+using Restup.Webserver.Http;
+using Restup.Webserver.UnitTests.TestHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Headers.Request;
-using Devkoes.HttpMessage.Headers.Response;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
-namespace Devkoes.Restup.WebServer.UnitTests.Http
+namespace Restup.Webserver.UnitTests.Http
 {
     public class HttpServerFluentTests
     {

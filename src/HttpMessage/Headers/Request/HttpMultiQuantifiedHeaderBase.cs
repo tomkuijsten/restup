@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Devkoes.HttpMessage.Headers.Request
+namespace Restup.HttpMessage.Headers.Request
 {
     public abstract class HttpMultiQuantifiedHeaderBase : HttpRequestHeaderBase
     {

@@ -1,13 +1,13 @@
-﻿using Devkoes.HttpMessage.Headers;
-using Devkoes.HttpMessage.Headers.Response;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.HttpMessage.ServerResponseParsers;
+﻿using Restup.HttpMessage.Headers;
+using Restup.HttpMessage.Headers.Response;
+using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.HttpMessage.ServerResponseParsers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Devkoes.HttpMessage
+namespace Restup.HttpMessage
 {
     public class HttpServerResponse
     {

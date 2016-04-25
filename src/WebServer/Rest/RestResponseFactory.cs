@@ -1,8 +1,7 @@
-﻿using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
+﻿using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal class RestResponseFactory
     {

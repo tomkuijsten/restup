@@ -1,12 +1,12 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.UnitTests.TestHelpers;
 using System;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Devkoes.Restup.WebServer.UnitTests
+namespace Restup.Webserver.UnitTests
 {
     [TestClass]
     public class RestRouteHandlerHappyPathTest
@@ -18,7 +18,7 @@ namespace Devkoes.Restup.WebServer.UnitTests
             Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
             AcceptMediaTypes = new[] { "application/xml" },
             IsComplete = true
-        };  
+        };
 
         [TestMethod]
         public async Task HandleRequest_BasicGETAcceptXML_Status200WithXml()
@@ -39,29 +39,29 @@ namespace Devkoes.Restup.WebServer.UnitTests
         #region BasicGetWithParamAcceptXML
         private MutableHttpServerRequest _basicGETWithParamAcceptXML = new MutableHttpServerRequest()
         {
-          Method = HttpMethod.GET,
-          Uri = new Uri("/users?userId=2", UriKind.RelativeOrAbsolute),
-          AcceptMediaTypes = new[] { "application/xml" },
-          IsComplete = true
+            Method = HttpMethod.GET,
+            Uri = new Uri("/users?userId=2", UriKind.RelativeOrAbsolute),
+            AcceptMediaTypes = new[] { "application/xml" },
+            IsComplete = true
         };
 
         [TestMethod]
         public async Task HandleRequest_BasicGETWithParamAcceptXML_Status200WithXml()
         {
-          var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
+            var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
 
-          var response = await m.HandleRequest(_basicGETWithParamAcceptXML);
+            var response = await m.HandleRequest(_basicGETWithParamAcceptXML);
 
-          string content = response.ToString();
+            string content = response.ToString();
 
-          StringAssert.Contains(content, "200 OK");
-          StringAssert.Contains(content, "Content-Type: application/xml");
-          StringAssert.Contains(content, "<Name>Tom</Name>");
-          StringAssert.Contains(content, "<Age>30</Age>");
+            StringAssert.Contains(content, "200 OK");
+            StringAssert.Contains(content, "Content-Type: application/xml");
+            StringAssert.Contains(content, "<Name>Tom</Name>");
+            StringAssert.Contains(content, "<Age>30</Age>");
         }
         #endregion
 
-    #region BasicGetWithAbsoluteUri
+        #region BasicGetWithAbsoluteUri
         private MutableHttpServerRequest _basicGETAbsoluteUri = new MutableHttpServerRequest()
         {
             Method = HttpMethod.GET,

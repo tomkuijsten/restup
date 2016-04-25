@@ -7,8 +7,8 @@
     <ProjectGuid>{748F18DD-9682-467F-AF82-82032E8BE5D5}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Devkoes.Restup.WebServer.UnitTests</RootNamespace>
-    <AssemblyName>Devkoes.Restup.WebServer.UnitTests</AssemblyName>
+    <RootNamespace>Restup.Webserver.UnitTests</RootNamespace>
+    <AssemblyName>Restup.Webserver.UnitTests</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
@@ -143,13 +143,13 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebServer.Contracts\WebServer.Contracts.csproj">
+    <ProjectReference Include="..\WebServer.Models\Webserver.Models.csproj">
       <Project>{0B20D095-2896-41A6-865D-172DFD5ECC99}</Project>
-      <Name>WebServer.Contracts</Name>
+      <Name>Webserver.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WebServer\WebServer.csproj">
+    <ProjectReference Include="..\WebServer\Webserver.csproj">
       <Project>{837b8ff3-ded6-4dc7-ad58-dbb0b3e44dd4}</Project>
-      <Name>WebServer</Name>
+      <Name>Webserver</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

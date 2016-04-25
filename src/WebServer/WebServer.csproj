@@ -7,8 +7,8 @@
     <ProjectGuid>{837B8FF3-DED6-4DC7-AD58-DBB0B3E44DD4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Devkoes.Restup.WebServer</RootNamespace>
-    <AssemblyName>Devkoes.Restup.WebServer</AssemblyName>
+    <RootNamespace>Restup.WebServer</RootNamespace>
+    <AssemblyName>Restup.WebServer</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
@@ -164,9 +164,9 @@
     <None Include="WebServer.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebServer.Contracts\WebServer.Contracts.csproj">
+    <ProjectReference Include="..\WebServer.Models\Webserver.Models.csproj">
       <Project>{0b20d095-2896-41a6-865d-172dfd5ecc99}</Project>
-      <Name>WebServer.Contracts</Name>
+      <Name>Webserver.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\HttpMessage\HttpMessage.projitems" Label="Shared" />

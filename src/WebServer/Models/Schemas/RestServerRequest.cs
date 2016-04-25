@@ -1,8 +1,7 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
+﻿using Restup.HttpMessage;
 using System.Text;
 
-namespace Devkoes.Restup.WebServer.Models.Schemas
+namespace Restup.Webserver.Models.Schemas
 {
     /// <summary>
     /// Wraps a <see cref="HttpServerRequest"/> with the defaults defined in the <see cref="Configuration"/>

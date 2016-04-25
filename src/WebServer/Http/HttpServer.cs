@@ -1,8 +1,8 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Headers.Response;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Restup.HttpMessage;
+using Restup.HttpMessage.Headers.Response;
+using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Models.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
 
-namespace Devkoes.Restup.WebServer.Http
+namespace Restup.Webserver.Http
 {
     public class HttpServer : IDisposable
     {

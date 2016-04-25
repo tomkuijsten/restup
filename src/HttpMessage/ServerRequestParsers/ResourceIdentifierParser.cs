@@ -1,7 +1,7 @@
-﻿using Devkoes.HttpMessage.Plumbing;
+﻿using Restup.HttpMessage.Plumbing;
 using System;
 
-namespace Devkoes.HttpMessage.ServerRequestParsers
+namespace Restup.HttpMessage.ServerRequestParsers
 {
     internal class ResourceIdentifierParser : HttpRequestPartParser
     {

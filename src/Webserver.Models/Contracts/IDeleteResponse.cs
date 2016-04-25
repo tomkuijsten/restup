@@ -1,4 +1,4 @@
-namespace Devkoes.Restup.WebServer.Rest.Models.Contracts
+namespace Restup.Webserver.Models.Contracts
 {
     public interface IDeleteResponse : IRestResponse
     {

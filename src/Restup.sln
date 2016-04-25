@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer", "WebServer\WebServer.csproj", "{837B8FF3-DED6-4DC7-AD58-DBB0B3E44DD4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webserver", "Webserver\Webserver.csproj", "{837B8FF3-DED6-4DC7-AD58-DBB0B3E44DD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer.UnitTests", "WebServer.UnitTests\WebServer.UnitTests.csproj", "{748F18DD-9682-467F-AF82-82032E8BE5D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webserver.UnitTests", "Webserver.UnitTests\Webserver.UnitTests.csproj", "{748F18DD-9682-467F-AF82-82032E8BE5D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HttpMessage.UnitTests", "HttpMessage.UnitTests\HttpMessage.UnitTests.csproj", "{D313F525-2D90-4BF5-8857-2698EE580A65}"
 EndProject
@@ -23,7 +23,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "HttpMessage", "HttpMessage\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoStaticFiles", "DemoStaticFiles\DemoStaticFiles.csproj", "{71394B97-2990-4E92-A7CC-0642D4860651}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer.Contracts", "WebServer.Contracts\WebServer.Contracts.csproj", "{0B20D095-2896-41A6-865D-172DFD5ECC99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webserver.Models", "Webserver.Models\Webserver.Models.csproj", "{0B20D095-2896-41A6-865D-172DFD5ECC99}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -88,6 +88,7 @@ Global
 		{D313F525-2D90-4BF5-8857-2698EE580A65}.Release|x86.ActiveCfg = Release|x86
 		{DE304E4A-D832-41F2-BE46-5CBDC5A61902}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{DE304E4A-D832-41F2-BE46-5CBDC5A61902}.Debug|Any CPU.Build.0 = Debug|x86
+		{DE304E4A-D832-41F2-BE46-5CBDC5A61902}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{DE304E4A-D832-41F2-BE46-5CBDC5A61902}.Debug|ARM.ActiveCfg = Debug|ARM
 		{DE304E4A-D832-41F2-BE46-5CBDC5A61902}.Debug|ARM.Build.0 = Debug|ARM
 		{DE304E4A-D832-41F2-BE46-5CBDC5A61902}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -126,6 +127,7 @@ Global
 		{8383DC52-161B-4085-B133-4420E995668D}.Release|x86.Build.0 = Release|x86
 		{CCC377F6-F5D1-4A07-A0E8-58894E8196FA}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{CCC377F6-F5D1-4A07-A0E8-58894E8196FA}.Debug|Any CPU.Build.0 = Debug|x86
+		{CCC377F6-F5D1-4A07-A0E8-58894E8196FA}.Debug|Any CPU.Deploy.0 = Debug|x86
 		{CCC377F6-F5D1-4A07-A0E8-58894E8196FA}.Debug|ARM.ActiveCfg = Debug|ARM
 		{CCC377F6-F5D1-4A07-A0E8-58894E8196FA}.Debug|ARM.Build.0 = Debug|ARM
 		{CCC377F6-F5D1-4A07-A0E8-58894E8196FA}.Debug|ARM.Deploy.0 = Debug|ARM

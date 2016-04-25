@@ -1,12 +1,12 @@
-﻿using System;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
+using Restup.Webserver.Rest;
+using Restup.Webserver.UnitTests.TestHelpers;
+using System;
 
-namespace Devkoes.Restup.WebServer.UnitTests.Rest
+namespace Restup.Webserver.UnitTests.Rest
 {
     [TestClass]
     public class RestControllerRequestHandlerWithMultipleSimilarlyNamedMethods
