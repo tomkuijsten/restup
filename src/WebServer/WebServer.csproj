@@ -164,9 +164,9 @@
     <None Include="WebServer.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebServer.Rest.Models.Contracts\WebServer.Rest.Models.Contracts.csproj">
+    <ProjectReference Include="..\WebServer.Contracts\WebServer.Contracts.csproj">
       <Project>{0b20d095-2896-41a6-865d-172dfd5ecc99}</Project>
-      <Name>WebServer.Rest.Models.Contracts</Name>
+      <Name>WebServer.Contracts</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\HttpMessage\HttpMessage.projitems" Label="Shared" />

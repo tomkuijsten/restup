@@ -1,0 +1,3 @@
+﻿We need a seperate library for exported types, the "why" you'll find at:
+
+https://github.com/tomkuijsten/restup/issues/45

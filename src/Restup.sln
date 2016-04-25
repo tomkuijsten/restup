@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer", "WebServer\WebServer.csproj", "{837B8FF3-DED6-4DC7-AD58-DBB0B3E44DD4}"
 EndProject
@@ -23,7 +23,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "HttpMessage", "HttpMessage\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoStaticFiles", "DemoStaticFiles\DemoStaticFiles.csproj", "{71394B97-2990-4E92-A7CC-0642D4860651}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer.Rest.Models.Contracts", "WebServer.Rest.Models.Contracts\WebServer.Rest.Models.Contracts.csproj", "{0B20D095-2896-41A6-865D-172DFD5ECC99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer.Contracts", "WebServer.Contracts\WebServer.Contracts.csproj", "{0B20D095-2896-41A6-865D-172DFD5ECC99}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
