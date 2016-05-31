@@ -59,6 +59,20 @@ namespace Restup.Webserver.Rest
         private void InitializeValidParameterTypes()
         {
             _validParameterTypes = new[] {
+                typeof(IEnumerable<byte>),
+                typeof(IEnumerable<sbyte>),
+                typeof(IEnumerable<short>),
+                typeof(IEnumerable<ushort>),
+                typeof(IEnumerable<int>),
+                typeof(IEnumerable<uint>),
+                typeof(IEnumerable<long>),
+                typeof(IEnumerable<ulong>),
+                typeof(IEnumerable<decimal>),
+                typeof(IEnumerable<double>),
+                typeof(IEnumerable<float>),
+                typeof(IEnumerable<string>),
+                typeof(IEnumerable<bool>),
+                typeof(IEnumerable<char>),
                 typeof(string),
                 typeof(decimal),
                 typeof(double),
