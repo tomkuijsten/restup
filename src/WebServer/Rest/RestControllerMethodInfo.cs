@@ -2,6 +2,7 @@
 using Restup.Webserver.Attributes;
 using Restup.Webserver.Models.Contracts;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,9 +12,17 @@ namespace Restup.Webserver.Rest
 {
     internal class RestControllerMethodInfo
     {
+        internal enum TypeWrapper
+        {
+            None,
+            Task,
+            AsyncOperation
+        }
+
         private static readonly Regex FIND_PARAMETERKEYS_REGEX = new Regex("{(.*?)}", RegexOptions.Compiled);
         private const string MATCHPARAMETER_REPLACE_STRING = "(?<$1>.+?)";
         private const string MATCHURI_REPLACE_STRING = ".+?";
+        private const char URIPARAMETER_SEPERATOR = ';';
 
         private IEnumerable<Type> _validParameterTypes;
         private Regex _findParameterValuesRegex;
@@ -189,28 +198,58 @@ namespace Restup.Webserver.Rest
 
         internal IEnumerable<object> GetParametersFromUri(Uri uri)
         {
-            Match m = _findParameterValuesRegex.Match(uri.ToRelativeString());
-            if (!m.Success)
+            Match parametersMatch = _findParameterValuesRegex.Match(uri.ToRelativeString());
+            if (!parametersMatch.Success)
             {
                 yield return null;
             }
 
             foreach (var parameter in _parametersForUri)
             {
-                yield return Convert.ChangeType(m.Groups[parameter.Key].Value, parameter.Value);
+                yield return HandleParameter(parameter.Key, parameter.Value, parametersMatch);
+            }
+        }
+
+        private object HandleParameter(string parameterName, Type parameterType, Match matchedRegex)
+        {
+            if (parameterType == typeof(string))
+            {
+                // String is also an IEnumerable, but should not be treated as one
+                return Convert.ChangeType(matchedRegex.Groups[parameterName].Value, parameterType);
+            }
+            else if (typeof(IEnumerable).IsAssignableFrom(parameterType))
+            {
+                // Because we are in control of the allowed types (_validParameterTypes) we are sure that
+                // there will always be a generic argument. Get index 0  is safe.
+                var genericType = parameterType.GenericTypeArguments[0];
+                var genericListType = typeof(List<>).MakeGenericType(genericType);
+                var genericList = (IList)Activator.CreateInstance(genericListType);
+
+                var uriValue = matchedRegex.Groups[parameterName].Value;
+                foreach (var v in uriValue.Split(URIPARAMETER_SEPERATOR))
+                {
+                    if (genericType == typeof(string))
+                    {
+                        string d = (string)Convert.ChangeType(v, genericType);
+                        genericList.Add(Uri.UnescapeDataString(d));
+                    }
+                    else
+                    {
+                        genericList.Add(Convert.ChangeType(v, genericType));
+                    }
+                }
+
+                return genericList;
+            }
+            else
+            {
+                return Convert.ChangeType(matchedRegex.Groups[parameterName].Value, parameterType);
             }
         }
 
         public override string ToString()
         {
             return $"Hosting {Verb.ToString()} method on {_urlToMatch}";
-        }
-
-        internal enum TypeWrapper
-        {
-            None,
-            Task,
-            AsyncOperation
         }
     }
 }

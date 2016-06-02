@@ -82,7 +82,7 @@ namespace Restup.Webserver.Rest
             return genericArgs[0].GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
         }
 
-        internal async Task<IRestResponse> HandleRequest(RestServerRequest req)
+        internal async Task<IRestResponse> HandleRequestAsync(RestServerRequest req)
         {
             if (!req.HttpServerRequest.IsComplete ||
                 req.HttpServerRequest.Method == HttpMethod.Unsupported)

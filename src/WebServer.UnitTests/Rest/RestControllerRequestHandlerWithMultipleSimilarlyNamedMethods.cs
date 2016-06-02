@@ -20,7 +20,7 @@ namespace Restup.Webserver.UnitTests.Rest
             var restHandler = new RestControllerRequestHandler();
             restHandler.RegisterController<MethodsSortedByParametersAscendingController>();
 
-            var request = restHandler.HandleRequest(Utils.CreateRestServerRequest(uri: new Uri(uri, UriKind.Relative)));
+            var request = restHandler.HandleRequestAsync(Utils.CreateRestServerRequest(uri: new Uri(uri, UriKind.Relative)));
 
             Assert.IsNotNull(request.Result);
             Assert.AreEqual((int)GetResponse.ResponseStatus.OK, request.Result.StatusCode);
@@ -36,7 +36,7 @@ namespace Restup.Webserver.UnitTests.Rest
             var restHandler = new RestControllerRequestHandler();
             restHandler.RegisterController<MethodsSortedByParametersDescendingController>();
 
-            var request = restHandler.HandleRequest(Utils.CreateRestServerRequest(uri: new Uri(uri, UriKind.Relative)));
+            var request = restHandler.HandleRequestAsync(Utils.CreateRestServerRequest(uri: new Uri(uri, UriKind.Relative)));
 
             Assert.IsNotNull(request.Result);
             Assert.AreEqual((int)GetResponse.ResponseStatus.OK, request.Result.StatusCode);

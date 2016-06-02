@@ -19,7 +19,7 @@ namespace Restup.Webserver.UnitTests.Rest
             var restHandler = new RestControllerRequestHandler();
             restHandler.RegisterController<AsyncTaskTestController>();
 
-            var request = restHandler.HandleRequest(Utils.CreateRestServerRequest(uri: new Uri("/users/1", UriKind.Relative)));
+            var request = restHandler.HandleRequestAsync(Utils.CreateRestServerRequest(uri: new Uri("/users/1", UriKind.Relative)));
 
             Assert.IsNotNull(request.Result);
             Assert.AreEqual((int)GetResponse.ResponseStatus.OK, request.Result.StatusCode);
@@ -31,7 +31,7 @@ namespace Restup.Webserver.UnitTests.Rest
             var restHandler = new RestControllerRequestHandler();
             restHandler.RegisterController<AsyncOperationTestController>();
 
-            var request = restHandler.HandleRequest(Utils.CreateRestServerRequest(uri: new Uri("/users/1", UriKind.Relative)));
+            var request = restHandler.HandleRequestAsync(Utils.CreateRestServerRequest(uri: new Uri("/users/1", UriKind.Relative)));
 
             Assert.IsNotNull(request.Result);
             Assert.AreEqual((int)GetResponse.ResponseStatus.OK, request.Result.StatusCode);

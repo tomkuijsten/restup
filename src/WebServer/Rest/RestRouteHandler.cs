@@ -37,7 +37,7 @@ namespace Restup.Webserver.Rest
         {
             var restServerRequest = _restServerRequestFactory.Create(request);
 
-            var restResponse = await _requestHandler.HandleRequest(restServerRequest);
+            var restResponse = await _requestHandler.HandleRequestAsync(restServerRequest);
 
             var httpResponse = _restToHttpConverter.ConvertToHttpResponse(restResponse, restServerRequest);
 
