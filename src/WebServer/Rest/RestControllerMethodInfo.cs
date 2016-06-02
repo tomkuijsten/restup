@@ -22,7 +22,7 @@ namespace Restup.Webserver.Rest
         private static readonly Regex FIND_PARAMETERKEYS_REGEX = new Regex("{(.*?)}", RegexOptions.Compiled);
         private const string MATCHPARAMETER_REPLACE_STRING = "(?<$1>.+?)";
         private const string MATCHURI_REPLACE_STRING = ".+?";
-        private const char URIPARAMETER_SEPERATOR = ';';
+        private const char URIPARAMETER_ARRAY_SEPERATOR = ';';
 
         private IEnumerable<Type> _validParameterTypes;
         private Regex _findParameterValuesRegex;
@@ -226,7 +226,7 @@ namespace Restup.Webserver.Rest
                 var genericList = (IList)Activator.CreateInstance(genericListType);
 
                 var uriValue = matchedRegex.Groups[parameterName].Value;
-                foreach (var v in uriValue.Split(URIPARAMETER_SEPERATOR))
+                foreach (var v in uriValue.Split(URIPARAMETER_ARRAY_SEPERATOR))
                 {
                     if (genericType == typeof(string))
                     {
