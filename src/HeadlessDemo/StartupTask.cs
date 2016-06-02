@@ -40,7 +40,7 @@ namespace Restup.HeadlessDemo
             restRouteHandler.RegisterController<WithResponseContentControllerSample>();
 
             httpServer.RegisterRoute("api", restRouteHandler);
-            httpServer.RegisterRoute(new StaticFileRouteHandler(@"DemoStaticFiles\Web"));
+            httpServer.RegisterRoute(new StaticFileRouteHandler(@"Restup.DemoStaticFiles\Web"));
 
             await httpServer.StartServerAsync();
 
