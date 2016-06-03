@@ -25,10 +25,17 @@ namespace Restup.Webserver.Rest
         private const char URIPARAMETER_ARRAY_SEPERATOR = ';';
 
         private IEnumerable<Type> _validParameterTypes;
-        private Regex _findParameterValuesRegex;
-        private string _urlToMatch;
+        private Regex _findPathParameterValuesRegex;
+        private Regex _findQueryParameterValuesRegex;
+        private string _urlToMatchLocalPath;
+        private string _urlToMatchQuery;
+        private string _urlToMatchPathAndQuery;
         private Regex _matchUriRegex;
+
         private IDictionary<string, Type> _parametersForUri;
+        private IEnumerable<string> _pathParameterNames;
+        private IEnumerable<string> _queryParameterNames;
+        private bool _hasQueryParameter;
 
         internal MethodInfo MethodInfo { get; private set; }
         internal HttpMethod Verb { get; private set; }
@@ -44,6 +51,8 @@ namespace Restup.Webserver.Rest
         {
             constructorArgs.GuardNull(nameof(constructorArgs));
 
+            SetUriInfo(methodInfo);
+
             ReturnTypeWrapper = typeWrapper;
             ControllerConstructorArgs = constructorArgs;
             MethodInfo = methodInfo;
@@ -52,17 +61,29 @@ namespace Restup.Webserver.Rest
             InitializeParameters();
             InitializeVerb();
 
-            GetUrlToMatch(methodInfo);
-            InitializeFindParameterRegex(_urlToMatch);
+            InitializeFindParameterRegex();
 
             InitializeMatchUriRegex();
             InitializeContentParameter();
         }
 
-        private void GetUrlToMatch(MethodInfo methodInfo)
+        private void SetUriInfo(MethodInfo methodInfo)
         {
             var uriFormatter = methodInfo.GetCustomAttribute<UriFormatAttribute>();
-            _urlToMatch = CreateUriFormat(uriFormatter);
+
+            _urlToMatchPathAndQuery = uriFormatter.UriFormat;
+
+            var queryIndex = uriFormatter.UriFormat.IndexOf('?');
+            _hasQueryParameter = queryIndex > -1;
+            if (_hasQueryParameter)
+            {
+                _urlToMatchQuery = uriFormatter.UriFormat.Substring(queryIndex);
+                _urlToMatchLocalPath = uriFormatter.UriFormat.Substring(0, queryIndex);
+            }
+            else
+            {
+                _urlToMatchLocalPath = uriFormatter.UriFormat;
+            }
         }
 
         private void InitializeValidParameterTypes()
@@ -124,6 +145,23 @@ namespace Restup.Webserver.Rest
             }
 
             _parametersForUri = fromUriParams.ToDictionary(p => p.Name, p => p.ParameterType);
+
+            var pathParams = new List<string>();
+            var queryParams = new List<string>();
+            foreach (var item in _parametersForUri)
+            {
+                if (_hasQueryParameter && _urlToMatchQuery.IndexOf("{" + item.Key + "}") > -1)
+                {
+                    queryParams.Add(item.Key);
+                }
+                else
+                {
+                    pathParams.Add(item.Key);
+                }
+            }
+
+            _pathParameterNames = pathParams;
+            _queryParameterNames = queryParams;
         }
 
         private bool ParametersHaveValidType(IEnumerable<Type> parameters)
@@ -134,23 +172,37 @@ namespace Restup.Webserver.Rest
         private void InitializeMatchUriRegex()
         {
             var uriFormatter = MethodInfo.GetCustomAttribute<UriFormatAttribute>();
-            string uriFormatWithPrefix = CreateUriFormat(uriFormatter);
-            string regexToMatchUri = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatWithPrefix, MATCHURI_REPLACE_STRING));
+            var regexSafeUrl = _urlToMatchPathAndQuery.EscapeRegexChars();
+
+            string regexToMatchUri = string.Format(
+                "^{0}((&|\\?).*$|$)",
+                FIND_PARAMETERKEYS_REGEX.Replace(regexSafeUrl, MATCHURI_REPLACE_STRING));
+
             _matchUriRegex = new Regex(regexToMatchUri, RegexOptions.Compiled);
-
         }
 
-        private void InitializeFindParameterRegex(string uriFormatWithPrefix)
+        private void InitializeFindParameterRegex()
         {
-            string regexToFindParamValues = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatWithPrefix, MATCHPARAMETER_REPLACE_STRING));
+            string regexToFindParamValues = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(_urlToMatchLocalPath, MATCHPARAMETER_REPLACE_STRING));
 
-            _findParameterValuesRegex = new Regex(regexToFindParamValues, RegexOptions.Compiled);
-        }
+            _findPathParameterValuesRegex = new Regex(regexToFindParamValues, RegexOptions.Compiled);
 
-        private string CreateUriFormat(UriFormatAttribute uriFormatter)
-        {
-            string uriFormat = uriFormatter.UriFormat.RemovePreAndPostSlash().EscapeRegexChars(); ;
-            return string.Format("/{0}", uriFormat);
+            // regex to match query parameters
+            // ^\?q=(?<q>.+?)&f=(?<f>.+?)(?<rest>&.*$|$)
+            // dit moet je opbouwen
+            // "^\" + FIND_PARAMETERKEYS_REGEX.replace(uri, MATCHPARAMETER_REPLACE_STRING) + "(&.*$|$)"
+
+            if (_hasQueryParameter)
+            {
+                var x = FIND_PARAMETERKEYS_REGEX.Replace(_urlToMatchQuery, MATCHPARAMETER_REPLACE_STRING);
+                string regexToFindQueryParamValues = $"^\\{x}(&.*$|$)";
+
+                _findQueryParameterValuesRegex = new Regex(regexToFindQueryParamValues, RegexOptions.Compiled);
+            }
+            else
+            {
+                _findQueryParameterValuesRegex = new Regex("");
+            }
         }
 
         private void InitializeVerb()
@@ -191,23 +243,49 @@ namespace Restup.Webserver.Rest
 
         private bool UriMatches(Uri uri)
         {
-            string relativeUri = uri.ToRelativeString();
+            var isMatch = _matchUriRegex.IsMatch(uri.ToRelativeString());
 
-            return _matchUriRegex.IsMatch(relativeUri);
+            return isMatch;
         }
 
         internal IEnumerable<object> GetParametersFromUri(Uri uri)
         {
-            Match parametersMatch = _findParameterValuesRegex.Match(uri.ToRelativeString());
-            if (!parametersMatch.Success)
+            var paramValues = new Dictionary<string, object>();
+
+            string baseUri = uri.ToRelativeString();
+            int queryIndex = baseUri.IndexOf('?');
+            string localPath = null;
+            if (queryIndex > -1)
             {
-                yield return null;
+                localPath = baseUri.Substring(0, queryIndex);
+            }
+            else
+            {
+                localPath = baseUri.ToString();
             }
 
-            foreach (var parameter in _parametersForUri)
+            Match pathParametersMatch = _findPathParameterValuesRegex.Match(localPath);
+            if (!pathParametersMatch.Success)
             {
-                yield return HandleParameter(parameter.Key, parameter.Value, parametersMatch);
+                return Enumerable.Empty<object>();
             }
+
+            foreach (var parameter in _pathParameterNames)
+            {
+                paramValues.Add(parameter, HandleParameter(parameter, _parametersForUri[parameter], pathParametersMatch));
+            }
+
+            if (_hasQueryParameter)
+            {
+                string query = baseUri.ToString().Substring(queryIndex);
+                Match queryParametersMatch = _findQueryParameterValuesRegex.Match(query);
+                foreach (var parameter in _queryParameterNames)
+                {
+                    paramValues.Add(parameter, HandleParameter(parameter, _parametersForUri[parameter], queryParametersMatch));
+                }
+            }
+
+            return _parametersForUri.Select(kv => paramValues[kv.Key]).ToArray();
         }
 
         private object HandleParameter(string parameterName, Type parameterType, Match matchedRegex)
@@ -249,7 +327,7 @@ namespace Restup.Webserver.Rest
 
         public override string ToString()
         {
-            return $"Hosting {Verb.ToString()} method on {_urlToMatch}";
+            return $"Hosting {Verb.ToString()} method on {_urlToMatchPathAndQuery}";
         }
     }
 }
