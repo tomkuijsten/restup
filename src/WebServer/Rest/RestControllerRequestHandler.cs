@@ -51,9 +51,9 @@ namespace Restup.Webserver.Rest
             {
                 if (HasRestResponse(restMethod))
                     yield return new RestControllerMethodInfo(restMethod, constructorArgs, RestControllerMethodInfo.TypeWrapper.None);
-                if (HasAsyncRestResponse(restMethod, typeof(Task<>)))
+                else if (HasAsyncRestResponse(restMethod, typeof(Task<>)))
                     yield return new RestControllerMethodInfo(restMethod, constructorArgs, RestControllerMethodInfo.TypeWrapper.Task);
-                if (HasAsyncRestResponse(restMethod, typeof(IAsyncOperation<>)))
+                else if (HasAsyncRestResponse(restMethod, typeof(IAsyncOperation<>)))
                     yield return new RestControllerMethodInfo(restMethod, constructorArgs, RestControllerMethodInfo.TypeWrapper.AsyncOperation);
             }
         }
