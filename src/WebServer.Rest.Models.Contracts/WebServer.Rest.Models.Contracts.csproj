@@ -111,6 +111,7 @@
     <Compile Include="IContentRestResponse.cs" />
     <Compile Include="IDeleteResponse.cs" />
     <Compile Include="IGetResponse.cs" />
+    <Compile Include="IHeader.cs" />
     <Compile Include="IPostResponse.cs" />
     <Compile Include="IPutResponse.cs" />
     <Compile Include="IRestResponse.cs" />

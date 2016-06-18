@@ -1,9 +1,13 @@
 ﻿using Devkoes.Restup.WebServer.Rest.Models.Contracts;
+using System.Collections.Generic;
 
 namespace Devkoes.Restup.WebServer.Models.Schemas
 {
     public class DeleteResponse : IDeleteResponse
     {
+
+        public IEnumerable<IHeader> Headers { get; }
+
         public enum ResponseStatus : int
         {
             OK = 200,
@@ -16,6 +20,7 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
         public DeleteResponse(ResponseStatus status)
         {
             Status = status;
+            this.Headers = new List<IHeader>();
         }
 
         public int StatusCode
@@ -24,6 +29,18 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
             {
                 return (int)Status;
             }
+        }
+
+        public IRestResponse addHeader(IHeader headerToAdd)
+        {
+            ((List<IHeader>)Headers).Add(headerToAdd);
+
+            return this;
+        }
+
+        public IRestResponse addHeader(string headerName, string headerValue)
+        {
+            return addHeader(new Header(headerName, headerValue));
         }
     }
 }
