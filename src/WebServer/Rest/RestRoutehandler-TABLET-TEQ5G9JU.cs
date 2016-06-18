@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Restup.HttpMessage;
+using Restup.Webserver.Models.Contracts;
+using System;
 using System.Threading.Tasks;
-using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
-using System.Collections;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     public class RestRouteHandler : IRouteHandler
     {
@@ -39,14 +37,9 @@ namespace Devkoes.Restup.WebServer.Rest
         {
             var restServerRequest = _restServerRequestFactory.Create(request);
 
-            var restResponse = await _requestHandler.HandleRequest(restServerRequest);
+            var restResponse = await _requestHandler.HandleRequestAsync(restServerRequest);
 
             var httpResponse = _restToHttpConverter.ConvertToHttpResponse(restResponse, restServerRequest);
-
-            foreach ( IHeader header in restResponse.Headers )
-            {
-                httpResponse.AddHeader(header.Name, header.Value);
-            }
 
             return httpResponse;
         }
