@@ -1,6 +1,10 @@
 # Webservice for Universal Windows Apps
 
-[![Build status](https://ci.appveyor.com/api/projects/status/1aj7614fb0o1bjdy?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup) [![NuGet downloads](https://img.shields.io/nuget/dt/restup.svg)](https://www.nuget.org/packages/Restup/)
+Release build: [![Build status](https://ci.appveyor.com/api/projects/status/jhdlmysux72qej51?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup-hwwpp)
+
+Dev build: [![Build status](https://ci.appveyor.com/api/projects/status/h6faknf1b7b20994?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup-frwxx)
+
+NuGet downloads: [![NuGet downloads](https://img.shields.io/nuget/vpre/restup.svg)](https://www.nuget.org/packages/Restup/)
 
 ### Goal
 Provide a HTTP server supporting html and REST in order to keep Windows IoT projects going. Let's hope there will be a native solution soon, although there aren't any signs for that yet (if you have one, let me [know](https://github.com/tomkuijsten/restup/issues/new)).

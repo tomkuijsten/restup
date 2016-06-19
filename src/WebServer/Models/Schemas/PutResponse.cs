@@ -1,9 +1,14 @@
-﻿using Restup.Webserver.Models.Contracts;
+
+using Restup.Webserver.Models.Contracts;
+using System.Collections.Generic;
 
 namespace Restup.Webserver.Models.Schemas
 {
     public class PutResponse : IPutResponse
     {
+
+        public IEnumerable<IHeader> Headers { get; }
+
         public enum ResponseStatus : int
         {
             OK = 200,
@@ -17,6 +22,7 @@ namespace Restup.Webserver.Models.Schemas
 
         public PutResponse(ResponseStatus status, object content)
         {
+            Headers = new List<IHeader>();
             Status = status;
             ContentData = content;
         }
@@ -36,6 +42,18 @@ namespace Restup.Webserver.Models.Schemas
             {
                 return (int)Status;
             }
+        }
+
+        public IRestResponse addHeader(IHeader headerToAdd)
+        {
+            ((List<IHeader>)Headers).Add(headerToAdd);
+
+            return this;
+        }
+
+        public IRestResponse addHeader(string headerName, string headerValue)
+        {
+            return addHeader(new Header(headerName, headerValue));
         }
     }
 }

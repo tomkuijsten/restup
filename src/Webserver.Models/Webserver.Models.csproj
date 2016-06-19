@@ -111,6 +111,7 @@
     <Compile Include="Contracts\IContentRestResponse.cs" />
     <Compile Include="Contracts\IDeleteResponse.cs" />
     <Compile Include="Contracts\IGetResponse.cs" />
+    <Compile Include="Contracts\IHeader.cs" />
     <Compile Include="Contracts\IPostResponse.cs" />
     <Compile Include="Contracts\IPutResponse.cs" />
     <Compile Include="Contracts\IRestResponse.cs" />
