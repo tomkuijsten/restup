@@ -5,7 +5,7 @@ namespace Restup.Webserver.Rest
 {
     internal class RestResponseFactory
     {
-        private BadRequestResponse _badRequestResponse;
+        private readonly BadRequestResponse _badRequestResponse;
 
         internal RestResponseFactory()
         {
