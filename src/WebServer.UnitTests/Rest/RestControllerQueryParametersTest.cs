@@ -25,15 +25,15 @@ namespace Restup.Webserver.UnitTests.Rest
             Assert.AreEqual((int)GetResponse.ResponseStatus.OK, request.StatusCode);
 
             var asGet = request as IGetResponse;
-
+            
             Assert.AreEqual(asGet.ContentData, "test");
         }
 
         [RestController(InstanceCreationType.Singleton)]
         public class QueryParamsTestController
         {
-            [UriFormat("/query?val={val}")]
-            public IGetResponse SimpleQuery(string val)
+            [UriFormat("/query?val={val}&val2={val2}")]
+            public IGetResponse SimpleQuery(string val, string val2)
             {
                 return new GetResponse(GetResponse.ResponseStatus.OK, val);
             }
