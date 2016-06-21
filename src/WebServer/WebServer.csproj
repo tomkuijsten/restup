@@ -130,6 +130,7 @@
     <Compile Include="Http\RouteRegistration.cs" />
     <Compile Include="Models\Contracts\IRouteHandler.cs" />
     <Compile Include="Models\Schemas\MediaType.cs" />
+    <Compile Include="Models\Schemas\RestResponse.cs" />
     <Compile Include="Models\Schemas\RestServerRequest.cs" />
     <Compile Include="Rest\RestMethodExecutor.cs" />
     <Compile Include="Rest\RestRoutehandler.cs" />
