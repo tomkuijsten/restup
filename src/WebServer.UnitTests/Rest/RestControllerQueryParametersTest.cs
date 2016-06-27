@@ -19,7 +19,7 @@ namespace Restup.Webserver.UnitTests.Rest
             restHandler.RegisterController<QueryParamsTestController>();
 
             var request = await restHandler.HandleRequestAsync(
-                Utils.CreateRestServerRequest(uri: new Uri("/query?val=test&_=129283174928743", UriKind.Relative)));
+                Utils.CreateRestServerRequest(uri: new Uri("/query?val=test&val2=test2&_=129283174928743", UriKind.Relative)));
 
             Assert.IsNotNull(request);
             Assert.AreEqual((int)GetResponse.ResponseStatus.OK, request.StatusCode);

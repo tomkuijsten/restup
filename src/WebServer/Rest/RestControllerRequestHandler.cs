@@ -98,7 +98,13 @@ namespace Restup.Webserver.Rest
                 return _responseFactory.CreateBadRequest();
             }
 
-            var parsedUri = _uriParser.Parse(req.HttpServerRequest.Uri.ToRelativeString());
+            ParsedUri parsedUri;
+            var incomingUriAsString = req.HttpServerRequest.Uri.ToRelativeString();
+            if (!_uriParser.TryParse(incomingUriAsString, out parsedUri))
+            {
+                throw new Exception($"Could not parse uri: {incomingUriAsString}");
+            }
+
             var restMethods = _restMethodCollection.Where(r => r.Match(parsedUri)).ToList();
             if (!restMethods.Any())
             {

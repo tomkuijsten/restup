@@ -5,20 +5,20 @@ namespace Restup.Webserver.Rest
 {
     internal class ParsedUri
     {
-        public string Path { get; set; }
-        public IReadOnlyCollection<UriParameter> Parameters { get;}
-        public string Fragment { get; set; }
+        public IReadOnlyList<PathPart> PathParts { get; }
+        public IReadOnlyList<UriParameter> Parameters { get; }
+        public string Fragment { get; }
 
-        public ParsedUri(string path, IReadOnlyCollection<UriParameter> parameters, string fragment)
+        public ParsedUri(IReadOnlyList<PathPart> pathParts, IReadOnlyList<UriParameter> parameters, string fragment)
         {
-            Path = path;
+            PathParts = pathParts;
             Parameters = parameters;
             Fragment = fragment;
         }
 
         public override string ToString()
         {
-            return $"Path={Path}, Parameters={string.Join("&", Parameters.Select(x => $"{x.Name}={x.Value}"))}, Fragment={Fragment}";
+            return $"Path={string.Join("/", PathParts.Select(x => x.PartType == PathPart.PathPartType.Argument ? $"{{{x.Value}}}" : x.Value))}, Parameters={string.Join("&", Parameters.Select(x => $"{x.Name}={x.Value}"))}, Fragment={Fragment}";
         }
     }
 }

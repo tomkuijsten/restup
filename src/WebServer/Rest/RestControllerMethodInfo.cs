@@ -25,10 +25,10 @@ namespace Restup.Webserver.Rest
         private IEnumerable<Type> _validParameterTypes;
 
         private IDictionary<string, Type> _parametersForUri;
-        private IEnumerable<string> _pathParameterNames;
-        private IEnumerable<string> _queryParameterNames;
+        private IReadOnlyDictionary<string, int> _pathParameterNameToIndex;
+        private IReadOnlyDictionary<string, string> _queryParameterNamesByMethodName;
         private readonly UriParser uriParser;
-        private MatchUri matchUri;
+        private ParsedUri matchUri;
 
         internal MethodInfo MethodInfo { get; private set; }
         internal HttpMethod Verb { get; private set; }
@@ -60,9 +60,11 @@ namespace Restup.Webserver.Rest
         private void SetUriInfo(MethodInfo methodInfo)
         {
             var uriFormatter = methodInfo.GetCustomAttribute<UriFormatAttribute>();
-            var originalParsedUri = uriParser.Parse(uriFormatter.UriFormat);            
+            ParsedUri originalParsedUri;
+            if (!uriParser.TryParse(uriFormatter.UriFormat, out originalParsedUri))
+                throw new Exception($"Could not parse uri: {uriFormatter.UriFormat}");
 
-            matchUri = new MatchUri(originalParsedUri);
+            matchUri = originalParsedUri;
         }
 
         private void InitializeValidParameterTypes()
@@ -125,22 +127,15 @@ namespace Restup.Webserver.Rest
 
             _parametersForUri = fromUriParams.ToDictionary(p => p.Name, p => p.ParameterType);
 
-            var pathParams = new List<string>();
-            var queryParams = new List<string>();
-            foreach (var item in _parametersForUri)
-            {
-                if (matchUri.Parameters.Any(x => x.Value.Equals(item.Key, StringComparison.OrdinalIgnoreCase)))
-                {
-                    queryParams.Add(item.Key);
-                }
-                else
-                {
-                    pathParams.Add(item.Key);
-                }
-            }
+            _pathParameterNameToIndex = matchUri.PathParts
+                .Select((x, i) => new { Part = x, Index = i })
+                .Where(x => x.Part.PartType == PathPart.PathPartType.Argument)
+                .Where(x => _parametersForUri.Any(y => y.Key.Equals(x.Part.Value, StringComparison.OrdinalIgnoreCase)))
+                .ToDictionary(x => x.Part.Value, x => x.Index, StringComparer.OrdinalIgnoreCase);
 
-            _pathParameterNames = pathParams;
-            _queryParameterNames = queryParams;
+            _queryParameterNamesByMethodName = matchUri.Parameters
+                .Where(x => _parametersForUri.Any(y => y.Key.Equals(x.Value, StringComparison.OrdinalIgnoreCase)))
+                .ToDictionary(x => x.Value, x => x.Name, StringComparer.OrdinalIgnoreCase);
         }
 
         private bool ParametersHaveValidType(IEnumerable<Type> parameters)
@@ -186,121 +181,90 @@ namespace Restup.Webserver.Rest
 
         private bool UriMatches(ParsedUri uri)
         {
-            return string.Equals(matchUri.Path, uri.Path, StringComparison.OrdinalIgnoreCase);
+            if (matchUri.PathParts.Count != uri.PathParts.Count)
+                return false;
+
+            for (var i = 0; i < matchUri.PathParts.Count; i++)
+            {
+                var fromPart = matchUri.PathParts[i];
+                var toPart = uri.PathParts[i];
+                if (fromPart.PartType == PathPart.PathPartType.Argument)
+                    continue;
+
+                if (!fromPart.Value.Equals(toPart.Value, StringComparison.OrdinalIgnoreCase))
+                    return false;
+            }
+
+            if (uri.Parameters.Count < matchUri.Parameters.Count)
+                return false;
+
+            return matchUri.Parameters.All(x => uri.Parameters.Any(y => y.Name.Equals(x.Name, StringComparison.OrdinalIgnoreCase)));
         }
 
-        internal IEnumerable<object> GetParametersFromUri(Uri uri)
+        internal IEnumerable<object> GetParametersFromUri(Uri uri) // TODO:  pass in ParsedUri
         {
             var paramValues = new Dictionary<string, object>();
 
-            string baseUri = uri.ToRelativeString();
-            int queryIndex = baseUri.IndexOf('?');
-            string localPath = null;
-            if (queryIndex > -1)
-            {
-                localPath = baseUri.Substring(0, queryIndex);
-            }
-            else
-            {
-                localPath = baseUri.ToString();
-            }
-
-            Match pathParametersMatch = _findPathParameterValuesRegex.Match(localPath);
-            if (!pathParametersMatch.Success)
+            ParsedUri parsedUri;
+            if (!uriParser.TryParse(uri.ToRelativeString(), out parsedUri))
             {
                 return Enumerable.Empty<object>();
             }
 
-            foreach (var parameter in _pathParameterNames)
+            foreach (var parameter in _pathParameterNameToIndex)
             {
-                paramValues.Add(parameter, HandleParameter(parameter, _parametersForUri[parameter], pathParametersMatch));
+                paramValues.Add(parameter.Key, HandleParameter(_parametersForUri[parameter.Key], parsedUri.PathParts[parameter.Value].Value));
             }
 
-            if (_hasQueryParameter)
+            foreach (var parameter in _queryParameterNamesByMethodName)
             {
-                string query = baseUri.ToString().Substring(queryIndex);
-                Match queryParametersMatch = _findQueryParameterValuesRegex.Match(query);
-                foreach (var parameter in _queryParameterNames)
-                {
-                    paramValues.Add(parameter, HandleParameter(parameter, _parametersForUri[parameter], queryParametersMatch));
-                }
+                paramValues.Add(parameter.Key, HandleParameter(_parametersForUri[parameter.Key], parsedUri.Parameters.FirstOrDefault(x => x.Name.Equals(parameter.Value, StringComparison.OrdinalIgnoreCase)).Value));
             }
 
             return _parametersForUri.Select(kv => paramValues[kv.Key]).ToArray();
         }
 
-        private object HandleParameter(string parameterName, Type parameterType, Match matchedRegex)
+        private static object HandleParameter(Type parameterType, string parameterValue)
         {
             if (parameterType == typeof(string))
             {
                 // String is also an IEnumerable, but should not be treated as one
-                return Convert.ChangeType(matchedRegex.Groups[parameterName].Value, parameterType);
-            }
-            else if (typeof(IEnumerable).IsAssignableFrom(parameterType))
-            {
-                // Because we are in control of the allowed types (_validParameterTypes) we are sure that
-                // there will always be a generic argument. Get index 0  is safe.
-                var genericType = parameterType.GenericTypeArguments[0];
-                var genericListType = typeof(List<>).MakeGenericType(genericType);
-                var genericList = (IList)Activator.CreateInstance(genericListType);
-
-                var uriValue = matchedRegex.Groups[parameterName].Value;
-                foreach (var v in uriValue.Split(URIPARAMETER_ARRAY_SEPERATOR))
-                {
-                    if (genericType == typeof(string))
-                    {
-                        string d = (string)Convert.ChangeType(v, genericType);
-                        genericList.Add(Uri.UnescapeDataString(d));
-                    }
-                    else
-                    {
-                        genericList.Add(Convert.ChangeType(v, genericType));
-                    }
-                }
-
-                return genericList;
+                return Convert.ChangeType(parameterValue, parameterType);
             }
             else
             {
-                return Convert.ChangeType(matchedRegex.Groups[parameterName].Value, parameterType);
+                if (typeof(IEnumerable).IsAssignableFrom(parameterType))
+                {
+                    // Because we are in control of the allowed types (_validParameterTypes) we are sure that
+                    // there will always be a generic argument. Get index 0  is safe.
+                    var genericType = parameterType.GenericTypeArguments[0];
+                    var genericListType = typeof(List<>).MakeGenericType(genericType);
+                    var genericList = (IList)Activator.CreateInstance(genericListType);
+
+                    var uriValue = parameterValue;
+                    foreach (var v in uriValue.Split(URIPARAMETER_ARRAY_SEPERATOR))
+                    {
+                        if (genericType == typeof(string))
+                        {
+                            string d = (string)Convert.ChangeType(v, genericType);
+                            genericList.Add(Uri.UnescapeDataString(d));
+                        }
+                        else
+                        {
+                            genericList.Add(Convert.ChangeType(v, genericType));
+                        }
+                    }
+
+                    return genericList;
+                }
+
+                return Convert.ChangeType(parameterValue, parameterType);
             }
         }
 
         public override string ToString()
         {
-            return $"Hosting {Verb.ToString()} method on {matchUri}";
-        }
-    }
-
-    internal class MatchUri
-    {
-        public string Path { get; }
-        internal MatchUri(ParsedUri originalParsedUri)
-        {
-
-            Path = originalParsedUri.Path;
-
-            PathVariables = GetVariablesFromPath(Path);
-        }
-
-        private string GetVariablesFromPath(string path)
-        {
-            
-        }
-    }
-
-    internal class MatchUriParser
-    {
-        private Regex pathVariablesRegex;
-
-        public MatchUriParser()
-        {
-            pathVariablesRegex = new Regex(@"/(?<vars>\{.*?\}(?=/))");
-
-        }
-        internal MatchUri Parse(ParsedUri parsedUri)
-        {
-            
+            return $"Hosting {Verb} method on {matchUri}";
         }
     }
 }
