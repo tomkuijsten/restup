@@ -203,15 +203,9 @@ namespace Restup.Webserver.Rest
             return _matchUri.Parameters.All(x => uri.Parameters.Any(y => y.Name.Equals(x.Name, StringComparison.OrdinalIgnoreCase)));
         }
 
-        internal IEnumerable<object> GetParametersFromUri(Uri uri) // TODO:  pass in ParsedUri
+        internal IEnumerable<object> GetParametersFromUri(ParsedUri uri)
         {
-            ParsedUri parsedUri;
-            if (!_uriParser.TryParse(uri.ToRelativeString(), out parsedUri))
-            {
-                return Enumerable.Empty<object>();
-            }
-
-            return _parameterGetters.Select(x => x.GetParameterValue(parsedUri)).ToArray();
+            return _parameterGetters.Select(x => x.GetParameterValue(uri)).ToArray();
         }
 
         public override string ToString()

@@ -121,7 +121,7 @@ namespace Restup.Webserver.Rest
 
             try
             {
-                return await restMethodExecutor.ExecuteMethodAsync(restMethod, req);
+                return await restMethodExecutor.ExecuteMethodAsync(restMethod, req, parsedUri);
             }
             catch
             {

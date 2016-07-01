@@ -14,14 +14,14 @@ namespace Restup.Webserver.Rest
             _responseFactory = new RestResponseFactory();
         }
 
-        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request)
+        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri)
         {
             var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
 
-            object[] parameters = null;
+            object[] parameters;
             try
             {
-                parameters = info.GetParametersFromUri(request.HttpServerRequest.Uri).ToArray();
+                parameters = info.GetParametersFromUri(requestUri).ToArray();
             }
             catch (FormatException)
             {
