@@ -1,13 +1,10 @@
-﻿using Restup.HttpMessage.Models.Schemas;
-using Restup.Webserver.Attributes;
-using Restup.Webserver.Models.Contracts;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
 
 namespace Restup.Webserver.Rest
 {
@@ -20,17 +17,13 @@ namespace Restup.Webserver.Rest
             AsyncOperation
         }
 
-        private const char URIPARAMETER_ARRAY_SEPERATOR = ';';
-
         private IEnumerable<Type> _validParameterTypes;
 
-        private IDictionary<string, Type> _parametersForUri;
-        private IReadOnlyDictionary<string, int> _pathParameterNameToIndex;
-        private IReadOnlyDictionary<string, string> _queryParameterNamesByMethodName;
-        private readonly UriParser uriParser;
-        private ParsedUri matchUri;
+        private readonly UriParser _uriParser;
+        private ParsedUri _matchUri;
+        private IEnumerable<ParameterValueGetter> _parameterGetters;
 
-        internal MethodInfo MethodInfo { get; private set; }
+        internal MethodInfo MethodInfo { get; }
         internal HttpMethod Verb { get; private set; }
         internal bool HasContentParameter { get; private set; }
         internal Type ContentParameterType { get; private set; }
@@ -43,7 +36,7 @@ namespace Restup.Webserver.Rest
             TypeWrapper typeWrapper)
         {
             constructorArgs.GuardNull(nameof(constructorArgs));
-            uriParser = new UriParser();
+            _uriParser = new UriParser();
             SetUriInfo(methodInfo);
 
             ReturnTypeWrapper = typeWrapper;
@@ -61,10 +54,10 @@ namespace Restup.Webserver.Rest
         {
             var uriFormatter = methodInfo.GetCustomAttribute<UriFormatAttribute>();
             ParsedUri originalParsedUri;
-            if (!uriParser.TryParse(uriFormatter.UriFormat, out originalParsedUri))
+            if (!_uriParser.TryParse(uriFormatter.UriFormat, out originalParsedUri))
                 throw new Exception($"Could not parse uri: {uriFormatter.UriFormat}");
 
-            matchUri = originalParsedUri;
+            _matchUri = originalParsedUri;
         }
 
         private void InitializeValidParameterTypes()
@@ -104,7 +97,7 @@ namespace Restup.Webserver.Rest
 
         private void InitializeContentParameter()
         {
-            var fromContentParameter = MethodInfo.GetParameters().FirstOrDefault((p) => p.GetCustomAttribute<FromContentAttribute>() != null);
+            var fromContentParameter = MethodInfo.GetParameters().FirstOrDefault(p => p.GetCustomAttribute<FromContentAttribute>() != null);
             if (fromContentParameter == null)
             {
                 return;
@@ -116,26 +109,37 @@ namespace Restup.Webserver.Rest
 
         private void InitializeParameters()
         {
-            var fromUriParams = from p in MethodInfo.GetParameters()
-                                where p.GetCustomAttribute<FromContentAttribute>() == null
-                                select p;
+            var fromUriParams = (from p in MethodInfo.GetParameters()
+                                 where p.GetCustomAttribute<FromContentAttribute>() == null
+                                 select p).ToList();
 
             if (!ParametersHaveValidType(fromUriParams.Select(p => p.ParameterType)))
             {
                 throw new InvalidOperationException("Can't use method parameters with a custom type.");
             }
 
-            _parametersForUri = fromUriParams.ToDictionary(p => p.Name, p => p.ParameterType);
+            _parameterGetters = fromUriParams.Select(x => GetParameterGetter(x, _matchUri)).ToArray();
+        }
 
-            _pathParameterNameToIndex = matchUri.PathParts
+        private static ParameterValueGetter GetParameterGetter(ParameterInfo parameterInfo, ParsedUri matchUri)
+        {
+            var methodName = parameterInfo.Name;
+            var firstPathPartMatch = matchUri.PathParts
                 .Select((x, i) => new { Part = x, Index = i })
                 .Where(x => x.Part.PartType == PathPart.PathPartType.Argument)
-                .Where(x => _parametersForUri.Any(y => y.Key.Equals(x.Part.Value, StringComparison.OrdinalIgnoreCase)))
-                .ToDictionary(x => x.Part.Value, x => x.Index, StringComparer.OrdinalIgnoreCase);
+                .FirstOrDefault(x => methodName.Equals(x.Part.Value, StringComparison.OrdinalIgnoreCase));
 
-            _queryParameterNamesByMethodName = matchUri.Parameters
-                .Where(x => _parametersForUri.Any(y => y.Key.Equals(x.Value, StringComparison.OrdinalIgnoreCase)))
-                .ToDictionary(x => x.Value, x => x.Name, StringComparer.OrdinalIgnoreCase);
+            var parameterType = parameterInfo.ParameterType;
+            if (firstPathPartMatch != null)
+                return new PathParameterValueGetter(methodName, parameterType, firstPathPartMatch.Index);
+
+            var firstQueryParameterMatch = matchUri.Parameters
+                .FirstOrDefault(x => methodName.Equals(x.Value, StringComparison.OrdinalIgnoreCase));
+
+            if (firstQueryParameterMatch != null)
+                return new QueryParameterValueGetter(methodName, parameterType, firstQueryParameterMatch);
+
+            throw new Exception($"Method {methodName} not found in rest controller method uri {matchUri}.");
         }
 
         private bool ParametersHaveValidType(IEnumerable<Type> parameters)
@@ -145,7 +149,7 @@ namespace Restup.Webserver.Rest
 
         private void InitializeVerb()
         {
-            TypeInfo returnType = null;
+            TypeInfo returnType;
 
             if (ReturnTypeWrapper == TypeWrapper.None)
                 returnType = MethodInfo.ReturnType.GetTypeInfo();
@@ -176,17 +180,12 @@ namespace Restup.Webserver.Rest
 
         internal bool Match(ParsedUri uri)
         {
-            return UriMatches(uri);
-        }
-
-        private bool UriMatches(ParsedUri uri)
-        {
-            if (matchUri.PathParts.Count != uri.PathParts.Count)
+            if (_matchUri.PathParts.Count != uri.PathParts.Count)
                 return false;
 
-            for (var i = 0; i < matchUri.PathParts.Count; i++)
+            for (var i = 0; i < _matchUri.PathParts.Count; i++)
             {
-                var fromPart = matchUri.PathParts[i];
+                var fromPart = _matchUri.PathParts[i];
                 var toPart = uri.PathParts[i];
                 if (fromPart.PartType == PathPart.PathPartType.Argument)
                     continue;
@@ -195,76 +194,26 @@ namespace Restup.Webserver.Rest
                     return false;
             }
 
-            if (uri.Parameters.Count < matchUri.Parameters.Count)
+            if (uri.Parameters.Count < _matchUri.Parameters.Count)
                 return false;
 
-            return matchUri.Parameters.All(x => uri.Parameters.Any(y => y.Name.Equals(x.Name, StringComparison.OrdinalIgnoreCase)));
+            return _matchUri.Parameters.All(x => uri.Parameters.Any(y => y.Name.Equals(x.Name, StringComparison.OrdinalIgnoreCase)));
         }
 
         internal IEnumerable<object> GetParametersFromUri(Uri uri) // TODO:  pass in ParsedUri
         {
-            var paramValues = new Dictionary<string, object>();
-
             ParsedUri parsedUri;
-            if (!uriParser.TryParse(uri.ToRelativeString(), out parsedUri))
+            if (!_uriParser.TryParse(uri.ToRelativeString(), out parsedUri))
             {
                 return Enumerable.Empty<object>();
             }
 
-            foreach (var parameter in _pathParameterNameToIndex)
-            {
-                paramValues.Add(parameter.Key, HandleParameter(_parametersForUri[parameter.Key], parsedUri.PathParts[parameter.Value].Value));
-            }
-
-            foreach (var parameter in _queryParameterNamesByMethodName)
-            {
-                paramValues.Add(parameter.Key, HandleParameter(_parametersForUri[parameter.Key], parsedUri.Parameters.FirstOrDefault(x => x.Name.Equals(parameter.Value, StringComparison.OrdinalIgnoreCase)).Value));
-            }
-
-            return _parametersForUri.Select(kv => paramValues[kv.Key]).ToArray();
-        }
-
-        private static object HandleParameter(Type parameterType, string parameterValue)
-        {
-            if (parameterType == typeof(string))
-            {
-                // String is also an IEnumerable, but should not be treated as one
-                return Convert.ChangeType(parameterValue, parameterType);
-            }
-            else
-            {
-                if (typeof(IEnumerable).IsAssignableFrom(parameterType))
-                {
-                    // Because we are in control of the allowed types (_validParameterTypes) we are sure that
-                    // there will always be a generic argument. Get index 0  is safe.
-                    var genericType = parameterType.GenericTypeArguments[0];
-                    var genericListType = typeof(List<>).MakeGenericType(genericType);
-                    var genericList = (IList)Activator.CreateInstance(genericListType);
-
-                    var uriValue = parameterValue;
-                    foreach (var v in uriValue.Split(URIPARAMETER_ARRAY_SEPERATOR))
-                    {
-                        if (genericType == typeof(string))
-                        {
-                            string d = (string)Convert.ChangeType(v, genericType);
-                            genericList.Add(Uri.UnescapeDataString(d));
-                        }
-                        else
-                        {
-                            genericList.Add(Convert.ChangeType(v, genericType));
-                        }
-                    }
-
-                    return genericList;
-                }
-
-                return Convert.ChangeType(parameterValue, parameterType);
-            }
+            return _parameterGetters.Select(x => x.GetParameterValue(parsedUri)).ToArray();
         }
 
         public override string ToString()
         {
-            return $"Hosting {Verb} method on {matchUri}";
+            return $"Hosting {Verb} method on {_matchUri}";
         }
     }
 }

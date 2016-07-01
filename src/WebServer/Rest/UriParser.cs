@@ -7,16 +7,16 @@ namespace Restup.Webserver.Rest
 {
     internal class UriParser
     {
-        private readonly Regex splitRegex;
+        private readonly Regex _splitRegex;
 
         public UriParser()
         {
-            splitRegex = new Regex(@"(?<uri>.*?)(\?(?<parameters>.*?))?(#(?<fragment>.*?))?$");
+            _splitRegex = new Regex(@"(?<uri>.*?)(\?(?<parameters>.*?))?(#(?<fragment>.*?))?$");
         }
 
         public bool TryParse(string uriFormatUri, out ParsedUri parsedUri)
         {
-            var match = splitRegex.Match(uriFormatUri);
+            var match = _splitRegex.Match(uriFormatUri);
             if (!match.Success)
             {
                 parsedUri = null;
