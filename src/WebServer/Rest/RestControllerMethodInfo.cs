@@ -44,7 +44,7 @@ namespace Restup.Webserver.Rest
             MethodInfo = methodInfo;
 
             _validParameterTypes = GetValidParameterTypes();
-            _parameterGetters = InitializeParameters();
+            _parameterGetters = GetParameterGetters(methodInfo);
             Verb = GetVerb();
 
             Type contentParameterType;
@@ -110,9 +110,9 @@ namespace Restup.Webserver.Rest
             return false;
         }
 
-        private ParameterValueGetter[] InitializeParameters()
+        private ParameterValueGetter[] GetParameterGetters(MethodInfo methodInfo)
         {
-            var fromUriParams = (from p in MethodInfo.GetParameters()
+            var fromUriParams = (from p in methodInfo.GetParameters()
                                  where p.GetCustomAttribute<FromContentAttribute>() == null
                                  select p).ToList();
 
