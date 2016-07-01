@@ -17,16 +17,16 @@ namespace Restup.Webserver.Rest
             AsyncOperation
         }
 
-        private IEnumerable<Type> _validParameterTypes;
+        private readonly IEnumerable<Type> _validParameterTypes;
 
         private readonly UriParser _uriParser;
-        private ParsedUri _matchUri;
-        private IEnumerable<ParameterValueGetter> _parameterGetters;
+        private readonly ParsedUri _matchUri;
+        private readonly IEnumerable<ParameterValueGetter> _parameterGetters;
 
         internal MethodInfo MethodInfo { get; }
-        internal HttpMethod Verb { get; private set; }
-        internal bool HasContentParameter { get; private set; }
-        internal Type ContentParameterType { get; private set; }
+        internal HttpMethod Verb { get; }
+        internal bool HasContentParameter { get; }
+        internal Type ContentParameterType { get; }
         internal TypeWrapper ReturnTypeWrapper { get; }
         internal Func<object[]> ControllerConstructorArgs { get; }
 
@@ -37,32 +37,34 @@ namespace Restup.Webserver.Rest
         {
             constructorArgs.GuardNull(nameof(constructorArgs));
             _uriParser = new UriParser();
-            SetUriInfo(methodInfo);
+            _matchUri = GetUriFromMethod(methodInfo);
 
             ReturnTypeWrapper = typeWrapper;
             ControllerConstructorArgs = constructorArgs;
             MethodInfo = methodInfo;
 
-            InitializeValidParameterTypes();
-            InitializeParameters();
-            InitializeVerb();
+            _validParameterTypes = GetValidParameterTypes();
+            _parameterGetters = InitializeParameters();
+            Verb = GetVerb();
 
-            InitializeContentParameter();
+            Type contentParameterType;
+            HasContentParameter = TryGetContentParameterType(methodInfo, out contentParameterType);
+            ContentParameterType = contentParameterType;
         }
 
-        private void SetUriInfo(MethodInfo methodInfo)
+        private ParsedUri GetUriFromMethod(MethodInfo methodInfo)
         {
             var uriFormatter = methodInfo.GetCustomAttribute<UriFormatAttribute>();
-            ParsedUri originalParsedUri;
-            if (!_uriParser.TryParse(uriFormatter.UriFormat, out originalParsedUri))
+            ParsedUri parsedUri;
+            if (!_uriParser.TryParse(uriFormatter.UriFormat, out parsedUri))
                 throw new Exception($"Could not parse uri: {uriFormatter.UriFormat}");
 
-            _matchUri = originalParsedUri;
+            return parsedUri;
         }
 
-        private void InitializeValidParameterTypes()
+        private Type[] GetValidParameterTypes()
         {
-            _validParameterTypes = new[] {
+            return new[] {
                 typeof(IEnumerable<byte>),
                 typeof(IEnumerable<sbyte>),
                 typeof(IEnumerable<short>),
@@ -95,19 +97,20 @@ namespace Restup.Webserver.Rest
             };
         }
 
-        private void InitializeContentParameter()
+        private bool TryGetContentParameterType(MethodInfo methodInfo, out Type content)
         {
-            var fromContentParameter = MethodInfo.GetParameters().FirstOrDefault(p => p.GetCustomAttribute<FromContentAttribute>() != null);
-            if (fromContentParameter == null)
+            var fromContentParameter = methodInfo.GetParameters().FirstOrDefault(p => p.GetCustomAttribute<FromContentAttribute>() != null);
+            if (fromContentParameter != null)
             {
-                return;
+                content = fromContentParameter.ParameterType;
+                return true;
             }
 
-            HasContentParameter = true;
-            ContentParameterType = fromContentParameter.ParameterType;
+            content = null;
+            return false;
         }
 
-        private void InitializeParameters()
+        private ParameterValueGetter[] InitializeParameters()
         {
             var fromUriParams = (from p in MethodInfo.GetParameters()
                                  where p.GetCustomAttribute<FromContentAttribute>() == null
@@ -118,7 +121,7 @@ namespace Restup.Webserver.Rest
                 throw new InvalidOperationException("Can't use method parameters with a custom type.");
             }
 
-            _parameterGetters = fromUriParams.Select(x => GetParameterGetter(x, _matchUri)).ToArray();
+           return fromUriParams.Select(x => GetParameterGetter(x, _matchUri)).ToArray();
         }
 
         private static ParameterValueGetter GetParameterGetter(ParameterInfo parameterInfo, ParsedUri matchUri)
@@ -147,7 +150,7 @@ namespace Restup.Webserver.Rest
             return !parameters.Except(_validParameterTypes).Any();
         }
 
-        private void InitializeVerb()
+        private HttpMethod GetVerb()
         {
             TypeInfo returnType;
 
@@ -156,7 +159,7 @@ namespace Restup.Webserver.Rest
             else
                 returnType = MethodInfo.ReturnType.GetGenericArguments()[0].GetTypeInfo();
 
-            Verb = GetVerb(returnType);
+            return GetVerb(returnType);
         }
 
         private HttpMethod GetVerb(TypeInfo returnType)
