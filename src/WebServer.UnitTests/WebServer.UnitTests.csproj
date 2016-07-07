@@ -111,11 +111,12 @@
     <Compile Include="Rest\RestControllerRequestHandlerAsyncMethodsTest.cs" />
     <Compile Include="RestRouteHandlerTest.Happy.cs" />
     <Compile Include="Rest\RestControllerRequestHandlerWithMultipleSimilarlyNamedMethods.cs" />
+    <Compile Include="Rest\RestToHttpResponseConverterTests.cs" />
     <Compile Include="TestHelpers\TestRestControllers.cs" />
     <Compile Include="UnitTestApp.xaml.cs">
       <DependentUpon>UnitTestApp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Rest\RestResponseToHttpResponseConverterTest.cs" />
+    <Compile Include="Rest\RestResponseVisitorTest.cs" />
     <Compile Include="TestHelpers\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
