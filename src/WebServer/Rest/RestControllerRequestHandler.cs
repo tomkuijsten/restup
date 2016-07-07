@@ -18,12 +18,14 @@ namespace Restup.Webserver.Rest
         private ImmutableArray<RestControllerMethodInfo> _restMethodCollection;
         private readonly RestResponseFactory _responseFactory;
         private readonly RestControllerMethodExecutorFactory _methodExecuteFactory;
+        private UriParser _uriParser;
 
         internal RestControllerRequestHandler()
         {
             _restMethodCollection = ImmutableArray<RestControllerMethodInfo>.Empty;
             _responseFactory = new RestResponseFactory();
             _methodExecuteFactory = new RestControllerMethodExecutorFactory();
+            _uriParser = new UriParser();
         }
 
         internal void RegisterController<T>() where T : class
@@ -33,11 +35,17 @@ namespace Restup.Webserver.Rest
 
         internal void RegisterController<T>(Func<object[]> constructorArgs) where T : class
         {
-            _restMethodCollection = _restMethodCollection.Concat(GetRestMethods<T>(constructorArgs))
-                    .OrderByDescending(x => x.MethodInfo.GetParameters().Count())
-                    .ToImmutableArray();
+            var restControllerMethodInfos = GetRestMethods<T>(constructorArgs);
+            AddRestMethods<T>(restControllerMethodInfos);
+        }
 
-            InstanceCreatorCache.Default.CacheCreator(typeof(T));
+        private void AddRestMethods<T>(IEnumerable<RestControllerMethodInfo> restControllerMethodInfos) where T : class
+        {
+            _restMethodCollection = _restMethodCollection.Concat(restControllerMethodInfos)
+                .OrderByDescending(x => x.MethodInfo.GetParameters().Count())
+                .ToImmutableArray();
+
+            InstanceCreatorCache.Default.CacheCreator(typeof (T));
         }
 
         internal IEnumerable<RestControllerMethodInfo> GetRestMethods<T>(Func<object[]> constructorArgs) where T : class
@@ -90,7 +98,14 @@ namespace Restup.Webserver.Rest
                 return _responseFactory.CreateBadRequest();
             }
 
-            var restMethods = _restMethodCollection.Where(r => r.Match(req.HttpServerRequest.Uri)).ToList();
+            ParsedUri parsedUri;
+            var incomingUriAsString = req.HttpServerRequest.Uri.ToRelativeString();
+            if (!_uriParser.TryParse(incomingUriAsString, out parsedUri))
+            {
+                throw new Exception($"Could not parse uri: {incomingUriAsString}");
+            }
+
+            var restMethods = _restMethodCollection.Where(r => r.Match(parsedUri)).ToList();
             if (!restMethods.Any())
             {
                 return _responseFactory.CreateBadRequest();
@@ -106,7 +121,7 @@ namespace Restup.Webserver.Rest
 
             try
             {
-                return await restMethodExecutor.ExecuteMethodAsync(restMethod, req);
+                return await restMethodExecutor.ExecuteMethodAsync(restMethod, req, parsedUri);
             }
             catch
             {

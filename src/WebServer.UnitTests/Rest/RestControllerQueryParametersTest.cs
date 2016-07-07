@@ -19,21 +19,21 @@ namespace Restup.Webserver.UnitTests.Rest
             restHandler.RegisterController<QueryParamsTestController>();
 
             var request = await restHandler.HandleRequestAsync(
-                Utils.CreateRestServerRequest(uri: new Uri("/query?val=test&_=129283174928743", UriKind.Relative)));
+                Utils.CreateRestServerRequest(uri: new Uri("/query?val=test&val2=test2&_=129283174928743", UriKind.Relative)));
 
             Assert.IsNotNull(request);
             Assert.AreEqual((int)GetResponse.ResponseStatus.OK, request.StatusCode);
 
             var asGet = request as IGetResponse;
-
+            
             Assert.AreEqual(asGet.ContentData, "test");
         }
 
         [RestController(InstanceCreationType.Singleton)]
         public class QueryParamsTestController
         {
-            [UriFormat("/query?val={val}")]
-            public IGetResponse SimpleQuery(string val)
+            [UriFormat("/query?val={val}&val2={val2}")]
+            public IGetResponse SimpleQuery(string val, string val2)
             {
                 return new GetResponse(GetResponse.ResponseStatus.OK, val);
             }

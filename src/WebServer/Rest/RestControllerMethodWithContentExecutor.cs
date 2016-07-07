@@ -9,8 +9,8 @@ namespace Restup.Webserver.Rest
 {
     internal class RestControllerMethodWithContentExecutor : RestMethodExecutor
     {
-        private ContentSerializer _contentSerializer;
-        private RestResponseFactory _responseFactory;
+        private readonly ContentSerializer _contentSerializer;
+        private readonly RestResponseFactory _responseFactory;
 
         public RestControllerMethodWithContentExecutor()
         {
@@ -18,7 +18,7 @@ namespace Restup.Webserver.Rest
             _responseFactory = new RestResponseFactory();
         }
 
-        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request)
+        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri)
         {
             var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
 
@@ -45,7 +45,7 @@ namespace Restup.Webserver.Rest
             object[] parameters = null;
             try
             {
-                parameters = info.GetParametersFromUri(request.HttpServerRequest.Uri).Concat(new[] { contentObj }).ToArray();
+                parameters = info.GetParametersFromUri(requestUri).Concat(new[] { contentObj }).ToArray();
             }
             catch (FormatException)
             {
