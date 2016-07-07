@@ -69,6 +69,10 @@ namespace Restup.Webserver.Rest
             var serverResponse = HttpServerResponse.Create(response.StatusCode);
             serverResponse.Date = DateTime.Now;
             serverResponse.IsConnectionClosed = true;
+            foreach (var header in response.Headers)
+            {
+                serverResponse.AddHeader(header.Key, header.Value);
+            }
 
             return serverResponse;
         }
