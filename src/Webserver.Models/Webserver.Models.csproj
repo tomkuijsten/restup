@@ -106,7 +106,7 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
-    <None Include="restup-tmp1.pfx" />
+    <None Include="restup-tmp1.snk" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\IContentRestResponse.cs" />
@@ -130,7 +130,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>restup-tmp1.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>restup-tmp1.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

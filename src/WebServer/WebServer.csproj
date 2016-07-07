@@ -112,7 +112,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>restup-tmp1.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>restup-tmp1.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Attributes\FromContentAttribute.cs" />
@@ -176,7 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
-    <None Include="restup-tmp1.pfx" />
+    <None Include="restup-tmp1.snk" />
     <None Include="WebServer.nuspec" />
   </ItemGroup>
   <ItemGroup>

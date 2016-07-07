@@ -130,6 +130,7 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Compile Include="RestRouteHandlerTest.Rainy.cs" />
+    <None Include="restup-tmp1.snk" />
     <None Include="WebServer.UnitTests_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -157,6 +158,12 @@
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>restup-tmp1.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
