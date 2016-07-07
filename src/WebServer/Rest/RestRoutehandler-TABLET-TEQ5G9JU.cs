@@ -41,11 +41,6 @@ namespace Restup.Webserver.Rest
 
             var httpResponse = _restToHttpConverter.ConvertToHttpResponse(restResponse, restServerRequest);
 
-            foreach ( IHeader header in restResponse.Headers )
-            {
-                httpResponse.AddHeader(header.Name, header.Value);
-            }
-
             return httpResponse;
         }
     }

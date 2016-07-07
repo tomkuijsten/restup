@@ -29,7 +29,12 @@ namespace Restup.Webserver.Http
                 return new byte[0];
             }
 
-            if (req.AcceptMediaType == MediaType.JSON)
+            // If we're returning a byte array then don't try and serialize it
+            if (contentObject is byte[])
+            {
+                return (byte[])contentObject;
+            }
+            else if (req.AcceptMediaType == MediaType.JSON)
             {
                 return req.AcceptEncoding.GetBytes(JsonConvert.SerializeObject(contentObject));
             }

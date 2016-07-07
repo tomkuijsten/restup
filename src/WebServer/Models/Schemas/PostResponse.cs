@@ -1,9 +1,13 @@
-﻿using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Contracts;
+using System.Collections.Generic;
 
 namespace Restup.Webserver.Models.Schemas
 {
     public class PostResponse : IPostResponse
     {
+
+        public IEnumerable<IHeader> Headers { get; }
+
         public enum ResponseStatus : int
         {
             Created = 201,
@@ -16,6 +20,8 @@ namespace Restup.Webserver.Models.Schemas
 
         public PostResponse(ResponseStatus status, string locationRedirectUri, object content)
         {
+            Headers = new List<IHeader>();
+
             Status = status;
             LocationRedirect = locationRedirectUri;
             ContentData = content;
@@ -23,10 +29,12 @@ namespace Restup.Webserver.Models.Schemas
 
         public PostResponse(ResponseStatus status, string locationRedirectUri) : this(status, locationRedirectUri, null)
         {
+            Headers = new List<IHeader>();
         }
 
         public PostResponse(ResponseStatus status) : this(status, null)
         {
+            Headers = new List<IHeader>();
         }
 
         public int StatusCode
@@ -35,6 +43,17 @@ namespace Restup.Webserver.Models.Schemas
             {
                 return (int)Status;
             }
+        }
+        public IRestResponse addHeader(IHeader headerToAdd)
+        {
+            ((List<IHeader>)Headers).Add(headerToAdd);
+
+            return this;
+        }
+
+        public IRestResponse addHeader(string headerName, string headerValue)
+        {
+            return addHeader(new Header(headerName, headerValue));
         }
     }
 }

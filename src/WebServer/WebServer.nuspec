@@ -12,7 +12,9 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A webserver for Universal Windows Platform (UWP) apps</description>
     <releaseNotes>
+
 .... (#xx)
+
     </releaseNotes>
     <copyright></copyright>
     <tags>UWP REST webserver Universal Windows Platform</tags>
