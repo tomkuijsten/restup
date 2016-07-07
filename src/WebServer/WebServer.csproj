@@ -108,6 +108,12 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>restup-tmp1.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Attributes\FromContentAttribute.cs" />
     <Compile Include="Attributes\RestControllerAttribute.cs" />
@@ -169,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <None Include="restup-tmp1.pfx" />
     <None Include="WebServer.nuspec" />
   </ItemGroup>
   <ItemGroup>
