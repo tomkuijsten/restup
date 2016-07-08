@@ -80,7 +80,7 @@ namespace Restup.Webserver.UnitTests
         }
         #endregion
 
-        #region BasicGetWithAbsoluteUri
+        #region BasicGetWithUriPrefix
         private MutableHttpServerRequest _basicGETUriPrefix = new MutableHttpServerRequest()
         {
             Method = HttpMethod.GET,
@@ -96,6 +96,25 @@ namespace Restup.Webserver.UnitTests
             var response = await m.HandleRequest(_basicGETUriPrefix);
 
             StringAssert.Contains(response.ToString(), "200 OK");
+        }
+        #endregion
+
+        #region BasicGetWithEscapedString
+        private MutableHttpServerRequest _basicGETTextEncoding = new MutableHttpServerRequest()
+        {
+            Method = HttpMethod.GET,
+            Uri = new Uri("/users/John%20Doe", UriKind.RelativeOrAbsolute),
+            IsComplete = true
+        };
+
+        [TestMethod]
+        public async Task HandleRequest_BasicGETTextEncoding_DecodedStringResult()
+        {
+            var m = Utils.CreateRestRoutehandler<HappyPathTestTextEncodingController>();
+
+            var response = await m.HandleRequest(_basicGETTextEncoding);
+
+            StringAssert.Contains(response.ToString(), "John Doe");
         }
         #endregion
 

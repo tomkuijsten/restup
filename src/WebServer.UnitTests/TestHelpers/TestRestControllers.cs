@@ -46,6 +46,16 @@ namespace Restup.Webserver.UnitTests.TestHelpers
     }
 
     [RestController(InstanceCreationType.Singleton)]
+    public class HappyPathTestTextEncodingController
+    {
+        [UriFormat("/users/{name}")]
+        public GetResponse GetUser(string name)
+        {
+            return new GetResponse(GetResponse.ResponseStatus.OK, new User() { Name = name, Age = 30 });
+        }
+    }
+
+    [RestController(InstanceCreationType.Singleton)]
     public class HappyPathTestSingletonControllerWithArgs
     {
         private User _user;

@@ -32,7 +32,8 @@ namespace Restup.Webserver.Rest
             if (parameterType == typeof(string))
             {
                 // String is also an IEnumerable, but should not be treated as one
-                return Convert.ChangeType(parameterValue, parameterType);
+                var unescapedParameterValue = Uri.UnescapeDataString(parameterValue);
+                return Convert.ChangeType(unescapedParameterValue, parameterType);
             }
 
             if (typeof(IEnumerable).IsAssignableFrom(parameterType))
