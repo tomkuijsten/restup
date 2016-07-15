@@ -134,6 +134,7 @@
     <Compile Include="Http\IContentEncoder.cs" />
     <Compile Include="Http\NoContentEncoder.cs" />
     <Compile Include="Http\RouteRegistration.cs" />
+    <Compile Include="LogManager.cs" />
     <Compile Include="Models\Contracts\IRouteHandler.cs" />
     <Compile Include="Models\Schemas\MediaType.cs" />
     <Compile Include="Models\Schemas\RestResponse.cs" />
@@ -180,6 +181,10 @@
     <None Include="WebServer.nuspec" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WebServer.Logging\WebServer.Logging.csproj">
+      <Project>{06a3d120-5923-4ad1-8411-7395a1ec6e94}</Project>
+      <Name>WebServer.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebServer.Models\Webserver.Models.csproj">
       <Project>{0b20d095-2896-41a6-865d-172dfd5ecc99}</Project>
       <Name>Webserver.Models</Name>

@@ -14,7 +14,8 @@
     <releaseNotes>
 .... (#xx)
     </releaseNotes>
-    <copyright></copyright>
+    <copyright>
+    </copyright>
     <tags>UWP REST webserver Universal Windows Platform</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="7.0.1" />
