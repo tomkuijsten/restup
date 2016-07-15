@@ -41,9 +41,9 @@ namespace Restup.Webserver.UnitTests.Rest
         public class AsyncTaskTestController
         {
             [UriFormat("/users/{userId}")]
-            public async Task<GetResponse> GetUser(int userId)
+            public Task<GetResponse> GetUser(int userId)
             {
-                return await Task.FromResult(new GetResponse(GetResponse.ResponseStatus.OK, "test"));
+                return Task.FromResult(new GetResponse(GetResponse.ResponseStatus.OK, "test"));
             }
         }
 
