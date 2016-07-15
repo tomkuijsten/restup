@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Restup.WebServer.Logging;
+using System;
 using System.Threading;
-using Restup.WebServer.Logging;
 
 namespace Restup.Webserver
 {
@@ -54,6 +54,8 @@ namespace Restup.Webserver
 
         private class NullLogger : AbstractLogger
         {
+            protected override bool IsLogEnabled(LogLevel trace) => false;
+
             protected override void LogMessage(string message, LogLevel loggingLevel, params object[] args)
             {
             }
