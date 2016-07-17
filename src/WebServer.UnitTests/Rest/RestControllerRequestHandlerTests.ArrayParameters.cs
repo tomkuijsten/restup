@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Restup.Webserver.UnitTests.Rest
 {
     [TestClass]
-    public class RestControllerRequestHandlerArrayParameters
+    public class RestControllerRequestHandlerTests_ArrayParameters
     {
         [TestMethod]
         public void HandleRequest_ComplexObjectArray_Exception()

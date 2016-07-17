@@ -97,26 +97,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="File\MimeTypeProviderTests.cs" />
-    <Compile Include="File\MockFile.cs" />
-    <Compile Include="File\MockFileSystem.cs" />
-    <Compile Include="File\StaticFileRouteHandlerFluentTests.cs" />
+    <Compile Include="TestHelpers\MockFile.cs" />
+    <Compile Include="TestHelpers\MockFileSystem.cs" />
+    <Compile Include="TestHelpers\StaticFileRouteHandlerTests.Fluent.cs" />
     <Compile Include="File\StaticFileRouteHandlerTests.cs" />
-    <Compile Include="Http\HttpServerContentEncodingTests.cs" />
-    <Compile Include="Http\HttpServerFluentTests.cs" />
-    <Compile Include="Http\HttpServerTests.cs" />
-    <Compile Include="Http\EchoRouteHandler.cs" />
+    <Compile Include="Http\HttpServerTests.ContentEncoding.cs" />
+    <Compile Include="TestHelpers\HttpServerTests.Fluent.cs" />
+    <Compile Include="Http\HttpServerTests.HandleRequest.cs" />
+    <Compile Include="TestHelpers\EchoRouteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rest\RestControllerQueryParametersTest.cs" />
-    <Compile Include="Rest\RestControllerRequestHandlerArrayParameters.cs" />
-    <Compile Include="Rest\RestControllerRequestHandlerAsyncMethodsTest.cs" />
-    <Compile Include="RestRouteHandlerTest.Happy.cs" />
-    <Compile Include="Rest\RestControllerRequestHandlerWithMultipleSimilarlyNamedMethods.cs" />
+    <Compile Include="Rest\RestControllerRequestHandlerTests.QueryParameters.cs" />
+    <Compile Include="Rest\RestControllerRequestHandlerTests.ArrayParameters.cs" />
+    <Compile Include="Rest\RestControllerRequestHandlerTests.AsyncMethods.cs" />
+    <Compile Include="Rest\RestRouteHandlerTest.Happy.cs" />
+    <Compile Include="Rest\RestControllerRequestHandlerTests.MultipleSimilarlyNamedMethods.cs" />
     <Compile Include="Rest\RestToHttpResponseConverterTests.cs" />
     <Compile Include="TestHelpers\TestRestControllers.cs" />
     <Compile Include="UnitTestApp.xaml.cs">
       <DependentUpon>UnitTestApp.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Rest\RestResponseVisitorTest.cs" />
     <Compile Include="TestHelpers\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -129,7 +128,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Compile Include="RestRouteHandlerTest.Rainy.cs" />
+    <Compile Include="Rest\RestRouteHandlerTest.Rainy.cs" />
     <None Include="restup-tmp1.snk" />
     <None Include="WebServer.UnitTests_TemporaryKey.pfx" />
   </ItemGroup>

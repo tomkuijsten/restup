@@ -6,15 +6,15 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 
-namespace Restup.Webserver.UnitTests.Http
+namespace Restup.Webserver.UnitTests.TestHelpers
 {
     [TestClass]
-    public class HttpServerContentEncodingTests
+    public class HttpServerTests_ContentEncoding
     {
         [TestMethod]
         public void WithGzipAcceptEncoding()
         {
-            new HttpServerFluentTests()
+            new HttpServerTests_Fluent()
                 .Given
                     .ListeningOnDefaultRoute()
                 .When
@@ -28,7 +28,7 @@ namespace Restup.Webserver.UnitTests.Http
         [TestMethod]
         public void WithDeflateAcceptEncoding()
         {
-            new HttpServerFluentTests()
+            new HttpServerTests_Fluent()
                .Given
                    .ListeningOnDefaultRoute()
                .When
@@ -42,7 +42,7 @@ namespace Restup.Webserver.UnitTests.Http
         [TestMethod]
         public void WithNoEncoding()
         {
-            new HttpServerFluentTests()
+            new HttpServerTests_Fluent()
                .Given
                    .ListeningOnDefaultRoute()
                .When

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Restup.Webserver.UnitTests.Rest
 {
     [TestClass]
-    public class RestControllerQueryParametersTest
+    public class RestControllerRequestHandlerTests_QueryParameters
     {
         [TestMethod]
         public async Task HandleRequest_MoreQueryParametersThenDefined_IgnoreExtraParameters()
@@ -25,7 +25,7 @@ namespace Restup.Webserver.UnitTests.Rest
             Assert.AreEqual((int)GetResponse.ResponseStatus.OK, request.StatusCode);
 
             var asGet = request as IGetResponse;
-            
+
             Assert.AreEqual(asGet.ContentData, "test");
         }
 

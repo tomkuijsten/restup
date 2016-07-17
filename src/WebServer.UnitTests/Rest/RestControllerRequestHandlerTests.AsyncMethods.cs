@@ -11,7 +11,7 @@ using Windows.Foundation;
 namespace Restup.Webserver.UnitTests.Rest
 {
     [TestClass]
-    public class RestControllerRequestHandlerAsyncMethodsTest
+    public class RestControllerRequestHandlerTests_AsyncMethods
     {
         [TestMethod]
         public void GetRestMethods_HasTaskMethod_CanHandleRequest()

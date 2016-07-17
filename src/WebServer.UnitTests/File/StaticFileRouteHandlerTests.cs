@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.UnitTests.TestHelpers;
 using Windows.ApplicationModel;
 
 namespace Restup.Webserver.UnitTests.File
