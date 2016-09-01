@@ -19,10 +19,13 @@ namespace Restup.HttpMessage
         public IEnumerable<string> AcceptMediaTypes { get; }
         public byte[] Content { get; }
         public bool IsComplete { get; }
+        public HttpMethod? AccessControlRequestMethod { get; }
+        public IEnumerable<string> AccessControlRequestHeaders { get; }
 
         public HttpServerRequest(IEnumerable<IHttpRequestHeader> headers, HttpMethod? method, Uri uri,
             string httpVersion, string contentTypeCharset, IEnumerable<string> acceptCharsets, int contentLength,
-            string contentType, IEnumerable<string> acceptEncodings, IEnumerable<string> acceptMediaTypes, byte[] content, bool isComplete)
+            string contentType, IEnumerable<string> acceptEncodings, IEnumerable<string> acceptMediaTypes,
+            byte[] content, bool isComplete, HttpMethod? accessControlRequestMethod, IEnumerable<string> accessControlRequestHeaders)
         {
             Headers = headers;
             Method = method;
@@ -36,6 +39,8 @@ namespace Restup.HttpMessage
             AcceptMediaTypes = acceptMediaTypes;
             Content = content;
             IsComplete = isComplete;
+            AccessControlRequestMethod = accessControlRequestMethod;
+            AccessControlRequestHeaders = accessControlRequestHeaders;
         }
     }
 }

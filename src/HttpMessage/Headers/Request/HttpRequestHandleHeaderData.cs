@@ -38,6 +38,16 @@ namespace Restup.HttpMessage.Headers.Request
             arg.AcceptEncodings = uh.AcceptEncodings;
         }
 
+        public void Visit(AccessControlRequestMethodHeader uh, MutableHttpServerRequest arg)
+        {
+            arg.AccessControlRequestMethod = uh.Method;
+        }
+
+        public void Visit(AccessControlRequestHeadersHeader uh, MutableHttpServerRequest arg)
+        {
+            arg.AccessControlRequestHeaders = uh.Headers;
+        }
+
         public void Visit(ContentTypeHeader uh, MutableHttpServerRequest arg)
         {
             arg.ContentTypeCharset = uh.ContentCharset;

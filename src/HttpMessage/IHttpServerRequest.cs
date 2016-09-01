@@ -19,5 +19,7 @@ namespace Restup.HttpMessage
         IEnumerable<string> AcceptMediaTypes { get;  }
         byte[] Content { get;  }
         bool IsComplete { get;  }
+        HttpMethod? AccessControlRequestMethod { get; }
+        IEnumerable<string> AccessControlRequestHeaders { get; }
     }
 }

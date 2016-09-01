@@ -37,7 +37,9 @@ namespace Restup.Webserver.Http
                 request.AcceptEncodings,
                 request.AcceptMediaTypes,
                 request.Content,
-                request.IsComplete);
+                request.IsComplete, 
+                request.AccessControlRequestMethod,
+                request.AccessControlRequestHeaders);
         }
 
         public async Task<HttpServerResponse> HandleAsync(IHttpServerRequest request)

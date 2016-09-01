@@ -18,8 +18,20 @@ namespace Restup.HttpMessage.Headers.Request
                 [AcceptHeader.NAME] = CreateResponseContentType,
                 [ContentTypeHeader.NAME] = CreateRequestContentType,
                 [AcceptCharsetHeader.NAME] = CreateResponseContentCharset,
-                [AcceptEncodingHeader.NAME] = CreateResponseAcceptEncoding
+                [AcceptEncodingHeader.NAME] = CreateResponseAcceptEncoding,
+                [AccessControlRequestMethodHeader.NAME] = CreateAccessControlRequestMethodHeader,
+                [AccessControlRequestHeadersHeader.NAME] = CreateAccessControlRequestHeaders,
             };
+        }
+
+        private IHttpRequestHeader CreateAccessControlRequestHeaders(string arg)
+        {
+            return new AccessControlRequestHeadersHeader(arg);
+        }
+
+        private IHttpRequestHeader CreateAccessControlRequestMethodHeader(string arg)
+        {
+            return new AccessControlRequestMethodHeader(arg);
         }
 
         internal IHttpRequestHeader Create(string headerName, string headerValue)
@@ -60,7 +72,7 @@ namespace Restup.HttpMessage.Headers.Request
         internal IEnumerable<QuantifiedHeaderValue> ExtractQuantifiedHeaders(string value)
         {
             var headerValues = value.Split(',');
-            var quantifiedValues = headerValues.Select(h => ExtractQuantifiedHeader(h));
+            var quantifiedValues = headerValues.Select(ExtractQuantifiedHeader);
 
             return quantifiedValues.OrderByDescending(q => q.Quality).ToArray();
         }

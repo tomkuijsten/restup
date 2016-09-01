@@ -12,22 +12,11 @@ namespace Restup.HttpMessage.ServerRequestParsers
 
             if (word.WordFound)
             {
-                resultThisFar.Method = GetMethod(word.Word);
+                resultThisFar.Method = HttpMethodParser.GetMethod(word.Word);
                 UnparsedData = word.RemainingBytes;
                 IsFinished = true;
                 IsSucceeded = true;
             }
-        }
-
-        private HttpMethod GetMethod(string method)
-        {
-            method = method.ToUpper();
-
-            HttpMethod methodVerb = HttpMethod.Unsupported;
-
-            Enum.TryParse<HttpMethod>(method, out methodVerb);
-
-            return methodVerb;
         }
     }
 }

@@ -82,7 +82,6 @@ namespace Restup.Webserver.Http
                     using (var inputStream = args.Socket.InputStream)
                     {
                         var request = await MutableHttpServerRequest.Parse(inputStream);
-
                         var httpResponse = await HandleRequestAsync(request);
 
                         await WriteResponseAsync(httpResponse, args.Socket);
@@ -111,8 +110,31 @@ namespace Restup.Webserver.Http
                 return HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.BadRequest);
             }
 
-            var httpResponse = await routeRegistration.HandleAsync(request);
-            return await AddContentEncodingAsync(httpResponse, request.AcceptEncodings);
+            HttpServerResponse httpResponse;
+            if (request.Method == HttpMethod.OPTIONS)
+            {
+                // max age possible by chrome https://code.google.com/p/chromium/codesearch#chromium/src/third_party/WebKit/Source/core/loader/CrossOriginPreflightResultCache.cpp&l=40&rcl=1399481969
+                httpResponse = HttpServerResponse.Create(HttpResponseStatus.OK);
+                httpResponse.AddHeader(new AccessControlAllowMethodsHeader(new[] { HttpMethod.POST, HttpMethod.DELETE, HttpMethod.GET, HttpMethod.OPTIONS, HttpMethod.PUT }));
+                httpResponse.AddHeader(new AccessControlMaxAgeHeader(10 * 60));
+                if (request.AccessControlRequestHeaders.Any())
+                    httpResponse.AddHeader(new AccessControlAllowHeadersHeader(request.AccessControlRequestHeaders));
+            }
+            else
+            {
+                httpResponse = await routeRegistration.HandleAsync(request);
+            }
+
+            var requestWithContentEncoding = await AddContentEncodingAsync(httpResponse, request.AcceptEncodings);
+            return AddCorsHeaders(requestWithContentEncoding);
+        }
+
+        private static HttpServerResponse AddCorsHeaders(HttpServerResponse requestWithContentEncoding)
+        {
+            requestWithContentEncoding.AddHeader(new AccessControlAllowOriginHeader("*"));
+            requestWithContentEncoding.AddHeader(new AccessControlAllowCredentialsHeader(true));
+
+            return requestWithContentEncoding; ;
         }
 
         private async Task<HttpServerResponse> AddContentEncodingAsync(HttpServerResponse httpResponse, IEnumerable<string> acceptEncodings)
