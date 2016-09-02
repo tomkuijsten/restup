@@ -59,6 +59,12 @@ namespace Restup.HttpMessage.Headers.Request
             arg.ContentLength = uh.Length;
         }
 
+        public void Visit(OriginHeader uh, MutableHttpServerRequest arg)
+        {
+            // no specific info to set for untyped header
+            arg.Origin = uh.Value;
+        }
+
         public void Visit(UntypedRequestHeader uh, MutableHttpServerRequest arg)
         {
             // no specific info to set for untyped header

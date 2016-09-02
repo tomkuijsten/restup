@@ -37,6 +37,7 @@ namespace Restup.HttpMessage
         public bool IsComplete { get; set; }
         public HttpMethod? AccessControlRequestMethod { get; set; }
         public IEnumerable<string> AccessControlRequestHeaders { get; set; }
+        public string Origin { get; set; }
 
         internal void AddHeader(IHttpRequestHeader header)
         {

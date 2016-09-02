@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\HttpMultiQuantifiedHeaderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\HttpRequestHandleHeaderData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\HttpSingleQuantifiedHeaderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\OriginHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\QuantifiedHeaderValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\RequestHeaderFactory.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\AccessControlAllowCredentialsHeader.cs" />

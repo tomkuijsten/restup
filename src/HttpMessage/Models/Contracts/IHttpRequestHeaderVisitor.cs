@@ -13,5 +13,6 @@ namespace Restup.HttpMessage.Models.Contracts
         void Visit(AcceptEncodingHeader uh, T arg);
         void Visit(AccessControlRequestMethodHeader uh, T arg);
         void Visit(AccessControlRequestHeadersHeader uh, T arg);
+        void Visit(OriginHeader uh, T arg);
     }
 }

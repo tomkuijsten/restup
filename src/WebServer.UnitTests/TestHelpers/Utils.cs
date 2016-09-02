@@ -54,14 +54,14 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             IEnumerable<string> acceptEncodings = null,
             IEnumerable<string> acceptMediaTypes = null, byte[] content = null,
             bool isComplete = true, HttpMethod? accessControlRequestMethod = null, 
-            IEnumerable<string> accessControlRequestHeaders = null)
+            IEnumerable<string> accessControlRequestHeaders = null, string origin = null)
         {            
             return new HttpServerRequest(headers ?? Enumerable.Empty<IHttpRequestHeader>(), method,
                 uri ?? new Uri("/Get", UriKind.Relative), httpVersion, contentTypeCharset,
                 acceptCharsets ?? Enumerable.Empty<string>(),
                 contentLength, contentType, acceptEncodings ?? Enumerable.Empty<string>(),
                 acceptMediaTypes ?? Enumerable.Empty<string>(), content ?? new byte[] { },
-                isComplete, null, accessControlRequestHeaders ?? Enumerable.Empty<string>());
+                isComplete, accessControlRequestMethod, accessControlRequestHeaders ?? Enumerable.Empty<string>(), origin);
         }
 
         internal static RestServerRequest CreateRestServerRequest(IEnumerable<IHttpRequestHeader> headers = null,

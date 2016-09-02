@@ -21,5 +21,6 @@ namespace Restup.HttpMessage
         bool IsComplete { get;  }
         HttpMethod? AccessControlRequestMethod { get; }
         IEnumerable<string> AccessControlRequestHeaders { get; }
+        string Origin { get; }
     }
 }
