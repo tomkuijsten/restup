@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
 
 namespace Restup.Webserver.UnitTests.TestHelpers
 {
@@ -44,10 +45,13 @@ namespace Restup.Webserver.UnitTests.TestHelpers
         }
 
         public FluentHttpServerTests RequestHasArrived(string uri, IEnumerable<string> acceptEncodings = null,
-            byte[] content = null, string origin = null)
+            byte[] content = null, string origin = null, HttpMethod? method = HttpMethod.GET, HttpMethod? accessControlRequestMethod = null,
+            IEnumerable<string> accessControlRequestHeaders = null, string contentType = null)
         {
             var httpServerRequest = Utils.CreateHttpRequest(uri: new Uri(uri, UriKind.Relative),
-                acceptEncodings: acceptEncodings, content: content, origin: origin);
+                acceptEncodings: acceptEncodings, content: content, origin: origin, method: method, 
+                accessControlRequestMethod: accessControlRequestMethod, accessControlRequestHeaders: accessControlRequestHeaders,
+                contentType: contentType);
             var response = _httpServer.HandleRequestAsync(httpServerRequest).Result;
             _responses.Add(response);
             return this;
@@ -70,6 +74,11 @@ namespace Restup.Webserver.UnitTests.TestHelpers
 
             Assert.AreEqual(expected, actual);
             return this;
+        }
+
+        public FluentHttpServerTests AssertLastResponse<T>(string expected) where T : IHttpHeader
+        {
+            return AssertLastResponse<T, string>(x => x.Value, expected);
         }
 
         public FluentHttpServerTests AssertLastResponseHasNoHeaderOf<T>() where T : IHttpHeader

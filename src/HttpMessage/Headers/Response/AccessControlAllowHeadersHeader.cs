@@ -6,7 +6,7 @@ namespace Restup.HttpMessage.Headers.Response
     {
         internal static string NAME = "Access-Control-Allow-Headers";
 
-        public AccessControlAllowHeadersHeader(IEnumerable<string> headers) : base(NAME, string.Join(",", headers))
+        public AccessControlAllowHeadersHeader(IEnumerable<string> headers) : base(NAME, string.Join(", ", headers))
         {
         }
     }

@@ -115,7 +115,7 @@ namespace Restup.Webserver.Http
             {
                 // max age possible by chrome https://code.google.com/p/chromium/codesearch#chromium/src/third_party/WebKit/Source/core/loader/CrossOriginPreflightResultCache.cpp&l=40&rcl=1399481969
                 httpResponse = HttpServerResponse.Create(HttpResponseStatus.OK);
-                httpResponse.AddHeader(new AccessControlAllowMethodsHeader(new[] { HttpMethod.POST, HttpMethod.DELETE, HttpMethod.GET, HttpMethod.OPTIONS, HttpMethod.PUT }));
+                httpResponse.AddHeader(new AccessControlAllowMethodsHeader(new[] { HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE,HttpMethod.OPTIONS,  }));
                 httpResponse.AddHeader(new AccessControlMaxAgeHeader(10 * 60));
                 if (request.AccessControlRequestHeaders.Any())
                     httpResponse.AddHeader(new AccessControlAllowHeadersHeader(request.AccessControlRequestHeaders));

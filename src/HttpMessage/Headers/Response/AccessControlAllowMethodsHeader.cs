@@ -7,7 +7,7 @@ namespace Restup.HttpMessage.Headers.Response
     {
         internal static string NAME = "Access-Control-Allow-Methods";
 
-        public AccessControlAllowMethodsHeader(IEnumerable<HttpMethod> methods) : base(NAME, string.Join(",", methods))
+        public AccessControlAllowMethodsHeader(IEnumerable<HttpMethod> methods) : base(NAME, string.Join(", ", methods))
         {
         }
     }
