@@ -125,16 +125,16 @@ namespace Restup.Webserver.Http
                 httpResponse = await routeRegistration.HandleAsync(request);
             }
 
-            var requestWithContentEncoding = await AddContentEncodingAsync(httpResponse, request.AcceptEncodings);
-            return AddCorsHeaders(requestWithContentEncoding);
+            var responseWithContentEncoding = await AddContentEncodingAsync(httpResponse, request.AcceptEncodings);
+            return AddCorsHeaders(request, responseWithContentEncoding);
         }
 
-        private static HttpServerResponse AddCorsHeaders(HttpServerResponse requestWithContentEncoding)
+        private static HttpServerResponse AddCorsHeaders(IHttpServerRequest request, HttpServerResponse responseWithContentEncoding)
         {
-            requestWithContentEncoding.AddHeader(new AccessControlAllowOriginHeader("*"));
-            requestWithContentEncoding.AddHeader(new AccessControlAllowCredentialsHeader(true));
+            if (!string.IsNullOrWhiteSpace(request.Origin))
+                responseWithContentEncoding.AddHeader(new AccessControlAllowOriginHeader("*"));
 
-            return requestWithContentEncoding; ;
+            return responseWithContentEncoding;
         }
 
         private async Task<HttpServerResponse> AddContentEncodingAsync(HttpServerResponse httpResponse, IEnumerable<string> acceptEncodings)

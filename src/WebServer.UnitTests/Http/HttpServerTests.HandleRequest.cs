@@ -1,10 +1,10 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using System;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Restup.HttpMessage.Models.Schemas;
 using Restup.Webserver.Http;
-using System;
 using Restup.Webserver.UnitTests.TestHelpers;
 
-namespace Restup.Webserver.UnitTests
+namespace Restup.Webserver.UnitTests.Http
 {
     [TestClass]
     public class HttpServerTests_HandleRequest
@@ -12,7 +12,7 @@ namespace Restup.Webserver.UnitTests
         [TestMethod]
         public void HandleRequest_RegisteredOnDefaultRoute_RoutesSuccesfully()
         {
-            new HttpServerTests_Fluent()
+            new FluentHttpServerTests()
                 .Given
                     .ListeningOnDefaultRoute()
                 .When
@@ -28,7 +28,7 @@ namespace Restup.Webserver.UnitTests
         [DataRow("api/")]
         public void HandleRequest_RegisteredOnPrefixedRoute_RoutesSuccesfully(string registeredPrefix)
         {
-            new HttpServerTests_Fluent()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnRoute(registeredPrefix)
                .When
@@ -42,7 +42,7 @@ namespace Restup.Webserver.UnitTests
         [TestMethod]
         public void HandleRequest_OnNonRegisteredRoute_ReturnsBadRequest()
         {
-            new HttpServerTests_Fluent()
+            new FluentHttpServerTests()
                .When
                    .RequestHasArrived("/api/Get")
                .Then
@@ -52,7 +52,7 @@ namespace Restup.Webserver.UnitTests
         [TestMethod]
         public void GivenMultipleRouteHandlersAreAddedInSequentialOrder_WhenRequestIsReceivedOnApiRoute_ThenRequestIsSuccesfullyReceived()
         {
-            new HttpServerTests_Fluent()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnDefaultRoute()
                    .ListeningOnRoute("/api")
@@ -68,7 +68,7 @@ namespace Restup.Webserver.UnitTests
         [TestMethod]
         public void GivenMultipleRouteHandlersAreAddedInSequentialOrder_WhenRequestIsReceivedOnAnyRoute_ThenRequestIsSuccesfullyReceived()
         {
-            new HttpServerTests_Fluent()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnDefaultRoute()
                    .ListeningOnRoute("/api")
@@ -84,7 +84,7 @@ namespace Restup.Webserver.UnitTests
         [TestMethod]
         public void GivenMultipleRouteHandlersAreAddedInReverseOrder_WhenRequestIsReceivedOnApiRoute_ThenRequestIsSuccesfullyReceived()
         {
-            new HttpServerTests_Fluent()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnRoute("/api")
                    .ListeningOnDefaultRoute()
@@ -100,7 +100,7 @@ namespace Restup.Webserver.UnitTests
         [TestMethod]
         public void GivenMultipleRouteHandlersAreAddedInReverseOrder_WhenRequestIsReceivedOnAnyRoute_ThenRequestIsSuccesfullyReceived()
         {
-            new HttpServerTests_Fluent()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnRoute("/api")
                    .ListeningOnDefaultRoute()

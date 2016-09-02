@@ -97,12 +97,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="File\MimeTypeProviderTests.cs" />
+    <Compile Include="Http\HttpServerTests.CorsSimpleRequests.cs" />
     <Compile Include="TestHelpers\MockFile.cs" />
     <Compile Include="TestHelpers\MockFileSystem.cs" />
     <Compile Include="TestHelpers\StaticFileRouteHandlerTests.Fluent.cs" />
     <Compile Include="File\StaticFileRouteHandlerTests.cs" />
     <Compile Include="Http\HttpServerTests.ContentEncoding.cs" />
-    <Compile Include="TestHelpers\HttpServerTests.Fluent.cs" />
+    <Compile Include="TestHelpers\FluentHttpServerTests.cs" />
     <Compile Include="Http\HttpServerTests.HandleRequest.cs" />
     <Compile Include="TestHelpers\EchoRouteHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

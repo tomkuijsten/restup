@@ -5,28 +5,29 @@ using Restup.Webserver.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Restup.HttpMessage.Models.Contracts;
 
 namespace Restup.Webserver.UnitTests.TestHelpers
 {
-    public class HttpServerTests_Fluent
+    public class FluentHttpServerTests
     {
         private readonly HttpServer _httpServer;
         private readonly List<HttpServerResponse> _responses;
 
         private readonly Dictionary<string, EchoRouteHandler> _routeHandlers;
 
-        public HttpServerTests_Fluent Given => this;
-        public HttpServerTests_Fluent When => this;
-        public HttpServerTests_Fluent Then => this;
+        public FluentHttpServerTests Given => this;
+        public FluentHttpServerTests When => this;
+        public FluentHttpServerTests Then => this;
 
-        public HttpServerTests_Fluent()
+        public FluentHttpServerTests()
         {
             _httpServer = new HttpServer(80);
             _responses = new List<HttpServerResponse>();
             _routeHandlers = new Dictionary<string, EchoRouteHandler>();
         }
 
-        public HttpServerTests_Fluent ListeningOnDefaultRoute()
+        public FluentHttpServerTests ListeningOnDefaultRoute()
         {
             var routeHandler = new EchoRouteHandler();
             _routeHandlers[string.Empty] = routeHandler;
@@ -34,7 +35,7 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             return this;
         }
 
-        public HttpServerTests_Fluent ListeningOnRoute(string urlPrefix)
+        public FluentHttpServerTests ListeningOnRoute(string urlPrefix)
         {
             var routeHandler = new EchoRouteHandler();
             _routeHandlers[urlPrefix] = routeHandler;
@@ -42,15 +43,17 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             return this;
         }
 
-        public HttpServerTests_Fluent RequestHasArrived(string uri, IEnumerable<string> acceptEncodings = null, byte[] content = null)
+        public FluentHttpServerTests RequestHasArrived(string uri, IEnumerable<string> acceptEncodings = null,
+            byte[] content = null, string origin = null)
         {
-            var httpServerRequest = Utils.CreateHttpRequest(uri: new Uri(uri, UriKind.Relative), acceptEncodings: acceptEncodings, content: content);
+            var httpServerRequest = Utils.CreateHttpRequest(uri: new Uri(uri, UriKind.Relative),
+                acceptEncodings: acceptEncodings, content: content, origin: origin);
             var response = _httpServer.HandleRequestAsync(httpServerRequest).Result;
             _responses.Add(response);
             return this;
         }
 
-        public HttpServerTests_Fluent AssertLastResponse<T>(Func<HttpServerResponse, T> actualFunc, T expected)
+        public FluentHttpServerTests AssertLastResponse<T>(Func<HttpServerResponse, T> actualFunc, T expected)
         {
             var response = _responses.Last();
             var actual = actualFunc(response);
@@ -59,17 +62,26 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             return this;
         }
 
-        public HttpServerTests_Fluent AssertLastResponse<T>(Func<ContentEncodingHeader, T> actualFunc, T expected)
+        public FluentHttpServerTests AssertLastResponse<T, T1>(Func<T, T1> actualFunc, T1 expected) where T : IHttpHeader
         {
             var response = _responses.Last();
-            var header = response.Headers.OfType<ContentEncodingHeader>().First();
+            var header = response.Headers.OfType<T>().First();
             var actual = actualFunc(header);
 
             Assert.AreEqual(expected, actual);
             return this;
         }
 
-        public HttpServerTests_Fluent AssertRouteHandlerRequest<T>(Func<IHttpServerRequest, T> actualFunc, T expected)
+        public FluentHttpServerTests AssertLastResponseHasNoHeaderOf<T>() where T : IHttpHeader
+        {
+            var response = _responses.Last();
+            var anyHeaderOfTypeT = response.Headers.OfType<T>().Any();            
+
+            Assert.IsFalse(anyHeaderOfTypeT);
+            return this;
+        }
+
+        public FluentHttpServerTests AssertRouteHandlerRequest<T>(Func<IHttpServerRequest, T> actualFunc, T expected)
         {
             var routeHandler = _routeHandlers.Single().Value;
             var request = routeHandler.Requests.Last();
@@ -79,21 +91,21 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             return this;
         }
 
-        public HttpServerTests_Fluent AssertRouteHandlerReceivedRequest()
+        public FluentHttpServerTests AssertRouteHandlerReceivedRequest()
         {
             var routeHandler = _routeHandlers.Single().Value;
             Assert.AreEqual(1, routeHandler.Requests.Count());
             return this;
         }
 
-        public HttpServerTests_Fluent AssertRouteHandlerReceivedNoRequests()
+        public FluentHttpServerTests AssertRouteHandlerReceivedNoRequests()
         {
             var routeHandler = _routeHandlers.Single().Value;
             Assert.AreEqual(0, routeHandler.Requests.Count());
             return this;
         }
 
-        public HttpServerTests_Fluent AssertRouteHandlerRequest<T>(string prefix, Func<IHttpServerRequest, T> actualFunc, T expected)
+        public FluentHttpServerTests AssertRouteHandlerRequest<T>(string prefix, Func<IHttpServerRequest, T> actualFunc, T expected)
         {
             var routeHandler = _routeHandlers[prefix];
             var request = routeHandler.Requests.Last();
@@ -103,14 +115,14 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             return this;
         }
 
-        public HttpServerTests_Fluent AssertRouteHandlerReceivedRequest(string prefix)
+        public FluentHttpServerTests AssertRouteHandlerReceivedRequest(string prefix)
         {
             var routeHandler = _routeHandlers[prefix];
             Assert.AreEqual(1, routeHandler.Requests.Count());
             return this;
         }
 
-        public HttpServerTests_Fluent AssertRouteHandlerReceivedNoRequests(string prefix)
+        public FluentHttpServerTests AssertRouteHandlerReceivedNoRequests(string prefix)
         {
             var routeHandler = _routeHandlers[prefix];
             Assert.AreEqual(0, routeHandler.Requests.Count());
