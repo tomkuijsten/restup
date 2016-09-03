@@ -21,6 +21,7 @@ namespace Restup.Webserver.Http
         private readonly SortedSet<RouteRegistration> _routes;
         private readonly ContentEncoderFactory _contentEncoderFactory;
         private ILogger _log;
+        private readonly List<IHttpMessageInspector> _messageInspectors;
 
         public HttpServer(int serverPort)
         {
@@ -31,6 +32,7 @@ namespace Restup.Webserver.Http
 
             _listener.ConnectionReceived += ProcessRequestAsync;
             _contentEncoderFactory = new ContentEncoderFactory();
+            _messageInspectors = new List<IHttpMessageInspector>();
         }
 
         public async Task StartServerAsync()
@@ -73,6 +75,18 @@ namespace Restup.Webserver.Http
             _routes.Add(routeRegistration);
         }
 
+        /// <summary>
+        /// Enables cors support if <param name="validOrigins" /> is not used then all origins are accepted.
+        /// </summary>
+        /// <param name="validOrigins">The origins to accept, if left empty then all origins are accepted.</param>
+        public void EnableCors(params string[] validOrigins)
+        {
+            if (validOrigins == null || !validOrigins.Any())
+                validOrigins = new[] { "*" };
+
+            _messageInspectors.Add(new CorsMessageInspector(validOrigins));
+        }
+
         private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
             await Task.Run(async () =>
@@ -110,31 +124,39 @@ namespace Restup.Webserver.Http
                 return HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.BadRequest);
             }
 
-            HttpServerResponse httpResponse;
-            if (request.Method == HttpMethod.OPTIONS)
-            {
-                // max age possible by chrome https://code.google.com/p/chromium/codesearch#chromium/src/third_party/WebKit/Source/core/loader/CrossOriginPreflightResultCache.cpp&l=40&rcl=1399481969
-                httpResponse = HttpServerResponse.Create(HttpResponseStatus.OK);
-                httpResponse.AddHeader(new AccessControlAllowMethodsHeader(new[] { HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE,HttpMethod.OPTIONS,  }));
-                httpResponse.AddHeader(new AccessControlMaxAgeHeader(10 * 60));
-                if (request.AccessControlRequestHeaders.Any())
-                    httpResponse.AddHeader(new AccessControlAllowHeadersHeader(request.AccessControlRequestHeaders));
-            }
-            else
-            {
-                httpResponse = await routeRegistration.HandleAsync(request);
-            }
+            var httpResponse = ApplyMessageInspectorsBeforeHandleRequest(request);
 
-            var responseWithContentEncoding = await AddContentEncodingAsync(httpResponse, request.AcceptEncodings);
-            return AddCorsHeaders(request, responseWithContentEncoding);
+            if (httpResponse == null)
+                httpResponse = await routeRegistration.HandleAsync(request);
+
+            httpResponse = await AddContentEncodingAsync(httpResponse, request.AcceptEncodings);
+            httpResponse = ApplyMessageInspectorsAfterHandleRequest(request, httpResponse);
+
+            return httpResponse;
         }
 
-        private static HttpServerResponse AddCorsHeaders(IHttpServerRequest request, HttpServerResponse responseWithContentEncoding)
+        private HttpServerResponse ApplyMessageInspectorsBeforeHandleRequest(IHttpServerRequest request)
         {
-            if (!string.IsNullOrWhiteSpace(request.Origin))
-                responseWithContentEncoding.AddHeader(new AccessControlAllowOriginHeader("*"));
+            foreach (var httpMessageInspector in _messageInspectors)
+            {
+                var result = httpMessageInspector.BeforeHandleRequest(request);
+                if (result != null)
+                    return result.Response;
+            }
 
-            return responseWithContentEncoding;
+            return null;
+        }
+
+        private HttpServerResponse ApplyMessageInspectorsAfterHandleRequest(IHttpServerRequest request,
+            HttpServerResponse httpResponse)
+        {
+            foreach (var httpMessageInspector in _messageInspectors)
+            {
+                var result = httpMessageInspector.AfterHandleRequest(request, httpResponse);
+                if (result != null)
+                    httpResponse = result.Response;
+            }
+            return httpResponse;
         }
 
         private async Task<HttpServerResponse> AddContentEncodingAsync(HttpServerResponse httpResponse, IEnumerable<string> acceptEncodings)

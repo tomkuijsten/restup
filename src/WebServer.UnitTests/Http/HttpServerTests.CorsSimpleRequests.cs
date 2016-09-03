@@ -15,6 +15,7 @@ namespace Restup.Webserver.UnitTests.Http
             new FluentHttpServerTests()
                 .Given
                     .ListeningOnDefaultRoute()
+                    .CorsIsEnabled()
                 .When
                     .RequestHasArrived("/Get", origin: "http://testrequest.com")
                 .Then

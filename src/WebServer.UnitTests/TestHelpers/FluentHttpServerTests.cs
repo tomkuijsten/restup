@@ -137,5 +137,11 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             Assert.AreEqual(0, routeHandler.Requests.Count());
             return this;
         }
+
+        public FluentHttpServerTests CorsIsEnabled(params string[] validOrigins)
+        {
+            _httpServer.EnableCors(validOrigins);
+            return this;
+        }
     }
 }

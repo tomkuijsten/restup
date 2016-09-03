@@ -14,6 +14,7 @@ namespace Restup.Webserver.UnitTests.Http
             new FluentHttpServerTests()
                 .Given
                     .ListeningOnDefaultRoute()
+                    .CorsIsEnabled()
                 .When
                     .RequestHasArrived("/Get", method: HttpMethod.OPTIONS, 
                     contentType: "application/x-www-form-urlencoded",
@@ -24,15 +25,54 @@ namespace Restup.Webserver.UnitTests.Http
                     .AssertLastResponse<AccessControlAllowOriginHeader>("*")
                     .AssertLastResponse<AccessControlAllowMethodsHeader>("GET, POST, PUT, DELETE, OPTIONS")
                     .AssertLastResponseHasNoHeaderOf<AccessControlAllowHeadersHeader>()
-                    .AssertLastResponse<AccessControlMaxAgeHeader>("600")
-;
+                    .AssertLastResponse<AccessControlMaxAgeHeader>("600");
         }
+
+        [TestMethod]
+        public void PreflightRequest_WithOnlyTheExactOriginEnabled_ReturnsTrue()
+        {
+            new FluentHttpServerTests()
+                .Given
+                    .ListeningOnDefaultRoute()
+                    .CorsIsEnabled("http://testrequest.com")
+                .When
+                    .RequestHasArrived("/Get", method: HttpMethod.OPTIONS,
+                        contentType: "application/x-www-form-urlencoded",
+                        origin: "http://testrequest.com",
+                        accessControlRequestMethod: HttpMethod.POST)
+                .Then
+                    .AssertRouteHandlerReceivedNoRequests()
+                    .AssertLastResponse<AccessControlAllowOriginHeader>("http://testrequest.com")
+                    .AssertLastResponse<AccessControlAllowMethodsHeader>("GET, POST, PUT, DELETE, OPTIONS")
+                    .AssertLastResponseHasNoHeaderOf<AccessControlAllowHeadersHeader>();
+        }
+
+        [TestMethod]
+        public void PreflightRequest_WithOriginNotInTheList_ThenNoCorsHeadersArePresent()
+        {
+            new FluentHttpServerTests()
+                .Given
+                    .ListeningOnDefaultRoute()
+                    .CorsIsEnabled("http://iamtheonlyoriginthatcounts.com")
+                .When
+                    .RequestHasArrived("/Get", method: HttpMethod.OPTIONS,
+                        contentType: "application/x-www-form-urlencoded",
+                        origin: "http://testrequest.com",
+                        accessControlRequestMethod: HttpMethod.POST)
+                .Then
+                    .AssertRouteHandlerReceivedRequest()
+                    .AssertLastResponseHasNoHeaderOf<AccessControlAllowOriginHeader>()
+                    .AssertLastResponseHasNoHeaderOf<AccessControlAllowMethodsHeader>()
+                    .AssertLastResponseHasNoHeaderOf<AccessControlAllowHeadersHeader>();
+        }
+
         [TestMethod]
         public void PreflightRequest_RequestWithAccessControlRequestHeaders()
         {
             new FluentHttpServerTests()
                 .Given
                     .ListeningOnDefaultRoute()
+                    .CorsIsEnabled()
                 .When
                     .RequestHasArrived( "/Get", method: HttpMethod.OPTIONS, contentType: "application/xml",
                         origin: "http://testrequest.com", 
