@@ -36,5 +36,33 @@ namespace Restup.Webserver.UnitTests.Http
                     .AssertRouteHandlerReceivedRequest()
                     .AssertLastResponseHasNoHeaderOf<AccessControlAllowOriginHeader>();
         }
+
+        [TestMethod]
+        public void SimpleRequest_WithOnlyTheExactOriginEnabled_ThenResponseShouldHaveTheAccessControlAllowOriginHeader()
+        {
+            new FluentHttpServerTests()
+                .Given
+                    .ListeningOnDefaultRoute()
+                    .CorsIsEnabled("http://testrequest.com")
+                .When
+                    .RequestHasArrived("/Get", origin: "http://testrequest.com")
+                .Then
+                    .AssertRouteHandlerReceivedRequest()
+                    .AssertLastResponse<AccessControlAllowOriginHeader, string>(x => x.Value, "*");
+        }
+
+        [TestMethod]
+        public void SimpleRequest_WithMultipleExactOriginsEnabled_ThenResponseShouldHaveTheAccessControlAllowOriginHeader()
+        {
+            new FluentHttpServerTests()
+                .Given
+                    .ListeningOnDefaultRoute()
+                    .CorsIsEnabled("http://testrequest.com", "http://testrequest2.com")
+                .When
+                    .RequestHasArrived("/Get", origin: "http://testrequest2.com")
+                .Then
+                    .AssertRouteHandlerReceivedRequest()
+                    .AssertLastResponse<AccessControlAllowOriginHeader, string>(x => x.Value, "*");
+        }
     }
 }

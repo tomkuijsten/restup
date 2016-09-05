@@ -20,7 +20,7 @@ namespace Restup.Webserver.Http
         private readonly StreamSocketListener _listener;
         private readonly SortedSet<RouteRegistration> _routes;
         private readonly ContentEncoderFactory _contentEncoderFactory;
-        private ILogger _log;
+        private readonly ILogger _log;
         private readonly List<IHttpMessageInspector> _messageInspectors;
 
         public HttpServer(int serverPort)
@@ -77,6 +77,10 @@ namespace Restup.Webserver.Http
 
         /// <summary>
         /// Enables cors support if <param name="validOrigins" /> is not used then all origins are accepted.
+        /// In the preflight request the cors headers have the following values:
+        /// Access-Control-Allow-Methods = GET, POST, PUT, DELETE, OPTIONS
+        /// Access-Control-Max-Age = 10 min
+        /// Access-Control-Allow-Headers = mirrors the Access-Control-Request-Headers field of the request.
         /// </summary>
         /// <param name="validOrigins">The origins to accept, if left empty then all origins are accepted.</param>
         public void EnableCors(params string[] validOrigins)
