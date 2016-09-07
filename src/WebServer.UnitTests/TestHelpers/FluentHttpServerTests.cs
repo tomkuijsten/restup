@@ -138,9 +138,15 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             return this;
         }
 
-        public FluentHttpServerTests CorsIsEnabled(params string[] validOrigins)
+        public FluentHttpServerTests CorsIsEnabled()
         {
-            _httpServer.EnableCors(validOrigins);
+            _httpServer.EnableCors();
+            return this;
+        }
+
+        public FluentHttpServerTests CorsIsEnabled(Action<ICorsConfigurationBuilder> builder)
+        {
+            _httpServer.EnableCors(builder);
             return this;
         }
     }

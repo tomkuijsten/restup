@@ -74,21 +74,37 @@ namespace Restup.Webserver.Http
 
             _routes.Add(routeRegistration);
         }
-
+        
         /// <summary>
-        /// Enables cors support if <param name="validOrigins" /> is not used then all origins are accepted.
+        /// Enables cors support on all origins (*).
         /// In the preflight request the cors headers have the following values:
         /// Access-Control-Allow-Methods = GET, POST, PUT, DELETE, OPTIONS
         /// Access-Control-Max-Age = 10 min
         /// Access-Control-Allow-Headers = mirrors the Access-Control-Request-Headers field of the request.
         /// </summary>
-        /// <param name="validOrigins">The origins to accept, if left empty then all origins are accepted.</param>
-        public void EnableCors(params string[] validOrigins)
+        public void EnableCors()
         {
-            if (validOrigins == null || !validOrigins.Any())
-                validOrigins = new[] { "*" };
+            EnableCors(x => x.AddAllowedOrigin("*"));
+        }
 
-            _messageInspectors.Add(new CorsMessageInspector(validOrigins));
+        /// <summary>
+        /// Enables cors support and allows to specify the cors configuration.
+        /// In the preflight request the cors headers have the following values:
+        /// Access-Control-Allow-Methods = GET, POST, PUT, DELETE, OPTIONS
+        /// Access-Control-Max-Age = 10 min
+        /// Access-Control-Allow-Headers = mirrors the Access-Control-Request-Headers field of the request.
+        /// </summary>
+        /// <example>
+        /// httpServer.EnableCors(x => x
+        ///             .AddAllowedOrigin("http://server1.com")
+        ///             .AddAllowedOrigin("http://server2.com"));
+        /// </example>
+        /// <param name="builderFunc">The cors configuration builder function.</param>
+        public void EnableCors(Action<ICorsConfigurationBuilder> builderFunc)
+        {
+            var corsConfigurationBuilder = new CorsConfigurationBuilder();
+            builderFunc(corsConfigurationBuilder);
+            _messageInspectors.Add(new CorsMessageInspector(corsConfigurationBuilder.AllowedOrigins));
         }
 
         private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)

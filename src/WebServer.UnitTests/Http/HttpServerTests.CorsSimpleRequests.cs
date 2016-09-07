@@ -43,12 +43,12 @@ namespace Restup.Webserver.UnitTests.Http
             new FluentHttpServerTests()
                 .Given
                     .ListeningOnDefaultRoute()
-                    .CorsIsEnabled("http://testrequest.com")
+                    .CorsIsEnabled(x => x.AddAllowedOrigin("http://testrequest.com"))
                 .When
                     .RequestHasArrived("/Get", origin: "http://testrequest.com")
                 .Then
                     .AssertRouteHandlerReceivedRequest()
-                    .AssertLastResponse<AccessControlAllowOriginHeader, string>(x => x.Value, "*");
+                    .AssertLastResponse<AccessControlAllowOriginHeader, string>(x => x.Value, "http://testrequest.com");
         }
 
         [TestMethod]
@@ -57,12 +57,14 @@ namespace Restup.Webserver.UnitTests.Http
             new FluentHttpServerTests()
                 .Given
                     .ListeningOnDefaultRoute()
-                    .CorsIsEnabled("http://testrequest.com", "http://testrequest2.com")
+                    .CorsIsEnabled(x => x
+                        .AddAllowedOrigin("http://testrequest.com")
+                        .AddAllowedOrigin("http://testrequest2.com"))
                 .When
                     .RequestHasArrived("/Get", origin: "http://testrequest2.com")
                 .Then
                     .AssertRouteHandlerReceivedRequest()
-                    .AssertLastResponse<AccessControlAllowOriginHeader, string>(x => x.Value, "*");
+                    .AssertLastResponse<AccessControlAllowOriginHeader, string>(x => x.Value, "http://testrequest2.com");
         }
     }
 }
