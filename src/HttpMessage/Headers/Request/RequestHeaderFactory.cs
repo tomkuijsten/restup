@@ -8,30 +8,21 @@ namespace Restup.HttpMessage.Headers.Request
 {
     internal class RequestHeaderFactory
     {
-        private Dictionary<string, Func<string, IHttpRequestHeader>> _headerCollection;
+        private readonly Dictionary<string, Func<string, IHttpRequestHeader>> _headerCollection;
 
         internal RequestHeaderFactory()
         {
             _headerCollection = new Dictionary<string, Func<string, IHttpRequestHeader>>(StringComparer.OrdinalIgnoreCase)
             {
-                [ContentLengthHeader.NAME] = CreateContentLength,
+                [ContentLengthHeader.NAME] = x => new ContentLengthHeader(x),
                 [AcceptHeader.NAME] = CreateResponseContentType,
                 [ContentTypeHeader.NAME] = CreateRequestContentType,
                 [AcceptCharsetHeader.NAME] = CreateResponseContentCharset,
                 [AcceptEncodingHeader.NAME] = CreateResponseAcceptEncoding,
-                [AccessControlRequestMethodHeader.NAME] = CreateAccessControlRequestMethodHeader,
-                [AccessControlRequestHeadersHeader.NAME] = CreateAccessControlRequestHeaders,
+                [AccessControlRequestMethodHeader.NAME] = x => new AccessControlRequestHeadersHeader(x),
+                [AccessControlRequestHeadersHeader.NAME] = x => new AccessControlRequestMethodHeader(x),
+                [OriginHeader.NAME] = x => new OriginHeader(x)
             };
-        }
-
-        private IHttpRequestHeader CreateAccessControlRequestHeaders(string arg)
-        {
-            return new AccessControlRequestHeadersHeader(arg);
-        }
-
-        private IHttpRequestHeader CreateAccessControlRequestMethodHeader(string arg)
-        {
-            return new AccessControlRequestMethodHeader(arg);
         }
 
         internal IHttpRequestHeader Create(string headerName, string headerValue)
@@ -42,11 +33,6 @@ namespace Restup.HttpMessage.Headers.Request
             }
 
             return new UntypedRequestHeader(headerName, headerValue);
-        }
-
-        private IHttpRequestHeader CreateContentLength(string headerValue)
-        {
-            return new ContentLengthHeader(headerValue);
         }
 
         private IHttpRequestHeader CreateRequestContentType(string headerValue)

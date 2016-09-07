@@ -45,7 +45,10 @@ namespace Restup.HeadedDemo
             httpServer.RegisterRoute("api", restRouteHandler);
 
             httpServer.RegisterRoute(new StaticFileRouteHandler(@"Restup.DemoStaticFiles\Web"));
+            httpServer.EnableCors(); // allow cors requests on all origins
+            // httpServer.EnableCors(x => x.AddAllowedOrigin("http://specificserver:<listen-port>"));
             await httpServer.StartServerAsync();
+
 
             // Don't release deferral, otherwise app will stop
         }

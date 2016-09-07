@@ -23,5 +23,15 @@ namespace Restup.DemoControllers
                     PropName = propName
                 });
         }
+
+        /// <summary>
+        /// Make sure the number of parameters in your UriFormat match the parameters in your method and
+        /// the names (case sensitive) and order are respected.
+        /// </summary>
+        [UriFormat("/simpleparameter/{id}/property/{propName}")]
+        public IDeleteResponse DeleteWithSimpleParameters(int id, string propName)
+        {
+            return new DeleteResponse(DeleteResponse.ResponseStatus.OK);
+        }
     }
 }
