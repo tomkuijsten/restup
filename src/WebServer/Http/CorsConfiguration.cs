@@ -2,11 +2,11 @@ using System.Collections.Generic;
 
 namespace Restup.Webserver.Http
 {
-    internal class CorsConfigurationBuilder : ICorsConfigurationBuilder
+    internal class CorsConfiguration : ICorsConfiguration
     {
         public List<string> AllowedOrigins { get; } = new List<string>();
 
-        public ICorsConfigurationBuilder AddAllowedOrigin(string allowedOrigin)
+        public ICorsConfiguration AddAllowedOrigin(string allowedOrigin)
         {
             AllowedOrigins.Add(allowedOrigin);
             return this;

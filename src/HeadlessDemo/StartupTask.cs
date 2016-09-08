@@ -26,7 +26,7 @@ namespace Restup.HeadlessDemo
             // should be removed. Which results in the application being closed.
             _deferral = taskInstance.GetDeferral();
 
-            var httpServer = new HttpServer(8800);
+            var httpServer = new HttpServer(new HttpServerConfiguration(8800));
             _httpServer = httpServer;
 
             var restRouteHandler = new RestRouteHandler();
