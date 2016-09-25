@@ -12,8 +12,8 @@ namespace Restup.Webserver.Http
 
         public RouteRegistration(string urlPrefix, IRouteHandler routeHandler)
         {
-            this._urlPrefix = urlPrefix.FormatRelativeUri();
-            this._routeHandler = routeHandler;
+            _urlPrefix = urlPrefix.FormatRelativeUri();
+            _routeHandler = routeHandler;
         }
 
         public bool Match(IHttpServerRequest request)
@@ -37,7 +37,7 @@ namespace Restup.Webserver.Http
                 request.AcceptEncodings,
                 request.AcceptMediaTypes,
                 request.Content,
-                request.IsComplete, 
+                request.IsComplete,
                 request.AccessControlRequestMethod,
                 request.AccessControlRequestHeaders,
                 request.Origin);
@@ -53,6 +53,27 @@ namespace Restup.Webserver.Http
         public int CompareTo(RouteRegistration other)
         {
             return string.Compare(other._urlPrefix, _urlPrefix, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((RouteRegistration)obj);
+        }
+
+        protected bool Equals(RouteRegistration other)
+        {
+            return string.Equals(_urlPrefix, other._urlPrefix);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return _urlPrefix?.GetHashCode() ?? 0;
+            }
         }
     }
 }

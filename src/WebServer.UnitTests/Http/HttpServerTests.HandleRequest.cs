@@ -116,19 +116,19 @@ namespace Restup.Webserver.UnitTests.Http
         [TestMethod]
         public void GivenMultipleRouteHandlersAreBeingAddedWithTheSamePrefix_ThenAnExceptionShouldBeThrown()
         {
-            var httpServer = new HttpServer(new HttpServerConfiguration(80));
-            httpServer.RegisterRoute("api", new EchoRouteHandler());
+            var configuration = new HttpServerConfiguration()
+                .RegisterRoute("api", new EchoRouteHandler());
 
-            Assert.ThrowsException<Exception>(() => httpServer.RegisterRoute("api", new EchoRouteHandler()));
+            Assert.ThrowsException<Exception>(() => configuration.RegisterRoute("api", new EchoRouteHandler()));
         }
 
         [TestMethod]
         public void GivenMultipleRouteHandlersAreBeingAddedOnTheCatchAllRoute_ThenAnExceptionShouldBeThrown()
         {
-            var httpServer = new HttpServer(new HttpServerConfiguration(80));
-            httpServer.RegisterRoute(new EchoRouteHandler());
+            var configuration = new HttpServerConfiguration();
+            configuration.RegisterRoute(new EchoRouteHandler());
 
-            Assert.ThrowsException<Exception>(() => httpServer.RegisterRoute(new EchoRouteHandler()));
+            Assert.ThrowsException<Exception>(() => configuration.RegisterRoute(new EchoRouteHandler()));
         }
     }
 }

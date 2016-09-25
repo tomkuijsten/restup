@@ -8,7 +8,6 @@ using Restup.HttpMessage;
 using Restup.HttpMessage.Headers.Response;
 using Restup.HttpMessage.Models.Contracts;
 using Restup.HttpMessage.Models.Schemas;
-using Restup.Webserver.Models.Contracts;
 using Restup.WebServer.Logging;
 
 namespace Restup.Webserver.Http
@@ -26,7 +25,6 @@ namespace Restup.Webserver.Http
         {
             _log = LogManager.GetLogger<HttpServer>();
             _port = configuration.ServerPort;
-            _routes = new SortedSet<RouteRegistration>();
             _listener = new StreamSocketListener();
 
             _listener.ConnectionReceived += ProcessRequestAsync;
@@ -35,11 +33,13 @@ namespace Restup.Webserver.Http
 
             if (configuration.CorsConfiguration != null)
                 _messageInspectors.Add(new CorsMessageInspector(configuration.CorsConfiguration.AllowedOrigins));
+
+            _routes = new SortedSet<RouteRegistration>(configuration.Routes);
         }
 
         [Obsolete("Use constructor that takes a httpServerConfiguration")]
         public HttpServer(int serverPort)
-            : this(new HttpServerConfiguration(serverPort))
+            : this(new HttpServerConfiguration().ListenOnPort(serverPort))
         {
         }
 
@@ -55,32 +55,6 @@ namespace Restup.Webserver.Http
             ((IDisposable)this).Dispose();
 
             _log.Info($"Webserver stopped listening on port {_port}");
-        }
-
-        /// <summary>
-        /// Registers the <see cref="IRouteHandler"/> on the root url.
-        /// </summary>
-        /// <param name="restRoutehandler">The rest route handler to register.</param>
-        public void RegisterRoute(IRouteHandler restRoutehandler)
-        {
-            RegisterRoute("/", restRoutehandler);
-        }
-
-        /// <summary>
-        /// Registers the <see cref="IRouteHandler"/> on the specified url prefix.
-        /// </summary>
-        /// <param name="urlPrefix">The urlprefix to use, e.g. /api, /api/v001, etc. </param>
-        /// <param name="restRoutehandler">The rest route handler to register.</param>
-        public void RegisterRoute(string urlPrefix, IRouteHandler restRoutehandler)
-        {
-            var routeRegistration = new RouteRegistration(urlPrefix, restRoutehandler);
-
-            if (_routes.Contains(routeRegistration))
-            {
-                throw new Exception($"RouteHandler already registered for prefix: {urlPrefix}");
-            }
-
-            _routes.Add(routeRegistration);
         }
 
         private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)

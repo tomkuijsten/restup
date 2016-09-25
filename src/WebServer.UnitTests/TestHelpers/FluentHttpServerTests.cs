@@ -1,12 +1,11 @@
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Restup.HttpMessage;
-using Restup.HttpMessage.Headers.Response;
-using Restup.Webserver.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage;
 using Restup.HttpMessage.Models.Contracts;
 using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Http;
 
 namespace Restup.Webserver.UnitTests.TestHelpers
 {
@@ -16,7 +15,7 @@ namespace Restup.Webserver.UnitTests.TestHelpers
         private readonly List<HttpServerResponse> _responses;
 
         private readonly Dictionary<string, EchoRouteHandler> _routeHandlers;
-        private HttpServerConfiguration _configuration;
+        private readonly HttpServerConfiguration _configuration;
 
         public FluentHttpServerTests Given => this;
         public FluentHttpServerTests When => this;
@@ -24,7 +23,7 @@ namespace Restup.Webserver.UnitTests.TestHelpers
 
         public FluentHttpServerTests()
         {
-            _configuration = new HttpServerConfiguration(80);
+            _configuration = new HttpServerConfiguration();
             _httpServer = new HttpServer(_configuration);
             _responses = new List<HttpServerResponse>();
             _routeHandlers = new Dictionary<string, EchoRouteHandler>();
@@ -34,7 +33,8 @@ namespace Restup.Webserver.UnitTests.TestHelpers
         {
             var routeHandler = new EchoRouteHandler();
             _routeHandlers[string.Empty] = routeHandler;
-            _httpServer.RegisterRoute(routeHandler);
+            _configuration.RegisterRoute(routeHandler);
+            _httpServer = new HttpServer(_configuration);
             return this;
         }
 
@@ -42,7 +42,8 @@ namespace Restup.Webserver.UnitTests.TestHelpers
         {
             var routeHandler = new EchoRouteHandler();
             _routeHandlers[urlPrefix] = routeHandler;
-            _httpServer.RegisterRoute(urlPrefix, routeHandler);
+            _configuration.RegisterRoute(urlPrefix, routeHandler);
+            _httpServer = new HttpServer(_configuration);
             return this;
         }
 
