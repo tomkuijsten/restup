@@ -34,7 +34,7 @@ namespace Restup.Webserver.UnitTests.Http
             new FluentHttpServerTests()
                 .Given
                     .ListeningOnDefaultRoute()
-                    .CorsIsEnabled("http://testrequest.com")
+                    .CorsIsEnabled(x => x.AddAllowedOrigin("http://testrequest.com"))
                 .When
                     .RequestHasArrived("/Get", method: HttpMethod.OPTIONS,
                         contentType: "application/x-www-form-urlencoded",
@@ -53,7 +53,7 @@ namespace Restup.Webserver.UnitTests.Http
             new FluentHttpServerTests()
                 .Given
                     .ListeningOnDefaultRoute()
-                    .CorsIsEnabled("http://iamtheonlyoriginthatcounts.com")
+                    .CorsIsEnabled(x => x.AddAllowedOrigin("http://iamtheonlyoriginthatcounts.com"))
                 .When
                     .RequestHasArrived("/Get", method: HttpMethod.OPTIONS,
                         contentType: "application/x-www-form-urlencoded",

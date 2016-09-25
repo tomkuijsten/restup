@@ -131,10 +131,13 @@
     <Compile Include="Http\ContentCoding.cs" />
     <Compile Include="Http\CompressContentEncoder.cs" />
     <Compile Include="Http\ContentEncoderFactory.cs" />
+    <Compile Include="Http\CorsConfiguration.cs" />
     <Compile Include="Http\CorsMessageInspector.cs" />
     <Compile Include="Http\DeflateContentEncoder.cs" />
     <Compile Include="Http\GzipContentEncoder.cs" />
+    <Compile Include="Http\HttpServerConfiguration.cs" />
     <Compile Include="Http\IContentEncoder.cs" />
+    <Compile Include="Http\ICorsConfiguration.cs" />
     <Compile Include="Http\IHttpMessageInspector.cs" />
     <Compile Include="Http\NoContentEncoder.cs" />
     <Compile Include="Http\RouteRegistration.cs" />

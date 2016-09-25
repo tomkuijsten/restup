@@ -29,7 +29,7 @@ namespace Restup.HeadedDemo
 
         private async Task InitializeWebServer()
         {
-            var httpServer = new HttpServer(8800);
+            var httpServer = new HttpServer(new HttpServerConfiguration(8800));
             _httpServer = httpServer;
 
             var restRouteHandler = new RestRouteHandler();

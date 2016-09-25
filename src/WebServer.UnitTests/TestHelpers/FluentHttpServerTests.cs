@@ -12,10 +12,11 @@ namespace Restup.Webserver.UnitTests.TestHelpers
 {
     public class FluentHttpServerTests
     {
-        private readonly HttpServer _httpServer;
+        private HttpServer _httpServer;
         private readonly List<HttpServerResponse> _responses;
 
         private readonly Dictionary<string, EchoRouteHandler> _routeHandlers;
+        private HttpServerConfiguration _configuration;
 
         public FluentHttpServerTests Given => this;
         public FluentHttpServerTests When => this;
@@ -23,7 +24,8 @@ namespace Restup.Webserver.UnitTests.TestHelpers
 
         public FluentHttpServerTests()
         {
-            _httpServer = new HttpServer(80);
+            _configuration = new HttpServerConfiguration(80);
+            _httpServer = new HttpServer(_configuration);
             _responses = new List<HttpServerResponse>();
             _routeHandlers = new Dictionary<string, EchoRouteHandler>();
         }
@@ -138,9 +140,17 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             return this;
         }
 
-        public FluentHttpServerTests CorsIsEnabled(params string[] validOrigins)
+        public FluentHttpServerTests CorsIsEnabled()
         {
-            _httpServer.EnableCors(validOrigins);
+            _configuration.EnableCors();
+            _httpServer = new HttpServer(_configuration);
+            return this;
+        }
+
+        public FluentHttpServerTests CorsIsEnabled(Action<ICorsConfiguration> builder)
+        {
+            _configuration.EnableCors(builder);
+            _httpServer = new HttpServer(_configuration);
             return this;
         }
     }
