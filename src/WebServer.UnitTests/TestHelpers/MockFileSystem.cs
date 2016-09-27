@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Restup.Webserver.UnitTests.File
+namespace Restup.Webserver.UnitTests.TestHelpers
 {
     public class MockFileSystem : IFileSystem
     {

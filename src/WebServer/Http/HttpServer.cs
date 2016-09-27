@@ -1,15 +1,13 @@
-﻿using Restup.HttpMessage;
-using Restup.HttpMessage.Headers.Response;
-using Restup.HttpMessage.Models.Contracts;
-using Restup.HttpMessage.Models.Schemas;
-using Restup.Webserver.Models.Contracts;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Networking.Sockets;
+using Restup.HttpMessage;
+using Restup.HttpMessage.Headers.Response;
+using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
 using Restup.WebServer.Logging;
 
 namespace Restup.Webserver.Http
@@ -20,17 +18,29 @@ namespace Restup.Webserver.Http
         private readonly StreamSocketListener _listener;
         private readonly SortedSet<RouteRegistration> _routes;
         private readonly ContentEncoderFactory _contentEncoderFactory;
-        private ILogger _log;
+        private readonly ILogger _log;
+        private readonly List<IHttpMessageInspector> _messageInspectors;
 
-        public HttpServer(int serverPort)
+        public HttpServer(HttpServerConfiguration configuration)
         {
             _log = LogManager.GetLogger<HttpServer>();
-            _port = serverPort;
-            _routes = new SortedSet<RouteRegistration>();
+            _port = configuration.ServerPort;
             _listener = new StreamSocketListener();
 
             _listener.ConnectionReceived += ProcessRequestAsync;
             _contentEncoderFactory = new ContentEncoderFactory();
+            _messageInspectors = new List<IHttpMessageInspector>();
+
+            if (configuration.CorsConfiguration != null)
+                _messageInspectors.Add(new CorsMessageInspector(configuration.CorsConfiguration.AllowedOrigins));
+
+            _routes = new SortedSet<RouteRegistration>(configuration.Routes);
+        }
+
+        [Obsolete("Use constructor that takes a httpServerConfiguration")]
+        public HttpServer(int serverPort)
+            : this(new HttpServerConfiguration().ListenOnPort(serverPort))
+        {
         }
 
         public async Task StartServerAsync()
@@ -47,32 +57,6 @@ namespace Restup.Webserver.Http
             _log.Info($"Webserver stopped listening on port {_port}");
         }
 
-        /// <summary>
-        /// Registers the <see cref="IRouteHandler"/> on the root url.
-        /// </summary>
-        /// <param name="restRoutehandler">The rest route handler to register.</param>
-        public void RegisterRoute(IRouteHandler restRoutehandler)
-        {
-            RegisterRoute("/", restRoutehandler);
-        }
-
-        /// <summary>
-        /// Registers the <see cref="IRouteHandler"/> on the specified url prefix.
-        /// </summary>
-        /// <param name="urlPrefix">The urlprefix to use, e.g. /api, /api/v001, etc. </param>
-        /// <param name="restRoutehandler">The rest route handler to register.</param>
-        public void RegisterRoute(string urlPrefix, IRouteHandler restRoutehandler)
-        {
-            var routeRegistration = new RouteRegistration(urlPrefix, restRoutehandler);
-
-            if (_routes.Contains(routeRegistration))
-            {
-                throw new Exception($"RouteHandler already registered for prefix: {urlPrefix}");
-            }
-
-            _routes.Add(routeRegistration);
-        }
-
         private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
             await Task.Run(async () =>
@@ -82,7 +66,6 @@ namespace Restup.Webserver.Http
                     using (var inputStream = args.Socket.InputStream)
                     {
                         var request = await MutableHttpServerRequest.Parse(inputStream);
-
                         var httpResponse = await HandleRequestAsync(request);
 
                         await WriteResponseAsync(httpResponse, args.Socket);
@@ -111,8 +94,39 @@ namespace Restup.Webserver.Http
                 return HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.BadRequest);
             }
 
-            var httpResponse = await routeRegistration.HandleAsync(request);
-            return await AddContentEncodingAsync(httpResponse, request.AcceptEncodings);
+            var httpResponse = ApplyMessageInspectorsBeforeHandleRequest(request);
+
+            if (httpResponse == null)
+                httpResponse = await routeRegistration.HandleAsync(request);
+
+            httpResponse = await AddContentEncodingAsync(httpResponse, request.AcceptEncodings);
+            httpResponse = ApplyMessageInspectorsAfterHandleRequest(request, httpResponse);
+
+            return httpResponse;
+        }
+
+        private HttpServerResponse ApplyMessageInspectorsBeforeHandleRequest(IHttpServerRequest request)
+        {
+            foreach (var httpMessageInspector in _messageInspectors)
+            {
+                var result = httpMessageInspector.BeforeHandleRequest(request);
+                if (result != null)
+                    return result.Response;
+            }
+
+            return null;
+        }
+
+        private HttpServerResponse ApplyMessageInspectorsAfterHandleRequest(IHttpServerRequest request,
+            HttpServerResponse httpResponse)
+        {
+            foreach (var httpMessageInspector in _messageInspectors)
+            {
+                var result = httpMessageInspector.AfterHandleRequest(request, httpResponse);
+                if (result != null)
+                    httpResponse = result.Response;
+            }
+            return httpResponse;
         }
 
         private async Task<HttpServerResponse> AddContentEncodingAsync(HttpServerResponse httpResponse, IEnumerable<string> acceptEncodings)

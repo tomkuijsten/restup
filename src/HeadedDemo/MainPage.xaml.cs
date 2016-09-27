@@ -29,9 +29,6 @@ namespace Restup.HeadedDemo
 
         private async Task InitializeWebServer()
         {
-            var httpServer = new HttpServer(8800);
-            _httpServer = httpServer;
-
             var restRouteHandler = new RestRouteHandler();
 
             restRouteHandler.RegisterController<AsyncControllerSample>();
@@ -42,10 +39,18 @@ namespace Restup.HeadedDemo
             restRouteHandler.RegisterController<ThrowExceptionControllerSample>();
             restRouteHandler.RegisterController<WithResponseContentControllerSample>();
 
-            httpServer.RegisterRoute("api", restRouteHandler);
+            var configuration = new HttpServerConfiguration()
+                .ListenOnPort(8800)
+                .RegisterRoute("api", restRouteHandler)
+                .RegisterRoute("api", restRouteHandler)
+                .RegisterRoute(new StaticFileRouteHandler(@"Restup.DemoStaticFiles\Web"))
+                .EnableCors(); // allow cors requests on all origins
+              //.EnableCors(x => x.AddAllowedOrigin("http://specificserver:<listen-port>"));
 
-            httpServer.RegisterRoute(new StaticFileRouteHandler(@"Restup.DemoStaticFiles\Web"));
+            var httpServer = new HttpServer(configuration);
+            _httpServer = httpServer;
             await httpServer.StartServerAsync();
+
 
             // Don't release deferral, otherwise app will stop
         }

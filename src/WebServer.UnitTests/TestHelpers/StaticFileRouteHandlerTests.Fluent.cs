@@ -2,11 +2,10 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Restup.HttpMessage;
 using Restup.HttpMessage.Models.Schemas;
 using Restup.Webserver.File;
-using Restup.Webserver.UnitTests.TestHelpers;
 using System;
 using System.Text;
 
-namespace Restup.Webserver.UnitTests.File
+namespace Restup.Webserver.UnitTests.TestHelpers
 {
     public class StaticFileRouteHandlerFluentTests
     {

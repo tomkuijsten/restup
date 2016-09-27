@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restup.Webserver.UnitTests.File
+namespace Restup.Webserver.UnitTests.TestHelpers
 {
     public class MockFile : IFile
     {

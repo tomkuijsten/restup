@@ -35,6 +35,9 @@ namespace Restup.HttpMessage
         public IEnumerable<string> AcceptMediaTypes { get; set; }
         public byte[] Content { get; set; }
         public bool IsComplete { get; set; }
+        public HttpMethod? AccessControlRequestMethod { get; set; }
+        public IEnumerable<string> AccessControlRequestHeaders { get; set; }
+        public string Origin { get; set; }
 
         internal void AddHeader(IHttpRequestHeader header)
         {

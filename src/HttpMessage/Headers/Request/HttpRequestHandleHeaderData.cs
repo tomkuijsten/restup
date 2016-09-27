@@ -38,6 +38,16 @@ namespace Restup.HttpMessage.Headers.Request
             arg.AcceptEncodings = uh.AcceptEncodings;
         }
 
+        public void Visit(AccessControlRequestMethodHeader uh, MutableHttpServerRequest arg)
+        {
+            arg.AccessControlRequestMethod = uh.Method;
+        }
+
+        public void Visit(AccessControlRequestHeadersHeader uh, MutableHttpServerRequest arg)
+        {
+            arg.AccessControlRequestHeaders = uh.Headers;
+        }
+
         public void Visit(ContentTypeHeader uh, MutableHttpServerRequest arg)
         {
             arg.ContentTypeCharset = uh.ContentCharset;
@@ -47,6 +57,12 @@ namespace Restup.HttpMessage.Headers.Request
         public void Visit(ContentLengthHeader uh, MutableHttpServerRequest arg)
         {
             arg.ContentLength = uh.Length;
+        }
+
+        public void Visit(OriginHeader uh, MutableHttpServerRequest arg)
+        {
+            // no specific info to set for untyped header
+            arg.Origin = uh.Value;
         }
 
         public void Visit(UntypedRequestHeader uh, MutableHttpServerRequest arg)

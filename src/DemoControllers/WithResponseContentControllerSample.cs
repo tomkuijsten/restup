@@ -35,5 +35,11 @@ namespace Restup.DemoControllers
                 GetResponse.ResponseStatus.OK,
                 new ResponseData() { Status = "GET received" });
         }
+
+        [UriFormat("/withresponsecontent")]
+        public IDeleteResponse DeleteSomething()
+        {
+            return new DeleteResponse(DeleteResponse.ResponseStatus.OK);
+        }
     }
 }

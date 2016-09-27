@@ -1,8 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Restup.Webserver.Models.Schemas;
 using Restup.Webserver.Rest;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Restup.Webserver.UnitTests.Visitors
 {
@@ -17,6 +17,19 @@ namespace Restup.Webserver.UnitTests.Visitors
             var httpResponse = responseConverter.ConvertToHttpResponse(restResponse, default(RestServerRequest));
 
             Assert.AreEqual(httpResponse.Headers.First(x => x.Name == "X-CustomHeader").Value, "CustomValue");
+        }
+
+        [TestMethod]
+        public void Visit_Delete_DefaultResponse()
+        {
+            RestToHttpResponseConverter v = new RestToHttpResponseConverter();
+            var httpResponse = v.ConvertToHttpResponse(new DeleteResponse(DeleteResponse.ResponseStatus.OK), default(RestServerRequest));
+
+            string content = httpResponse.ToString();
+
+            StringAssert.Contains(content, "200 OK");
+            StringAssert.Contains(content, "Connection: ");
+            StringAssert.Contains(content, "Date: ");
         }
     }
 }

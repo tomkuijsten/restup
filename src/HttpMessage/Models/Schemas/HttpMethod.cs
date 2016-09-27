@@ -7,5 +7,6 @@
         GET,
         PUT,
         DELETE,
+        OPTIONS
     }
 }

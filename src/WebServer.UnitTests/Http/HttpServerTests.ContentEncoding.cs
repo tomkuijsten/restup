@@ -1,48 +1,50 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using Restup.HttpMessage.Headers.Request;
-using System;
+﻿using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage.Headers.Response;
+using Restup.Webserver.UnitTests.TestHelpers;
+using ContentTypeHeader = Restup.HttpMessage.Headers.Request.ContentTypeHeader;
 
 namespace Restup.Webserver.UnitTests.Http
 {
     [TestClass]
-    public class HttpServerContentEncodingTests
+    public class HttpServerTests_ContentEncoding
     {
         [TestMethod]
         public void WithGzipAcceptEncoding()
         {
-            new HttpServerFluentTests()
+            new FluentHttpServerTests()
                 .Given
                     .ListeningOnDefaultRoute()
                 .When
                     .RequestHasArrived("/Get", new[] { "gzip" }, Encoding.UTF8.GetBytes("tom"))
                 .Then
                     .AssertRouteHandlerReceivedRequest()
-                    .AssertLastResponse(x => x.Encoding, "gzip")
+                    .AssertLastResponse<ContentEncodingHeader, string>(x => x.Encoding, "gzip")
                     .AssertLastResponse(x => DecompressGzipContent(x.Content), "tom");
         }
 
         [TestMethod]
         public void WithDeflateAcceptEncoding()
         {
-            new HttpServerFluentTests()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnDefaultRoute()
                .When
                    .RequestHasArrived("/Get", new[] { "deflate" }, Encoding.UTF8.GetBytes("tom"))
                .Then
                    .AssertRouteHandlerReceivedRequest()
-                   .AssertLastResponse(x => x.Encoding, "deflate") // used http://www.txtwizard.net/compression to compress "tom", represented here in base64
+                   .AssertLastResponse<ContentEncodingHeader, string>(x => x.Encoding, "deflate")
                    .AssertLastResponse(x => DecompressDeflateContent(x.Content), "tom");
         }
 
         [TestMethod]
         public void WithNoEncoding()
         {
-            new HttpServerFluentTests()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnDefaultRoute()
                .When

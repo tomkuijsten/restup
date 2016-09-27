@@ -14,6 +14,21 @@
     <button id="pressme" type="button">Press me!</button>
     <div id="output"></div>
 </p>
+<h2>Send a request</h2>
+<form id="requestForm">
+    Request:
+    <select id="method" name="select">
+        <option value="GET" selected>GET</option> 
+        <option value="POST">POST</option>
+        <option value="PUT">PUT</option>
+        <option value="DELETE">DELETE</option>
+    </select>
+    <input id="url" type="text" value="http://127.0.0.1:8800/" /> 
+    <button id="send">Send</button> <br />
+    Output:
+    <div id="requestOutput">
+    </div>    
+</form>
 <script src="js/jquery-latest.min.js"></script>
 <script src="js/script.js"></script>
 </body>

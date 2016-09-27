@@ -1,17 +1,18 @@
-﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using System;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Restup.HttpMessage.Models.Schemas;
 using Restup.Webserver.Http;
-using System;
+using Restup.Webserver.UnitTests.TestHelpers;
 
 namespace Restup.Webserver.UnitTests.Http
 {
     [TestClass]
-    public class HttpServerTests
+    public class HttpServerTests_HandleRequest
     {
         [TestMethod]
         public void HandleRequest_RegisteredOnDefaultRoute_RoutesSuccesfully()
         {
-            new HttpServerFluentTests()
+            new FluentHttpServerTests()
                 .Given
                     .ListeningOnDefaultRoute()
                 .When
@@ -27,7 +28,7 @@ namespace Restup.Webserver.UnitTests.Http
         [DataRow("api/")]
         public void HandleRequest_RegisteredOnPrefixedRoute_RoutesSuccesfully(string registeredPrefix)
         {
-            new HttpServerFluentTests()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnRoute(registeredPrefix)
                .When
@@ -41,7 +42,7 @@ namespace Restup.Webserver.UnitTests.Http
         [TestMethod]
         public void HandleRequest_OnNonRegisteredRoute_ReturnsBadRequest()
         {
-            new HttpServerFluentTests()
+            new FluentHttpServerTests()
                .When
                    .RequestHasArrived("/api/Get")
                .Then
@@ -51,7 +52,7 @@ namespace Restup.Webserver.UnitTests.Http
         [TestMethod]
         public void GivenMultipleRouteHandlersAreAddedInSequentialOrder_WhenRequestIsReceivedOnApiRoute_ThenRequestIsSuccesfullyReceived()
         {
-            new HttpServerFluentTests()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnDefaultRoute()
                    .ListeningOnRoute("/api")
@@ -67,7 +68,7 @@ namespace Restup.Webserver.UnitTests.Http
         [TestMethod]
         public void GivenMultipleRouteHandlersAreAddedInSequentialOrder_WhenRequestIsReceivedOnAnyRoute_ThenRequestIsSuccesfullyReceived()
         {
-            new HttpServerFluentTests()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnDefaultRoute()
                    .ListeningOnRoute("/api")
@@ -83,7 +84,7 @@ namespace Restup.Webserver.UnitTests.Http
         [TestMethod]
         public void GivenMultipleRouteHandlersAreAddedInReverseOrder_WhenRequestIsReceivedOnApiRoute_ThenRequestIsSuccesfullyReceived()
         {
-            new HttpServerFluentTests()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnRoute("/api")
                    .ListeningOnDefaultRoute()
@@ -99,7 +100,7 @@ namespace Restup.Webserver.UnitTests.Http
         [TestMethod]
         public void GivenMultipleRouteHandlersAreAddedInReverseOrder_WhenRequestIsReceivedOnAnyRoute_ThenRequestIsSuccesfullyReceived()
         {
-            new HttpServerFluentTests()
+            new FluentHttpServerTests()
                .Given
                    .ListeningOnRoute("/api")
                    .ListeningOnDefaultRoute()
@@ -115,19 +116,19 @@ namespace Restup.Webserver.UnitTests.Http
         [TestMethod]
         public void GivenMultipleRouteHandlersAreBeingAddedWithTheSamePrefix_ThenAnExceptionShouldBeThrown()
         {
-            var httpServer = new HttpServer(80);
-            httpServer.RegisterRoute("api", new EchoRouteHandler());
+            var configuration = new HttpServerConfiguration()
+                .RegisterRoute("api", new EchoRouteHandler());
 
-            Assert.ThrowsException<Exception>(() => httpServer.RegisterRoute("api", new EchoRouteHandler()));
+            Assert.ThrowsException<Exception>(() => configuration.RegisterRoute("api", new EchoRouteHandler()));
         }
 
         [TestMethod]
         public void GivenMultipleRouteHandlersAreBeingAddedOnTheCatchAllRoute_ThenAnExceptionShouldBeThrown()
         {
-            var httpServer = new HttpServer(80);
-            httpServer.RegisterRoute(new EchoRouteHandler());
+            var configuration = new HttpServerConfiguration();
+            configuration.RegisterRoute(new EchoRouteHandler());
 
-            Assert.ThrowsException<Exception>(() => httpServer.RegisterRoute(new EchoRouteHandler()));
+            Assert.ThrowsException<Exception>(() => configuration.RegisterRoute(new EchoRouteHandler()));
         }
     }
 }

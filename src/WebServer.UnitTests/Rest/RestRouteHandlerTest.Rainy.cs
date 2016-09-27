@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Restup.Webserver.UnitTests
+namespace Restup.Webserver.UnitTests.Rest
 {
     [TestClass]
     public class RestRouteHandlerRainyDayTest
