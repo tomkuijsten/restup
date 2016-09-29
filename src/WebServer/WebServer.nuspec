@@ -7,12 +7,14 @@
     <authors>Tom, Jark</authors>
     <owners>Tom, Jark</owners>
     <licenseUrl>https://github.com/tomkuijsten/restup/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/tomkuijsten/restup/tree/v1.0.0-beta4</projectUrl>
+    <projectUrl>https://github.com/tomkuijsten/restup/tree/v1.0.0-rc1</projectUrl>
     <iconUrl>https://github.com/tomkuijsten/restup/blob/master/restup.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A webserver for Universal Windows Platform (UWP) apps</description>
-    <releaseNotes>
-.... (#xx)
+    <releaseNotes>CORS is supported now (read the Wiki for configuration options)
+Removed "Devkoes." from namespaces
+Url arrays implemented (#16)
+Query parameters are supported (#49)
     </releaseNotes>
     <copyright>
     </copyright>
