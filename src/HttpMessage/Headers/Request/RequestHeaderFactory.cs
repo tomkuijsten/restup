@@ -19,8 +19,8 @@ namespace Restup.HttpMessage.Headers.Request
                 [ContentTypeHeader.NAME] = CreateRequestContentType,
                 [AcceptCharsetHeader.NAME] = CreateResponseContentCharset,
                 [AcceptEncodingHeader.NAME] = CreateResponseAcceptEncoding,
-                [AccessControlRequestMethodHeader.NAME] = x => new AccessControlRequestHeadersHeader(x),
-                [AccessControlRequestHeadersHeader.NAME] = x => new AccessControlRequestMethodHeader(x),
+                [AccessControlRequestHeadersHeader.NAME] = x => new AccessControlRequestHeadersHeader(x),
+                [AccessControlRequestMethodHeader.NAME] = x => new AccessControlRequestMethodHeader(x),
                 [OriginHeader.NAME] = x => new OriginHeader(x)
             };
         }
