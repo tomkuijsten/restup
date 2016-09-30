@@ -21,6 +21,7 @@ namespace Restup.HttpMessage
             AcceptCharsets = Enumerable.Empty<string>();
             AcceptMediaTypes = Enumerable.Empty<string>();
             AcceptEncodings = Enumerable.Empty<string>();
+            AccessControlRequestHeaders = Enumerable.Empty<string>();
         }
 
         public IEnumerable<IHttpRequestHeader> Headers => _headers;
