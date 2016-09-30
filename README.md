@@ -6,6 +6,10 @@ Dev build: [![Build status](https://ci.appveyor.com/api/projects/status/h6faknf1
 
 NuGet downloads: [![NuGet downloads](https://img.shields.io/nuget/vpre/restup.svg)](https://www.nuget.org/packages/Restup/)
 
+***
+Want to start coding immediatly, read the [one pager setup](https://github.com/tomkuijsten/restup/wiki/One-pager)
+***
+
 ### Goal
 Provide a HTTP server supporting static html and REST in order to keep Windows IoT projects going. Let's hope there will be a native solution soon, although there aren't any signs for that yet (if you have one, let me [know](https://github.com/tomkuijsten/restup/issues/new)).
 
