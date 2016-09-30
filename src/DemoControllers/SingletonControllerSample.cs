@@ -15,7 +15,7 @@ namespace Restup.DemoControllers
         {
             return new GetResponse(
                 GetResponse.ResponseStatus.OK,
-                new WebserverInfo() { TotalCallsHandled = _totalNrOfCallsHandled++ });
+                new WebserverInfo() { TotalCallsHandled = ++_totalNrOfCallsHandled });
         }
 
         [UriFormat("/singletonwithparameter?p={v}")]
@@ -24,7 +24,7 @@ namespace Restup.DemoControllers
             long.TryParse(v, out _totalNrOfCallsHandled);
             return new GetResponse(
                 GetResponse.ResponseStatus.OK,
-                new WebserverInfo() { TotalCallsHandled = _totalNrOfCallsHandled++ });
+                new WebserverInfo() { TotalCallsHandled = ++_totalNrOfCallsHandled });
         }
     }
 }

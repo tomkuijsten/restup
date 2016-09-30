@@ -23,7 +23,7 @@ namespace Restup.DemoControllers
         {
             return new GetResponse(
                 GetResponse.ResponseStatus.OK,
-                new CallInfo() { TotalCallsHandled = _totalNrOfCallsHandled++ });
+                new CallInfo() { TotalCallsHandled = ++_totalNrOfCallsHandled });
         }
     }
 }
