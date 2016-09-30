@@ -42,10 +42,9 @@ namespace Restup.HeadedDemo
             var configuration = new HttpServerConfiguration()
                 .ListenOnPort(8800)
                 .RegisterRoute("api", restRouteHandler)
-                .RegisterRoute("api", restRouteHandler)
                 .RegisterRoute(new StaticFileRouteHandler(@"Restup.DemoStaticFiles\Web"))
                 .EnableCors(); // allow cors requests on all origins
-              //.EnableCors(x => x.AddAllowedOrigin("http://specificserver:<listen-port>"));
+                               //.EnableCors(x => x.AddAllowedOrigin("http://specificserver:<listen-port>"));
 
             var httpServer = new HttpServer(configuration);
             _httpServer = httpServer;
