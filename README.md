@@ -1,4 +1,4 @@
-# Webservice for Universal Windows Apps
+# Webserver for Universal Windows Apps
 
 Release build: [![Build status](https://ci.appveyor.com/api/projects/status/jhdlmysux72qej51?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup-hwwpp)
 
