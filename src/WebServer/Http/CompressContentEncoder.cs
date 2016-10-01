@@ -1,8 +1,8 @@
+using Restup.HttpMessage.Headers.Response;
 using System.IO;
 using System.Threading.Tasks;
-using Devkoes.HttpMessage.Headers.Response;
 
-namespace Devkoes.Restup.WebServer.Http
+namespace Restup.Webserver.Http
 {
     internal abstract class CompressContentEncoder : IContentEncoder
     {

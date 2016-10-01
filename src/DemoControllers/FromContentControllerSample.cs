@@ -1,11 +1,11 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Restup.DemoControllers.Model;
+using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
 using System;
 using System.Diagnostics;
-using Devkoes.Restup.DemoControllers.Model;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
-namespace Devkoes.Restup.DemoControllers
+namespace Restup.DemoControllers
 {
     [RestController(InstanceCreationType.PerCall)]
     public sealed class FromContentControllerSample

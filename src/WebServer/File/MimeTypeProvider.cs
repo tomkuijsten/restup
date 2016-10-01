@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace Devkoes.Restup.WebServer.File
+namespace Restup.Webserver.File
 {
     public class MimeTypeProvider
     {
@@ -462,19 +462,19 @@ namespace Devkoes.Restup.WebServer.File
             if (!mimeTypesByExtension.All(x => x.Key.StartsWith(".")))
                 throw new Exception("The keys in the dictionary needs to all start with a '.'");
 
-            this.mimeTypesByExtension = mimeTypesByExtension.ToImmutableDictionary(StringComparer.OrdinalIgnoreCase);            
+            this.mimeTypesByExtension = mimeTypesByExtension.ToImmutableDictionary(StringComparer.OrdinalIgnoreCase);
         }
 
         public string GetMimeType(IFile file)
         {
             // first try to find the mime type in the specified list
             string contentType;
-            if (!string.IsNullOrWhiteSpace(file.Extension) && 
+            if (!string.IsNullOrWhiteSpace(file.Extension) &&
                 mimeTypesByExtension.TryGetValue(file.Extension, out contentType))
                 return contentType;
 
             // fall back to content type provided by file
             return file.ContentType;
         }
-    }    
+    }
 }

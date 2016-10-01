@@ -1,17 +1,18 @@
+using Restup.Webserver.Models;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal abstract class RestMethodExecutor : IRestMethodExecutor
     {
-        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, RestServerRequest request)
+        public async Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri)
         {
-            var methodInvokeResult = ExecuteAnonymousMethod(info, request);
+            var methodInvokeResult = ExecuteAnonymousMethod(info, request, requestUri);
             switch (info.ReturnTypeWrapper)
             {
                 case RestControllerMethodInfo.TypeWrapper.None:
@@ -30,6 +31,6 @@ namespace Devkoes.Restup.WebServer.Rest
             return methodInvokeResult.AsTask();
         }
 
-        protected abstract object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request);
+        protected abstract object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri);
     }
 }

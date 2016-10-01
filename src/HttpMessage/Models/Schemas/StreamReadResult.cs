@@ -1,4 +1,4 @@
-﻿namespace Devkoes.HttpMessage.Models.Schemas
+﻿namespace Restup.HttpMessage.Models.Schemas
 {
     internal struct StreamReadResult
     {

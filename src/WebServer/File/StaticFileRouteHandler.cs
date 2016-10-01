@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Restup.HttpMessage;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Models.Contracts;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.File
+namespace Restup.Webserver.File
 {
     public class StaticFileRouteHandler : IRouteHandler
     {
@@ -57,12 +57,10 @@ namespace Devkoes.Restup.WebServer.File
 
         private static HttpServerResponse GetFileNotFoundResponse(string localPath)
         {
-            var notFoundResponse = new HttpServerResponse(new Version(1, 1), HttpResponseStatus.NotFound)
-            {
-                Content = Encoding.UTF8.GetBytes($"File at {localPath} not found."),
-                ContentType = "text/plain",
-                ContentCharset = "utf-8"
-            };
+            var notFoundResponse = HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.NotFound);
+            notFoundResponse.Content = Encoding.UTF8.GetBytes($"File at {localPath} not found.");
+            notFoundResponse.ContentType = "text/plain";
+            notFoundResponse.ContentCharset = "utf-8";
 
             return notFoundResponse;
         }
@@ -71,13 +69,11 @@ namespace Devkoes.Restup.WebServer.File
         {
             // https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
             // The method specified in the Request-Line is not allowed for the resource identified by the Request-URI. The response MUST include an Allow header containing a list of valid methods for the requested resource.
-            var methodNotAllowedResponse = new HttpServerResponse(new Version(1, 1), HttpResponseStatus.MethodNotAllowed)
-            {
-                Content = Encoding.UTF8.GetBytes($"Unsupported method {method}."),
-                Allow = new[] { HttpMethod.GET },
-                ContentType = "text/plain",
-                ContentCharset = "utf-8"
-            };
+            var methodNotAllowedResponse = HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.MethodNotAllowed);
+            methodNotAllowedResponse.Content = Encoding.UTF8.GetBytes($"Unsupported method {method}.");
+            methodNotAllowedResponse.Allow = new[] { HttpMethod.GET };
+            methodNotAllowedResponse.ContentType = "text/plain";
+            methodNotAllowedResponse.ContentCharset = "utf-8";
 
             return methodNotAllowedResponse;
         }
@@ -91,11 +87,11 @@ namespace Devkoes.Restup.WebServer.File
                 // slightly inefficient since we're reading the whole file into memory... Should probably expose the http response stream directly somehow
                 await inputStream.CopyToAsync(memoryStream);
 
-                return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.OK)
-                {
-                    Content = memoryStream.ToArray(), // and make another copy of the file... for now this will do
-                    ContentType = _mimeTypeProvider.GetMimeType(item)
-                };
+                var response = HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.OK);
+                response.Content = memoryStream.ToArray(); // and make another copy of the file... for now this will do
+                response.ContentType = _mimeTypeProvider.GetMimeType(item);
+
+                return response;
             }
         }
 

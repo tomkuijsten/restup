@@ -1,7 +1,7 @@
-﻿using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Restup.Webserver.Models.Contracts;
 using System;
 
-namespace Devkoes.Restup.WebServer.InstanceCreators
+namespace Restup.Webserver.InstanceCreators
 {
     internal class SingletonInstanceCreator : IInstanceCreator
     {

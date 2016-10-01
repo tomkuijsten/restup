@@ -7,8 +7,8 @@
     <ProjectGuid>{8383DC52-161B-4085-B133-4420E995668D}</ProjectGuid>
     <OutputType>winmdobj</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Devkoes.Restup.DemoControllers</RootNamespace>
-    <AssemblyName>Devkoes.Restup.DemoControllers</AssemblyName>
+    <RootNamespace>Restup.DemoControllers</RootNamespace>
+    <AssemblyName>Restup.DemoControllers</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
@@ -123,13 +123,13 @@
     <EmbeddedResource Include="Properties\DemoControllers.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebServer.Rest.Models.Contracts\WebServer.Rest.Models.Contracts.csproj">
+    <ProjectReference Include="..\WebServer.Models\Webserver.Models.csproj">
       <Project>{0B20D095-2896-41A6-865D-172DFD5ECC99}</Project>
-      <Name>WebServer.Rest.Models.Contracts</Name>
+      <Name>Webserver.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WebServer\WebServer.csproj">
+    <ProjectReference Include="..\WebServer\Webserver.csproj">
       <Project>{837b8ff3-ded6-4dc7-ad58-dbb0b3e44dd4}</Project>
-      <Name>WebServer</Name>
+      <Name>Webserver</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

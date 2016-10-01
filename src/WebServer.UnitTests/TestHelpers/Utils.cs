@@ -1,14 +1,13 @@
+using Restup.HttpMessage;
+using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Models.Schemas;
+using Restup.Webserver.Rest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using Devkoes.HttpMessage;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest;
 
-namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
+namespace Restup.Webserver.UnitTests.TestHelpers
 {
     // helper methods to make it easier to change the creation of classes in the future
     public static class Utils
@@ -42,7 +41,10 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
 
         public static HttpServerResponse CreateOkHttpServerResponse(byte[] content = null)
         {
-            return new HttpServerResponse(new Version(1, 1), HttpResponseStatus.OK) { Content = content };
+            var response = HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.OK);
+            response.Content = content;
+
+            return response;
         }
 
         public static IHttpServerRequest CreateHttpRequest(IEnumerable<IHttpRequestHeader> headers = null,
@@ -51,14 +53,15 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
             int contentLength = 0, string contentType = null,
             IEnumerable<string> acceptEncodings = null,
             IEnumerable<string> acceptMediaTypes = null, byte[] content = null,
-            bool isComplete = true)
-        {
+            bool isComplete = true, HttpMethod? accessControlRequestMethod = null, 
+            IEnumerable<string> accessControlRequestHeaders = null, string origin = null)
+        {            
             return new HttpServerRequest(headers ?? Enumerable.Empty<IHttpRequestHeader>(), method,
                 uri ?? new Uri("/Get", UriKind.Relative), httpVersion, contentTypeCharset,
                 acceptCharsets ?? Enumerable.Empty<string>(),
-                contentLength, contentType, acceptEncodings ?? Enumerable.Empty<string>(), 
-                acceptMediaTypes ?? Enumerable.Empty<string>(), content ?? new byte[] {},
-                isComplete);
+                contentLength, contentType, acceptEncodings ?? Enumerable.Empty<string>(),
+                acceptMediaTypes ?? Enumerable.Empty<string>(), content ?? new byte[] { },
+                isComplete, accessControlRequestMethod, accessControlRequestHeaders ?? Enumerable.Empty<string>(), origin);
         }
 
         internal static RestServerRequest CreateRestServerRequest(IEnumerable<IHttpRequestHeader> headers = null,

@@ -1,9 +1,9 @@
-﻿using Devkoes.Restup.WebServer.InstanceCreators;
-using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Restup.Webserver.InstanceCreators;
+using Restup.Webserver.Models.Schemas;
 using System;
 using System.Linq;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal class RestControllerMethodExecutor : RestMethodExecutor
     {
@@ -13,15 +13,15 @@ namespace Devkoes.Restup.WebServer.Rest
         {
             _responseFactory = new RestResponseFactory();
         }
-       
-        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request)
+
+        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri)
         {
             var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
 
-            object[] parameters = null;
+            object[] parameters;
             try
             {
-                parameters = info.GetParametersFromUri(request.HttpServerRequest.Uri).ToArray();
+                parameters = info.GetParametersFromUri(requestUri).ToArray();
             }
             catch (FormatException)
             {

@@ -1,9 +1,9 @@
-﻿using Devkoes.HttpMessage;
-using Devkoes.Restup.WebServer.Models.Contracts;
+﻿using Restup.HttpMessage;
+using Restup.Webserver.Models.Contracts;
 using System;
 using System.Threading.Tasks;
 
-namespace Devkoes.Restup.WebServer.Http
+namespace Restup.Webserver.Http
 {
     internal class RouteRegistration : IComparable<RouteRegistration>
     {
@@ -12,8 +12,8 @@ namespace Devkoes.Restup.WebServer.Http
 
         public RouteRegistration(string urlPrefix, IRouteHandler routeHandler)
         {
-            this._urlPrefix = urlPrefix.FormatRelativeUri();
-            this._routeHandler = routeHandler;
+            _urlPrefix = urlPrefix.FormatRelativeUri();
+            _routeHandler = routeHandler;
         }
 
         public bool Match(IHttpServerRequest request)
@@ -37,7 +37,10 @@ namespace Devkoes.Restup.WebServer.Http
                 request.AcceptEncodings,
                 request.AcceptMediaTypes,
                 request.Content,
-                request.IsComplete);
+                request.IsComplete,
+                request.AccessControlRequestMethod,
+                request.AccessControlRequestHeaders,
+                request.Origin);
         }
 
         public async Task<HttpServerResponse> HandleAsync(IHttpServerRequest request)
@@ -50,6 +53,27 @@ namespace Devkoes.Restup.WebServer.Http
         public int CompareTo(RouteRegistration other)
         {
             return string.Compare(other._urlPrefix, _urlPrefix, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != GetType()) return false;
+            return Equals((RouteRegistration)obj);
+        }
+
+        protected bool Equals(RouteRegistration other)
+        {
+            return string.Equals(_urlPrefix, other._urlPrefix);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return _urlPrefix?.GetHashCode() ?? 0;
+            }
         }
     }
 }

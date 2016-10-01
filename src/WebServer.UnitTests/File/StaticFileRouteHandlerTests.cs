@@ -1,8 +1,9 @@
-﻿using Windows.ApplicationModel;
-using Devkoes.HttpMessage.Models.Schemas;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.UnitTests.TestHelpers;
+using Windows.ApplicationModel;
 
-namespace Devkoes.Restup.WebServer.UnitTests.File
+namespace Restup.Webserver.UnitTests.File
 {
     [TestClass]
     public class StaticFileRouteHandlerTests
@@ -19,7 +20,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.File
                 .Then
                     .AssertOkResponseExists()
                     .AssertResponse(x => x.ContentType, "text/html")
-                    .AssertResponseContent("test test test");            
+                    .AssertResponseContent("test test test");
         }
 
         [TestMethod]

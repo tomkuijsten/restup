@@ -2,29 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal class RestControllerMethodInfo
     {
-        private static readonly Regex FIND_PARAMETERKEYS_REGEX = new Regex("{(.*?)}", RegexOptions.Compiled);
-        private const string MATCHPARAMETER_REPLACE_STRING = "(?<$1>.+?)";
-        private const string MATCHURI_REPLACE_STRING = ".+?";
+        internal enum TypeWrapper
+        {
+            None,
+            Task,
+            AsyncOperation
+        }
 
-        private IEnumerable<Type> _validParameterTypes;
-        private Regex _findParameterValuesRegex;
-        private string _urlToMatch;
-        private Regex _matchUriRegex;
-        private IDictionary<string, Type> _parametersForUri;
+        private readonly IEnumerable<Type> _validParameterTypes;
 
-        internal MethodInfo MethodInfo { get; private set; }
-        internal HttpMethod Verb { get; private set; }
-        internal bool HasContentParameter { get; private set; }
-        internal Type ContentParameterType { get; private set; }
+        private readonly UriParser _uriParser;
+        private readonly ParsedUri _matchUri;
+        private readonly IEnumerable<ParameterValueGetter> _parameterGetters;
+
+        internal MethodInfo MethodInfo { get; }
+        internal HttpMethod Verb { get; }
+        internal bool HasContentParameter { get; }
+        internal Type ContentParameterType { get; }
         internal TypeWrapper ReturnTypeWrapper { get; }
         internal Func<object[]> ControllerConstructorArgs { get; }
 
@@ -34,31 +36,49 @@ namespace Devkoes.Restup.WebServer.Rest
             TypeWrapper typeWrapper)
         {
             constructorArgs.GuardNull(nameof(constructorArgs));
+            _uriParser = new UriParser();
+            _matchUri = GetUriFromMethod(methodInfo);
 
             ReturnTypeWrapper = typeWrapper;
             ControllerConstructorArgs = constructorArgs;
             MethodInfo = methodInfo;
 
-            InitializeValidParameterTypes();
-            InitializeParameters();
-            InitializeVerb();
+            _validParameterTypes = GetValidParameterTypes();
+            _parameterGetters = GetParameterGetters(methodInfo);
+            Verb = GetVerb();
 
-            GetUrlToMatch(methodInfo);
-            InitializeFindParameterRegex(_urlToMatch);
-
-            InitializeMatchUriRegex();
-            InitializeContentParameter();
+            Type contentParameterType;
+            HasContentParameter = TryGetContentParameterType(methodInfo, out contentParameterType);
+            ContentParameterType = contentParameterType;
         }
 
-        private void GetUrlToMatch(MethodInfo methodInfo)
+        private ParsedUri GetUriFromMethod(MethodInfo methodInfo)
         {
             var uriFormatter = methodInfo.GetCustomAttribute<UriFormatAttribute>();
-            _urlToMatch = CreateUriFormat(uriFormatter);
+            ParsedUri parsedUri;
+            if (!_uriParser.TryParse(uriFormatter.UriFormat, out parsedUri))
+                throw new Exception($"Could not parse uri: {uriFormatter.UriFormat}");
+
+            return parsedUri;
         }
 
-        private void InitializeValidParameterTypes()
+        private Type[] GetValidParameterTypes()
         {
-            _validParameterTypes = new[] {
+            return new[] {
+                typeof(IEnumerable<byte>),
+                typeof(IEnumerable<sbyte>),
+                typeof(IEnumerable<short>),
+                typeof(IEnumerable<ushort>),
+                typeof(IEnumerable<int>),
+                typeof(IEnumerable<uint>),
+                typeof(IEnumerable<long>),
+                typeof(IEnumerable<ulong>),
+                typeof(IEnumerable<decimal>),
+                typeof(IEnumerable<double>),
+                typeof(IEnumerable<float>),
+                typeof(IEnumerable<string>),
+                typeof(IEnumerable<bool>),
+                typeof(IEnumerable<char>),
                 typeof(string),
                 typeof(decimal),
                 typeof(double),
@@ -77,30 +97,52 @@ namespace Devkoes.Restup.WebServer.Rest
             };
         }
 
-        private void InitializeContentParameter()
+        private bool TryGetContentParameterType(MethodInfo methodInfo, out Type content)
         {
-            var fromContentParameter = MethodInfo.GetParameters().FirstOrDefault((p) => p.GetCustomAttribute<FromContentAttribute>() != null);
-            if (fromContentParameter == null)
+            var fromContentParameter = methodInfo.GetParameters().FirstOrDefault(p => p.GetCustomAttribute<FromContentAttribute>() != null);
+            if (fromContentParameter != null)
             {
-                return;
+                content = fromContentParameter.ParameterType;
+                return true;
             }
 
-            HasContentParameter = true;
-            ContentParameterType = fromContentParameter.ParameterType;
+            content = null;
+            return false;
         }
 
-        private void InitializeParameters()
+        private ParameterValueGetter[] GetParameterGetters(MethodInfo methodInfo)
         {
-            var fromUriParams = from p in MethodInfo.GetParameters()
-                                where p.GetCustomAttribute<FromContentAttribute>() == null
-                                select p;
+            var fromUriParams = (from p in methodInfo.GetParameters()
+                                 where p.GetCustomAttribute<FromContentAttribute>() == null
+                                 select p).ToList();
 
             if (!ParametersHaveValidType(fromUriParams.Select(p => p.ParameterType)))
             {
                 throw new InvalidOperationException("Can't use method parameters with a custom type.");
             }
 
-            _parametersForUri = fromUriParams.ToDictionary(p => p.Name, p => p.ParameterType);
+           return fromUriParams.Select(x => GetParameterGetter(x, _matchUri)).ToArray();
+        }
+
+        private static ParameterValueGetter GetParameterGetter(ParameterInfo parameterInfo, ParsedUri matchUri)
+        {
+            var methodName = parameterInfo.Name;
+            var firstPathPartMatch = matchUri.PathParts
+                .Select((x, i) => new { Part = x, Index = i })
+                .Where(x => x.Part.PartType == PathPart.PathPartType.Argument)
+                .FirstOrDefault(x => methodName.Equals(x.Part.Value, StringComparison.OrdinalIgnoreCase));
+
+            var parameterType = parameterInfo.ParameterType;
+            if (firstPathPartMatch != null)
+                return new PathParameterValueGetter(methodName, parameterType, firstPathPartMatch.Index);
+
+            var firstQueryParameterMatch = matchUri.Parameters
+                .FirstOrDefault(x => methodName.Equals(x.Value, StringComparison.OrdinalIgnoreCase));
+
+            if (firstQueryParameterMatch != null)
+                return new QueryParameterValueGetter(methodName, parameterType, firstQueryParameterMatch);
+
+            throw new Exception($"Method {methodName} not found in rest controller method uri {matchUri}.");
         }
 
         private bool ParametersHaveValidType(IEnumerable<Type> parameters)
@@ -108,38 +150,16 @@ namespace Devkoes.Restup.WebServer.Rest
             return !parameters.Except(_validParameterTypes).Any();
         }
 
-        private void InitializeMatchUriRegex()
+        private HttpMethod GetVerb()
         {
-            var uriFormatter = MethodInfo.GetCustomAttribute<UriFormatAttribute>();
-            string uriFormatWithPrefix = CreateUriFormat(uriFormatter);
-            string regexToMatchUri = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatWithPrefix, MATCHURI_REPLACE_STRING));
-            _matchUriRegex = new Regex(regexToMatchUri, RegexOptions.Compiled);
-
-        }
-
-        private void InitializeFindParameterRegex(string uriFormatWithPrefix)
-        {            
-            string regexToFindParamValues = string.Format("^{0}$", FIND_PARAMETERKEYS_REGEX.Replace(uriFormatWithPrefix, MATCHPARAMETER_REPLACE_STRING));
-
-            _findParameterValuesRegex = new Regex(regexToFindParamValues, RegexOptions.Compiled);
-        }
-
-        private string CreateUriFormat(UriFormatAttribute uriFormatter)
-        {
-            string uriFormat = uriFormatter.UriFormat.RemovePreAndPostSlash().EscapeRegexChars();;
-            return string.Format("/{0}", uriFormat);
-        }
-
-        private void InitializeVerb()
-        {
-            TypeInfo returnType = null;
+            TypeInfo returnType;
 
             if (ReturnTypeWrapper == TypeWrapper.None)
                 returnType = MethodInfo.ReturnType.GetTypeInfo();
             else
                 returnType = MethodInfo.ReturnType.GetGenericArguments()[0].GetTypeInfo();
 
-            Verb = GetVerb(returnType);
+            return GetVerb(returnType);
         }
 
         private HttpMethod GetVerb(TypeInfo returnType)
@@ -158,45 +178,39 @@ namespace Devkoes.Restup.WebServer.Rest
 
         private static bool IsRestResponseOfType<T>(TypeInfo returnType)
         {
-            return returnType.ImplementedInterfaces.Contains(typeof (T)) || returnType.AsType() == typeof (T);
+            return returnType.ImplementedInterfaces.Contains(typeof(T)) || returnType.AsType() == typeof(T);
         }
 
-        internal bool Match(Uri uri)
+        internal bool Match(ParsedUri uri)
         {
-            return UriMatches(uri);
-        }
+            if (_matchUri.PathParts.Count != uri.PathParts.Count)
+                return false;
 
-        private bool UriMatches(Uri uri)
-        {
-            string relativeUri = uri.ToRelativeString();
-
-            return _matchUriRegex.IsMatch(relativeUri);
-        }
-
-        internal IEnumerable<object> GetParametersFromUri(Uri uri)
-        {
-            Match m = _findParameterValuesRegex.Match(uri.ToRelativeString());
-            if (!m.Success)
+            for (var i = 0; i < _matchUri.PathParts.Count; i++)
             {
-                yield return null;
+                var fromPart = _matchUri.PathParts[i];
+                var toPart = uri.PathParts[i];
+                if (fromPart.PartType == PathPart.PathPartType.Argument)
+                    continue;
+
+                if (!fromPart.Value.Equals(toPart.Value, StringComparison.OrdinalIgnoreCase))
+                    return false;
             }
 
-            foreach (var parameter in _parametersForUri)
-            {
-                yield return Convert.ChangeType(m.Groups[parameter.Key].Value, parameter.Value);
-            }
+            if (uri.Parameters.Count < _matchUri.Parameters.Count)
+                return false;
+
+            return _matchUri.Parameters.All(x => uri.Parameters.Any(y => y.Name.Equals(x.Name, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        internal IEnumerable<object> GetParametersFromUri(ParsedUri uri)
+        {
+            return _parameterGetters.Select(x => x.GetParameterValue(uri)).ToArray();
         }
 
         public override string ToString()
         {
-            return $"Hosting {Verb.ToString()} method on {_urlToMatch}";
-        }
-
-        internal enum TypeWrapper
-        {
-            None,
-            Task,
-            AsyncOperation
+            return $"Hosting {Verb} method on {_matchUri}";
         }
     }
 }

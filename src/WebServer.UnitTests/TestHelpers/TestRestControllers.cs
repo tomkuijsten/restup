@@ -1,8 +1,8 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Schemas;
 using System;
 
-namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
+namespace Restup.Webserver.UnitTests.TestHelpers
 {
 
     public class User
@@ -23,7 +23,7 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
         [UriFormat("/users?userId={userId}")]
         public GetResponse GetUserWithParam(int userId)
         {
-          return new GetResponse(GetResponse.ResponseStatus.OK, new User() { Name = "Tom", Age = 30 });
+            return new GetResponse(GetResponse.ResponseStatus.OK, new User() { Name = "Tom", Age = 30 });
         }
 
         [UriFormat("/users")]
@@ -42,6 +42,16 @@ namespace Devkoes.Restup.WebServer.UnitTests.TestHelpers
         public DeleteResponse DeleteUser(int userId)
         {
             return new DeleteResponse(DeleteResponse.ResponseStatus.OK);
+        }
+    }
+
+    [RestController(InstanceCreationType.Singleton)]
+    public class HappyPathTestTextEncodingController
+    {
+        [UriFormat("/users/{name}")]
+        public GetResponse GetUser(string name)
+        {
+            return new GetResponse(GetResponse.ResponseStatus.OK, new User() { Name = name, Age = 30 });
         }
     }
 

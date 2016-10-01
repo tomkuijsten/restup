@@ -1,8 +1,8 @@
-﻿using Devkoes.HttpMessage.Models.Contracts;
+﻿using Restup.HttpMessage.Models.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Devkoes.HttpMessage.Headers.Request
+namespace Restup.HttpMessage.Headers.Request
 {
     public class AcceptCharsetHeader : HttpMultiQuantifiedHeaderBase
     {

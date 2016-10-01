@@ -1,7 +1,7 @@
-﻿using Devkoes.HttpMessage;
+﻿using Restup.HttpMessage;
 using System.Threading.Tasks;
 
-namespace Devkoes.Restup.WebServer.Models.Contracts
+namespace Restup.Webserver.Models.Contracts
 {
     public interface IRouteHandler
     {

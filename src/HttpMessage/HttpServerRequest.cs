@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
+using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
 
-namespace Devkoes.HttpMessage
+namespace Restup.HttpMessage
 {
     internal class HttpServerRequest : IHttpServerRequest
     {
@@ -19,10 +19,15 @@ namespace Devkoes.HttpMessage
         public IEnumerable<string> AcceptMediaTypes { get; }
         public byte[] Content { get; }
         public bool IsComplete { get; }
+        public HttpMethod? AccessControlRequestMethod { get; }
+        public IEnumerable<string> AccessControlRequestHeaders { get; }
+        public string Origin { get; }
 
         public HttpServerRequest(IEnumerable<IHttpRequestHeader> headers, HttpMethod? method, Uri uri,
             string httpVersion, string contentTypeCharset, IEnumerable<string> acceptCharsets, int contentLength,
-            string contentType, IEnumerable<string> acceptEncodings, IEnumerable<string> acceptMediaTypes, byte[] content, bool isComplete)
+            string contentType, IEnumerable<string> acceptEncodings, IEnumerable<string> acceptMediaTypes,
+            byte[] content, bool isComplete, HttpMethod? accessControlRequestMethod, IEnumerable<string> accessControlRequestHeaders,
+            string origin)
         {
             Headers = headers;
             Method = method;
@@ -36,6 +41,9 @@ namespace Devkoes.HttpMessage
             AcceptMediaTypes = acceptMediaTypes;
             Content = content;
             IsComplete = isComplete;
+            AccessControlRequestMethod = accessControlRequestMethod;
+            AccessControlRequestHeaders = accessControlRequestHeaders;
+            Origin = origin;
         }
     }
 }

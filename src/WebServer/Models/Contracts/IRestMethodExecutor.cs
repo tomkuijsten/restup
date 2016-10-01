@@ -1,12 +1,11 @@
-﻿using Devkoes.Restup.WebServer.Models.Schemas;
-using Devkoes.Restup.WebServer.Rest;
-using System.Threading.Tasks;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
+﻿using System.Threading.Tasks;
+using Restup.Webserver.Models.Schemas;
+using Restup.Webserver.Rest;
 
-namespace Devkoes.Restup.WebServer.Models.Contracts
+namespace Restup.Webserver.Models.Contracts
 {
     interface IRestMethodExecutor
     {
-        Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, RestServerRequest request);
+        Task<IRestResponse> ExecuteMethodAsync(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri);
     }
 }

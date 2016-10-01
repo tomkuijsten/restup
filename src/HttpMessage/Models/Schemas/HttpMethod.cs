@@ -1,4 +1,4 @@
-﻿namespace Devkoes.HttpMessage.Models.Schemas
+﻿namespace Restup.HttpMessage.Models.Schemas
 {
     public enum HttpMethod
     {
@@ -7,5 +7,6 @@
         GET,
         PUT,
         DELETE,
+        OPTIONS
     }
 }

@@ -1,11 +1,11 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
 using System;
 using System.Threading.Tasks;
 using Windows.Foundation;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
-namespace Devkoes.Restup.DemoControllers
+namespace Restup.DemoControllers
 {
     [RestController(InstanceCreationType.PerCall)]
     public sealed class AsyncControllerSample

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
-using Devkoes.HttpMessage.Headers.Request;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.HttpMessage.ServerRequestParsers;
+using Restup.HttpMessage.Headers.Request;
+using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.HttpMessage.ServerRequestParsers;
 
-namespace Devkoes.HttpMessage
+namespace Restup.HttpMessage
 {
     public class MutableHttpServerRequest : IHttpServerRequest
     {
@@ -21,6 +21,7 @@ namespace Devkoes.HttpMessage
             AcceptCharsets = Enumerable.Empty<string>();
             AcceptMediaTypes = Enumerable.Empty<string>();
             AcceptEncodings = Enumerable.Empty<string>();
+            AccessControlRequestHeaders = Enumerable.Empty<string>();
         }
 
         public IEnumerable<IHttpRequestHeader> Headers => _headers;
@@ -35,6 +36,9 @@ namespace Devkoes.HttpMessage
         public IEnumerable<string> AcceptMediaTypes { get; set; }
         public byte[] Content { get; set; }
         public bool IsComplete { get; set; }
+        public HttpMethod? AccessControlRequestMethod { get; set; }
+        public IEnumerable<string> AccessControlRequestHeaders { get; set; }
+        public string Origin { get; set; }
 
         internal void AddHeader(IHttpRequestHeader header)
         {

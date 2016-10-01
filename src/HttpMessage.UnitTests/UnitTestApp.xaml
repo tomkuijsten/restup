@@ -1,8 +1,8 @@
 ﻿<Application
-    x:Class="HttpMessage.UnitTests.App"
+    x:Class="Restup.HttpMessage.UnitTests.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:HttpMessage.UnitTests"
+    xmlns:local="using:Restup.HttpMessage.UnitTests"
     RequestedTheme="Light">
 
 </Application>

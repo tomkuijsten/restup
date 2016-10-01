@@ -1,13 +1,12 @@
-﻿using Devkoes.Restup.DemoControllers;
-using Devkoes.Restup.WebServer;
+﻿using Restup.DemoControllers;
+using Restup.Webserver.File;
+using Restup.Webserver.Http;
+using Restup.Webserver.Rest;
 using Windows.ApplicationModel.Background;
-using Devkoes.Restup.WebServer.File;
-using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.Rest;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
-namespace Devkoes.Restup.HeadlessDemo
+namespace Restup.HeadlessDemo
 {
     public sealed class StartupTask : IBackgroundTask
     {
@@ -26,10 +25,6 @@ namespace Devkoes.Restup.HeadlessDemo
             // come some day, see that this method is not active anymore and the local variable
             // should be removed. Which results in the application being closed.
             _deferral = taskInstance.GetDeferral();
-            
-            var httpServer = new HttpServer(8800);
-            _httpServer = httpServer;
-
             var restRouteHandler = new RestRouteHandler();
 
             restRouteHandler.RegisterController<AsyncControllerSample>();
@@ -40,9 +35,16 @@ namespace Devkoes.Restup.HeadlessDemo
             restRouteHandler.RegisterController<ThrowExceptionControllerSample>();
             restRouteHandler.RegisterController<WithResponseContentControllerSample>();
 
-            httpServer.RegisterRoute("api", restRouteHandler);
-            httpServer.RegisterRoute(new StaticFileRouteHandler(@"DemoStaticFiles\Web"));
+            var configuration = new HttpServerConfiguration()
+                .ListenOnPort(8800)
+                .RegisterRoute("api", restRouteHandler)
+                .RegisterRoute(new StaticFileRouteHandler(@"Restup.DemoStaticFiles\Web"))
+                .EnableCors(); // allow cors requests on all origins
+            //  .EnableCors(x => x.AddAllowedOrigin("http://specificserver:<listen-port>"));
 
+            var httpServer = new HttpServer(configuration);
+            _httpServer = httpServer;
+            
             await httpServer.StartServerAsync();
 
             // Dont release deferral, otherwise app will stop

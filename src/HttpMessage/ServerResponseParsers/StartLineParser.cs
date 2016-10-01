@@ -1,8 +1,8 @@
-﻿using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Plumbing;
+﻿using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Plumbing;
 using System;
 
-namespace Devkoes.HttpMessage.ServerResponseParsers
+namespace Restup.HttpMessage.ServerResponseParsers
 {
     public class StartLineParser : IHttpResponsePartParser
     {

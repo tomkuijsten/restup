@@ -1,9 +1,9 @@
-﻿using Devkoes.HttpMessage.Headers.Request;
-using Devkoes.HttpMessage.Plumbing;
+﻿using Restup.HttpMessage.Headers.Request;
+using Restup.HttpMessage.Plumbing;
 using System;
 using System.Linq;
 
-namespace Devkoes.HttpMessage.ServerRequestParsers
+namespace Restup.HttpMessage.ServerRequestParsers
 {
     /// <summary>
     /// Some http header spec rules (http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2)

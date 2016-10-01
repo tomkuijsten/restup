@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace HeadedDemo
+namespace Restup.HeadedDemo
 {
     public class DelegateCommand<T> : ICommand where T : class
     {
@@ -24,8 +24,8 @@ namespace HeadedDemo
             command(parameter as T);
         }
 
-        #pragma warning disable 67
+#pragma warning disable 67
         public event EventHandler CanExecuteChanged;
-        #pragma warning restore 67
+#pragma warning restore 67
     }
 }

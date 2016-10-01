@@ -1,5 +1,5 @@
-﻿using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Plumbing;
+﻿using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Plumbing;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage.Streams;
 
-namespace Devkoes.HttpMessage.ServerRequestParsers
+namespace Restup.HttpMessage.ServerRequestParsers
 {
     internal class HttpRequestParser
     {

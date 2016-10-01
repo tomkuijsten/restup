@@ -6,7 +6,7 @@
     <SharedGUID>13aba022-a7c1-45b7-9e47-2bb74f2a7f9f</SharedGUID>
   </PropertyGroup>
   <PropertyGroup Label="Configuration">
-    <Import_RootNamespace>HttpMessage</Import_RootNamespace>
+    <Import_RootNamespace>Restup.HttpMessage</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Headers\HttpHeaderBase.cs" />
@@ -14,13 +14,21 @@
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AcceptCharsetHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AcceptEncodingHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AcceptHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AccessControlRequestHeadersHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AccessControlRequestMethodHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\ContentLengthHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\ContentTypeHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\HttpMultiQuantifiedHeaderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\HttpRequestHandleHeaderData.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\HttpSingleQuantifiedHeaderBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\OriginHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\QuantifiedHeaderValue.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\RequestHeaderFactory.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\AccessControlAllowCredentialsHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\AccessControlAllowHeadersHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\AccessControlAllowMethodsHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\AccessControlAllowOriginHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\AccessControlMaxAgeHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\AllowHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\CloseConnectionHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\ContentEncodingHeader.cs" />
@@ -49,6 +57,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Plumbing\HttpRequestStream.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\ContentParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\HeadersParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\HttpMethodParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\HttpRequestParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\HttpRequestPartParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServerRequestParsers\MethodParser.cs" />

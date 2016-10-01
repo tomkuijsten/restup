@@ -7,8 +7,8 @@
     <ProjectGuid>{71394B97-2990-4E92-A7CC-0642D4860651}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DemoStaticFiles</RootNamespace>
-    <AssemblyName>DemoStaticFiles</AssemblyName>
+    <RootNamespace>Restup.DemoStaticFiles</RootNamespace>
+    <AssemblyName>Restup.DemoStaticFiles</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>

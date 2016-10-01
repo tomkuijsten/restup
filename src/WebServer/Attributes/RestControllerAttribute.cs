@@ -1,7 +1,7 @@
-﻿using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Restup.Webserver.Models.Schemas;
 using System;
 
-namespace Devkoes.Restup.WebServer.Attributes
+namespace Restup.Webserver.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
     public sealed class RestControllerAttribute : Attribute

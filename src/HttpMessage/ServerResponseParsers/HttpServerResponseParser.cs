@@ -1,8 +1,8 @@
-﻿using Devkoes.HttpMessage.Models.Contracts;
+﻿using Restup.HttpMessage.Models.Contracts;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Devkoes.HttpMessage.ServerResponseParsers
+namespace Restup.HttpMessage.ServerResponseParsers
 {
     internal class HttpServerResponseParser
     {

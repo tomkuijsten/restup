@@ -1,9 +1,10 @@
-﻿using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using Restup.Webserver.Models.Contracts;
 
-namespace Devkoes.Restup.WebServer.Models.Schemas
+namespace Restup.Webserver.Models.Schemas
 {
-    public class GetResponse : IGetResponse
+    public class GetResponse : RestResponse, IGetResponse
     {
         public enum ResponseStatus : int
         {
@@ -14,20 +15,14 @@ namespace Devkoes.Restup.WebServer.Models.Schemas
         public ResponseStatus Status { get; }
         public object ContentData { get; }
 
-        public GetResponse(ResponseStatus status) : this(status, null) { }
-
-        public GetResponse(ResponseStatus status, object data)
+        public GetResponse(ResponseStatus status, IReadOnlyDictionary<string, string> headers, object data) : base((int)status, headers)
         {
             Status = status;
             ContentData = data;
         }
 
-        public int StatusCode
-        {
-            get
-            {
-                return (int)Status;
-            }
-        }
+        public GetResponse(ResponseStatus status) : this(status, ImmutableDictionary<string, string>.Empty, null) { }
+        public GetResponse(ResponseStatus status, IReadOnlyDictionary<string, string> headers) : this(status, headers, null) { }
+        public GetResponse(ResponseStatus status, object data) : this(status, ImmutableDictionary<string, string>.Empty, data) { }
     }
 }

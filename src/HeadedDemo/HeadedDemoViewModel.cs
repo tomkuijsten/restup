@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace HeadedDemo
+namespace Restup.HeadedDemo
 {
     public class HeadedDemoViewModel : INotifyPropertyChanged
     {

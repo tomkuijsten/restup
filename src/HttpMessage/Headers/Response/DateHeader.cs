@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Devkoes.HttpMessage.Headers.Response
+namespace Restup.HttpMessage.Headers.Response
 {
     internal class DateHeader : HttpHeaderBase
     {

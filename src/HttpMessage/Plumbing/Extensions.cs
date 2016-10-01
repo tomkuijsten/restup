@@ -1,9 +1,9 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
+﻿using Restup.HttpMessage.Models.Schemas;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Devkoes.HttpMessage.Plumbing
+namespace Restup.HttpMessage.Plumbing
 {
     internal static class Extensions
     {

@@ -1,4 +1,4 @@
-﻿namespace Devkoes.HttpMessage.Models.Schemas
+﻿namespace Restup.HttpMessage.Models.Schemas
 {
     // From http://www.w3.org/Protocols/rfc2616/rfc2616-sec6.html
     public enum HttpResponseStatus

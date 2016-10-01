@@ -1,9 +1,9 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
 using System;
-using Devkoes.Restup.WebServer.Rest.Models.Contracts;
 
-namespace Devkoes.Restup.DemoControllers
+namespace Restup.DemoControllers
 {
     [RestController(InstanceCreationType.Singleton)]
     public sealed class ThrowExceptionControllerSample

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Devkoes.Restup.WebServer.Attributes
+namespace Restup.Webserver.Attributes
 {
     [System.AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public sealed class UriFormatAttribute : Attribute

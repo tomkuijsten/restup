@@ -1,7 +1,7 @@
-﻿using Devkoes.HttpMessage.Headers;
-using Devkoes.HttpMessage.Headers.Request;
+﻿using Restup.HttpMessage.Headers;
+using Restup.HttpMessage.Headers.Request;
 
-namespace Devkoes.HttpMessage.Models.Contracts
+namespace Restup.HttpMessage.Models.Contracts
 {
     public interface IHttpRequestHeaderVisitor<T>
     {
@@ -11,5 +11,8 @@ namespace Devkoes.HttpMessage.Models.Contracts
         void Visit(ContentTypeHeader uh, T arg);
         void Visit(AcceptCharsetHeader uh, T arg);
         void Visit(AcceptEncodingHeader uh, T arg);
+        void Visit(AccessControlRequestMethodHeader uh, T arg);
+        void Visit(AccessControlRequestHeadersHeader uh, T arg);
+        void Visit(OriginHeader uh, T arg);
     }
 }

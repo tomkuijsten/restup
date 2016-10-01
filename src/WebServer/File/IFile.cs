@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace Devkoes.Restup.WebServer.File
+namespace Restup.Webserver.File
 {
     public interface IFile
     {

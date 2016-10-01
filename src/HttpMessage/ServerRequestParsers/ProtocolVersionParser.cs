@@ -1,6 +1,6 @@
-﻿using Devkoes.HttpMessage.Plumbing;
+﻿using Restup.HttpMessage.Plumbing;
 
-namespace Devkoes.HttpMessage.ServerRequestParsers
+namespace Restup.HttpMessage.ServerRequestParsers
 {
     internal class ProtocolVersionParser : HttpRequestPartParser
     {

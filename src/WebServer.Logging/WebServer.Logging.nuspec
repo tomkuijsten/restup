@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Restup.Logging</id>
+    <version>1.0.0</version>
+    <title>Restup.Logging</title>
+    <authors>Tom, Jark</authors>
+    <owners>Tom, Jark</owners>
+    <licenseUrl>https://github.com/tomkuijsten/restup/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/tomkuijsten/restup/tree/v1.0.0-beta4</projectUrl>
+    <iconUrl>https://github.com/tomkuijsten/restup/blob/master/restup.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The logging interfaces for Restup, A webserver for Universal Windows Platform (UWP) app.</description>
+    <releaseNotes>First release of the Restup logging interface dll.</releaseNotes>
+    <copyright>
+    </copyright>
+    <tags>UWP REST webserver logging Restup Universal Windows Platform</tags>
+  </metadata>
+</package>

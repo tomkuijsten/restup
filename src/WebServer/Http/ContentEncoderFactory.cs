@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Devkoes.HttpMessage.ServerResponseParsers;
 
-namespace Devkoes.Restup.WebServer.Http
+namespace Restup.Webserver.Http
 {
     public class ContentEncoderFactory
-    {      
+    {
         internal IContentEncoder GetEncoder(IEnumerable<string> acceptEncodings)
         {
             var firstSupportedEncoding = GetSupportedAcceptEncoding(acceptEncodings);
@@ -19,7 +18,7 @@ namespace Devkoes.Restup.WebServer.Http
                 case ContentCoding.Gzip:
                     return new GzipContentEncoder();
             }
-            
+
             throw new Exception($"{firstSupportedEncoding} not supported.");
         }
 

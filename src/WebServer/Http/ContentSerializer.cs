@@ -1,11 +1,10 @@
-﻿using Devkoes.HttpMessage.Models.Schemas;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Restup.Webserver.Models.Schemas;
 using System;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Devkoes.Restup.WebServer.Http
+namespace Restup.Webserver.Http
 {
     internal class ContentSerializer
     {

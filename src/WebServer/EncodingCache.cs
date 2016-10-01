@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Devkoes.Restup.WebServer
+namespace Restup.Webserver
 {
     internal class EncodingCache
     {

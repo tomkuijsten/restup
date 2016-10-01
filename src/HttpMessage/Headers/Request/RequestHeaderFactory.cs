@@ -1,24 +1,27 @@
-﻿using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Plumbing;
+﻿using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Plumbing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Devkoes.HttpMessage.Headers.Request
+namespace Restup.HttpMessage.Headers.Request
 {
     internal class RequestHeaderFactory
     {
-        private Dictionary<string, Func<string, IHttpRequestHeader>> _headerCollection;
+        private readonly Dictionary<string, Func<string, IHttpRequestHeader>> _headerCollection;
 
         internal RequestHeaderFactory()
         {
             _headerCollection = new Dictionary<string, Func<string, IHttpRequestHeader>>(StringComparer.OrdinalIgnoreCase)
             {
-                [ContentLengthHeader.NAME] = CreateContentLength,
+                [ContentLengthHeader.NAME] = x => new ContentLengthHeader(x),
                 [AcceptHeader.NAME] = CreateResponseContentType,
                 [ContentTypeHeader.NAME] = CreateRequestContentType,
                 [AcceptCharsetHeader.NAME] = CreateResponseContentCharset,
-                [AcceptEncodingHeader.NAME] = CreateResponseAcceptEncoding
+                [AcceptEncodingHeader.NAME] = CreateResponseAcceptEncoding,
+                [AccessControlRequestHeadersHeader.NAME] = x => new AccessControlRequestHeadersHeader(x),
+                [AccessControlRequestMethodHeader.NAME] = x => new AccessControlRequestMethodHeader(x),
+                [OriginHeader.NAME] = x => new OriginHeader(x)
             };
         }
 
@@ -30,11 +33,6 @@ namespace Devkoes.HttpMessage.Headers.Request
             }
 
             return new UntypedRequestHeader(headerName, headerValue);
-        }
-
-        private IHttpRequestHeader CreateContentLength(string headerValue)
-        {
-            return new ContentLengthHeader(headerValue);
         }
 
         private IHttpRequestHeader CreateRequestContentType(string headerValue)
@@ -60,7 +58,7 @@ namespace Devkoes.HttpMessage.Headers.Request
         internal IEnumerable<QuantifiedHeaderValue> ExtractQuantifiedHeaders(string value)
         {
             var headerValues = value.Split(',');
-            var quantifiedValues = headerValues.Select(h => ExtractQuantifiedHeader(h));
+            var quantifiedValues = headerValues.Select(ExtractQuantifiedHeader);
 
             return quantifiedValues.OrderByDescending(q => q.Quality).ToArray();
         }

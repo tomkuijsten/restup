@@ -1,19 +1,16 @@
-﻿using Devkoes.Restup.WebServer.Http;
-using Devkoes.Restup.WebServer.InstanceCreators;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Models.Schemas;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Restup.Webserver.Http;
+using Restup.Webserver.InstanceCreators;
+using Restup.Webserver.Models.Schemas;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
-using Windows.Foundation;
 
-namespace Devkoes.Restup.WebServer.Rest
+namespace Restup.Webserver.Rest
 {
     internal class RestControllerMethodWithContentExecutor : RestMethodExecutor
     {
-        private ContentSerializer _contentSerializer;
-        private RestResponseFactory _responseFactory;
+        private readonly ContentSerializer _contentSerializer;
+        private readonly RestResponseFactory _responseFactory;
 
         public RestControllerMethodWithContentExecutor()
         {
@@ -21,7 +18,7 @@ namespace Devkoes.Restup.WebServer.Rest
             _responseFactory = new RestResponseFactory();
         }
 
-        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request)
+        protected override object ExecuteAnonymousMethod(RestControllerMethodInfo info, RestServerRequest request, ParsedUri requestUri)
         {
             var instantiator = InstanceCreatorCache.Default.GetCreator(info.MethodInfo.DeclaringType);
 
@@ -48,7 +45,7 @@ namespace Devkoes.Restup.WebServer.Rest
             object[] parameters = null;
             try
             {
-                parameters = info.GetParametersFromUri(request.HttpServerRequest.Uri).Concat(new[] { contentObj }).ToArray();
+                parameters = info.GetParametersFromUri(requestUri).Concat(new[] { contentObj }).ToArray();
             }
             catch (FormatException)
             {

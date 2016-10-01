@@ -7,8 +7,8 @@
     <ProjectGuid>{837B8FF3-DED6-4DC7-AD58-DBB0B3E44DD4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Devkoes.Restup.WebServer</RootNamespace>
-    <AssemblyName>Devkoes.Restup.WebServer</AssemblyName>
+    <RootNamespace>Restup.WebServer</RootNamespace>
+    <AssemblyName>Restup.WebServer</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
@@ -108,6 +108,12 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>restup-tmp1.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Attributes\FromContentAttribute.cs" />
     <Compile Include="Attributes\RestControllerAttribute.cs" />
@@ -120,17 +126,32 @@
     <Compile Include="File\PhysicalFile.cs" />
     <Compile Include="File\PhysicalFileSystem.cs" />
     <Compile Include="File\StaticFileRouteHandler.cs" />
+    <Compile Include="Http\AfterHandleRequestResult.cs" />
+    <Compile Include="Http\BeforeHandleRequestResult.cs" />
     <Compile Include="Http\ContentCoding.cs" />
     <Compile Include="Http\CompressContentEncoder.cs" />
     <Compile Include="Http\ContentEncoderFactory.cs" />
+    <Compile Include="Http\CorsConfiguration.cs" />
+    <Compile Include="Http\CorsMessageInspector.cs" />
     <Compile Include="Http\DeflateContentEncoder.cs" />
     <Compile Include="Http\GzipContentEncoder.cs" />
+    <Compile Include="Http\HttpServerConfiguration.cs" />
     <Compile Include="Http\IContentEncoder.cs" />
+    <Compile Include="Http\ICorsConfiguration.cs" />
+    <Compile Include="Http\IHttpMessageInspector.cs" />
     <Compile Include="Http\NoContentEncoder.cs" />
     <Compile Include="Http\RouteRegistration.cs" />
+    <Compile Include="LogManager.cs" />
     <Compile Include="Models\Contracts\IRouteHandler.cs" />
     <Compile Include="Models\Schemas\MediaType.cs" />
+    <Compile Include="Models\Schemas\RestResponse.cs" />
     <Compile Include="Models\Schemas\RestServerRequest.cs" />
+    <Compile Include="Rest\MatchUri.cs" />
+    <Compile Include="Rest\ParameterValueGetter.cs" />
+    <Compile Include="Rest\ParsedUri.cs" />
+    <Compile Include="Rest\PathParameterValueGetter.cs" />
+    <Compile Include="Rest\PathPart.cs" />
+    <Compile Include="Rest\QueryParameterValueGetter.cs" />
     <Compile Include="Rest\RestMethodExecutor.cs" />
     <Compile Include="Rest\RestRoutehandler.cs" />
     <Compile Include="Rest\RestControllerMethodWithContentExecutor.cs" />
@@ -158,15 +179,22 @@
     <Compile Include="Rest\RestControllerMethodExecutor.cs" />
     <Compile Include="Rest\RestServerRequestFactory.cs" />
     <Compile Include="Rest\RestToHttpResponseConverter.cs" />
+    <Compile Include="Rest\UriParser.cs" />
+    <Compile Include="Rest\UriParameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <None Include="restup-tmp1.snk" />
     <None Include="WebServer.nuspec" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebServer.Rest.Models.Contracts\WebServer.Rest.Models.Contracts.csproj">
+    <ProjectReference Include="..\WebServer.Logging\WebServer.Logging.csproj">
+      <Project>{06a3d120-5923-4ad1-8411-7395a1ec6e94}</Project>
+      <Name>WebServer.Logging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebServer.Models\Webserver.Models.csproj">
       <Project>{0b20d095-2896-41a6-865d-172dfd5ecc99}</Project>
-      <Name>WebServer.Rest.Models.Contracts</Name>
+      <Name>Webserver.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\HttpMessage\HttpMessage.projitems" Label="Shared" />

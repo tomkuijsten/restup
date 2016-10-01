@@ -1,4 +1,4 @@
-﻿namespace Devkoes.HttpMessage.Headers.Response
+﻿namespace Restup.HttpMessage.Headers.Response
 {
     public class ContentLengthHeader : HttpHeaderBase
     {

@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Restup.Webserver.File;
+using Restup.Webserver.UnitTests.TestHelpers;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Devkoes.Restup.WebServer.File;
-using Devkoes.Restup.WebServer.UnitTests.TestHelpers;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
-namespace Devkoes.Restup.WebServer.UnitTests.File
+namespace Restup.Webserver.UnitTests.File
 {
     [TestClass]
     public class MimeTypeProviderTests

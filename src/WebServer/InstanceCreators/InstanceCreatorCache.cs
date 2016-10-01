@@ -1,11 +1,11 @@
-﻿using Devkoes.Restup.WebServer.Attributes;
-using Devkoes.Restup.WebServer.Models.Contracts;
-using Devkoes.Restup.WebServer.Models.Schemas;
+﻿using Restup.Webserver.Attributes;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Devkoes.Restup.WebServer.InstanceCreators
+namespace Restup.Webserver.InstanceCreators
 {
     internal class InstanceCreatorCache
     {

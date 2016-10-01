@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Devkoes.HttpMessage.Models.Contracts;
-using Devkoes.HttpMessage.Models.Schemas;
+using Restup.HttpMessage.Models.Contracts;
+using Restup.HttpMessage.Models.Schemas;
 
-namespace Devkoes.HttpMessage
+namespace Restup.HttpMessage
 {
     public interface IHttpServerRequest
     {
@@ -19,5 +19,8 @@ namespace Devkoes.HttpMessage
         IEnumerable<string> AcceptMediaTypes { get;  }
         byte[] Content { get;  }
         bool IsComplete { get;  }
+        HttpMethod? AccessControlRequestMethod { get; }
+        IEnumerable<string> AccessControlRequestHeaders { get; }
+        string Origin { get; }
     }
 }

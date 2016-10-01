@@ -1,4 +1,4 @@
-﻿namespace Devkoes.HttpMessage.Models.Contracts
+﻿namespace Restup.HttpMessage.Models.Contracts
 {
     public interface IHttpRequestHeader : IHttpHeader
     {
