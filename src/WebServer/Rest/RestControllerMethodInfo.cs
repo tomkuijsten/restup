@@ -112,16 +112,23 @@ namespace Restup.Webserver.Rest
 
         private ParameterValueGetter[] GetParameterGetters(MethodInfo methodInfo)
         {
-            var fromUriParams = (from p in methodInfo.GetParameters()
-                                 where p.GetCustomAttribute<FromContentAttribute>() == null
-                                 select p).ToList();
+            var methodParameters = (from p in methodInfo.GetParameters()
+                                    where p.GetCustomAttribute<FromContentAttribute>() == null
+                                    select p).ToList();
 
-            if (!ParametersHaveValidType(fromUriParams.Select(p => p.ParameterType)))
+            if (!ParametersHaveValidType(methodParameters.Select(p => p.ParameterType)))
             {
                 throw new InvalidOperationException("Can't use method parameters with a custom type.");
             }
 
-            return fromUriParams.Select(x => GetParameterGetter(x, MatchUri)).ToArray();
+            var parameterValueGetters = methodParameters.Select(x => GetParameterGetter(x, MatchUri)).ToArray();
+            if (parameterValueGetters.Length !=
+                MatchUri.Parameters.Count + MatchUri.PathParts.Count(x => x.PartType == PathPart.PathPartType.Argument))
+            {
+                throw new Exception($"Uri format {MatchUri} has got more method parameters defined than the method has got.");
+            }
+
+            return parameterValueGetters;
         }
 
         private static ParameterValueGetter GetParameterGetter(ParameterInfo parameterInfo, ParsedUri matchUri)
