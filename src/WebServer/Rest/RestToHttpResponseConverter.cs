@@ -19,7 +19,7 @@ namespace Restup.Webserver.Rest
         {
             var methodNotAllowedResponse = restResponse as MethodNotAllowedResponse;
             if (methodNotAllowedResponse != null)
-                return GetMethodNotAllowedResponse(methodNotAllowedResponse, restServerRequest);
+                return GetMethodNotAllowedResponse(methodNotAllowedResponse);
 
             var postResponse = restResponse as PostResponse;
             if (postResponse != null)
@@ -32,7 +32,7 @@ namespace Restup.Webserver.Rest
             return GetDefaultResponse(restResponse);
         }
 
-        private static HttpServerResponse GetMethodNotAllowedResponse(MethodNotAllowedResponse methodNotAllowedResponse, RestServerRequest restReq)
+        private static HttpServerResponse GetMethodNotAllowedResponse(MethodNotAllowedResponse methodNotAllowedResponse)
         {
             var serverResponse = GetDefaultResponse(methodNotAllowedResponse);
             serverResponse.Allow = methodNotAllowedResponse.Allows;
@@ -44,8 +44,11 @@ namespace Restup.Webserver.Rest
         {
             var serverResponse = GetDefaultContentResponse(response, restReq);
 
-            if (response.Status == PostResponse.ResponseStatus.Created)
-                serverResponse.Location = new Uri(response.LocationRedirect, UriKind.RelativeOrAbsolute);
+            var locationRedirect = response.LocationRedirect;
+            if (response.Status == PostResponse.ResponseStatus.Created && !string.IsNullOrWhiteSpace(locationRedirect))
+            {
+                serverResponse.Location = new Uri(locationRedirect, UriKind.RelativeOrAbsolute);
+            }
 
             return serverResponse;
         }

@@ -32,6 +32,12 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             return new PostResponse(PostResponse.ResponseStatus.Created, $"/users/2");
         }
 
+        [UriFormat("/userswithnolocation")]
+        public PostResponse CreateUserWithNoRedirect()
+        {
+            return new PostResponse(PostResponse.ResponseStatus.Created);
+        }
+
         [UriFormat("/users/{userId}")]
         public PutResponse UpdateUser(int userId)
         {
