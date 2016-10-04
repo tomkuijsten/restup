@@ -20,9 +20,9 @@ namespace Restup.Webserver.Rest
         private readonly IEnumerable<Type> _validParameterTypes;
 
         private readonly UriParser _uriParser;
-        private readonly ParsedUri _matchUri;
         private readonly IEnumerable<ParameterValueGetter> _parameterGetters;
 
+        internal ParsedUri MatchUri { get; }
         internal MethodInfo MethodInfo { get; }
         internal HttpMethod Verb { get; }
         internal bool HasContentParameter { get; }
@@ -37,7 +37,7 @@ namespace Restup.Webserver.Rest
         {
             constructorArgs.GuardNull(nameof(constructorArgs));
             _uriParser = new UriParser();
-            _matchUri = GetUriFromMethod(methodInfo);
+            MatchUri = GetUriFromMethod(methodInfo);
 
             ReturnTypeWrapper = typeWrapper;
             ControllerConstructorArgs = constructorArgs;
@@ -121,7 +121,7 @@ namespace Restup.Webserver.Rest
                 throw new InvalidOperationException("Can't use method parameters with a custom type.");
             }
 
-           return fromUriParams.Select(x => GetParameterGetter(x, _matchUri)).ToArray();
+            return fromUriParams.Select(x => GetParameterGetter(x, MatchUri)).ToArray();
         }
 
         private static ParameterValueGetter GetParameterGetter(ParameterInfo parameterInfo, ParsedUri matchUri)
@@ -183,12 +183,12 @@ namespace Restup.Webserver.Rest
 
         internal bool Match(ParsedUri uri)
         {
-            if (_matchUri.PathParts.Count != uri.PathParts.Count)
+            if (MatchUri.PathParts.Count != uri.PathParts.Count)
                 return false;
 
-            for (var i = 0; i < _matchUri.PathParts.Count; i++)
+            for (var i = 0; i < MatchUri.PathParts.Count; i++)
             {
-                var fromPart = _matchUri.PathParts[i];
+                var fromPart = MatchUri.PathParts[i];
                 var toPart = uri.PathParts[i];
                 if (fromPart.PartType == PathPart.PathPartType.Argument)
                     continue;
@@ -197,10 +197,10 @@ namespace Restup.Webserver.Rest
                     return false;
             }
 
-            if (uri.Parameters.Count < _matchUri.Parameters.Count)
+            if (uri.Parameters.Count < MatchUri.Parameters.Count)
                 return false;
 
-            return _matchUri.Parameters.All(x => uri.Parameters.Any(y => y.Name.Equals(x.Name, StringComparison.OrdinalIgnoreCase)));
+            return MatchUri.Parameters.All(x => uri.Parameters.Any(y => y.Name.Equals(x.Name, StringComparison.OrdinalIgnoreCase)));
         }
 
         internal IEnumerable<object> GetParametersFromUri(ParsedUri uri)
@@ -210,7 +210,7 @@ namespace Restup.Webserver.Rest
 
         public override string ToString()
         {
-            return $"Hosting {Verb} method on {_matchUri}";
+            return $"Hosting {Verb} method on {MatchUri}";
         }
     }
 }

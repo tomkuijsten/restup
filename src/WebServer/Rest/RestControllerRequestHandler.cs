@@ -18,7 +18,8 @@ namespace Restup.Webserver.Rest
         private ImmutableArray<RestControllerMethodInfo> _restMethodCollection;
         private readonly RestResponseFactory _responseFactory;
         private readonly RestControllerMethodExecutorFactory _methodExecuteFactory;
-        private UriParser _uriParser;
+        private readonly UriParser _uriParser;
+        private readonly RestControllerMethodInfoValidator _restControllerMethodInfoValidator;
 
         internal RestControllerRequestHandler()
         {
@@ -26,6 +27,7 @@ namespace Restup.Webserver.Rest
             _responseFactory = new RestResponseFactory();
             _methodExecuteFactory = new RestControllerMethodExecutorFactory();
             _uriParser = new UriParser();
+            _restControllerMethodInfoValidator = new RestControllerMethodInfoValidator();
         }
 
         internal void RegisterController<T>() where T : class
@@ -41,11 +43,15 @@ namespace Restup.Webserver.Rest
 
         private void AddRestMethods<T>(IEnumerable<RestControllerMethodInfo> restControllerMethodInfos) where T : class
         {
-            _restMethodCollection = _restMethodCollection.Concat(restControllerMethodInfos)
+            var newControllerMethodInfos = restControllerMethodInfos.ToArray();
+
+            _restControllerMethodInfoValidator.Validate<T>(_restMethodCollection, newControllerMethodInfos);
+
+            _restMethodCollection = _restMethodCollection.Concat(newControllerMethodInfos)
                 .OrderByDescending(x => x.MethodInfo.GetParameters().Count())
                 .ToImmutableArray();
 
-            InstanceCreatorCache.Default.CacheCreator(typeof (T));
+            InstanceCreatorCache.Default.CacheCreator(typeof(T));
         }
 
         internal IEnumerable<RestControllerMethodInfo> GetRestMethods<T>(Func<object[]> constructorArgs) where T : class
