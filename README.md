@@ -6,6 +6,8 @@ Dev build: [![Build status](https://ci.appveyor.com/api/projects/status/h6faknf1
 
 NuGet downloads: [![NuGet downloads](https://img.shields.io/nuget/vpre/restup.svg)](https://www.nuget.org/packages/Restup/)
 
+Code quality: [![BCH compliancy](https://bettercodehub.com/edge/badge/tomkuijsten/restup)](https://bettercodehub.com) 
+
 ***
 Want to start coding immediatly, read the [one pager setup](https://github.com/tomkuijsten/restup/wiki/One-pager)
 ***
