@@ -1,10 +1,12 @@
-# Webservice for Universal Windows Apps
+# Webserver for Universal Windows Apps
 
 Release build: [![Build status](https://ci.appveyor.com/api/projects/status/jhdlmysux72qej51?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup-hwwpp)
 
 Dev build: [![Build status](https://ci.appveyor.com/api/projects/status/h6faknf1b7b20994?svg=true)](https://ci.appveyor.com/project/tomkuijsten/restup-frwxx)
 
 NuGet downloads: [![NuGet downloads](https://img.shields.io/nuget/vpre/restup.svg)](https://www.nuget.org/packages/Restup/)
+
+Code quality: [![BCH compliancy](https://bettercodehub.com/edge/badge/tomkuijsten/restup)](https://bettercodehub.com) 
 
 ***
 Want to start coding immediatly, read the [one pager setup](https://github.com/tomkuijsten/restup/wiki/One-pager)

@@ -144,7 +144,7 @@ namespace Restup.Webserver.UnitTests.Rest
         #endregion
 
         #region BasicPost
-        private MutableHttpServerRequest _basicPOST = new MutableHttpServerRequest()
+        private readonly MutableHttpServerRequest _basicPOST = new MutableHttpServerRequest()
         {
             Method = HttpMethod.POST,
             Uri = new Uri("/users", UriKind.RelativeOrAbsolute),
@@ -164,6 +164,18 @@ namespace Restup.Webserver.UnitTests.Rest
 
             StringAssert.Contains(content, "201 Created");
             StringAssert.Contains(content, "Location: /users/2");
+        }
+
+        [TestMethod]
+        public async Task HandleRequest_BasicPOST_Status201()
+        {
+            var request = Utils.CreateHttpRequest(uri: new Uri("/userswithnolocation", UriKind.RelativeOrAbsolute), method: HttpMethod.POST);
+
+            var m = Utils.CreateRestRoutehandler<HappyPathTestController>();
+            var response = await m.HandleRequest(request);
+
+            Assert.AreEqual(HttpResponseStatus.Created, response.ResponseStatus);
+            Assert.AreEqual(null, response.Location);
         }
         #endregion
 
