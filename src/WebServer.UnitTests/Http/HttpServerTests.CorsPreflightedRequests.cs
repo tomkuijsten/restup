@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Restup.HttpMessage.Headers.Response;
 using Restup.HttpMessage.Models.Schemas;
 using Restup.Webserver.UnitTests.TestHelpers;

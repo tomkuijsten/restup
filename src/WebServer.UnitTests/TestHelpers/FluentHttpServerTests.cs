@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Restup.HttpMessage;
 using Restup.HttpMessage.Models.Contracts;
 using Restup.HttpMessage.Models.Schemas;
