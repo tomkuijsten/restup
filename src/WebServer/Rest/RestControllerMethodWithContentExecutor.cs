@@ -53,7 +53,7 @@ namespace Restup.Webserver.Rest
             }
 
             return info.MethodInfo.Invoke(
-                    instantiator.Create(info.MethodInfo.DeclaringType, info.ControllerConstructorArgs()),
+                    instantiator.Create(info.ControllerConstructor, info.ControllerConstructorArgs()),
                     parameters);
         }
     }

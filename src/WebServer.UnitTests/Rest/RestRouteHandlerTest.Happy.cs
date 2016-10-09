@@ -251,15 +251,16 @@ namespace Restup.Webserver.UnitTests.Rest
 
             string content = response.ToString();
 
+            // constructor validation will execute the Func once so initial value is set at + 1
             StringAssert.Contains(content, "\"Name\":\"Johathan\"");
-            StringAssert.Contains(content, "\"Age\":15");
+            StringAssert.Contains(content, "\"Age\":16");
 
             response = await m.HandleRequest(_basicControllerWithArgs);
 
             content = response.ToString();
 
             StringAssert.Contains(content, "\"Name\":\"Johathan\"");
-            StringAssert.Contains(content, "\"Age\":16");
+            StringAssert.Contains(content, "\"Age\":17");
         }
         #endregion
     }

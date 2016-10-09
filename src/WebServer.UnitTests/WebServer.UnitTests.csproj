@@ -98,7 +98,9 @@
     <Compile Include="File\MimeTypeProviderTests.cs" />
     <Compile Include="Http\HttpServerTests.CorsSimpleRequests.cs" />
     <Compile Include="Http\HttpServerTests.CorsPreflightedRequests.cs" />
+    <Compile Include="Rest\RestRouteHandlerTests.ControllerConstructor.cs" />
     <Compile Include="Rest\RestRouteHandlerTests.UriFormatValidation.cs" />
+    <Compile Include="TestHelpers\RestRouteHandlerTests.cs" />
     <Compile Include="TestHelpers\MockFile.cs" />
     <Compile Include="TestHelpers\MockFileSystem.cs" />
     <Compile Include="TestHelpers\StaticFileRouteHandlerTests.Fluent.cs" />
