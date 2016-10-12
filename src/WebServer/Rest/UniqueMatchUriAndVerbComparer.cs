@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Restup.WebServer;
 
 namespace Restup.Webserver.Rest
 {
@@ -21,7 +22,7 @@ namespace Restup.Webserver.Rest
         {
             unchecked
             {
-                return ((obj.MatchUri?.GetHashCode() ?? 0) * 397) ^ (int)obj.Verb;
+                return ((obj.MatchUri?.GetHashCode() ?? 0) * Constants.HashCodePrime) ^ (int)obj.Verb;
             }
         }
 
@@ -36,7 +37,7 @@ namespace Restup.Webserver.Rest
             {
                 unchecked
                 {
-                    return ((obj.Parameters?.GetHashCode() ?? 0) * 397) ^ (obj.PathParts?.GetHashCode() ?? 0);
+                    return ((obj.Parameters?.GetHashCode() ?? 0) * Constants.HashCodePrime) ^ (obj.PathParts?.GetHashCode() ?? 0);
                 }
             }
         }

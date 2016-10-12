@@ -1,4 +1,5 @@
 using System;
+using Restup.WebServer;
 
 namespace Restup.Webserver.Rest
 {
@@ -36,7 +37,7 @@ namespace Restup.Webserver.Rest
         {
             unchecked
             {
-                return ((int)PartType * 397) ^ (Value?.GetHashCode() ?? 0);
+                return ((int)PartType * Constants.HashCodePrime) ^ (Value?.GetHashCode() ?? 0);
             }
         }
     }
