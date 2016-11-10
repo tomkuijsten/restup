@@ -80,6 +80,54 @@ namespace Restup.Webserver.UnitTests.Rest
             await AssertHandleRequest("/Post", HttpMethod.POST, HttpResponseStatus.Created);
         }
 
+        private class UriFormatWitMisnamedPathInUrlController
+        {
+            [UriFormat("/Get/{param}/")]
+            public IGetResponse Get(string param2) => new GetResponse(GetResponse.ResponseStatus.OK, param2);
+        }
+
+        [TestMethod]
+        public void RegisterController_AControllerWithMismatchedParametersInPath_ThrowsException()
+        {
+            AssertRegisterControllerThrows<UriFormatWitMisnamedPathInUrlController>();
+        }
+
+        private class UriFormatWitMisnamedUriParameterInUrlController
+        {
+            [UriFormat("/Get/?param={param}")]
+            public IGetResponse Get(string param2) => new GetResponse(GetResponse.ResponseStatus.OK, param2);
+        }
+
+        [TestMethod]
+        public void RegisterController_AControllerWithMismatchedParametersInUriParameters_ThrowsException()
+        {
+            AssertRegisterControllerThrows<UriFormatWitMisnamedUriParameterInUrlController>();
+        }
+
+        private class UriFormatWithMoreInUrlPathController
+        {
+            [UriFormat("/Get/{param}/{param2}")]
+            public IGetResponse Get(string param) => new GetResponse(GetResponse.ResponseStatus.OK, param);
+        }
+
+        [TestMethod]
+        public void RegisterController_AControllerWithMoreInUrlPath_ThrowsException()
+        {
+            AssertRegisterControllerThrows<UriFormatWithMoreInUrlPathController>();
+        }
+
+        private class UriFormatWithMoreInUrlParameterController
+        {
+            [UriFormat("/Get/?param={param}&param2={param}")]
+            public IGetResponse Get(string param) => new GetResponse(GetResponse.ResponseStatus.OK, param);
+        }
+
+        [TestMethod]
+        public void RegisterController_AControllerWithMoreInUrlParameter_ThrowsException()
+        {
+            AssertRegisterControllerThrows<UriFormatWithMoreInUrlParameterController>();
+        }
+
         private void AssertRegisterControllerThrows<T>(params string[] args) where T : class
         {
             Assert.ThrowsException<Exception>(() =>
