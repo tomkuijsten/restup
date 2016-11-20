@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -18,7 +17,7 @@ namespace Restup.Webserver.Rest
 
                 var argsTypes = args.Select(x => x.GetType());
                 var parameterTypes = parameters.Select(x => x.ParameterType);
-                if (!argsTypes.SequenceEqual(parameterTypes, new TypeComparer()))
+                if (!argsTypes.SequenceEqual(parameterTypes))
                     continue;
 
                 foundConstructor = constructorInfo;
@@ -26,19 +25,6 @@ namespace Restup.Webserver.Rest
             }
             foundConstructor = null;
             return false;
-        }
-
-        private class TypeComparer : IEqualityComparer<Type>
-        {
-            public bool Equals(Type x, Type y)
-            {
-                return x == y;
-            }
-
-            public int GetHashCode(Type obj)
-            {
-                return obj.GetHashCode();
-            }
         }
     }
 }
