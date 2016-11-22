@@ -25,9 +25,10 @@ namespace Restup.Webserver.Rest
 
         public void RegisterController<T>(params object[] args) where T : class
         {
-            _requestHandler.RegisterController<T>(() => args);
+            _requestHandler.RegisterController<T>(args);
         }
 
+        [Obsolete("Use the RegisterController which takes instantiated arguments.")]
         public void RegisterController<T>(Func<object[]> args) where T : class
         {
             _requestHandler.RegisterController<T>(args);

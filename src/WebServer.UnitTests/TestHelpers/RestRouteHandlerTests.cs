@@ -21,6 +21,13 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             );
         }
 
+        protected void AssertRegisterControllerThrows<T>(Func<object[]> args) where T : class
+        {
+            Assert.ThrowsException<Exception>(() =>
+                _restRouteHandler.RegisterController<T>(args)
+            );
+        }
+
         protected void AssertRegisterControllerThrows<T>() where T : class
         {
             Assert.ThrowsException<Exception>(() =>

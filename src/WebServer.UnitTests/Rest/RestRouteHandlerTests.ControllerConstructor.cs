@@ -20,6 +20,24 @@ namespace Restup.Webserver.UnitTests.Rest
             }
         }
 
+        private class ControllerWithPrivateConstructor
+        {
+            private ControllerWithPrivateConstructor()
+            {                
+            }
+        }
+
+        private class ControllerWithTwoConstructors
+        {
+            public ControllerWithTwoConstructors()
+            {
+            }
+
+            public ControllerWithTwoConstructors(string param)
+            {
+            }
+        }
+
         [TestMethod]
         public void RegisterController_WithConstructerWithAParameterAndNoParamIsPassedIn_ThenExceptionIsThrown()
         {
@@ -42,6 +60,25 @@ namespace Restup.Webserver.UnitTests.Rest
         public void RegisterController_WithConstructerWithAParameterAndTheCorrectParamsArePassedIn_ThenNoExceptionIsThrown()
         {
             _restRouteHandler.RegisterController<ControllerWithOneStringParameter>(() => new object[] { "param1" });
+            Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public void RegisterController_WithPrivateConstructer_ThenExceptionIsThrown()
+        {
+            AssertRegisterControllerThrows<ControllerWithPrivateConstructor>(() => new object[] { "param1" });
+        }
+
+        [TestMethod]
+        public void RegisterController_WithTwoConstructersAndFuncIsUsed_ThenExceptionIsThrown()
+        {
+            AssertRegisterControllerThrows<ControllerWithTwoConstructors>(() => new object[] { "param1" });
+        }
+
+        [TestMethod]
+        public void RegisterController_WithTwoConstructersAndInstantiatedObjectIsUsed_ThenNoExceptionIsThrown()
+        {
+            _restRouteHandler.RegisterController<ControllerWithTwoConstructors>("param1");
             Assert.IsTrue(true);
         }
 
