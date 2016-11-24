@@ -1,21 +1,22 @@
-﻿using Restup.Webserver.Models.Contracts;
-using System;
+﻿using System;
+using System.Reflection;
+using Restup.Webserver.Models.Contracts;
 
 namespace Restup.Webserver.InstanceCreators
 {
     internal class SingletonInstanceCreator : IInstanceCreator
     {
         private object _instance;
-        private object _instanceLock = new object();
+        private readonly object _instanceLock = new object();
 
-        public object Create(Type instanceType, params object[] args)
+        public object Create(ConstructorInfo instanceType, object[] args)
         {
             CacheInstance(instanceType, args);
 
             return _instance;
         }
 
-        private void CacheInstance(Type instanceType, object[] args)
+        private void CacheInstance(ConstructorInfo instanceType, object[] args)
         {
             if (_instance == null)
             {
@@ -23,7 +24,7 @@ namespace Restup.Webserver.InstanceCreators
                 {
                     if (_instance == null)
                     {
-                        _instance = Activator.CreateInstance(instanceType, args);
+                        _instance = instanceType.Invoke(args);
                     }
                 }
             }

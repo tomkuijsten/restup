@@ -153,6 +153,7 @@
     <Compile Include="Rest\PathParameterValueGetter.cs" />
     <Compile Include="Rest\PathPart.cs" />
     <Compile Include="Rest\QueryParameterValueGetter.cs" />
+    <Compile Include="Rest\ReflectionHelper.cs" />
     <Compile Include="Rest\RestControllerMethodInfoValidator.cs" />
     <Compile Include="Rest\RestMethodExecutor.cs" />
     <Compile Include="Rest\RestRoutehandler.cs" />

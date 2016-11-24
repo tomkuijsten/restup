@@ -28,14 +28,13 @@ namespace Restup.Webserver.Rest
         internal bool HasContentParameter { get; }
         internal Type ContentParameterType { get; }
         internal TypeWrapper ReturnTypeWrapper { get; }
+        internal ConstructorInfo ControllerConstructor { get; }
         internal Func<object[]> ControllerConstructorArgs { get; }
 
-        internal RestControllerMethodInfo(
-            MethodInfo methodInfo,
-            Func<object[]> constructorArgs,
-            TypeWrapper typeWrapper)
+        internal RestControllerMethodInfo(MethodInfo methodInfo, ConstructorInfo constructor, Func<object[]> constructorArgs, TypeWrapper typeWrapper)
         {
-            constructorArgs.GuardNull(nameof(constructorArgs));
+            ControllerConstructor = constructor;
+
             _uriParser = new UriParser();
             MatchUri = GetUriFromMethod(methodInfo);
 

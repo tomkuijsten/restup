@@ -1,13 +1,14 @@
 ﻿using Restup.Webserver.Models.Contracts;
 using System;
+using System.Reflection;
 
 namespace Restup.Webserver.InstanceCreators
 {
     internal class PerCallInstanceCreator : IInstanceCreator
     {
-        public object Create(Type instanceType, params object[] args)
+        public object Create(ConstructorInfo instanceType, object[] args)
         {
-            return Activator.CreateInstance(instanceType, args);
+            return instanceType.Invoke(args);
         }
     }
 }

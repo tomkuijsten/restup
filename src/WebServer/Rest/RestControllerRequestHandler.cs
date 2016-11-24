@@ -30,14 +30,31 @@ namespace Restup.Webserver.Rest
             _restControllerMethodInfoValidator = new RestControllerMethodInfoValidator();
         }
 
-        internal void RegisterController<T>() where T : class
+        internal void RegisterController<T>(params object[] constructorArgs) where T : class
         {
-            RegisterController<T>(() => Enumerable.Empty<object>().ToArray());
+            constructorArgs.GuardNull(nameof(constructorArgs));
+
+            ConstructorInfo constructorInfo;
+            if (!ReflectionHelper.TryFindMatchingConstructor<T>(constructorArgs, out constructorInfo))
+            {
+                throw new Exception($"No constructor found on {typeof(T)} that matches passed in constructor arguments.");
+            }
+
+            var restControllerMethodInfos = GetRestMethods<T>(() => constructorArgs, constructorInfo);
+            AddRestMethods<T>(restControllerMethodInfos);
         }
 
         internal void RegisterController<T>(Func<object[]> constructorArgs) where T : class
         {
-            var restControllerMethodInfos = GetRestMethods<T>(constructorArgs);
+            constructorArgs.GuardNull(nameof(constructorArgs));
+
+            var constructorInfos = typeof (T).GetConstructors();
+            if (constructorInfos.Length > 1)
+                throw new Exception("More than one constructor defined.");
+            if (constructorInfos.Length == 0)
+                throw new Exception("No public constructor defined.");
+
+            var restControllerMethodInfos = GetRestMethods<T>(constructorArgs, constructorInfos.Single());
             AddRestMethods<T>(restControllerMethodInfos);
         }
 
@@ -54,7 +71,7 @@ namespace Restup.Webserver.Rest
             InstanceCreatorCache.Default.CacheCreator(typeof(T));
         }
 
-        internal IEnumerable<RestControllerMethodInfo> GetRestMethods<T>(Func<object[]> constructorArgs) where T : class
+        private IEnumerable<RestControllerMethodInfo> GetRestMethods<T>(Func<object[]> constructorArgs, ConstructorInfo constructor) where T : class
         {
             var possibleValidRestMethods = (from m in typeof(T).GetRuntimeMethods()
                                             where m.IsPublic &&
@@ -64,11 +81,11 @@ namespace Restup.Webserver.Rest
             foreach (var restMethod in possibleValidRestMethods)
             {
                 if (HasRestResponse(restMethod))
-                    yield return new RestControllerMethodInfo(restMethod, constructorArgs, RestControllerMethodInfo.TypeWrapper.None);
+                    yield return new RestControllerMethodInfo(restMethod, constructor, constructorArgs, RestControllerMethodInfo.TypeWrapper.None);
                 else if (HasAsyncRestResponse(restMethod, typeof(Task<>)))
-                    yield return new RestControllerMethodInfo(restMethod, constructorArgs, RestControllerMethodInfo.TypeWrapper.Task);
+                    yield return new RestControllerMethodInfo(restMethod, constructor, constructorArgs, RestControllerMethodInfo.TypeWrapper.Task);
                 else if (HasAsyncRestResponse(restMethod, typeof(IAsyncOperation<>)))
-                    yield return new RestControllerMethodInfo(restMethod, constructorArgs, RestControllerMethodInfo.TypeWrapper.AsyncOperation);
+                    yield return new RestControllerMethodInfo(restMethod, constructor, constructorArgs, RestControllerMethodInfo.TypeWrapper.AsyncOperation);
             }
         }
 
