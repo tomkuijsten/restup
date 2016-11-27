@@ -27,7 +27,8 @@ The REST implementation is using the guidelines from: https://github.com/tfredri
 
 Read the [wiki](https://github.com/tomkuijsten/restup/wiki), it explains it all.
 
-### Latest release notes (rc1)
+### Latest release notes (1.0.0 stable)
+ - Allow no location header with post response with not location specified (#90)
  - CORS is supported now (read the Wiki for configuration options)
  - Removed "Devkoes." from namespaces
  - Url arrays implemented (#16)
