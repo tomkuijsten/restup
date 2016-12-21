@@ -1,6 +1,7 @@
 ﻿using Restup.HttpMessage;
 using Restup.HttpMessage.Models.Schemas;
 using Restup.Webserver.Models.Contracts;
+using Restup.WebServer.Models.Contracts;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,16 +15,20 @@ namespace Restup.Webserver.File
         private readonly string _basePath;
         private readonly IFileSystem _fileSystem;
         private readonly MimeTypeProvider _mimeTypeProvider;
+		private readonly IAuthorizationProvider _authenticationProvider;
 
-        public StaticFileRouteHandler() : this(null, null, null) { }
-        public StaticFileRouteHandler(string basePath) : this(basePath, null, null) { }
-        public StaticFileRouteHandler(string basePath, IReadOnlyDictionary<string, string> extensionsToMimeTypes) : this(basePath, extensionsToMimeTypes, null) { }
+		public StaticFileRouteHandler() : this(null, null, null, null) { }
+		public StaticFileRouteHandler(IAuthorizationProvider authenticationProvider) : this(null, null, null, authenticationProvider) { }
+		public StaticFileRouteHandler(string basePath) : this(basePath, null, null, null) { }
+		public StaticFileRouteHandler(string basePath, IAuthorizationProvider authenticationProvider) : this(basePath, null, null, authenticationProvider) { }
+		public StaticFileRouteHandler(string basePath, IReadOnlyDictionary<string, string> extensionsToMimeTypes) : this(basePath, extensionsToMimeTypes, null, null) { }
 
-        public StaticFileRouteHandler(string basePath, IReadOnlyDictionary<string, string> extensionsToMimeTypes, IFileSystem fileSystem)
+        public StaticFileRouteHandler(string basePath, IReadOnlyDictionary<string, string> extensionsToMimeTypes, IFileSystem fileSystem, IAuthorizationProvider authenticationProvider)
         {
             _basePath = basePath.GetAbsoluteBasePathUri();
             _fileSystem = fileSystem ?? new PhysicalFileSystem();
             _mimeTypeProvider = new MimeTypeProvider(extensionsToMimeTypes ?? MimeTypeProvider.DefaultMimeTypesByExtension);
+			_authenticationProvider = authenticationProvider;
 
             if (!_fileSystem.Exists(_basePath))
             {
@@ -37,6 +42,15 @@ namespace Restup.Webserver.File
             {
                 return GetMethodNotAllowedResponse(request.Method);
             }
+
+			if(_authenticationProvider != null) // if you pass an IAuthenticationProvider, it will be used to check every request in this handler
+			{
+				var authResult = _authenticationProvider.Authorize(request);
+				if(authResult == HttpResponseStatus.Unauthorized)
+				{
+					return GetUnauthorizedResponse(_authenticationProvider.Realm);
+				}
+			}
 
             var localFilePath = GetFilePath(request.Uri);
             var absoluteFilePath = GetAbsoluteFilePath(localFilePath);
@@ -77,6 +91,13 @@ namespace Restup.Webserver.File
 
             return methodNotAllowedResponse;
         }
+
+		private static HttpServerResponse GetUnauthorizedResponse(string realm)
+		{
+			var response = HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.Unauthorized);
+			response.AddHeader("WWW-Authenticate", $"Basic realm=\"{realm}\"");
+			return response;
+		}
 
         private async Task<HttpServerResponse> GetHttpResponse(IFile item)
         {
