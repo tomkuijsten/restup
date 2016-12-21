@@ -9,6 +9,10 @@
     <Import_RootNamespace>Restup.HttpMessage</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Schemas\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Contracts\IAuthorizationProvider.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\HttpHeaderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\HttpRequestHeaderBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AcceptCharsetHeader.cs" />
@@ -32,16 +36,15 @@
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\AllowHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\CloseConnectionHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\ContentEncodingHeader.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\ContentTypeHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\ContentLengthHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\ContentTypeHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\DateHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Response\LocationHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\UntypedRequestHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\UntypedResponseHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpServerRequest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IHttpServerRequest.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)MutableHttpServerRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HttpServerResponse.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IHttpServerRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpRequestHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Contracts\IHttpRequestHeaderVisitor.cs" />
@@ -51,6 +54,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\HttpMethod.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\HttpResponseStatus.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Models\Schemas\StreamReadResult.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MutableHttpServerRequest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plumbing\Constants.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plumbing\Extensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Plumbing\HttpCodesTranslator.cs" />

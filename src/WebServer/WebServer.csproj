@@ -115,6 +115,7 @@
     <AssemblyOriginatorKeyFile>restup-tmp1.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Attributes\AuthorizeAttribute.cs" />
     <Compile Include="Attributes\FromContentAttribute.cs" />
     <Compile Include="Attributes\RestControllerAttribute.cs" />
     <Compile Include="Attributes\UriFormatAttribute.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="File\PhysicalFileSystem.cs" />
     <Compile Include="File\StaticFileRouteHandler.cs" />
     <Compile Include="Http\AfterHandleRequestResult.cs" />
+    <Compile Include="Http\BasicAuthorizationProvider.cs" />
     <Compile Include="Http\BeforeHandleRequestResult.cs" />
     <Compile Include="Http\ContentCoding.cs" />
     <Compile Include="Http\CompressContentEncoder.cs" />
@@ -143,9 +145,11 @@
     <Compile Include="Http\RouteRegistration.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="Models\Contracts\IRouteHandler.cs" />
+    <Compile Include="Models\Schemas\InternalServerErrorResponse.cs" />
     <Compile Include="Models\Schemas\MediaType.cs" />
     <Compile Include="Models\Schemas\RestResponse.cs" />
     <Compile Include="Models\Schemas\RestServerRequest.cs" />
+    <Compile Include="Models\Schemas\WwwAuthenticateResponse.cs" />
     <Compile Include="Rest\MatchUri.cs" />
     <Compile Include="Rest\ParameterValueGetter.cs" />
     <Compile Include="Rest\ParsedUri.cs" />
@@ -181,6 +185,7 @@
     <Compile Include="Rest\RestToHttpResponseConverter.cs" />
     <Compile Include="Rest\UriParser.cs" />
     <Compile Include="Rest\UriParameter.cs" />
+    <Compile Include="Utils\Base64.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
