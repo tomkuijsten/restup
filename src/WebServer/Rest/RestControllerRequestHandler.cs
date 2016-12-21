@@ -1,15 +1,18 @@
-﻿using Restup.HttpMessage.Models.Schemas;
-using Restup.Webserver.Attributes;
-using Restup.Webserver.InstanceCreators;
-using Restup.Webserver.Models.Contracts;
-using Restup.Webserver.Models.Schemas;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using Restup.HttpMessage.Models.Schemas;
+using Restup.Webserver.Attributes;
+using Restup.Webserver.InstanceCreators;
+using Restup.Webserver.Models.Contracts;
+using Restup.Webserver.Models.Schemas;
+using Restup.WebServer.Attributes;
+using Restup.WebServer.Logging;
+using Restup.WebServer.Models.Contracts;
 
 namespace Restup.Webserver.Rest
 {
@@ -19,6 +22,7 @@ namespace Restup.Webserver.Rest
         private readonly RestResponseFactory _responseFactory;
         private readonly RestControllerMethodExecutorFactory _methodExecuteFactory;
         private readonly UriParser _uriParser;
+		private readonly ILogger _log = LogManager.GetLogger<RestControllerRequestHandler>();
         private readonly RestControllerMethodInfoValidator _restControllerMethodInfoValidator;
 
         internal RestControllerRequestHandler()
@@ -113,7 +117,12 @@ namespace Restup.Webserver.Rest
             return genericArgs[0].GetTypeInfo().ImplementedInterfaces.Contains(typeof(IRestResponse));
         }
 
-        internal async Task<IRestResponse> HandleRequestAsync(RestServerRequest req)
+		internal Task<IRestResponse> HandleRequestAsync(RestServerRequest req)
+		{
+			return HandleRequestAsync(req, null);
+		}
+
+		internal async Task<IRestResponse> HandleRequestAsync(RestServerRequest req, IAuthorizationProvider authorizationProvider)
         {
             if (!req.HttpServerRequest.IsComplete ||
                 req.HttpServerRequest.Method == HttpMethod.Unsupported)
@@ -139,6 +148,32 @@ namespace Restup.Webserver.Rest
             {
                 return new MethodNotAllowedResponse(restMethods.Select(r => r.Verb));
             }
+
+			// check if authentication is required
+			AuthorizeAttribute authAttribute = null;
+			// first check on controller level
+			if(restMethod.MethodInfo.DeclaringType.GetTypeInfo().IsDefined(typeof(AuthorizeAttribute)))
+			{
+				authAttribute = restMethod.MethodInfo.DeclaringType.GetTypeInfo().GetCustomAttributes<AuthorizeAttribute>().Single();
+			}
+			// otherwise check on method level
+			else if(restMethod.MethodInfo.IsDefined(typeof(AuthorizeAttribute)))
+			{
+				authAttribute = restMethod.MethodInfo.GetCustomAttributes<AuthorizeAttribute>().Single();
+			}
+			if(authAttribute != null) // need to check authentication
+			{
+				if (authorizationProvider == null)
+				{
+					_log.Error("HandleRequestAsync|AuthenticationProvider not configured");
+					return _responseFactory.CreateInternalServerError();
+				}
+				var authResult = authorizationProvider.Authorize(req.HttpServerRequest);
+				if(authResult == HttpResponseStatus.Unauthorized)
+				{
+					return _responseFactory.CreateWwwAuthenticate(authorizationProvider.Realm);
+				}
+			}
 
             var restMethodExecutor = _methodExecuteFactory.Create(restMethod);
 
