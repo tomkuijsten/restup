@@ -29,7 +29,21 @@ namespace Restup.WebServer.Http
 			if (request.Headers.Any(h => h.Name == "Authorization"))
 			{
 				var authValue = request.Headers.Single(h => h.Name == "Authorization").Value;
-				var pair = Base64.DecodeFrom64(authValue.Split(' ')[1]).Split(':');
+				var authValueArray = authValue.Split(' ');
+				if(authValueArray.Length!=2 || authValueArray[0] != "Basic")
+				{
+					return HttpResponseStatus.BadRequest;
+				}
+
+				string[] pair = null;
+				try
+				{
+					pair = Base64.DecodeFrom64(authValueArray[1]).Split(':');
+				}
+				catch (FormatException)
+				{
+					return HttpResponseStatus.BadRequest;
+				}
 				var user = pair[0];
 				var pass = pair[1];
 

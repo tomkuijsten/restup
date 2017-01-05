@@ -173,6 +173,10 @@ namespace Restup.Webserver.Rest
 				{
 					return _responseFactory.CreateWwwAuthenticate(authorizationProvider.Realm);
 				}
+				else if(authResult != HttpResponseStatus.OK)
+				{
+					return _responseFactory.CreateBadRequest();
+				}
 			}
 
             var restMethodExecutor = _methodExecuteFactory.Create(restMethod);

@@ -50,6 +50,10 @@ namespace Restup.Webserver.File
 				{
 					return GetUnauthorizedResponse(_authenticationProvider.Realm);
 				}
+				else if (authResult != HttpResponseStatus.OK)
+				{
+					return GetBadRequestResponse();
+				}
 			}
 
             var localFilePath = GetFilePath(request.Uri);
@@ -99,7 +103,13 @@ namespace Restup.Webserver.File
 			return response;
 		}
 
-        private async Task<HttpServerResponse> GetHttpResponse(IFile item)
+		private static HttpServerResponse GetBadRequestResponse()
+		{
+			var response = HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.BadRequest);
+			return response;
+		}
+
+		private async Task<HttpServerResponse> GetHttpResponse(IFile item)
         {
             // todo: do validation on file extension, probably want to have a whitelist
             using (var inputStream = await item.OpenStreamForReadAsync())

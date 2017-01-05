@@ -189,7 +189,6 @@
     <Compile Include="Rest\UniqueMatchUriAndVerbComparer.cs" />
     <Compile Include="Rest\UriParser.cs" />
     <Compile Include="Rest\UriParameter.cs" />
-    <Compile Include="Utils\Base64.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />

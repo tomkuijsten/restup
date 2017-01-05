@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AcceptHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AccessControlRequestHeadersHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AccessControlRequestMethodHeader.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\AuthorizationHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\ContentLengthHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\ContentTypeHeader.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Headers\Request\HttpMultiQuantifiedHeaderBase.cs" />
@@ -71,5 +72,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ServerResponseParsers\HeadersParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServerResponseParsers\HttpServerResponseParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ServerResponseParsers\StartLineParser.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\Base64.cs" />
   </ItemGroup>
 </Project>
