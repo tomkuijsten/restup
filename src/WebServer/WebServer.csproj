@@ -143,6 +143,7 @@
     <Compile Include="Http\ICorsConfiguration.cs" />
     <Compile Include="Http\IHttpMessageInspector.cs" />
     <Compile Include="Http\NoContentEncoder.cs" />
+    <Compile Include="Http\PassThroughCredentialValidator.cs" />
     <Compile Include="Http\RouteRegistration.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="Models\Contracts\IRouteHandler.cs" />

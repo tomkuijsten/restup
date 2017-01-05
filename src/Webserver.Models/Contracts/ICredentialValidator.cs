@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 
 namespace Restup.Webserver.Models.Contracts
 {
 	public interface ICredentialValidator
 	{
-		bool Authenticate(string username, string password);
+		IAsyncOperation<bool> AuthenticateAsync(string username, string password);
 	}
 }

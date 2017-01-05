@@ -168,7 +168,7 @@ namespace Restup.Webserver.Rest
 					_log.Error("HandleRequestAsync|AuthenticationProvider not configured");
 					return _responseFactory.CreateInternalServerError();
 				}
-				var authResult = authorizationProvider.Authorize(req.HttpServerRequest);
+				var authResult = await authorizationProvider.AuthorizeAsync(req.HttpServerRequest);
 				if(authResult == HttpResponseStatus.Unauthorized)
 				{
 					return _responseFactory.CreateWwwAuthenticate(authorizationProvider.Realm);

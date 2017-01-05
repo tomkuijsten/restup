@@ -11,6 +11,6 @@ namespace Restup.WebServer.Models.Contracts
 	public interface IAuthorizationProvider
 	{
 		string Realm { get; }
-		HttpResponseStatus Authorize(IHttpServerRequest request);
+		Task<HttpResponseStatus> AuthorizeAsync(IHttpServerRequest request);
 	}
 }

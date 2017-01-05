@@ -45,7 +45,7 @@ namespace Restup.Webserver.File
 
 			if(_authenticationProvider != null) // if you pass an IAuthenticationProvider, it will be used to check every request in this handler
 			{
-				var authResult = _authenticationProvider.Authorize(request);
+				var authResult = await _authenticationProvider.AuthorizeAsync(request);
 				if(authResult == HttpResponseStatus.Unauthorized)
 				{
 					return GetUnauthorizedResponse(_authenticationProvider.Realm);

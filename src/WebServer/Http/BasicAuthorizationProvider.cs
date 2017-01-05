@@ -24,7 +24,7 @@ namespace Restup.WebServer.Http
 
 		public string Realm { get { return _realm; } }
 
-		public HttpResponseStatus Authorize(IHttpServerRequest request)
+		public async Task<HttpResponseStatus> AuthorizeAsync(IHttpServerRequest request)
 		{
 			if (request.Headers.Any(h => h.Name == "Authorization"))
 			{
@@ -47,7 +47,7 @@ namespace Restup.WebServer.Http
 				var user = pair[0];
 				var pass = pair[1];
 
-				if (!_credentialValidator.Authenticate(user, pass))
+				if (!(await _credentialValidator.AuthenticateAsync(user, pass)))
 				{
 					return HttpResponseStatus.Unauthorized;
 				}
