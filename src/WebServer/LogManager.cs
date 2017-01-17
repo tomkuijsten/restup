@@ -10,7 +10,7 @@ namespace Restup.Webserver
 
         static LogManager()
         {
-            _logFactory = new NullLogFactory();
+            _logFactory = new DebugLogFactory();
         }
 
         public static ILogger GetLogger<T>()
@@ -28,40 +28,47 @@ namespace Restup.Webserver
             Interlocked.Exchange(ref _logFactory, logFactory);
         }
 
-        private class NullLogFactory : ILogFactory
+        private class DebugLogFactory : ILogFactory
         {
-            private readonly NullLogger _nullLogger;
+            private ILogger _debugLogger;
 
-            public NullLogFactory()
+            public DebugLogFactory()
             {
-                _nullLogger = new NullLogger();
-            }
-
-            ILogger ILogFactory.GetLogger<T>()
-            {
-                return _nullLogger;
-            }
-
-            ILogger ILogFactory.GetLogger(string name)
-            {
-                return _nullLogger;
+                _debugLogger = new DebugLogger();
             }
 
             public void Dispose()
             {
+                _debugLogger = null;
+            }
+
+            ILogger ILogFactory.GetLogger(string name)
+            {
+                return _debugLogger;
+            }
+
+            ILogger ILogFactory.GetLogger<T>()
+            {
+                return _debugLogger;
             }
         }
 
-        private class NullLogger : AbstractLogger
+        public class DebugLogger : AbstractLogger
         {
-            protected override bool IsLogEnabled(LogLevel trace) => false;
-
-            protected override void LogMessage(string message, LogLevel loggingLevel, params object[] args)
+            protected override bool IsLogEnabled(LogLevel trace)
             {
+                // Ignore level, log everything
+                return true;
             }
 
             protected override void LogMessage(string message, LogLevel loggingLevel, Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine($"{DateTime.UtcNow.ToString("dd-MM-yyyy hh:mm:ss.fff")} {loggingLevel}: {message}. Exception: {Environment.NewLine} {ex}");
+            }
+
+            protected override void LogMessage(string message, LogLevel loggingLevel, params object[] args)
+            {
+                System.Diagnostics.Debug.WriteLine($"{DateTime.UtcNow.ToString("dd-MM-yyyy hh:mm:ss.fff")} {loggingLevel}: {(string.Format(message, args))}");
             }
         }
     }

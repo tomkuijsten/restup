@@ -45,16 +45,18 @@ namespace Restup.Webserver.Http
 
         public async Task StartServerAsync()
         {
+            _log.Info($"Binding webserver to port {_port}...");
+
             await _listener.BindServiceNameAsync(_port.ToString());
 
-            _log.Info($"Webserver listening on port {_port}");
+            _log.Info($"Webserver listening on port {_port}.");
         }
 
         public void StopServer()
         {
             ((IDisposable)this).Dispose();
 
-            _log.Info($"Webserver stopped listening on port {_port}");
+            _log.Info($"Webserver stopped listening on port {_port}.");
         }
 
         private async void ProcessRequestAsync(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
@@ -66,14 +68,22 @@ namespace Restup.Webserver.Http
                     using (var inputStream = args.Socket.InputStream)
                     {
                         var request = await MutableHttpServerRequest.Parse(inputStream);
+                        if (_log.IsDebugEnabled())
+                            _log.Debug($"Handling request {request.Method} {request.Uri} from {args.Socket.Information.LocalAddress}.");
+
                         var httpResponse = await HandleRequestAsync(request);
 
+                        if (_log.IsDebugEnabled())
+                            _log.Debug($"Request {request.Method} {request.Uri} from {args.Socket.Information.LocalAddress} handled, response status: {httpResponse.ResponseStatus}.");
+
                         await WriteResponseAsync(httpResponse, args.Socket);
+                        if (_log.IsDebugEnabled())
+                            _log.Debug($"Responded to request {request.Method} {request.Uri}, {args.Socket.Information.LocalAddress}.");
                     }
                 }
                 catch (Exception ex)
                 {
-                    _log.Error($"Exception while handling process: {ex.Message}");
+                    _log.Error($"Exception while handling request from {args.Socket.Information.LocalAddress}", ex);
                 }
                 finally
                 {
@@ -168,7 +178,9 @@ namespace Restup.Webserver.Http
 
         void IDisposable.Dispose()
         {
+            _log.Info("Disposing HttpServer...");
             _listener.Dispose();
+            _log.Info("HttpServer disposed.");
         }
     }
 }
