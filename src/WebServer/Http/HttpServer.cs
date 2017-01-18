@@ -68,6 +68,12 @@ namespace Restup.Webserver.Http
                     using (var inputStream = args.Socket.InputStream)
                     {
                         var request = await MutableHttpServerRequest.Parse(inputStream);
+                        if (!request.IsComplete)
+                        {
+                            _log.Warn($"Request {request.Method} {request.Uri} aborted.");
+                            return;
+                        }
+
                         if (_log.IsDebugEnabled())
                             _log.Debug($"Handling request {request.Method} {request.Uri} from {args.Socket.Information.LocalAddress}.");
 
