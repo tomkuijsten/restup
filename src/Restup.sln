@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Webserver", "Webserver\Webserver.csproj", "{837B8FF3-DED6-4DC7-AD58-DBB0B3E44DD4}"
 EndProject
@@ -29,8 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer.Logging", "WebSer
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		HttpMessage\HttpMessage.projitems*{837b8ff3-ded6-4dc7-ad58-dbb0b3e44dd4}*SharedItemsImports = 4
 		HttpMessage\HttpMessage.projitems*{13aba022-a7c1-45b7-9e47-2bb74f2a7f9f}*SharedItemsImports = 13
+		HttpMessage\HttpMessage.projitems*{837b8ff3-ded6-4dc7-ad58-dbb0b3e44dd4}*SharedItemsImports = 4
 		HttpMessage\HttpMessage.projitems*{d313f525-2d90-4bf5-8857-2698ee580a65}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -123,6 +123,10 @@
     <EmbeddedResource Include="Properties\DemoControllers.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\WebServer.Logging\WebServer.Logging.csproj">
+      <Project>{06A3D120-5923-4AD1-8411-7395A1EC6E94}</Project>
+      <Name>WebServer.Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebServer.Models\Webserver.Models.csproj">
       <Project>{0B20D095-2896-41A6-865D-172DFD5ECC99}</Project>
       <Name>Webserver.Models</Name>
