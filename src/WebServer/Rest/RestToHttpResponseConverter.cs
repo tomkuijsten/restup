@@ -61,7 +61,7 @@ namespace Restup.Webserver.Rest
             {
                 defaultResponse.ContentType = GetMediaTypeAsString(restReq.AcceptMediaType);
                 defaultResponse.ContentCharset = restReq.AcceptCharset;
-                defaultResponse.Content = _contentSerializer.ToAcceptContent(response.ContentData, restReq);
+                defaultResponse.Content = _contentSerializer.ToAcceptContent(response.ContentData, restReq.AcceptMediaType, restReq.AcceptEncoding);
             }
 
             return defaultResponse;
