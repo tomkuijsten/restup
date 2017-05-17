@@ -106,6 +106,7 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="project.json" />
     <None Include="restup-tmp1.snk" />
+    <None Include="WebServer.Logging.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractLogger.cs" />
