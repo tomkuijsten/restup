@@ -117,7 +117,7 @@ namespace Restup.Webserver.Rest
 
             if (!ParametersHaveValidType(methodParameters.Select(p => p.ParameterType)))
             {
-                throw new InvalidOperationException("Can't use method parameters with a custom type.");
+                throw new InvalidOperationException($"Can't use method parameters with a custom type, use the {typeof(FromContentAttribute)} if you meant to include it in the body of the request.");
             }
 
             var parameterValueGetters = methodParameters.Select(x => GetParameterGetter(x, MatchUri)).ToArray();

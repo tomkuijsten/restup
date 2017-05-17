@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Text;
 
 namespace Restup.Webserver
@@ -13,13 +13,11 @@ namespace Restup.Webserver
             Default = new EncodingCache();
         }
 
-        private Dictionary<string, Encoding> _cache;
-        private object _cacheLock;
+        private readonly ConcurrentDictionary<string, Encoding> _cache;
 
         internal EncodingCache()
         {
-            _cache = new Dictionary<string, Encoding>(StringComparer.OrdinalIgnoreCase);
-            _cacheLock = new object();
+            _cache = new ConcurrentDictionary<string, Encoding>(StringComparer.OrdinalIgnoreCase);
         }
 
         internal Encoding GetEncoding(string charset)
@@ -29,27 +27,19 @@ namespace Restup.Webserver
                 return null;
             }
 
-            if (!_cache.ContainsKey(charset))
+            return _cache.GetOrAdd(charset, ResolveEncoding);
+        }
+
+        private static Encoding ResolveEncoding(string charset)
+        {
+            try
             {
-                lock (_cacheLock)
-                {
-                    if (!_cache.ContainsKey(charset))
-                    {
-                        Encoding charsetEncoding = null;
-                        try
-                        {
-                            charsetEncoding = Encoding.GetEncoding(charset);
-                        }
-                        catch
-                        {
-                        }
-
-                        _cache[charset] = charsetEncoding;
-                    }
-                }
+                return Encoding.GetEncoding(charset);
             }
-
-            return _cache[charset];
+            catch
+            {
+                return null;
+            }
         }
     }
 }
