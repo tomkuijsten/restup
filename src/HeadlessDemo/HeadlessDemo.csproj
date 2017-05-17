@@ -21,7 +21,7 @@
     <PackageCertificateKeyFile>HeadlessDemo_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackage>true</AppxPackage>
     <ContainsStartupTask>true</ContainsStartupTask>
-    <PackageCertificateThumbprint>C1A211CD43D757E284FF98D374D3D6F7B6130081</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>12A8F1AA859568C3645E7142307385980DE1F4D5</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
