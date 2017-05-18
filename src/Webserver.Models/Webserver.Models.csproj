@@ -118,7 +118,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="About.txt" />
+    <None Include="About.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Schemas\" />

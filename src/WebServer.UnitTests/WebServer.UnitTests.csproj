@@ -19,7 +19,7 @@
     <PackageCertificateKeyFile>Webserver.UnitTests_TemporaryKey.pfx</PackageCertificateKeyFile>
     <UnitTestPlatformVersion Condition="'$(UnitTestPlatformVersion)' == ''">14.0</UnitTestPlatformVersion>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
-    <PackageCertificateThumbprint>F6B5CDD6531A2AE16A13D4A222CA758127DB8944</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>0285472860F5023EFF4FE8D709A2083E3A251849</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
