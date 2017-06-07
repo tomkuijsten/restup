@@ -2,25 +2,28 @@
 <package>
   <metadata>
     <id>Restup</id>
-    <version>1.0.0-rc1</version>
+    <version>1.0.1-beta0</version>
     <title>Restup</title>
     <authors>Tom, Jark</authors>
     <owners>Tom, Jark</owners>
     <licenseUrl>https://github.com/tomkuijsten/restup/blob/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/tomkuijsten/restup/tree/v1.0.0-rc1</projectUrl>
+    <projectUrl>https://github.com/tomkuijsten/restup/tree/v1.0.1-beta0</projectUrl>
     <iconUrl>https://github.com/tomkuijsten/restup/blob/master/restup.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A webserver for Universal Windows Platform (UWP) apps</description>
-    <releaseNotes>CORS is supported now (read the Wiki for configuration options)
-Removed "Devkoes." from namespaces
-Url arrays implemented (#16)
-Query parameters are supported (#49)
+    <releaseNotes>
+      UTP16 support for xml content (#119)
     </releaseNotes>
     <copyright>
     </copyright>
     <tags>UWP REST webserver Universal Windows Platform</tags>
     <dependencies>
       <dependency id="Newtonsoft.Json" version="7.0.1" />
+      <dependency id="Restup.Logging" version="1.0.0" />
     </dependencies>
   </metadata>
+  <files>
+    <file src="bin\Release\Restup.Webserver.dll" target="lib\netcore50" />
+    <file src="bin\Release\Restup.Webserver.Models.winmd" target="lib\netcore50" />
+  </files>
 </package>

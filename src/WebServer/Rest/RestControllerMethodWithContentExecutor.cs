@@ -28,9 +28,10 @@ namespace Restup.Webserver.Rest
                 if (request.HttpServerRequest.Content != null)
                 {
                     contentObj = _contentSerializer.FromContent(
-                        request.ContentEncoding.GetString(request.HttpServerRequest.Content),
+                        request.HttpServerRequest.Content,
                         request.ContentMediaType,
-                        info.ContentParameterType);
+                        info.ContentParameterType,
+                        request.ContentEncoding);
                 }
             }
             catch (JsonReaderException)

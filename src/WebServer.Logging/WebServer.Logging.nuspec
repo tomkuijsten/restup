@@ -16,4 +16,7 @@
     </copyright>
     <tags>UWP REST webserver logging Restup Universal Windows Platform</tags>
   </metadata>
+  <files>
+    <file src="bin\Release\Restup.Webserver.Logging.dll" target="lib\netcore50" />
+  </files>
 </package>

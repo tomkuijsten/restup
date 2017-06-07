@@ -5,7 +5,7 @@ namespace Restup.HttpMessage.ServerResponseParsers
 {
     internal class ContentParser : IHttpResponsePartParser
     {
-        private static Encoding DEFAULT_CONTENT_ENCODING = Encoding.UTF8;
+        private static readonly Encoding DEFAULT_CONTENT_ENCODING = Encoding.UTF8;
 
         public byte[] ParseToBytes(HttpServerResponse response)
         {
@@ -17,7 +17,8 @@ namespace Restup.HttpMessage.ServerResponseParsers
             if (response.Content == null)
                 return string.Empty;
 
-            return DEFAULT_CONTENT_ENCODING.GetString(response.Content);
+            var encoding = Encoding.GetEncoding(response.ContentCharset);
+            return (encoding ?? DEFAULT_CONTENT_ENCODING).GetString(response.Content);
         }
     }
 }
