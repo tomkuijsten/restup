@@ -189,7 +189,9 @@
   <ItemGroup>
     <None Include="project.json" />
     <None Include="restup-tmp1.snk" />
-    <None Include="WebServer.nuspec" />
+    <None Include="Webserver.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WebServer.Logging\WebServer.Logging.csproj">
