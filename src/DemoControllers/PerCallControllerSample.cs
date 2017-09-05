@@ -1,4 +1,5 @@
-﻿using Restup.Webserver.Attributes;
+using Restup.DemoControllers.Model;
+using Restup.Webserver.Attributes;
 using Restup.Webserver.Models.Contracts;
 using Restup.Webserver.Models.Schemas;
 
@@ -9,11 +10,6 @@ namespace Restup.DemoControllers
     {
         private long _totalNrOfCallsHandled;
 
-        private class CallInfo
-        {
-            public long TotalCallsHandled { get; set; }
-        }
-
         /// <summary>
         /// This will always return a TotalCallsHandled of one, no matter how many times you request this uri.
         /// </summary>
@@ -23,7 +19,7 @@ namespace Restup.DemoControllers
         {
             return new GetResponse(
                 GetResponse.ResponseStatus.OK,
-                new CallInfo() { TotalCallsHandled = ++_totalNrOfCallsHandled });
+                new WebserverInfo() { TotalCallsHandled = ++_totalNrOfCallsHandled });
         }
     }
 }
