@@ -14,10 +14,20 @@ namespace Restup.Webserver.Rest
                 if (args.Length != parameters.Length)
                     continue;
 
-                var argsTypes = args.Select(x => x.GetType());
-                var parameterTypes = parameters.Select(x => x.ParameterType);
-                if ( !argsTypes.SequenceEqual(parameterTypes))
-                    continue;
+                var argsTypes = args.Select(x => x.GetType()).ToList();
+                var parameterTypes = parameters.Select(x => x.ParameterType).ToList();
+
+                for (int i = 0; i < parameterTypes.Count; i++)
+                {
+                    var param = parameterTypes[i];
+                    var arg = argsTypes[i];
+
+                    if (param != arg && !param.IsAssignableFrom(arg))
+                    {
+                        foundConstructor = null;
+                        return false;
+                    }
+                }
 
                 foundConstructor = constructorInfo;
                 return true;
