@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Restup.Webserver.Models.Schemas;
 using Restup.Webserver.UnitTests.TestHelpers;
 
 namespace Restup.Webserver.UnitTests.Rest
@@ -36,6 +37,38 @@ namespace Restup.Webserver.UnitTests.Rest
             public ControllerWithTwoConstructors(string param)
             {
             }
+        }
+
+        private class ControllerWithInterfaceConstructor
+        {
+            private readonly IInterface _interface;
+
+            public ControllerWithInterfaceConstructor(IInterface @interface)
+            {
+                _interface = @interface;
+            }
+
+            public interface IInterface
+            { }
+
+            public class Implementation : IInterface
+            { }
+        }
+
+        [TestMethod]
+        public void RegisterController_WithConstructorWithInterfaceParameterAndImplementationIsPassedIn_ThenNoExceptionIsThrown()
+        {
+            _restRouteHandler.RegisterController<ControllerWithInterfaceConstructor>(new ControllerWithInterfaceConstructor.Implementation());
+            Assert.IsTrue(true);
+        }
+
+        [TestMethod]
+        public void RegisterController_WithConstructorWithInterfaceParameterAndInterfaceIsPassedIn_ThenNoExceptionIsThrown()
+        {
+            ControllerWithInterfaceConstructor.IInterface @interface = new ControllerWithInterfaceConstructor.Implementation();
+
+            _restRouteHandler.RegisterController<ControllerWithInterfaceConstructor>(@interface);
+            Assert.IsTrue(true);
         }
 
         [TestMethod]
