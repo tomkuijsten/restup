@@ -37,50 +37,43 @@ namespace Restup.HttpMessage.ServerRequestParsers
             var httpStream = new HttpRequestStream(requestStream);
             var request = new MutableHttpServerRequest();
 
-            try
+            var stream = await httpStream.ReadAsync(BUFFER_SIZE, InputStreamOptions.Partial);
+            byte[] streamData = stream.Data;
+
+            var requestPipeline = GetPipeline();
+            using (var pipeLineEnumerator = requestPipeline.GetEnumerator())
             {
-                var stream = await httpStream.ReadAsync(BUFFER_SIZE, InputStreamOptions.Partial);
-                byte[] streamData = stream.Data;
+                pipeLineEnumerator.MoveNext();
+                bool requestComplete = false;
 
-                var requestPipeline = GetPipeline();
-                using (var pipeLineEnumerator = requestPipeline.GetEnumerator())
+                while (!requestComplete)
                 {
-                    pipeLineEnumerator.MoveNext();
-                    bool requestComplete = false;
+                    pipeLineEnumerator.Current.HandleRequestPart(streamData, request);
+                    streamData = pipeLineEnumerator.Current.UnparsedData;
 
-                    while (!requestComplete)
+                    if (pipeLineEnumerator.Current.IsFinished)
                     {
-                        pipeLineEnumerator.Current.HandleRequestPart(streamData, request);
-                        streamData = pipeLineEnumerator.Current.UnparsedData;
-
-                        if (pipeLineEnumerator.Current.IsFinished)
+                        if (!pipeLineEnumerator.Current.IsSucceeded ||
+                            !pipeLineEnumerator.MoveNext())
                         {
-                            if (!pipeLineEnumerator.Current.IsSucceeded ||
-                                !pipeLineEnumerator.MoveNext())
-                            {
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            var newStreamdata = await httpStream.ReadAsync(BUFFER_SIZE, InputStreamOptions.Partial);
-
-                            if (!newStreamdata.ReadSuccessful)
-                            {
-                                break;
-                            }
-
-                            streamData = streamData.ConcatArray(newStreamdata.Data);
+                            break;
                         }
                     }
-                }
+                    else
+                    {
+                        var newStreamdata = await httpStream.ReadAsync(BUFFER_SIZE, InputStreamOptions.Partial);
 
-                request.IsComplete = requestPipeline.All(p => p.IsSucceeded);
+                        if (!newStreamdata.ReadSuccessful)
+                        {
+                            break;
+                        }
+
+                        streamData = streamData.ConcatArray(newStreamdata.Data);
+                    }
+                }
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
+
+            request.IsComplete = requestPipeline.All(p => p.IsSucceeded);
 
             return request;
         }
