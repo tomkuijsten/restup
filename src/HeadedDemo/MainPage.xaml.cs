@@ -1,7 +1,9 @@
 ﻿using Restup.DemoControllers;
+using Restup.DemoControllers.Authentication;
 using Restup.Webserver.File;
 using Restup.Webserver.Http;
 using Restup.Webserver.Rest;
+using Restup.WebServer.Http;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -29,12 +31,14 @@ namespace Restup.HeadedDemo
 
         private async Task InitializeWebServer()
         {
-            var restRouteHandler = new RestRouteHandler();
+			var authProvider = new BasicAuthorizationProvider("Please login", new DemoCredentialValidator());
+			var restRouteHandler = new RestRouteHandler(authProvider);
 
             restRouteHandler.RegisterController<AsyncControllerSample>();
             restRouteHandler.RegisterController<FromContentControllerSample>();
             restRouteHandler.RegisterController<PerCallControllerSample>();
-            restRouteHandler.RegisterController<SimpleParameterControllerSample>();
+			restRouteHandler.RegisterController<AuthenticatedPerCallControllerSample>();
+			restRouteHandler.RegisterController<SimpleParameterControllerSample>();
             restRouteHandler.RegisterController<SingletonControllerSample>();
             restRouteHandler.RegisterController<ThrowExceptionControllerSample>();
             restRouteHandler.RegisterController<WithResponseContentControllerSample>();
@@ -43,7 +47,7 @@ namespace Restup.HeadedDemo
                 .ListenOnPort(8800)
                 .RegisterRoute("api", restRouteHandler)
                 .RegisterRoute(new StaticFileRouteHandler(@"Restup.DemoStaticFiles\Web"))
-                .EnableCors(); // allow cors requests on all origins
+				.EnableCors(); // allow cors requests on all origins
                                //.EnableCors(x => x.AddAllowedOrigin("http://specificserver:<listen-port>"));
 
             var httpServer = new HttpServer(configuration);

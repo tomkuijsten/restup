@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contracts\IContentRestResponse.cs" />
+    <Compile Include="Contracts\ICredentialValidator.cs" />
     <Compile Include="Contracts\IDeleteResponse.cs" />
     <Compile Include="Contracts\IGetResponse.cs" />
     <Compile Include="Contracts\IPostResponse.cs" />
@@ -120,9 +121,7 @@
   <ItemGroup>
     <None Include="About.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Schemas\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -5,6 +5,8 @@ using Restup.Webserver.UnitTests.TestHelpers;
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using Restup.HttpMessage.Headers.Request;
+using Restup.WebServer.Http;
 
 namespace Restup.Webserver.UnitTests.Rest
 {
@@ -261,7 +263,113 @@ namespace Restup.Webserver.UnitTests.Rest
             StringAssert.Contains(content, "\"Name\":\"Johathan\"");
             StringAssert.Contains(content, "\"Age\":16");
         }
-        #endregion
-    }
+		#endregion
+
+		#region BasicGetWithAuth
+
+		private MutableHttpServerRequest _basicGETWithAuth = new MutableHttpServerRequest()
+		{
+			Method = HttpMethod.GET,
+			Uri = new Uri("/users/2", UriKind.RelativeOrAbsolute),
+			AcceptMediaTypes = new[] { "text/json" },
+		};
+
+		[TestMethod]
+		public async Task HandleGetRequest_BasicAuthController()
+		{
+			_basicGETWithAuth.AddHeader(new AuthorizationHeader(StaticUsernamePasswordValidator.Username, StaticUsernamePasswordValidator.Password));
+			_basicGETWithAuth.IsComplete = true;
+			var a = new BasicAuthorizationProvider("test", new StaticUsernamePasswordValidator());
+			var m = Utils.CreateRestRoutehandler<HappyPathTestControllerWithControllerAuth>(a);
+			var response = await m.HandleRequest(_basicGETWithAuth);
+			string content = response.ToString();
+
+			StringAssert.Contains(content, "200 OK");
+			StringAssert.Contains(content, "Content-Type: application/json");
+			StringAssert.Contains(content, "\"Name\":\"Tom\"");
+			StringAssert.Contains(content, "\"Age\":30");
+		}
+
+		[TestMethod]
+		public async Task HandleGetRequest_BasicAuthControllerMissingHeader()
+		{
+			_basicGETWithAuth.IsComplete = true;
+			var a = new BasicAuthorizationProvider("test", new StaticUsernamePasswordValidator());
+			var m = Utils.CreateRestRoutehandler<HappyPathTestControllerWithControllerAuth>(a);
+			var response = await m.HandleRequest(_basicGETWithAuth);
+			string content = response.ToString();
+
+			StringAssert.Contains(content, "401 Unauthorized");
+		}
+
+		[TestMethod]
+		public async Task HandleGetRequest_BasicAuthControllerWrongCredentials()
+		{
+			_basicGETWithAuth.AddHeader(new AuthorizationHeader("bla", "blubb"));
+			_basicGETWithAuth.IsComplete = true;
+			var a = new BasicAuthorizationProvider("test", new StaticUsernamePasswordValidator());
+			var m = Utils.CreateRestRoutehandler<HappyPathTestControllerWithControllerAuth>(a);
+			var response = await m.HandleRequest(_basicGETWithAuth);
+			string content = response.ToString();
+
+			StringAssert.Contains(content, "401 Unauthorized");
+		}
+
+		[TestMethod]
+		public async Task HandleGetRequest_BasicAuthControllerMissingPassword()
+		{
+			_basicGETWithAuth.AddHeader(new AuthorizationHeader("bla", null));
+			_basicGETWithAuth.IsComplete = true;
+			var a = new BasicAuthorizationProvider("test", new StaticUsernamePasswordValidator());
+			var m = Utils.CreateRestRoutehandler<HappyPathTestControllerWithControllerAuth>(a);
+			var response = await m.HandleRequest(_basicGETWithAuth);
+			string content = response.ToString();
+
+			StringAssert.Contains(content, "401 Unauthorized");
+		}
+
+		[TestMethod]
+		public async Task HandleGetRequest_BasicAuthControllerInvalidBase64Header()
+		{
+			_basicGETWithAuth.AddHeader(new InvalidAuthorizationHeaderNotABase64String());
+			_basicGETWithAuth.IsComplete = true;
+			var a = new BasicAuthorizationProvider("test", new StaticUsernamePasswordValidator());
+			var m = Utils.CreateRestRoutehandler<HappyPathTestControllerWithControllerAuth>(a);
+			var response = await m.HandleRequest(_basicGETWithAuth);
+			string content = response.ToString();
+
+			StringAssert.Contains(content, "400 Bad Request");
+		}
+
+		[TestMethod]
+		public async Task HandleGetRequest_BasicAuthMethod()
+		{
+			_basicGETWithAuth.AddHeader(new AuthorizationHeader(StaticUsernamePasswordValidator.Username, StaticUsernamePasswordValidator.Password));
+			_basicGETWithAuth.IsComplete = true;
+			var a = new BasicAuthorizationProvider("test", new StaticUsernamePasswordValidator());
+			var m = Utils.CreateRestRoutehandler<HappyPathTestControllerWithMethodAuth>(a);
+			var response = await m.HandleRequest(_basicGETWithAuth);
+			string content = response.ToString();
+
+			StringAssert.Contains(content, "200 OK");
+			StringAssert.Contains(content, "Content-Type: application/json");
+			StringAssert.Contains(content, "\"Name\":\"Tom\"");
+			StringAssert.Contains(content, "\"Age\":30");
+		}
+
+		[TestMethod]
+		public async Task HandleGetRequest_BasicAuthMethodMissingHeader()
+		{
+			_basicGETWithAuth.IsComplete = true;
+			var a = new BasicAuthorizationProvider("test", new StaticUsernamePasswordValidator());
+			var m = Utils.CreateRestRoutehandler<HappyPathTestControllerWithMethodAuth>(a);
+			var response = await m.HandleRequest(_basicGETWithAuth);
+			string content = response.ToString();
+
+			StringAssert.Contains(content, "401 Unauthorized");
+		}
+
+		#endregion
+	}
 }
 

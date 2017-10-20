@@ -102,6 +102,7 @@
     <Compile Include="Rest\FluentRestRouteHandlerTests.cs" />
     <Compile Include="Rest\RestRouteHandlerTests.ControllerConstructor.cs" />
     <Compile Include="Rest\RestRouteHandlerTests.UriFormatValidation.cs" />
+    <Compile Include="TestHelpers\InvalidAuthorizationHeader.cs" />
     <Compile Include="Rest\RestRouteHandlerTests.XmlAcceptCharset.cs" />
     <Compile Include="TestHelpers\RestRouteHandlerTests.cs" />
     <Compile Include="TestHelpers\MockFile.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Rest\RestRouteHandlerTest.Happy.cs" />
     <Compile Include="Rest\RestControllerRequestHandlerTests.MultipleSimilarlyNamedMethods.cs" />
     <Compile Include="Rest\RestToHttpResponseConverterTests.cs" />
+    <Compile Include="TestHelpers\StaticUsernamePasswordValidator.cs" />
     <Compile Include="TestHelpers\TestRestControllers.cs" />
     <Compile Include="UnitTestApp.xaml.cs">
       <DependentUpon>UnitTestApp.xaml</DependentUpon>

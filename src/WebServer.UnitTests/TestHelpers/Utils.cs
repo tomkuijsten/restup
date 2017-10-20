@@ -6,20 +6,28 @@ using Restup.Webserver.Rest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Restup.WebServer.Models.Contracts;
 
 namespace Restup.Webserver.UnitTests.TestHelpers
 {
     // helper methods to make it easier to change the creation of classes in the future
     public static class Utils
     {
-        public static RestRouteHandler CreateRestRoutehandler<T>() where T : class
+        public static RestRouteHandler CreateRestRoutehandler<T>(IAuthorizationProvider authHandler) where T : class
         {
-            var restRouteHandler = CreateRestRoutehandler();
+            var restRouteHandler = CreateRestRoutehandler(authHandler);
             restRouteHandler.RegisterController<T>();
             return restRouteHandler;
         }
 
-        public static RestRouteHandler CreateRestRoutehandler<T>(params object[] args) where T : class
+		public static RestRouteHandler CreateRestRoutehandler<T>() where T : class
+		{
+			var restRouteHandler = CreateRestRoutehandler();
+			restRouteHandler.RegisterController<T>();
+			return restRouteHandler;
+		}
+
+		public static RestRouteHandler CreateRestRoutehandler<T>(params object[] args) where T : class
         {
             var restRouteHandler = CreateRestRoutehandler();
             restRouteHandler.RegisterController<T>(args);
@@ -39,7 +47,13 @@ namespace Restup.Webserver.UnitTests.TestHelpers
             return restRouteHandler;
         }
 
-        public static HttpServerResponse CreateOkHttpServerResponse(byte[] content = null)
+		public static RestRouteHandler CreateRestRoutehandler(IAuthorizationProvider authHandler)
+		{
+			var restRouteHandler = new RestRouteHandler(authHandler);
+			return restRouteHandler;
+		}
+
+		public static HttpServerResponse CreateOkHttpServerResponse(byte[] content = null)
         {
             var response = HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.OK);
             response.Content = content;

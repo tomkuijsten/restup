@@ -107,6 +107,8 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthenticatedPerCallControllerSample.cs" />
+    <Compile Include="Authentication\DemoCredentialValidator.cs" />
     <Compile Include="Model\DataReceived.cs" />
     <Compile Include="Model\FromContentData.cs" />
     <Compile Include="Model\MoreComplexData.cs" />

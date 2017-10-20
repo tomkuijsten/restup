@@ -18,6 +18,10 @@ namespace Restup.Webserver.Http
 
         public bool Match(IHttpServerRequest request)
         {
+			if(request.Uri == null)
+			{
+				return false;
+			}
             return request.Uri.ToString().StartsWith(_urlPrefix, StringComparison.OrdinalIgnoreCase);
         }
 

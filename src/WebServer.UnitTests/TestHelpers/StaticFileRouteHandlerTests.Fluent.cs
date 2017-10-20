@@ -20,7 +20,7 @@ namespace Restup.Webserver.UnitTests.TestHelpers
         public StaticFileRouteHandlerFluentTests SetUp(string basePath, bool pathExists = true)
         {
             mockFileSystem = new MockFileSystem(pathExists);
-            routeHandler = new StaticFileRouteHandler(basePath, null, mockFileSystem);
+            routeHandler = new StaticFileRouteHandler(basePath, null, mockFileSystem, null);
 
             return this;
         }
