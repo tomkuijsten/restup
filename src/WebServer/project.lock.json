@@ -11809,12 +11809,12 @@
   },
   "libraries": {
     "Microsoft.ApplicationInsights/1.0.0": {
-      "sha512": "ssuClySnJd1B5YMA+qwzgW9/s2LocwAA9unrlu5EAV22GweLeeNl09sHCPfc94QpRHcWQA9vNn7TPGgfrut4bg==",
-      "type": "package",
+      "sha512": "HZ47/thX57SOuIivSvIbsR6L9CCb/Yt3IyB2i4KHmmNlf3DO+lqFwWIKDdbDNWKX+qh0Rg20/JSMPK0dwUsYYw==",
+      "type": "Package",
       "files": [
-        ".signature.p7s",
-        "Microsoft.ApplicationInsights.1.0.0.nupkg.sha512",
         "Microsoft.ApplicationInsights.nuspec",
+        "[Content_Types].xml",
+        "_rels/.rels",
         "lib/net40/Microsoft.ApplicationInsights.XML",
         "lib/net40/Microsoft.ApplicationInsights.dll",
         "lib/net45/Microsoft.ApplicationInsights.XML",
@@ -11822,37 +11822,40 @@
         "lib/portable-win81+wpa81/Microsoft.ApplicationInsights.XML",
         "lib/portable-win81+wpa81/Microsoft.ApplicationInsights.dll",
         "lib/wp8/Microsoft.ApplicationInsights.XML",
-        "lib/wp8/Microsoft.ApplicationInsights.dll"
+        "lib/wp8/Microsoft.ApplicationInsights.dll",
+        "package/services/metadata/core-properties/b9e7bc7ab2454491af07046165ff01d0.psmdcp"
       ]
     },
     "Microsoft.ApplicationInsights.PersistenceChannel/1.0.0": {
-      "sha512": "o1Zu36OlnKjBwCfEOpsXRlADArs0SWE+c5q7HleQZS/0oKxHQhPK9beMwv8KCiZTNmug57NMD0uRF7tL08+h4w==",
-      "type": "package",
+      "sha512": "0qQXC+CtbyF2RPuld5pF74fxsnP6ml0LUnzQ6GL9AXXY64LPsLDsPUAymoUffo7LZvPDppZboTYX59TfVxKA7A==",
+      "type": "Package",
       "files": [
-        ".signature.p7s",
-        "Microsoft.ApplicationInsights.PersistenceChannel.1.0.0.nupkg.sha512",
         "Microsoft.ApplicationInsights.PersistenceChannel.nuspec",
+        "[Content_Types].xml",
+        "_rels/.rels",
         "lib/net40/Microsoft.ApplicationInsights.PersistenceChannel.XML",
         "lib/net40/Microsoft.ApplicationInsights.PersistenceChannel.dll",
         "lib/portable-win8+wpa81/Microsoft.ApplicationInsights.PersistenceChannel.XML",
         "lib/portable-win81+wpa81/Microsoft.ApplicationInsights.PersistenceChannel.dll",
         "lib/wp8/Microsoft.ApplicationInsights.PersistenceChannel.XML",
-        "lib/wp8/Microsoft.ApplicationInsights.PersistenceChannel.dll"
+        "lib/wp8/Microsoft.ApplicationInsights.PersistenceChannel.dll",
+        "package/services/metadata/core-properties/dc9ebba80e7343fdbd0a39a3cdeb672c.psmdcp"
       ]
     },
     "Microsoft.ApplicationInsights.WindowsApps/1.0.0": {
-      "sha512": "lgUSf3ljCpqEuKGhhB5mA4LVPqhRVwJArlklb5/3MSGTJQIaHo49A7Bou9bCNg4/NrP8/3iR6GmqsRUImqzNHA==",
-      "type": "package",
+      "sha512": "NvBQnFeiFd0O1QdBz06UGApD7zn7ztVi7qO18IsM3EjiXRNgfrEBXB+azNm8XqLY8xGFAqh3HAuSd/wHZMe0XA==",
+      "type": "Package",
       "files": [
-        ".signature.p7s",
-        "Microsoft.ApplicationInsights.WindowsApps.1.0.0.nupkg.sha512",
         "Microsoft.ApplicationInsights.WindowsApps.nuspec",
+        "[Content_Types].xml",
+        "_rels/.rels",
         "lib/win81/Microsoft.ApplicationInsights.Extensibility.Windows.XML",
         "lib/win81/Microsoft.ApplicationInsights.Extensibility.Windows.dll",
         "lib/wp8/Microsoft.ApplicationInsights.Extensibility.Windows.XML",
         "lib/wp8/Microsoft.ApplicationInsights.Extensibility.Windows.dll",
         "lib/wpa81/Microsoft.ApplicationInsights.Extensibility.Windows.XML",
-        "lib/wpa81/Microsoft.ApplicationInsights.Extensibility.Windows.dll"
+        "lib/wpa81/Microsoft.ApplicationInsights.Extensibility.Windows.dll",
+        "package/services/metadata/core-properties/4f6f732debe548beaa1183418e8d65cc.psmdcp"
       ]
     },
     "Microsoft.CSharp/4.0.0": {
