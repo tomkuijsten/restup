@@ -41,6 +41,13 @@ namespace Restup.Webserver.File
             var localFilePath = GetFilePath(request.Uri);
             var absoluteFilePath = GetAbsoluteFilePath(localFilePath);
 
+            // Check to make sure the requested path isn't outside the base path.
+            if (!absoluteFilePath.ToLower().StartsWith(_basePath.ToLower()))
+            {
+                return GetBadRequestResponse("Navigation outside of allowed path.");
+            }
+
+
             // todo: add validation for invalid path characters / invalid filename characters
             IFile item;
             try
@@ -63,6 +70,16 @@ namespace Restup.Webserver.File
             notFoundResponse.ContentCharset = "utf-8";
 
             return notFoundResponse;
+        }
+
+        private static HttpServerResponse GetBadRequestResponse(string message)
+        {
+            var response = HttpServerResponse.Create(new Version(1, 1), HttpResponseStatus.BadRequest);
+            response.Content = Encoding.UTF8.GetBytes(message);
+            response.ContentType = "text/plain";
+            response.ContentCharset = "utf-8";
+
+            return response;
         }
 
         private static HttpServerResponse GetMethodNotAllowedResponse(HttpMethod? method)
@@ -110,7 +127,7 @@ namespace Restup.Webserver.File
         {
             var absoluteFilePath = Path.Combine(_basePath, localFilePath);
 
-            return absoluteFilePath;
+            return Path.GetFullPath(absoluteFilePath);
         }
 
         private static string GetLocalPath(string uriString)
